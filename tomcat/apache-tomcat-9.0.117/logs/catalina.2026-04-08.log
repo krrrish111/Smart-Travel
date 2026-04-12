@@ -1,0 +1,369 @@
+08-Apr-2026 17:25:23.946 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version name:   Apache Tomcat/9.0.117
+08-Apr-2026 17:25:23.952 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server built:          Mar 30 2026 18:21:16 UTC
+08-Apr-2026 17:25:23.953 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version number: 9.0.117.0
+08-Apr-2026 17:25:23.953 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Name:               Windows 11
+08-Apr-2026 17:25:23.953 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Version:            10.0
+08-Apr-2026 17:25:23.953 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Architecture:          amd64
+08-Apr-2026 17:25:23.953 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Java Home:             C:\Program Files\Java\jdk-24
+08-Apr-2026 17:25:23.953 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Version:           24.0.2+12-54
+08-Apr-2026 17:25:23.955 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Vendor:            Oracle Corporation
+08-Apr-2026 17:25:23.955 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_BASE:         C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+08-Apr-2026 17:25:23.955 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_HOME:         C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+08-Apr-2026 17:25:23.987 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang=ALL-UNNAMED
+08-Apr-2026 17:25:23.988 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang.invoke=ALL-UNNAMED
+08-Apr-2026 17:25:23.988 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang.reflect=ALL-UNNAMED
+08-Apr-2026 17:25:23.989 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.io=ALL-UNNAMED
+08-Apr-2026 17:25:23.989 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util=ALL-UNNAMED
+08-Apr-2026 17:25:23.990 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util.concurrent=ALL-UNNAMED
+08-Apr-2026 17:25:23.990 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED
+08-Apr-2026 17:25:23.992 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.config.file=c:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\conf\logging.properties
+08-Apr-2026 17:25:23.993 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+08-Apr-2026 17:25:23.993 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djdk.tls.ephemeralDHKeySize=2048
+08-Apr-2026 17:25:23.993 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.protocol.handler.pkgs=org.apache.catalina.webresources
+08-Apr-2026 17:25:23.993 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dsun.io.useCanonCaches=false
+08-Apr-2026 17:25:23.993 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dignore.endorsed.dirs=
+08-Apr-2026 17:25:23.994 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.base=c:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+08-Apr-2026 17:25:23.994 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.home=c:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+08-Apr-2026 17:25:23.994 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.io.tmpdir=c:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\temp
+08-Apr-2026 17:25:24.014 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent Loaded Apache Tomcat Native library [1.3.7] using APR version [1.7.6].
+08-Apr-2026 17:25:24.015 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent APR capabilities: IPv6 [true], sendfile [true], accept filters [false], random [true], UDS [true].
+08-Apr-2026 17:25:24.016 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent APR/OpenSSL configuration: useAprConnector [false], useOpenSSL [true]
+08-Apr-2026 17:25:24.067 INFO [main] org.apache.catalina.core.AprLifecycleListener.initializeSSL OpenSSL successfully initialized [OpenSSL 3.0.19 27 Jan 2026]
+08-Apr-2026 17:25:25.328 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["http-nio-8080"]
+08-Apr-2026 17:25:25.418 INFO [main] org.apache.catalina.startup.Catalina.load Server initialization in [2041] milliseconds
+08-Apr-2026 17:25:25.596 INFO [main] org.apache.catalina.core.StandardService.startInternal Starting service [Catalina]
+08-Apr-2026 17:25:25.596 INFO [main] org.apache.catalina.core.StandardEngine.startInternal Starting Servlet engine: [Apache Tomcat/9.0.117]
+08-Apr-2026 17:25:25.654 INFO [main] org.apache.catalina.startup.HostConfig.deployWAR Deploying web application archive [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\voyastra.war]
+08-Apr-2026 17:25:28.961 INFO [main] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+08-Apr-2026 17:25:29.133 INFO [main] com.voyastra.filter.ErrorHandlingFilter.init ErrorHandlingFilter initialized.
+08-Apr-2026 17:25:29.181 INFO [main] org.apache.catalina.startup.HostConfig.deployWAR Deployment of web application archive [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\voyastra.war] has finished in [3,526] ms
+08-Apr-2026 17:25:29.183 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\docs]
+08-Apr-2026 17:25:29.295 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\docs] has finished in [112] ms
+08-Apr-2026 17:25:29.295 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\examples]
+08-Apr-2026 17:25:30.750 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\examples] has finished in [1,455] ms
+08-Apr-2026 17:25:30.751 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\host-manager]
+08-Apr-2026 17:25:30.915 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\host-manager] has finished in [163] ms
+08-Apr-2026 17:25:30.916 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\manager]
+08-Apr-2026 17:25:31.050 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\manager] has finished in [134] ms
+08-Apr-2026 17:25:31.052 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\ROOT]
+08-Apr-2026 17:25:31.165 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\ROOT] has finished in [113] ms
+08-Apr-2026 17:25:31.180 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8080"]
+08-Apr-2026 17:25:31.393 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in [5969] milliseconds
+08-Apr-2026 17:26:00.465 INFO [http-nio-8080-exec-2] org.apache.tomcat.util.http.parser.Cookie.logInvalidHeader A cookie header was received [g_state={"i_l":0,"i_ll":1775577862180,"i_b":"ge7t1XLG4GNnPvg7i2mk2Qlt5revbrsrVS62T6Izssk","i_e":{"enable_itp_optimization":0}}] that contained an invalid cookie. That cookie will be ignored.
+ Note: further occurrences of this error will be logged at DEBUG level.
+08-Apr-2026 17:53:49.202 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version name:   Apache Tomcat/9.0.117
+08-Apr-2026 17:53:49.205 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server built:          Mar 30 2026 18:21:16 UTC
+08-Apr-2026 17:53:49.207 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version number: 9.0.117.0
+08-Apr-2026 17:53:49.207 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Name:               Windows 11
+08-Apr-2026 17:53:49.207 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Version:            10.0
+08-Apr-2026 17:53:49.208 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Architecture:          amd64
+08-Apr-2026 17:53:49.208 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Java Home:             C:\Program Files\Java\jdk-24
+08-Apr-2026 17:53:49.209 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Version:           24.0.2+12-54
+08-Apr-2026 17:53:49.209 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Vendor:            Oracle Corporation
+08-Apr-2026 17:53:49.209 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_BASE:         C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+08-Apr-2026 17:53:49.209 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_HOME:         C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+08-Apr-2026 17:53:49.235 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang=ALL-UNNAMED
+08-Apr-2026 17:53:49.235 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang.invoke=ALL-UNNAMED
+08-Apr-2026 17:53:49.236 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang.reflect=ALL-UNNAMED
+08-Apr-2026 17:53:49.236 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.io=ALL-UNNAMED
+08-Apr-2026 17:53:49.236 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util=ALL-UNNAMED
+08-Apr-2026 17:53:49.237 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util.concurrent=ALL-UNNAMED
+08-Apr-2026 17:53:49.237 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED
+08-Apr-2026 17:53:49.237 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.config.file=c:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\conf\logging.properties
+08-Apr-2026 17:53:49.238 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+08-Apr-2026 17:53:49.239 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djdk.tls.ephemeralDHKeySize=2048
+08-Apr-2026 17:53:49.239 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.protocol.handler.pkgs=org.apache.catalina.webresources
+08-Apr-2026 17:53:49.240 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dsun.io.useCanonCaches=false
+08-Apr-2026 17:53:49.240 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dignore.endorsed.dirs=
+08-Apr-2026 17:53:49.240 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.base=c:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+08-Apr-2026 17:53:49.240 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.home=c:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+08-Apr-2026 17:53:49.241 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.io.tmpdir=c:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\temp
+08-Apr-2026 17:53:49.286 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent Loaded Apache Tomcat Native library [1.3.7] using APR version [1.7.6].
+08-Apr-2026 17:53:49.286 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent APR capabilities: IPv6 [true], sendfile [true], accept filters [false], random [true], UDS [true].
+08-Apr-2026 17:53:49.286 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent APR/OpenSSL configuration: useAprConnector [false], useOpenSSL [true]
+08-Apr-2026 17:53:49.320 INFO [main] org.apache.catalina.core.AprLifecycleListener.initializeSSL OpenSSL successfully initialized [OpenSSL 3.0.19 27 Jan 2026]
+08-Apr-2026 17:53:49.879 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["http-nio-8080"]
+08-Apr-2026 17:53:49.933 INFO [main] org.apache.catalina.startup.Catalina.load Server initialization in [1064] milliseconds
+08-Apr-2026 17:53:50.018 INFO [main] org.apache.catalina.core.StandardService.startInternal Starting service [Catalina]
+08-Apr-2026 17:53:50.020 INFO [main] org.apache.catalina.core.StandardEngine.startInternal Starting Servlet engine: [Apache Tomcat/9.0.117]
+08-Apr-2026 17:53:50.055 INFO [main] org.apache.catalina.startup.HostConfig.deployWAR Deploying web application archive [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\voyastra.war]
+08-Apr-2026 17:53:51.949 INFO [main] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+08-Apr-2026 17:53:52.086 INFO [main] com.voyastra.filter.ErrorHandlingFilter.init ErrorHandlingFilter initialized.
+08-Apr-2026 17:53:52.120 INFO [main] org.apache.catalina.startup.HostConfig.deployWAR Deployment of web application archive [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\voyastra.war] has finished in [2,062] ms
+08-Apr-2026 17:53:52.121 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\docs]
+08-Apr-2026 17:53:52.204 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\docs] has finished in [83] ms
+08-Apr-2026 17:53:52.204 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\examples]
+08-Apr-2026 17:53:52.959 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\examples] has finished in [755] ms
+08-Apr-2026 17:53:52.960 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\host-manager]
+08-Apr-2026 17:53:53.033 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\host-manager] has finished in [73] ms
+08-Apr-2026 17:53:53.035 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\manager]
+08-Apr-2026 17:53:53.094 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\manager] has finished in [58] ms
+08-Apr-2026 17:53:53.094 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\ROOT]
+08-Apr-2026 17:53:53.138 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\ROOT] has finished in [44] ms
+08-Apr-2026 17:53:53.149 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8080"]
+08-Apr-2026 17:53:53.201 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in [3262] milliseconds
+08-Apr-2026 17:54:28.957 INFO [http-nio-8080-exec-1] org.apache.tomcat.util.http.parser.Cookie.logInvalidHeader A cookie header was received [g_state={"i_l":0,"i_ll":1775649685162,"i_b":"HA3qkGnp2mWErG2fKF5q7xndWls2O96aVL4ku8BLWaI","i_e":{"enable_itp_optimization":0}}] that contained an invalid cookie. That cookie will be ignored.
+ Note: further occurrences of this error will be logged at DEBUG level.
+08-Apr-2026 18:18:32.588 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version name:   Apache Tomcat/9.0.117
+08-Apr-2026 18:18:32.595 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server built:          Mar 30 2026 18:21:16 UTC
+08-Apr-2026 18:18:32.596 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version number: 9.0.117.0
+08-Apr-2026 18:18:32.597 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Name:               Windows 11
+08-Apr-2026 18:18:32.597 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Version:            10.0
+08-Apr-2026 18:18:32.598 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Architecture:          amd64
+08-Apr-2026 18:18:32.598 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Java Home:             C:\Program Files\Java\jdk-24
+08-Apr-2026 18:18:32.599 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Version:           24.0.2+12-54
+08-Apr-2026 18:18:32.599 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Vendor:            Oracle Corporation
+08-Apr-2026 18:18:32.600 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_BASE:         C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+08-Apr-2026 18:18:32.601 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_HOME:         C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+08-Apr-2026 18:18:32.629 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang=ALL-UNNAMED
+08-Apr-2026 18:18:32.630 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang.invoke=ALL-UNNAMED
+08-Apr-2026 18:18:32.630 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang.reflect=ALL-UNNAMED
+08-Apr-2026 18:18:32.631 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.io=ALL-UNNAMED
+08-Apr-2026 18:18:32.631 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util=ALL-UNNAMED
+08-Apr-2026 18:18:32.632 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util.concurrent=ALL-UNNAMED
+08-Apr-2026 18:18:32.632 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED
+08-Apr-2026 18:18:32.632 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.config.file=c:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\conf\logging.properties
+08-Apr-2026 18:18:32.633 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+08-Apr-2026 18:18:32.633 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djdk.tls.ephemeralDHKeySize=2048
+08-Apr-2026 18:18:32.633 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.protocol.handler.pkgs=org.apache.catalina.webresources
+08-Apr-2026 18:18:32.633 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dsun.io.useCanonCaches=false
+08-Apr-2026 18:18:32.635 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dignore.endorsed.dirs=
+08-Apr-2026 18:18:32.635 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.base=c:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+08-Apr-2026 18:18:32.636 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.home=c:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+08-Apr-2026 18:18:32.636 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.io.tmpdir=c:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\temp
+08-Apr-2026 18:18:32.656 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent Loaded Apache Tomcat Native library [1.3.7] using APR version [1.7.6].
+08-Apr-2026 18:18:32.656 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent APR capabilities: IPv6 [true], sendfile [true], accept filters [false], random [true], UDS [true].
+08-Apr-2026 18:18:32.656 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent APR/OpenSSL configuration: useAprConnector [false], useOpenSSL [true]
+08-Apr-2026 18:18:32.696 INFO [main] org.apache.catalina.core.AprLifecycleListener.initializeSSL OpenSSL successfully initialized [OpenSSL 3.0.19 27 Jan 2026]
+08-Apr-2026 18:18:34.428 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["http-nio-8080"]
+08-Apr-2026 18:18:34.543 INFO [main] org.apache.catalina.startup.Catalina.load Server initialization in [2630] milliseconds
+08-Apr-2026 18:18:34.679 INFO [main] org.apache.catalina.core.StandardService.startInternal Starting service [Catalina]
+08-Apr-2026 18:18:34.680 INFO [main] org.apache.catalina.core.StandardEngine.startInternal Starting Servlet engine: [Apache Tomcat/9.0.117]
+08-Apr-2026 18:18:34.737 INFO [main] org.apache.catalina.startup.HostConfig.deployWAR Deploying web application archive [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\voyastra.war]
+08-Apr-2026 18:18:37.926 INFO [main] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+08-Apr-2026 18:18:38.204 INFO [main] com.voyastra.filter.ErrorHandlingFilter.init ErrorHandlingFilter initialized.
+08-Apr-2026 18:18:38.320 INFO [main] org.apache.catalina.startup.HostConfig.deployWAR Deployment of web application archive [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\voyastra.war] has finished in [3,579] ms
+08-Apr-2026 18:18:38.327 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\docs]
+08-Apr-2026 18:18:38.641 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\docs] has finished in [315] ms
+08-Apr-2026 18:18:38.643 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\examples]
+08-Apr-2026 18:18:40.188 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\examples] has finished in [1,545] ms
+08-Apr-2026 18:18:40.189 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\host-manager]
+08-Apr-2026 18:18:40.301 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\host-manager] has finished in [113] ms
+08-Apr-2026 18:18:40.302 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\manager]
+08-Apr-2026 18:18:40.399 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\manager] has finished in [96] ms
+08-Apr-2026 18:18:40.400 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\ROOT]
+08-Apr-2026 18:18:40.466 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\ROOT] has finished in [67] ms
+08-Apr-2026 18:18:40.478 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8080"]
+08-Apr-2026 18:18:40.537 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in [5987] milliseconds
+08-Apr-2026 18:20:26.375 INFO [http-nio-8080-exec-1] org.apache.tomcat.util.http.parser.Cookie.logInvalidHeader A cookie header was received [g_state={"i_l":0,"i_ll":1775651106403,"i_b":"HA3qkGnp2mWErG2fKF5q7xndWls2O96aVL4ku8BLWaI","i_e":{"enable_itp_optimization":0}}] that contained an invalid cookie. That cookie will be ignored.
+ Note: further occurrences of this error will be logged at DEBUG level.
+08-Apr-2026 19:49:11.639 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version name:   Apache Tomcat/9.0.117
+08-Apr-2026 19:49:11.647 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server built:          Mar 30 2026 18:21:16 UTC
+08-Apr-2026 19:49:11.649 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version number: 9.0.117.0
+08-Apr-2026 19:49:11.649 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Name:               Windows 11
+08-Apr-2026 19:49:11.651 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Version:            10.0
+08-Apr-2026 19:49:11.653 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Architecture:          amd64
+08-Apr-2026 19:49:11.653 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Java Home:             C:\Program Files\Java\jdk-24
+08-Apr-2026 19:49:11.654 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Version:           24.0.2+12-54
+08-Apr-2026 19:49:11.655 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Vendor:            Oracle Corporation
+08-Apr-2026 19:49:11.655 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_BASE:         C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+08-Apr-2026 19:49:11.656 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_HOME:         C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+08-Apr-2026 19:49:11.687 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang=ALL-UNNAMED
+08-Apr-2026 19:49:11.687 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang.invoke=ALL-UNNAMED
+08-Apr-2026 19:49:11.688 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang.reflect=ALL-UNNAMED
+08-Apr-2026 19:49:11.688 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.io=ALL-UNNAMED
+08-Apr-2026 19:49:11.689 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util=ALL-UNNAMED
+08-Apr-2026 19:49:11.690 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util.concurrent=ALL-UNNAMED
+08-Apr-2026 19:49:11.691 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED
+08-Apr-2026 19:49:11.692 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.config.file=c:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\conf\logging.properties
+08-Apr-2026 19:49:11.692 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+08-Apr-2026 19:49:11.693 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djdk.tls.ephemeralDHKeySize=2048
+08-Apr-2026 19:49:11.693 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.protocol.handler.pkgs=org.apache.catalina.webresources
+08-Apr-2026 19:49:11.695 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dsun.io.useCanonCaches=false
+08-Apr-2026 19:49:11.696 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dignore.endorsed.dirs=
+08-Apr-2026 19:49:11.696 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.base=c:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+08-Apr-2026 19:49:11.697 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.home=c:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+08-Apr-2026 19:49:11.697 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.io.tmpdir=c:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\temp
+08-Apr-2026 19:49:11.717 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent Loaded Apache Tomcat Native library [1.3.7] using APR version [1.7.6].
+08-Apr-2026 19:49:11.718 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent APR capabilities: IPv6 [true], sendfile [true], accept filters [false], random [true], UDS [true].
+08-Apr-2026 19:49:11.718 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent APR/OpenSSL configuration: useAprConnector [false], useOpenSSL [true]
+08-Apr-2026 19:49:11.761 INFO [main] org.apache.catalina.core.AprLifecycleListener.initializeSSL OpenSSL successfully initialized [OpenSSL 3.0.19 27 Jan 2026]
+08-Apr-2026 19:49:12.612 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["http-nio-8080"]
+08-Apr-2026 19:49:12.675 INFO [main] org.apache.catalina.startup.Catalina.load Server initialization in [1699] milliseconds
+08-Apr-2026 19:49:12.782 INFO [main] org.apache.catalina.core.StandardService.startInternal Starting service [Catalina]
+08-Apr-2026 19:49:12.782 INFO [main] org.apache.catalina.core.StandardEngine.startInternal Starting Servlet engine: [Apache Tomcat/9.0.117]
+08-Apr-2026 19:49:12.826 INFO [main] org.apache.catalina.startup.HostConfig.deployWAR Deploying web application archive [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\voyastra.war]
+08-Apr-2026 19:49:15.496 INFO [main] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+08-Apr-2026 19:49:15.651 INFO [main] com.voyastra.filter.ErrorHandlingFilter.init ErrorHandlingFilter initialized.
+08-Apr-2026 19:49:15.702 INFO [main] org.apache.catalina.startup.HostConfig.deployWAR Deployment of web application archive [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\voyastra.war] has finished in [2,874] ms
+08-Apr-2026 19:49:15.704 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\docs]
+08-Apr-2026 19:49:15.822 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\docs] has finished in [117] ms
+08-Apr-2026 19:49:15.823 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\examples]
+08-Apr-2026 19:49:17.391 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\examples] has finished in [1,569] ms
+08-Apr-2026 19:49:17.393 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\host-manager]
+08-Apr-2026 19:49:17.515 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\host-manager] has finished in [123] ms
+08-Apr-2026 19:49:17.516 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\manager]
+08-Apr-2026 19:49:17.652 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\manager] has finished in [135] ms
+08-Apr-2026 19:49:17.653 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\ROOT]
+08-Apr-2026 19:49:17.745 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\ROOT] has finished in [93] ms
+08-Apr-2026 19:49:17.758 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8080"]
+08-Apr-2026 19:49:17.856 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in [5174] milliseconds
+08-Apr-2026 19:50:14.808 INFO [http-nio-8080-exec-1] org.apache.tomcat.util.http.parser.Cookie.logInvalidHeader A cookie header was received [g_state={"i_l":0,"i_ll":1775652639725,"i_b":"HA3qkGnp2mWErG2fKF5q7xndWls2O96aVL4ku8BLWaI","i_e":{"enable_itp_optimization":0}}] that contained an invalid cookie. That cookie will be ignored.
+ Note: further occurrences of this error will be logged at DEBUG level.
+08-Apr-2026 20:11:17.766 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version name:   Apache Tomcat/9.0.117
+08-Apr-2026 20:11:17.776 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server built:          Mar 30 2026 18:21:16 UTC
+08-Apr-2026 20:11:17.777 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version number: 9.0.117.0
+08-Apr-2026 20:11:17.777 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Name:               Windows 11
+08-Apr-2026 20:11:17.779 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Version:            10.0
+08-Apr-2026 20:11:17.780 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Architecture:          amd64
+08-Apr-2026 20:11:17.781 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Java Home:             C:\Program Files\Java\jdk-24
+08-Apr-2026 20:11:17.782 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Version:           24.0.2+12-54
+08-Apr-2026 20:11:17.784 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Vendor:            Oracle Corporation
+08-Apr-2026 20:11:17.785 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_BASE:         C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+08-Apr-2026 20:11:17.786 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_HOME:         C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+08-Apr-2026 20:11:17.821 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang=ALL-UNNAMED
+08-Apr-2026 20:11:17.822 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang.invoke=ALL-UNNAMED
+08-Apr-2026 20:11:17.823 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang.reflect=ALL-UNNAMED
+08-Apr-2026 20:11:17.824 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.io=ALL-UNNAMED
+08-Apr-2026 20:11:17.826 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util=ALL-UNNAMED
+08-Apr-2026 20:11:17.827 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util.concurrent=ALL-UNNAMED
+08-Apr-2026 20:11:17.828 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED
+08-Apr-2026 20:11:17.829 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.config.file=c:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\conf\logging.properties
+08-Apr-2026 20:11:17.830 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+08-Apr-2026 20:11:17.830 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djdk.tls.ephemeralDHKeySize=2048
+08-Apr-2026 20:11:17.831 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.protocol.handler.pkgs=org.apache.catalina.webresources
+08-Apr-2026 20:11:17.831 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dsun.io.useCanonCaches=false
+08-Apr-2026 20:11:17.832 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dignore.endorsed.dirs=
+08-Apr-2026 20:11:17.832 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.base=c:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+08-Apr-2026 20:11:17.833 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.home=c:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+08-Apr-2026 20:11:17.833 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.io.tmpdir=c:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\temp
+08-Apr-2026 20:11:17.855 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent Loaded Apache Tomcat Native library [1.3.7] using APR version [1.7.6].
+08-Apr-2026 20:11:17.856 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent APR capabilities: IPv6 [true], sendfile [true], accept filters [false], random [true], UDS [true].
+08-Apr-2026 20:11:17.856 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent APR/OpenSSL configuration: useAprConnector [false], useOpenSSL [true]
+08-Apr-2026 20:11:17.905 INFO [main] org.apache.catalina.core.AprLifecycleListener.initializeSSL OpenSSL successfully initialized [OpenSSL 3.0.19 27 Jan 2026]
+08-Apr-2026 20:11:18.975 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["http-nio-8080"]
+08-Apr-2026 20:11:19.117 INFO [main] org.apache.catalina.startup.Catalina.load Server initialization in [2229] milliseconds
+08-Apr-2026 20:11:19.360 INFO [main] org.apache.catalina.core.StandardService.startInternal Starting service [Catalina]
+08-Apr-2026 20:11:19.361 INFO [main] org.apache.catalina.core.StandardEngine.startInternal Starting Servlet engine: [Apache Tomcat/9.0.117]
+08-Apr-2026 20:11:19.425 INFO [main] org.apache.catalina.startup.HostConfig.deployWAR Deploying web application archive [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\voyastra.war]
+08-Apr-2026 20:11:23.236 INFO [main] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+08-Apr-2026 20:11:23.388 INFO [main] com.voyastra.filter.ErrorHandlingFilter.init ErrorHandlingFilter initialized.
+08-Apr-2026 20:11:23.440 INFO [main] org.apache.catalina.startup.HostConfig.deployWAR Deployment of web application archive [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\voyastra.war] has finished in [4,011] ms
+08-Apr-2026 20:11:23.445 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\docs]
+08-Apr-2026 20:11:23.571 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\docs] has finished in [127] ms
+08-Apr-2026 20:11:23.572 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\examples]
+08-Apr-2026 20:11:25.229 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\examples] has finished in [1,656] ms
+08-Apr-2026 20:11:25.230 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\host-manager]
+08-Apr-2026 20:11:25.363 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\host-manager] has finished in [134] ms
+08-Apr-2026 20:11:25.364 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\manager]
+08-Apr-2026 20:11:25.504 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\manager] has finished in [140] ms
+08-Apr-2026 20:11:25.506 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\ROOT]
+08-Apr-2026 20:11:25.682 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\ROOT] has finished in [177] ms
+08-Apr-2026 20:11:25.695 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8080"]
+08-Apr-2026 20:11:25.783 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in [6656] milliseconds
+08-Apr-2026 20:12:03.003 INFO [http-nio-8080-exec-2] org.apache.tomcat.util.http.parser.Cookie.logInvalidHeader A cookie header was received [g_state={"i_l":0,"i_ll":1775658309878,"i_b":"2x8tG0+8AdriSTHiK18MEpd+XDC/mQJQtequULLvQ+A","i_e":{"enable_itp_optimization":0}}] that contained an invalid cookie. That cookie will be ignored.
+ Note: further occurrences of this error will be logged at DEBUG level.
+08-Apr-2026 20:16:47.957 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version name:   Apache Tomcat/9.0.117
+08-Apr-2026 20:16:47.969 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server built:          Mar 30 2026 18:21:16 UTC
+08-Apr-2026 20:16:47.969 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version number: 9.0.117.0
+08-Apr-2026 20:16:47.970 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Name:               Windows 11
+08-Apr-2026 20:16:47.970 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Version:            10.0
+08-Apr-2026 20:16:47.972 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Architecture:          amd64
+08-Apr-2026 20:16:47.973 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Java Home:             C:\Program Files\Java\jdk-24
+08-Apr-2026 20:16:47.974 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Version:           24.0.2+12-54
+08-Apr-2026 20:16:47.974 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Vendor:            Oracle Corporation
+08-Apr-2026 20:16:47.975 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_BASE:         C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+08-Apr-2026 20:16:47.975 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_HOME:         C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+08-Apr-2026 20:16:48.010 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang=ALL-UNNAMED
+08-Apr-2026 20:16:48.011 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang.invoke=ALL-UNNAMED
+08-Apr-2026 20:16:48.012 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang.reflect=ALL-UNNAMED
+08-Apr-2026 20:16:48.012 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.io=ALL-UNNAMED
+08-Apr-2026 20:16:48.014 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util=ALL-UNNAMED
+08-Apr-2026 20:16:48.015 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util.concurrent=ALL-UNNAMED
+08-Apr-2026 20:16:48.016 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED
+08-Apr-2026 20:16:48.016 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.config.file=c:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\conf\logging.properties
+08-Apr-2026 20:16:48.017 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+08-Apr-2026 20:16:48.017 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djdk.tls.ephemeralDHKeySize=2048
+08-Apr-2026 20:16:48.018 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.protocol.handler.pkgs=org.apache.catalina.webresources
+08-Apr-2026 20:16:48.018 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dsun.io.useCanonCaches=false
+08-Apr-2026 20:16:48.019 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dignore.endorsed.dirs=
+08-Apr-2026 20:16:48.019 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.base=c:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+08-Apr-2026 20:16:48.020 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.home=c:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+08-Apr-2026 20:16:48.020 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.io.tmpdir=c:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\temp
+08-Apr-2026 20:16:48.038 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent Loaded Apache Tomcat Native library [1.3.7] using APR version [1.7.6].
+08-Apr-2026 20:16:48.038 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent APR capabilities: IPv6 [true], sendfile [true], accept filters [false], random [true], UDS [true].
+08-Apr-2026 20:16:48.039 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent APR/OpenSSL configuration: useAprConnector [false], useOpenSSL [true]
+08-Apr-2026 20:16:48.071 INFO [main] org.apache.catalina.core.AprLifecycleListener.initializeSSL OpenSSL successfully initialized [OpenSSL 3.0.19 27 Jan 2026]
+08-Apr-2026 20:16:49.002 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["http-nio-8080"]
+08-Apr-2026 20:16:49.090 INFO [main] org.apache.catalina.startup.Catalina.load Server initialization in [1775] milliseconds
+08-Apr-2026 20:16:49.256 INFO [main] org.apache.catalina.core.StandardService.startInternal Starting service [Catalina]
+08-Apr-2026 20:16:49.257 INFO [main] org.apache.catalina.core.StandardEngine.startInternal Starting Servlet engine: [Apache Tomcat/9.0.117]
+08-Apr-2026 20:16:49.336 INFO [main] org.apache.catalina.startup.HostConfig.deployWAR Deploying web application archive [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\voyastra.war]
+08-Apr-2026 20:16:52.347 INFO [main] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+08-Apr-2026 20:16:52.555 INFO [main] com.voyastra.filter.ErrorHandlingFilter.init ErrorHandlingFilter initialized.
+08-Apr-2026 20:16:52.609 INFO [main] org.apache.catalina.startup.HostConfig.deployWAR Deployment of web application archive [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\voyastra.war] has finished in [3,271] ms
+08-Apr-2026 20:16:52.611 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\docs]
+08-Apr-2026 20:16:52.726 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\docs] has finished in [115] ms
+08-Apr-2026 20:16:52.728 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\examples]
+08-Apr-2026 20:16:53.941 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\examples] has finished in [1,213] ms
+08-Apr-2026 20:16:53.942 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\host-manager]
+08-Apr-2026 20:16:54.056 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\host-manager] has finished in [114] ms
+08-Apr-2026 20:16:54.058 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\manager]
+08-Apr-2026 20:16:54.199 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\manager] has finished in [141] ms
+08-Apr-2026 20:16:54.200 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\ROOT]
+08-Apr-2026 20:16:54.309 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\ROOT] has finished in [109] ms
+08-Apr-2026 20:16:54.323 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8080"]
+08-Apr-2026 20:16:54.405 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in [5305] milliseconds
+08-Apr-2026 20:45:19.947 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version name:   Apache Tomcat/9.0.117
+08-Apr-2026 20:45:19.956 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server built:          Mar 30 2026 18:21:16 UTC
+08-Apr-2026 20:45:19.957 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version number: 9.0.117.0
+08-Apr-2026 20:45:19.958 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Name:               Windows 11
+08-Apr-2026 20:45:19.958 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Version:            10.0
+08-Apr-2026 20:45:19.960 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Architecture:          amd64
+08-Apr-2026 20:45:19.960 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Java Home:             C:\Program Files\Java\jdk-24
+08-Apr-2026 20:45:19.961 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Version:           24.0.2+12-54
+08-Apr-2026 20:45:19.962 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Vendor:            Oracle Corporation
+08-Apr-2026 20:45:19.963 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_BASE:         C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+08-Apr-2026 20:45:19.964 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_HOME:         C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+08-Apr-2026 20:45:19.992 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang=ALL-UNNAMED
+08-Apr-2026 20:45:19.994 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang.invoke=ALL-UNNAMED
+08-Apr-2026 20:45:19.994 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang.reflect=ALL-UNNAMED
+08-Apr-2026 20:45:19.995 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.io=ALL-UNNAMED
+08-Apr-2026 20:45:19.995 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util=ALL-UNNAMED
+08-Apr-2026 20:45:19.995 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util.concurrent=ALL-UNNAMED
+08-Apr-2026 20:45:19.996 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED
+08-Apr-2026 20:45:19.996 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.config.file=c:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\conf\logging.properties
+08-Apr-2026 20:45:19.997 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+08-Apr-2026 20:45:19.997 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djdk.tls.ephemeralDHKeySize=2048
+08-Apr-2026 20:45:19.997 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.protocol.handler.pkgs=org.apache.catalina.webresources
+08-Apr-2026 20:45:19.998 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dsun.io.useCanonCaches=false
+08-Apr-2026 20:45:19.998 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dignore.endorsed.dirs=
+08-Apr-2026 20:45:19.999 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.base=c:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+08-Apr-2026 20:45:20.001 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.home=c:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+08-Apr-2026 20:45:20.002 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.io.tmpdir=c:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\temp
+08-Apr-2026 20:45:20.022 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent Loaded Apache Tomcat Native library [1.3.7] using APR version [1.7.6].
+08-Apr-2026 20:45:20.022 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent APR capabilities: IPv6 [true], sendfile [true], accept filters [false], random [true], UDS [true].
+08-Apr-2026 20:45:20.023 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent APR/OpenSSL configuration: useAprConnector [false], useOpenSSL [true]
+08-Apr-2026 20:45:20.065 INFO [main] org.apache.catalina.core.AprLifecycleListener.initializeSSL OpenSSL successfully initialized [OpenSSL 3.0.19 27 Jan 2026]
+08-Apr-2026 20:45:21.046 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["http-nio-8080"]
+08-Apr-2026 20:45:21.120 INFO [main] org.apache.catalina.startup.Catalina.load Server initialization in [1789] milliseconds
+08-Apr-2026 20:45:21.264 INFO [main] org.apache.catalina.core.StandardService.startInternal Starting service [Catalina]
+08-Apr-2026 20:45:21.266 INFO [main] org.apache.catalina.core.StandardEngine.startInternal Starting Servlet engine: [Apache Tomcat/9.0.117]
+08-Apr-2026 20:45:21.344 INFO [main] org.apache.catalina.startup.HostConfig.deployWAR Deploying web application archive [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\voyastra.war]
+08-Apr-2026 20:45:24.588 INFO [main] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+08-Apr-2026 20:45:24.750 INFO [main] com.voyastra.filter.ErrorHandlingFilter.init ErrorHandlingFilter initialized.
+08-Apr-2026 20:45:24.798 INFO [main] org.apache.catalina.startup.HostConfig.deployWAR Deployment of web application archive [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\voyastra.war] has finished in [3,452] ms
+08-Apr-2026 20:45:24.803 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\docs]
+08-Apr-2026 20:45:24.912 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\docs] has finished in [109] ms
+08-Apr-2026 20:45:24.913 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\examples]
+08-Apr-2026 20:45:26.582 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\examples] has finished in [1,668] ms
+08-Apr-2026 20:45:26.583 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\host-manager]
+08-Apr-2026 20:45:26.720 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\host-manager] has finished in [137] ms
+08-Apr-2026 20:45:26.721 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\manager]
+08-Apr-2026 20:45:26.844 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\manager] has finished in [123] ms
+08-Apr-2026 20:45:26.845 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\ROOT]
+08-Apr-2026 20:45:26.955 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\ROOT] has finished in [109] ms
+08-Apr-2026 20:45:26.970 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8080"]
+08-Apr-2026 20:45:27.047 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in [5920] milliseconds
+08-Apr-2026 20:46:25.336 INFO [http-nio-8080-exec-1] org.apache.tomcat.util.http.parser.Cookie.logInvalidHeader A cookie header was received [g_state={"i_l":0,"i_ll":1775659347215,"i_b":"2x8tG0+8AdriSTHiK18MEpd+XDC/mQJQtequULLvQ+A","i_e":{"enable_itp_optimization":0}}] that contained an invalid cookie. That cookie will be ignored.
+ Note: further occurrences of this error will be logged at DEBUG level.

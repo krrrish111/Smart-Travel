@@ -1,0 +1,1186 @@
+07-Apr-2026 00:00:08.335 INFO [main] org.apache.catalina.core.StandardServer.await A valid shutdown command was received via the shutdown port. Stopping the Server instance.
+07-Apr-2026 00:00:09.384 INFO [main] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["http-nio-8080"]
+07-Apr-2026 00:00:09.863 INFO [main] org.apache.catalina.core.StandardService.stopInternal Stopping service [Catalina]
+07-Apr-2026 00:00:15.602 INFO [main] com.voyastra.filter.ErrorHandlingFilter.destroy ErrorHandlingFilter destroyed.
+07-Apr-2026 00:00:16.152 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version name:   Apache Tomcat/9.0.117
+07-Apr-2026 00:00:16.157 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server built:          Mar 30 2026 18:21:16 UTC
+07-Apr-2026 00:00:16.159 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version number: 9.0.117.0
+07-Apr-2026 00:00:16.159 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Name:               Windows 11
+07-Apr-2026 00:00:16.160 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Version:            10.0
+07-Apr-2026 00:00:16.160 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Architecture:          amd64
+07-Apr-2026 00:00:16.161 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Java Home:             C:\Program Files\Java\jdk-24
+07-Apr-2026 00:00:16.161 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Version:           24.0.2+12-54
+07-Apr-2026 00:00:16.162 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Vendor:            Oracle Corporation
+07-Apr-2026 00:00:16.162 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_BASE:         C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+07-Apr-2026 00:00:16.163 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_HOME:         C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+07-Apr-2026 00:00:16.185 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang=ALL-UNNAMED
+07-Apr-2026 00:00:16.186 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang.invoke=ALL-UNNAMED
+07-Apr-2026 00:00:16.187 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang.reflect=ALL-UNNAMED
+07-Apr-2026 00:00:16.187 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.io=ALL-UNNAMED
+07-Apr-2026 00:00:16.187 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util=ALL-UNNAMED
+07-Apr-2026 00:00:16.188 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util.concurrent=ALL-UNNAMED
+07-Apr-2026 00:00:16.188 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED
+07-Apr-2026 00:00:16.188 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.config.file=C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\conf\logging.properties
+07-Apr-2026 00:00:16.190 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+07-Apr-2026 00:00:16.190 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djdk.tls.ephemeralDHKeySize=2048
+07-Apr-2026 00:00:16.190 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.protocol.handler.pkgs=org.apache.catalina.webresources
+07-Apr-2026 00:00:16.190 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dsun.io.useCanonCaches=false
+07-Apr-2026 00:00:16.190 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dignore.endorsed.dirs=
+07-Apr-2026 00:00:16.191 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.base=C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+07-Apr-2026 00:00:16.191 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.home=C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+07-Apr-2026 00:00:16.191 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.io.tmpdir=C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\temp
+07-Apr-2026 00:00:16.205 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent Loaded Apache Tomcat Native library [1.3.7] using APR version [1.7.6].
+07-Apr-2026 00:00:16.205 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent APR capabilities: IPv6 [true], sendfile [true], accept filters [false], random [true], UDS [true].
+07-Apr-2026 00:00:16.205 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent APR/OpenSSL configuration: useAprConnector [false], useOpenSSL [true]
+07-Apr-2026 00:00:16.240 INFO [main] org.apache.catalina.core.AprLifecycleListener.initializeSSL OpenSSL successfully initialized [OpenSSL 3.0.19 27 Jan 2026]
+07-Apr-2026 00:00:16.965 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["http-nio-8080"]
+07-Apr-2026 00:00:17.027 SEVERE [main] org.apache.catalina.util.LifecycleBase.handleSubClassException Failed to initialize component [Connector["http-nio-8080"]]
+	org.apache.catalina.LifecycleException: Protocol handler initialization failed
+		at org.apache.catalina.connector.Connector.initInternal(Connector.java:1084)
+		at org.apache.catalina.util.LifecycleBase.init(LifecycleBase.java:122)
+		at org.apache.catalina.core.StandardService.initInternal(StandardService.java:520)
+		at org.apache.catalina.util.LifecycleBase.init(LifecycleBase.java:122)
+		at org.apache.catalina.core.StandardServer.initInternal(StandardServer.java:984)
+		at org.apache.catalina.util.LifecycleBase.init(LifecycleBase.java:122)
+		at org.apache.catalina.startup.Catalina.load(Catalina.java:687)
+		at org.apache.catalina.startup.Catalina.load(Catalina.java:710)
+		at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+		at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+		at org.apache.catalina.startup.Bootstrap.load(Bootstrap.java:299)
+		at org.apache.catalina.startup.Bootstrap.main(Bootstrap.java:472)
+	Caused by: java.net.BindException: Address already in use: bind
+		at java.base/sun.nio.ch.Net.bind0(Native Method)
+		at java.base/sun.nio.ch.Net.bind(Net.java:511)
+		at java.base/sun.nio.ch.ServerSocketChannelImpl.netBind(ServerSocketChannelImpl.java:335)
+		at java.base/sun.nio.ch.ServerSocketChannelImpl.bind(ServerSocketChannelImpl.java:297)
+		at org.apache.tomcat.util.net.NioEndpoint.initServerSocket(NioEndpoint.java:296)
+		at org.apache.tomcat.util.net.NioEndpoint.bind(NioEndpoint.java:251)
+		at org.apache.tomcat.util.net.AbstractEndpoint.bindWithCleanup(AbstractEndpoint.java:1498)
+		at org.apache.tomcat.util.net.AbstractEndpoint.init(AbstractEndpoint.java:1511)
+		at org.apache.coyote.AbstractProtocol.init(AbstractProtocol.java:667)
+		at org.apache.coyote.http11.AbstractHttp11Protocol.init(AbstractHttp11Protocol.java:80)
+		at org.apache.catalina.connector.Connector.initInternal(Connector.java:1082)
+		... 11 more
+07-Apr-2026 00:00:17.031 INFO [main] org.apache.catalina.startup.Catalina.load Server initialization in [1277] milliseconds
+07-Apr-2026 00:00:17.196 INFO [main] org.apache.catalina.core.StandardService.startInternal Starting service [Catalina]
+07-Apr-2026 00:00:17.197 INFO [main] org.apache.catalina.core.StandardEngine.startInternal Starting Servlet engine: [Apache Tomcat/9.0.117]
+07-Apr-2026 00:00:17.222 WARNING [main] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesJdbc The web application [voyastra] registered the JDBC driver [com.mysql.cj.jdbc.Driver] but failed to unregister it when the web application was stopped. To prevent a memory leak, the JDBC Driver has been forcibly unregistered.
+07-Apr-2026 00:00:17.223 WARNING [main] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesThreads The web application [voyastra] appears to have started a thread named [mysql-cj-abandoned-connection-cleanup] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base/java.lang.Object.wait0(Native Method)
+ java.base/java.lang.Object.wait(Object.java:389)
+ java.base/java.lang.ref.ReferenceQueue.remove0(ReferenceQueue.java:124)
+ java.base/java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:215)
+ com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.run(AbandonedConnectionCleanupThread.java:91)
+ java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1095)
+ java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:619)
+ java.base/java.lang.Thread.run(Thread.java:1447)
+07-Apr-2026 00:00:17.281 INFO [main] org.apache.catalina.startup.HostConfig.deployWAR Deploying web application archive [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\voyastra.war]
+07-Apr-2026 00:00:18.201 INFO [main] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["http-nio-8080"]
+07-Apr-2026 00:00:18.960 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["http-nio-8080"]
+07-Apr-2026 00:00:19.307 INFO [main] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+07-Apr-2026 00:00:19.456 INFO [main] com.voyastra.filter.ErrorHandlingFilter.init ErrorHandlingFilter initialized.
+07-Apr-2026 00:00:19.508 INFO [main] org.apache.catalina.startup.HostConfig.deployWAR Deployment of web application archive [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\voyastra.war] has finished in [2,221] ms
+07-Apr-2026 00:00:19.513 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\docs]
+07-Apr-2026 00:00:19.655 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\docs] has finished in [141] ms
+07-Apr-2026 00:00:19.656 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\examples]
+07-Apr-2026 00:00:20.754 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\examples] has finished in [1,098] ms
+07-Apr-2026 00:00:20.755 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\host-manager]
+07-Apr-2026 00:00:20.860 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\host-manager] has finished in [104] ms
+07-Apr-2026 00:00:20.861 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\manager]
+07-Apr-2026 00:00:20.944 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\manager] has finished in [84] ms
+07-Apr-2026 00:00:20.945 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\ROOT]
+07-Apr-2026 00:00:21.025 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\ROOT] has finished in [80] ms
+07-Apr-2026 00:00:21.038 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in [3999] milliseconds
+07-Apr-2026 00:00:54.970 INFO [mysql-cj-abandoned-connection-cleanup] org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+	java.lang.IllegalStateException: Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+		at org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading(WebappClassLoaderBase.java:1370)
+		at org.apache.catalina.loader.WebappClassLoaderBase.getResource(WebappClassLoaderBase.java:994)
+		at com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.checkThreadContextClassLoader(AbandonedConnectionCleanupThread.java:123)
+		at com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.run(AbandonedConnectionCleanupThread.java:90)
+		at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1095)
+		at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:619)
+		at java.base/java.lang.Thread.run(Thread.java:1447)
+07-Apr-2026 00:00:54.970 INFO [mysql-cj-abandoned-connection-cleanup] org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+	java.lang.IllegalStateException: Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+		at org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading(WebappClassLoaderBase.java:1370)
+		at org.apache.catalina.loader.WebappClassLoaderBase.getResource(WebappClassLoaderBase.java:994)
+		at com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.checkThreadContextClassLoader(AbandonedConnectionCleanupThread.java:123)
+		at com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.run(AbandonedConnectionCleanupThread.java:90)
+		at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1095)
+		at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:619)
+		at java.base/java.lang.Thread.run(Thread.java:1447)
+07-Apr-2026 00:05:07.916 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version name:   Apache Tomcat/9.0.117
+07-Apr-2026 00:05:07.921 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server built:          Mar 30 2026 18:21:16 UTC
+07-Apr-2026 00:05:07.922 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version number: 9.0.117.0
+07-Apr-2026 00:05:07.922 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Name:               Windows 11
+07-Apr-2026 00:05:07.923 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Version:            10.0
+07-Apr-2026 00:05:07.924 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Architecture:          amd64
+07-Apr-2026 00:05:07.925 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Java Home:             C:\Program Files\Java\jdk-24
+07-Apr-2026 00:05:07.925 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Version:           24.0.2+12-54
+07-Apr-2026 00:05:07.926 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Vendor:            Oracle Corporation
+07-Apr-2026 00:05:07.926 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_BASE:         C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+07-Apr-2026 00:05:07.927 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_HOME:         C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+07-Apr-2026 00:05:08.054 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang=ALL-UNNAMED
+07-Apr-2026 00:05:08.055 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang.invoke=ALL-UNNAMED
+07-Apr-2026 00:05:08.055 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang.reflect=ALL-UNNAMED
+07-Apr-2026 00:05:08.056 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.io=ALL-UNNAMED
+07-Apr-2026 00:05:08.056 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util=ALL-UNNAMED
+07-Apr-2026 00:05:08.057 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util.concurrent=ALL-UNNAMED
+07-Apr-2026 00:05:08.057 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED
+07-Apr-2026 00:05:08.058 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.config.file=C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\conf\logging.properties
+07-Apr-2026 00:05:08.058 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+07-Apr-2026 00:05:08.059 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djdk.tls.ephemeralDHKeySize=2048
+07-Apr-2026 00:05:08.059 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.protocol.handler.pkgs=org.apache.catalina.webresources
+07-Apr-2026 00:05:08.059 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dsun.io.useCanonCaches=false
+07-Apr-2026 00:05:08.060 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dignore.endorsed.dirs=
+07-Apr-2026 00:05:08.060 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.base=C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+07-Apr-2026 00:05:08.060 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.home=C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+07-Apr-2026 00:05:08.060 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.io.tmpdir=C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\temp
+07-Apr-2026 00:05:08.073 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent Loaded Apache Tomcat Native library [1.3.7] using APR version [1.7.6].
+07-Apr-2026 00:05:08.074 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent APR capabilities: IPv6 [true], sendfile [true], accept filters [false], random [true], UDS [true].
+07-Apr-2026 00:05:08.074 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent APR/OpenSSL configuration: useAprConnector [false], useOpenSSL [true]
+07-Apr-2026 00:05:08.089 INFO [main] org.apache.catalina.core.AprLifecycleListener.initializeSSL OpenSSL successfully initialized [OpenSSL 3.0.19 27 Jan 2026]
+07-Apr-2026 00:05:08.762 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["http-nio-8080"]
+07-Apr-2026 00:05:08.847 INFO [main] org.apache.catalina.startup.Catalina.load Server initialization in [1288] milliseconds
+07-Apr-2026 00:05:08.988 INFO [main] org.apache.catalina.core.StandardService.startInternal Starting service [Catalina]
+07-Apr-2026 00:05:08.991 INFO [main] org.apache.catalina.core.StandardEngine.startInternal Starting Servlet engine: [Apache Tomcat/9.0.117]
+07-Apr-2026 00:05:09.061 INFO [main] org.apache.catalina.startup.HostConfig.deployWAR Deploying web application archive [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\voyastra.war]
+07-Apr-2026 00:05:12.369 INFO [main] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+07-Apr-2026 00:05:12.493 INFO [main] com.voyastra.filter.ErrorHandlingFilter.init ErrorHandlingFilter initialized.
+07-Apr-2026 00:05:12.526 INFO [main] org.apache.catalina.startup.HostConfig.deployWAR Deployment of web application archive [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\voyastra.war] has finished in [3,463] ms
+07-Apr-2026 00:05:12.527 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\docs]
+07-Apr-2026 00:05:12.602 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\docs] has finished in [75] ms
+07-Apr-2026 00:05:12.604 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\examples]
+07-Apr-2026 00:05:13.468 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\examples] has finished in [864] ms
+07-Apr-2026 00:05:13.469 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\host-manager]
+07-Apr-2026 00:05:13.559 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\host-manager] has finished in [90] ms
+07-Apr-2026 00:05:13.559 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\manager]
+07-Apr-2026 00:05:13.641 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\manager] has finished in [81] ms
+07-Apr-2026 00:05:13.642 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\ROOT]
+07-Apr-2026 00:05:13.700 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\ROOT] has finished in [58] ms
+07-Apr-2026 00:05:13.709 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8080"]
+07-Apr-2026 00:05:13.765 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in [4908] milliseconds
+07-Apr-2026 00:13:24.542 SEVERE [http-nio-8080-exec-8] com.voyastra.filter.ErrorHandlingFilter.doFilter Unhandled Exception at http://localhost:8080/voyastra/admin-dashboard.jsp
+	org.apache.jasper.JasperException: org.apache.jasper.JasperException: javax.el.ELException: Failed to parse the expression [${hasImage
+                    ? `<img src="${p.imageUrl}" alt="Post" style="width:52px;height:40px;object-fit:cover;border-radius:6px;border:1px solid var(--color-border);" onerror="this.style.display='none'">`
+                    : '<span style="color:var(--text-muted);font-size:0.8rem;">None</span>'}]
+		at org.apache.jasper.servlet.JspServletWrapper.handleJspException(JspServletWrapper.java:561)
+		at org.apache.jasper.servlet.JspServletWrapper.service(JspServletWrapper.java:397)
+		at org.apache.jasper.servlet.JspServlet.serviceJspFile(JspServlet.java:349)
+		at org.apache.jasper.servlet.JspServlet.service(JspServlet.java:300)
+		at javax.servlet.http.HttpServlet.service(HttpServlet.java:623)
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:197)
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:142)
+		at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:166)
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:142)
+		at com.voyastra.filter.SecurityFilter.doFilter(SecurityFilter.java:114)
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:166)
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:142)
+		at com.voyastra.filter.ErrorHandlingFilter.doFilter(ErrorHandlingFilter.java:30)
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:166)
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:142)
+		at com.voyastra.filter.SecurityFilter.doFilter(SecurityFilter.java:114)
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:166)
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:142)
+		at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:166)
+		at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:88)
+		at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:491)
+		at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:127)
+		at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+		at org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:643)
+		at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:72)
+		at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+		at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:398)
+		at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+		at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:939)
+		at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1854)
+		at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+		at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:973)
+		at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:491)
+		at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+		at java.base/java.lang.Thread.run(Thread.java:1447)
+	Caused by: org.apache.jasper.JasperException: javax.el.ELException: Failed to parse the expression [${hasImage
+                    ? `<img src="${p.imageUrl}" alt="Post" style="width:52px;height:40px;object-fit:cover;border-radius:6px;border:1px solid var(--color-border);" onerror="this.style.display='none'">`
+                    : '<span style="color:var(--text-muted);font-size:0.8rem;">None</span>'}]
+		at org.apache.jasper.compiler.Validator$ValidateVisitor.prepareExpression(Validator.java:1422)
+		at org.apache.jasper.compiler.Validator$ValidateVisitor.visit(Validator.java:656)
+		at org.apache.jasper.compiler.Node$ELExpression.accept(Node.java:879)
+		at org.apache.jasper.compiler.Node$Nodes.visit(Node.java:2235)
+		at org.apache.jasper.compiler.Node$Visitor.visitBody(Node.java:2291)
+		at org.apache.jasper.compiler.Node$Visitor.visit(Node.java:2297)
+		at org.apache.jasper.compiler.Node$Root.accept(Node.java:430)
+		at org.apache.jasper.compiler.Node$Nodes.visit(Node.java:2235)
+		at org.apache.jasper.compiler.Validator.validateExDirectives(Validator.java:1630)
+		at org.apache.jasper.compiler.Compiler.generateJava(Compiler.java:203)
+		at org.apache.jasper.compiler.Compiler.compile(Compiler.java:359)
+		at org.apache.jasper.compiler.Compiler.compile(Compiler.java:337)
+		at org.apache.jasper.compiler.Compiler.compile(Compiler.java:323)
+		at org.apache.jasper.JspCompilationContext.compile(JspCompilationContext.java:585)
+		at org.apache.jasper.servlet.JspServletWrapper.service(JspServletWrapper.java:371)
+		... 34 more
+	Caused by: javax.el.ELException: Failed to parse the expression [${hasImage
+                    ? `<img src="${p.imageUrl}" alt="Post" style="width:52px;height:40px;object-fit:cover;border-radius:6px;border:1px solid var(--color-border);" onerror="this.style.display='none'">`
+                    : '<span style="color:var(--text-muted);font-size:0.8rem;">None</span>'}]
+		at org.apache.el.lang.ExpressionBuilder.createNodeInternal(ExpressionBuilder.java:135)
+		at org.apache.el.lang.ExpressionBuilder.build(ExpressionBuilder.java:164)
+		at org.apache.el.lang.ExpressionBuilder.createValueExpression(ExpressionBuilder.java:217)
+		at org.apache.el.ExpressionFactoryImpl.createValueExpression(ExpressionFactoryImpl.java:59)
+		at org.apache.jasper.compiler.Validator$ValidateVisitor.prepareExpression(Validator.java:1420)
+		... 48 more
+	Caused by: org.apache.el.parser.ParseException: Encountered " "?" "? "" at line 2, column 21.
+Was expecting one of:
+    "}" ...
+    "." ...
+    "[" ...
+    ";" ...
+    ">" ...
+    "gt" ...
+    "<" ...
+    "lt" ...
+    ">=" ...
+    "ge" ...
+    "<=" ...
+    "le" ...
+    "==" ...
+    "eq" ...
+    "!=" ...
+    "ne" ...
+    "&&" ...
+    "and" ...
+    "||" ...
+    "or" ...
+    "*" ...
+    "+" ...
+    "-" ...
+    "/" ...
+    "div" ...
+    "%" ...
+    "mod" ...
+    "+=" ...
+    
+		at org.apache.el.parser.ELParser.generateParseException(ELParser.java:4222)
+		at org.apache.el.parser.ELParser.jj_consume_token(ELParser.java:4066)
+		at org.apache.el.parser.ELParser.DynamicExpression(ELParser.java:177)
+		at org.apache.el.parser.ELParser.CompositeExpression(ELParser.java:48)
+		at org.apache.el.lang.ExpressionBuilder.createNodeInternal(ExpressionBuilder.java:105)
+		... 52 more
+07-Apr-2026 00:13:43.705 SEVERE [http-nio-8080-exec-10] com.voyastra.filter.ErrorHandlingFilter.doFilter Unhandled Exception at http://localhost:8080/voyastra/admin-dashboard.jsp
+	org.apache.jasper.JasperException: org.apache.jasper.JasperException: javax.el.ELException: Failed to parse the expression [${hasImage
+                    ? `<img src="${p.imageUrl}" alt="Post" style="width:52px;height:40px;object-fit:cover;border-radius:6px;border:1px solid var(--color-border);" onerror="this.style.display='none'">`
+                    : '<span style="color:var(--text-muted);font-size:0.8rem;">None</span>'}]
+		at org.apache.jasper.servlet.JspServletWrapper.handleJspException(JspServletWrapper.java:561)
+		at org.apache.jasper.servlet.JspServletWrapper.service(JspServletWrapper.java:397)
+		at org.apache.jasper.servlet.JspServlet.serviceJspFile(JspServlet.java:349)
+		at org.apache.jasper.servlet.JspServlet.service(JspServlet.java:300)
+		at javax.servlet.http.HttpServlet.service(HttpServlet.java:623)
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:197)
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:142)
+		at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:166)
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:142)
+		at com.voyastra.filter.SecurityFilter.doFilter(SecurityFilter.java:114)
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:166)
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:142)
+		at com.voyastra.filter.ErrorHandlingFilter.doFilter(ErrorHandlingFilter.java:30)
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:166)
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:142)
+		at com.voyastra.filter.SecurityFilter.doFilter(SecurityFilter.java:114)
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:166)
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:142)
+		at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:166)
+		at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:88)
+		at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:491)
+		at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:127)
+		at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+		at org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:643)
+		at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:72)
+		at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+		at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:398)
+		at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+		at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:939)
+		at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1854)
+		at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+		at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:973)
+		at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:491)
+		at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+		at java.base/java.lang.Thread.run(Thread.java:1447)
+	Caused by: org.apache.jasper.JasperException: javax.el.ELException: Failed to parse the expression [${hasImage
+                    ? `<img src="${p.imageUrl}" alt="Post" style="width:52px;height:40px;object-fit:cover;border-radius:6px;border:1px solid var(--color-border);" onerror="this.style.display='none'">`
+                    : '<span style="color:var(--text-muted);font-size:0.8rem;">None</span>'}]
+		at org.apache.jasper.compiler.Validator$ValidateVisitor.prepareExpression(Validator.java:1422)
+		at org.apache.jasper.compiler.Validator$ValidateVisitor.visit(Validator.java:656)
+		at org.apache.jasper.compiler.Node$ELExpression.accept(Node.java:879)
+		at org.apache.jasper.compiler.Node$Nodes.visit(Node.java:2235)
+		at org.apache.jasper.compiler.Node$Visitor.visitBody(Node.java:2291)
+		at org.apache.jasper.compiler.Node$Visitor.visit(Node.java:2297)
+		at org.apache.jasper.compiler.Node$Root.accept(Node.java:430)
+		at org.apache.jasper.compiler.Node$Nodes.visit(Node.java:2235)
+		at org.apache.jasper.compiler.Validator.validateExDirectives(Validator.java:1630)
+		at org.apache.jasper.compiler.Compiler.generateJava(Compiler.java:203)
+		at org.apache.jasper.compiler.Compiler.compile(Compiler.java:359)
+		at org.apache.jasper.compiler.Compiler.compile(Compiler.java:337)
+		at org.apache.jasper.compiler.Compiler.compile(Compiler.java:323)
+		at org.apache.jasper.JspCompilationContext.compile(JspCompilationContext.java:585)
+		at org.apache.jasper.servlet.JspServletWrapper.service(JspServletWrapper.java:371)
+		... 34 more
+	Caused by: javax.el.ELException: Failed to parse the expression [${hasImage
+                    ? `<img src="${p.imageUrl}" alt="Post" style="width:52px;height:40px;object-fit:cover;border-radius:6px;border:1px solid var(--color-border);" onerror="this.style.display='none'">`
+                    : '<span style="color:var(--text-muted);font-size:0.8rem;">None</span>'}]
+		at org.apache.el.lang.ExpressionBuilder.createNodeInternal(ExpressionBuilder.java:135)
+		at org.apache.el.lang.ExpressionBuilder.build(ExpressionBuilder.java:164)
+		at org.apache.el.lang.ExpressionBuilder.createValueExpression(ExpressionBuilder.java:217)
+		at org.apache.el.ExpressionFactoryImpl.createValueExpression(ExpressionFactoryImpl.java:59)
+		at org.apache.jasper.compiler.Validator$ValidateVisitor.prepareExpression(Validator.java:1420)
+		... 48 more
+	Caused by: org.apache.el.parser.ParseException: Encountered " "?" "? "" at line 2, column 21.
+Was expecting one of:
+    "}" ...
+    "." ...
+    "[" ...
+    ";" ...
+    ">" ...
+    "gt" ...
+    "<" ...
+    "lt" ...
+    ">=" ...
+    "ge" ...
+    "<=" ...
+    "le" ...
+    "==" ...
+    "eq" ...
+    "!=" ...
+    "ne" ...
+    "&&" ...
+    "and" ...
+    "||" ...
+    "or" ...
+    "*" ...
+    "+" ...
+    "-" ...
+    "/" ...
+    "div" ...
+    "%" ...
+    "mod" ...
+    "+=" ...
+    
+		at org.apache.el.parser.ELParser.generateParseException(ELParser.java:4222)
+		at org.apache.el.parser.ELParser.jj_consume_token(ELParser.java:4066)
+		at org.apache.el.parser.ELParser.DynamicExpression(ELParser.java:177)
+		at org.apache.el.parser.ELParser.CompositeExpression(ELParser.java:48)
+		at org.apache.el.lang.ExpressionBuilder.createNodeInternal(ExpressionBuilder.java:105)
+		... 52 more
+07-Apr-2026 00:14:42.290 SEVERE [http-nio-8080-exec-4] com.voyastra.filter.ErrorHandlingFilter.doFilter Unhandled Exception at http://localhost:8080/voyastra/admin-dashboard.jsp
+	org.apache.jasper.JasperException: org.apache.jasper.JasperException: javax.el.ELException: Failed to parse the expression [${hasImage
+                    ? `<img src="${p.imageUrl}" alt="Post" style="width:52px;height:40px;object-fit:cover;border-radius:6px;border:1px solid var(--color-border);" onerror="this.style.display='none'">`
+                    : '<span style="color:var(--text-muted);font-size:0.8rem;">None</span>'}]
+		at org.apache.jasper.servlet.JspServletWrapper.handleJspException(JspServletWrapper.java:561)
+		at org.apache.jasper.servlet.JspServletWrapper.service(JspServletWrapper.java:397)
+		at org.apache.jasper.servlet.JspServlet.serviceJspFile(JspServlet.java:349)
+		at org.apache.jasper.servlet.JspServlet.service(JspServlet.java:300)
+		at javax.servlet.http.HttpServlet.service(HttpServlet.java:623)
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:197)
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:142)
+		at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:166)
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:142)
+		at com.voyastra.filter.SecurityFilter.doFilter(SecurityFilter.java:114)
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:166)
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:142)
+		at com.voyastra.filter.ErrorHandlingFilter.doFilter(ErrorHandlingFilter.java:30)
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:166)
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:142)
+		at com.voyastra.filter.SecurityFilter.doFilter(SecurityFilter.java:114)
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:166)
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:142)
+		at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:166)
+		at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:88)
+		at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:491)
+		at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:127)
+		at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+		at org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:643)
+		at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:72)
+		at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+		at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:398)
+		at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+		at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:939)
+		at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1854)
+		at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+		at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:973)
+		at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:491)
+		at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+		at java.base/java.lang.Thread.run(Thread.java:1447)
+	Caused by: org.apache.jasper.JasperException: javax.el.ELException: Failed to parse the expression [${hasImage
+                    ? `<img src="${p.imageUrl}" alt="Post" style="width:52px;height:40px;object-fit:cover;border-radius:6px;border:1px solid var(--color-border);" onerror="this.style.display='none'">`
+                    : '<span style="color:var(--text-muted);font-size:0.8rem;">None</span>'}]
+		at org.apache.jasper.compiler.Validator$ValidateVisitor.prepareExpression(Validator.java:1422)
+		at org.apache.jasper.compiler.Validator$ValidateVisitor.visit(Validator.java:656)
+		at org.apache.jasper.compiler.Node$ELExpression.accept(Node.java:879)
+		at org.apache.jasper.compiler.Node$Nodes.visit(Node.java:2235)
+		at org.apache.jasper.compiler.Node$Visitor.visitBody(Node.java:2291)
+		at org.apache.jasper.compiler.Node$Visitor.visit(Node.java:2297)
+		at org.apache.jasper.compiler.Node$Root.accept(Node.java:430)
+		at org.apache.jasper.compiler.Node$Nodes.visit(Node.java:2235)
+		at org.apache.jasper.compiler.Validator.validateExDirectives(Validator.java:1630)
+		at org.apache.jasper.compiler.Compiler.generateJava(Compiler.java:203)
+		at org.apache.jasper.compiler.Compiler.compile(Compiler.java:359)
+		at org.apache.jasper.compiler.Compiler.compile(Compiler.java:337)
+		at org.apache.jasper.compiler.Compiler.compile(Compiler.java:323)
+		at org.apache.jasper.JspCompilationContext.compile(JspCompilationContext.java:585)
+		at org.apache.jasper.servlet.JspServletWrapper.service(JspServletWrapper.java:371)
+		... 34 more
+	Caused by: javax.el.ELException: Failed to parse the expression [${hasImage
+                    ? `<img src="${p.imageUrl}" alt="Post" style="width:52px;height:40px;object-fit:cover;border-radius:6px;border:1px solid var(--color-border);" onerror="this.style.display='none'">`
+                    : '<span style="color:var(--text-muted);font-size:0.8rem;">None</span>'}]
+		at org.apache.el.lang.ExpressionBuilder.createNodeInternal(ExpressionBuilder.java:135)
+		at org.apache.el.lang.ExpressionBuilder.build(ExpressionBuilder.java:164)
+		at org.apache.el.lang.ExpressionBuilder.createValueExpression(ExpressionBuilder.java:217)
+		at org.apache.el.ExpressionFactoryImpl.createValueExpression(ExpressionFactoryImpl.java:59)
+		at org.apache.jasper.compiler.Validator$ValidateVisitor.prepareExpression(Validator.java:1420)
+		... 48 more
+	Caused by: org.apache.el.parser.ParseException: Encountered " "?" "? "" at line 2, column 21.
+Was expecting one of:
+    "}" ...
+    "." ...
+    "[" ...
+    ";" ...
+    ">" ...
+    "gt" ...
+    "<" ...
+    "lt" ...
+    ">=" ...
+    "ge" ...
+    "<=" ...
+    "le" ...
+    "==" ...
+    "eq" ...
+    "!=" ...
+    "ne" ...
+    "&&" ...
+    "and" ...
+    "||" ...
+    "or" ...
+    "*" ...
+    "+" ...
+    "-" ...
+    "/" ...
+    "div" ...
+    "%" ...
+    "mod" ...
+    "+=" ...
+    
+		at org.apache.el.parser.ELParser.generateParseException(ELParser.java:4222)
+		at org.apache.el.parser.ELParser.jj_consume_token(ELParser.java:4066)
+		at org.apache.el.parser.ELParser.DynamicExpression(ELParser.java:177)
+		at org.apache.el.parser.ELParser.CompositeExpression(ELParser.java:48)
+		at org.apache.el.lang.ExpressionBuilder.createNodeInternal(ExpressionBuilder.java:105)
+		... 52 more
+07-Apr-2026 00:55:45.298 SEVERE [http-nio-8080-exec-9] com.voyastra.filter.ErrorHandlingFilter.doFilter Unhandled Exception at http://localhost:8080/voyastra/login
+	java.lang.NullPointerException: Cannot invoke "java.sql.Connection.prepareStatement(String)" because "<local4>" is null
+		at com.voyastra.dao.UserDAO.getUserByEmail(UserDAO.java:50)
+		at com.voyastra.servlet.LoginServlet.doPost(LoginServlet.java:63)
+		at javax.servlet.http.HttpServlet.service(HttpServlet.java:555)
+		at javax.servlet.http.HttpServlet.service(HttpServlet.java:623)
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:197)
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:142)
+		at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:166)
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:142)
+		at com.voyastra.filter.SecurityFilter.doFilter(SecurityFilter.java:89)
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:166)
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:142)
+		at com.voyastra.filter.ErrorHandlingFilter.doFilter(ErrorHandlingFilter.java:30)
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:166)
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:142)
+		at com.voyastra.filter.SecurityFilter.doFilter(SecurityFilter.java:89)
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:166)
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:142)
+		at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:166)
+		at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:88)
+		at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:491)
+		at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:127)
+		at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+		at org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:643)
+		at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:72)
+		at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+		at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:398)
+		at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+		at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:939)
+		at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1854)
+		at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+		at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:973)
+		at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:491)
+		at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+		at java.base/java.lang.Thread.run(Thread.java:1447)
+07-Apr-2026 01:21:14.377 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version name:   Apache Tomcat/9.0.117
+07-Apr-2026 01:21:14.386 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server built:          Mar 30 2026 18:21:16 UTC
+07-Apr-2026 01:21:14.386 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version number: 9.0.117.0
+07-Apr-2026 01:21:14.387 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Name:               Windows 11
+07-Apr-2026 01:21:14.388 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Version:            10.0
+07-Apr-2026 01:21:14.388 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Architecture:          amd64
+07-Apr-2026 01:21:14.389 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Java Home:             C:\Program Files\Java\jdk-24
+07-Apr-2026 01:21:14.389 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Version:           24.0.2+12-54
+07-Apr-2026 01:21:14.389 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Vendor:            Oracle Corporation
+07-Apr-2026 01:21:14.390 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_BASE:         C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+07-Apr-2026 01:21:14.391 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_HOME:         C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+07-Apr-2026 01:21:14.433 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang=ALL-UNNAMED
+07-Apr-2026 01:21:14.434 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang.invoke=ALL-UNNAMED
+07-Apr-2026 01:21:14.434 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang.reflect=ALL-UNNAMED
+07-Apr-2026 01:21:14.435 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.io=ALL-UNNAMED
+07-Apr-2026 01:21:14.436 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util=ALL-UNNAMED
+07-Apr-2026 01:21:14.436 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util.concurrent=ALL-UNNAMED
+07-Apr-2026 01:21:14.438 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED
+07-Apr-2026 01:21:14.438 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.config.file=C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\conf\logging.properties
+07-Apr-2026 01:21:14.439 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+07-Apr-2026 01:21:14.440 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djdk.tls.ephemeralDHKeySize=2048
+07-Apr-2026 01:21:14.440 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.protocol.handler.pkgs=org.apache.catalina.webresources
+07-Apr-2026 01:21:14.440 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dsun.io.useCanonCaches=false
+07-Apr-2026 01:21:14.440 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dignore.endorsed.dirs=
+07-Apr-2026 01:21:14.440 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.base=C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+07-Apr-2026 01:21:14.440 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.home=C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+07-Apr-2026 01:21:14.442 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.io.tmpdir=C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\temp
+07-Apr-2026 01:21:14.466 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent Loaded Apache Tomcat Native library [1.3.7] using APR version [1.7.6].
+07-Apr-2026 01:21:14.467 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent APR capabilities: IPv6 [true], sendfile [true], accept filters [false], random [true], UDS [true].
+07-Apr-2026 01:21:14.467 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent APR/OpenSSL configuration: useAprConnector [false], useOpenSSL [true]
+07-Apr-2026 01:21:14.523 INFO [main] org.apache.catalina.core.AprLifecycleListener.initializeSSL OpenSSL successfully initialized [OpenSSL 3.0.19 27 Jan 2026]
+07-Apr-2026 01:21:15.633 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["http-nio-8080"]
+07-Apr-2026 01:21:15.703 INFO [main] org.apache.catalina.startup.Catalina.load Server initialization in [2010] milliseconds
+07-Apr-2026 01:21:15.909 INFO [main] org.apache.catalina.core.StandardService.startInternal Starting service [Catalina]
+07-Apr-2026 01:21:15.910 INFO [main] org.apache.catalina.core.StandardEngine.startInternal Starting Servlet engine: [Apache Tomcat/9.0.117]
+07-Apr-2026 01:21:15.977 INFO [main] org.apache.catalina.startup.HostConfig.deployWAR Deploying web application archive [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\voyastra.war]
+07-Apr-2026 01:21:19.238 INFO [main] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+07-Apr-2026 01:21:19.413 INFO [main] com.voyastra.filter.ErrorHandlingFilter.init ErrorHandlingFilter initialized.
+07-Apr-2026 01:21:19.453 INFO [main] org.apache.catalina.startup.HostConfig.deployWAR Deployment of web application archive [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\voyastra.war] has finished in [3,475] ms
+07-Apr-2026 01:21:19.455 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\docs]
+07-Apr-2026 01:21:19.562 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\docs] has finished in [108] ms
+07-Apr-2026 01:21:19.563 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\examples]
+07-Apr-2026 01:21:20.790 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\examples] has finished in [1,227] ms
+07-Apr-2026 01:21:20.792 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\host-manager]
+07-Apr-2026 01:21:20.948 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\host-manager] has finished in [156] ms
+07-Apr-2026 01:21:20.948 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\manager]
+07-Apr-2026 01:21:21.084 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\manager] has finished in [135] ms
+07-Apr-2026 01:21:21.085 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\ROOT]
+07-Apr-2026 01:21:21.192 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\ROOT] has finished in [107] ms
+07-Apr-2026 01:21:21.206 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8080"]
+07-Apr-2026 01:21:21.268 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in [5559] milliseconds
+07-Apr-2026 01:47:48.963 INFO [Catalina-utility-2] org.apache.catalina.startup.HostConfig.reload Reloading context [/voyastra]
+07-Apr-2026 01:47:49.667 INFO [Catalina-utility-2] org.apache.catalina.core.StandardContext.reload Reloading Context with name [/voyastra] has started
+07-Apr-2026 01:47:53.530 INFO [Catalina-utility-2] com.voyastra.filter.ErrorHandlingFilter.destroy ErrorHandlingFilter destroyed.
+07-Apr-2026 01:48:54.360 WARNING [Catalina-utility-2] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesJdbc The web application [voyastra] registered the JDBC driver [com.mysql.cj.jdbc.Driver] but failed to unregister it when the web application was stopped. To prevent a memory leak, the JDBC Driver has been forcibly unregistered.
+07-Apr-2026 01:48:54.646 WARNING [Catalina-utility-2] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesThreads The web application [voyastra] appears to have started a thread named [mysql-cj-abandoned-connection-cleanup] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base/java.lang.Object.wait0(Native Method)
+ java.base/java.lang.Object.wait(Object.java:389)
+ java.base/java.lang.ref.ReferenceQueue.remove0(ReferenceQueue.java:124)
+ java.base/java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:215)
+ com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.run(AbandonedConnectionCleanupThread.java:91)
+ java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1095)
+ java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:619)
+ java.base/java.lang.Thread.run(Thread.java:1447)
+07-Apr-2026 01:49:00.801 INFO [mysql-cj-abandoned-connection-cleanup] org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+	java.lang.IllegalStateException: Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+		at org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading(WebappClassLoaderBase.java:1370)
+		at org.apache.catalina.loader.WebappClassLoaderBase.getResource(WebappClassLoaderBase.java:994)
+		at com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.checkThreadContextClassLoader(AbandonedConnectionCleanupThread.java:123)
+		at com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.run(AbandonedConnectionCleanupThread.java:90)
+		at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1095)
+		at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:619)
+		at java.base/java.lang.Thread.run(Thread.java:1447)
+07-Apr-2026 01:49:00.870 INFO [mysql-cj-abandoned-connection-cleanup] org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+	java.lang.IllegalStateException: Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+		at org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading(WebappClassLoaderBase.java:1370)
+		at org.apache.catalina.loader.WebappClassLoaderBase.getResource(WebappClassLoaderBase.java:994)
+		at com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.checkThreadContextClassLoader(AbandonedConnectionCleanupThread.java:123)
+		at com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.run(AbandonedConnectionCleanupThread.java:90)
+		at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1095)
+		at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:619)
+		at java.base/java.lang.Thread.run(Thread.java:1447)
+07-Apr-2026 01:49:00.871 INFO [mysql-cj-abandoned-connection-cleanup] org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+	java.lang.IllegalStateException: Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+		at org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading(WebappClassLoaderBase.java:1370)
+		at org.apache.catalina.loader.WebappClassLoaderBase.getResource(WebappClassLoaderBase.java:994)
+		at com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.checkThreadContextClassLoader(AbandonedConnectionCleanupThread.java:123)
+		at com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.run(AbandonedConnectionCleanupThread.java:90)
+		at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1095)
+		at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:619)
+		at java.base/java.lang.Thread.run(Thread.java:1447)
+07-Apr-2026 01:49:00.895 INFO [mysql-cj-abandoned-connection-cleanup] org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+	java.lang.IllegalStateException: Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+		at org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading(WebappClassLoaderBase.java:1370)
+		at org.apache.catalina.loader.WebappClassLoaderBase.getResource(WebappClassLoaderBase.java:994)
+		at com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.checkThreadContextClassLoader(AbandonedConnectionCleanupThread.java:123)
+		at com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.run(AbandonedConnectionCleanupThread.java:90)
+		at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1095)
+		at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:619)
+		at java.base/java.lang.Thread.run(Thread.java:1447)
+07-Apr-2026 01:49:05.758 INFO [Catalina-utility-2] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+07-Apr-2026 01:49:06.041 INFO [Catalina-utility-2] com.voyastra.filter.ErrorHandlingFilter.init ErrorHandlingFilter initialized.
+07-Apr-2026 01:49:06.047 INFO [Catalina-utility-2] org.apache.catalina.core.StandardContext.reload Reloading Context with name [/voyastra] is completed
+07-Apr-2026 02:46:59.493 INFO [Catalina-utility-2] org.apache.catalina.startup.HostConfig.reload Reloading context [/voyastra]
+07-Apr-2026 02:47:00.425 INFO [Catalina-utility-2] org.apache.catalina.core.StandardContext.reload Reloading Context with name [/voyastra] has started
+07-Apr-2026 02:47:01.730 INFO [Catalina-utility-2] com.voyastra.filter.ErrorHandlingFilter.destroy ErrorHandlingFilter destroyed.
+07-Apr-2026 02:47:04.644 WARNING [Catalina-utility-2] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesJdbc The web application [voyastra] registered the JDBC driver [com.mysql.cj.jdbc.Driver] but failed to unregister it when the web application was stopped. To prevent a memory leak, the JDBC Driver has been forcibly unregistered.
+07-Apr-2026 02:47:04.804 WARNING [Catalina-utility-2] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesThreads The web application [voyastra] appears to have started a thread named [mysql-cj-abandoned-connection-cleanup] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base/java.lang.Object.wait0(Native Method)
+ java.base/java.lang.Object.wait(Object.java:389)
+ java.base/java.lang.ref.ReferenceQueue.remove0(ReferenceQueue.java:124)
+ java.base/java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:215)
+ com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.run(AbandonedConnectionCleanupThread.java:91)
+ java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1095)
+ java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:619)
+ java.base/java.lang.Thread.run(Thread.java:1447)
+07-Apr-2026 02:47:08.413 INFO [mysql-cj-abandoned-connection-cleanup] org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+	java.lang.IllegalStateException: Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+		at org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading(WebappClassLoaderBase.java:1370)
+		at org.apache.catalina.loader.WebappClassLoaderBase.getResource(WebappClassLoaderBase.java:994)
+		at com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.checkThreadContextClassLoader(AbandonedConnectionCleanupThread.java:123)
+		at com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.run(AbandonedConnectionCleanupThread.java:90)
+		at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1095)
+		at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:619)
+		at java.base/java.lang.Thread.run(Thread.java:1447)
+07-Apr-2026 02:47:08.416 INFO [mysql-cj-abandoned-connection-cleanup] org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+	java.lang.IllegalStateException: Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+		at org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading(WebappClassLoaderBase.java:1370)
+		at org.apache.catalina.loader.WebappClassLoaderBase.getResource(WebappClassLoaderBase.java:994)
+		at com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.checkThreadContextClassLoader(AbandonedConnectionCleanupThread.java:123)
+		at com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.run(AbandonedConnectionCleanupThread.java:90)
+		at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1095)
+		at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:619)
+		at java.base/java.lang.Thread.run(Thread.java:1447)
+07-Apr-2026 02:47:08.417 INFO [mysql-cj-abandoned-connection-cleanup] org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+	java.lang.IllegalStateException: Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+		at org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading(WebappClassLoaderBase.java:1370)
+		at org.apache.catalina.loader.WebappClassLoaderBase.getResource(WebappClassLoaderBase.java:994)
+		at com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.checkThreadContextClassLoader(AbandonedConnectionCleanupThread.java:123)
+		at com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.run(AbandonedConnectionCleanupThread.java:90)
+		at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1095)
+		at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:619)
+		at java.base/java.lang.Thread.run(Thread.java:1447)
+07-Apr-2026 02:47:08.418 INFO [mysql-cj-abandoned-connection-cleanup] org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+	java.lang.IllegalStateException: Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+		at org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading(WebappClassLoaderBase.java:1370)
+		at org.apache.catalina.loader.WebappClassLoaderBase.getResource(WebappClassLoaderBase.java:994)
+		at com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.checkThreadContextClassLoader(AbandonedConnectionCleanupThread.java:123)
+		at com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.run(AbandonedConnectionCleanupThread.java:90)
+		at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1095)
+		at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:619)
+		at java.base/java.lang.Thread.run(Thread.java:1447)
+07-Apr-2026 02:47:08.418 INFO [mysql-cj-abandoned-connection-cleanup] org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+	java.lang.IllegalStateException: Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+		at org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading(WebappClassLoaderBase.java:1370)
+		at org.apache.catalina.loader.WebappClassLoaderBase.getResource(WebappClassLoaderBase.java:994)
+		at com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.checkThreadContextClassLoader(AbandonedConnectionCleanupThread.java:123)
+		at com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.run(AbandonedConnectionCleanupThread.java:90)
+		at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1095)
+		at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:619)
+		at java.base/java.lang.Thread.run(Thread.java:1447)
+07-Apr-2026 02:47:08.419 INFO [mysql-cj-abandoned-connection-cleanup] org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+	java.lang.IllegalStateException: Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+		at org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading(WebappClassLoaderBase.java:1370)
+		at org.apache.catalina.loader.WebappClassLoaderBase.getResource(WebappClassLoaderBase.java:994)
+		at com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.checkThreadContextClassLoader(AbandonedConnectionCleanupThread.java:123)
+		at com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.run(AbandonedConnectionCleanupThread.java:90)
+		at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1095)
+		at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:619)
+		at java.base/java.lang.Thread.run(Thread.java:1447)
+07-Apr-2026 02:47:08.420 INFO [mysql-cj-abandoned-connection-cleanup] org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+	java.lang.IllegalStateException: Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+		at org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading(WebappClassLoaderBase.java:1370)
+		at org.apache.catalina.loader.WebappClassLoaderBase.getResource(WebappClassLoaderBase.java:994)
+		at com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.checkThreadContextClassLoader(AbandonedConnectionCleanupThread.java:123)
+		at com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.run(AbandonedConnectionCleanupThread.java:90)
+		at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1095)
+		at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:619)
+		at java.base/java.lang.Thread.run(Thread.java:1447)
+07-Apr-2026 02:47:08.421 INFO [mysql-cj-abandoned-connection-cleanup] org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+	java.lang.IllegalStateException: Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+		at org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading(WebappClassLoaderBase.java:1370)
+		at org.apache.catalina.loader.WebappClassLoaderBase.getResource(WebappClassLoaderBase.java:994)
+		at com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.checkThreadContextClassLoader(AbandonedConnectionCleanupThread.java:123)
+		at com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.run(AbandonedConnectionCleanupThread.java:90)
+		at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1095)
+		at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:619)
+		at java.base/java.lang.Thread.run(Thread.java:1447)
+07-Apr-2026 02:47:08.422 INFO [mysql-cj-abandoned-connection-cleanup] org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+	java.lang.IllegalStateException: Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+		at org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading(WebappClassLoaderBase.java:1370)
+		at org.apache.catalina.loader.WebappClassLoaderBase.getResource(WebappClassLoaderBase.java:994)
+		at com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.checkThreadContextClassLoader(AbandonedConnectionCleanupThread.java:123)
+		at com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.run(AbandonedConnectionCleanupThread.java:90)
+		at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1095)
+		at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:619)
+		at java.base/java.lang.Thread.run(Thread.java:1447)
+07-Apr-2026 02:47:08.423 INFO [mysql-cj-abandoned-connection-cleanup] org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+	java.lang.IllegalStateException: Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+		at org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading(WebappClassLoaderBase.java:1370)
+		at org.apache.catalina.loader.WebappClassLoaderBase.getResource(WebappClassLoaderBase.java:994)
+		at com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.checkThreadContextClassLoader(AbandonedConnectionCleanupThread.java:123)
+		at com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.run(AbandonedConnectionCleanupThread.java:90)
+		at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1095)
+		at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:619)
+		at java.base/java.lang.Thread.run(Thread.java:1447)
+07-Apr-2026 02:47:08.425 INFO [mysql-cj-abandoned-connection-cleanup] org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+	java.lang.IllegalStateException: Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+		at org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading(WebappClassLoaderBase.java:1370)
+		at org.apache.catalina.loader.WebappClassLoaderBase.getResource(WebappClassLoaderBase.java:994)
+		at com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.checkThreadContextClassLoader(AbandonedConnectionCleanupThread.java:123)
+		at com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.run(AbandonedConnectionCleanupThread.java:90)
+		at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1095)
+		at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:619)
+		at java.base/java.lang.Thread.run(Thread.java:1447)
+07-Apr-2026 02:47:08.426 INFO [mysql-cj-abandoned-connection-cleanup] org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+	java.lang.IllegalStateException: Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+		at org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading(WebappClassLoaderBase.java:1370)
+		at org.apache.catalina.loader.WebappClassLoaderBase.getResource(WebappClassLoaderBase.java:994)
+		at com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.checkThreadContextClassLoader(AbandonedConnectionCleanupThread.java:123)
+		at com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.run(AbandonedConnectionCleanupThread.java:90)
+		at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1095)
+		at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:619)
+		at java.base/java.lang.Thread.run(Thread.java:1447)
+07-Apr-2026 02:47:08.427 INFO [mysql-cj-abandoned-connection-cleanup] org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+	java.lang.IllegalStateException: Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+		at org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading(WebappClassLoaderBase.java:1370)
+		at org.apache.catalina.loader.WebappClassLoaderBase.getResource(WebappClassLoaderBase.java:994)
+		at com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.checkThreadContextClassLoader(AbandonedConnectionCleanupThread.java:123)
+		at com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.run(AbandonedConnectionCleanupThread.java:90)
+		at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1095)
+		at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:619)
+		at java.base/java.lang.Thread.run(Thread.java:1447)
+07-Apr-2026 02:47:13.171 INFO [Catalina-utility-2] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+07-Apr-2026 02:47:13.426 INFO [Catalina-utility-2] com.voyastra.filter.ErrorHandlingFilter.init ErrorHandlingFilter initialized.
+07-Apr-2026 02:47:13.440 INFO [Catalina-utility-2] org.apache.catalina.core.StandardContext.reload Reloading Context with name [/voyastra] is completed
+07-Apr-2026 02:51:01.154 INFO [http-nio-8080-exec-24] org.apache.tomcat.util.http.parser.Cookie.logInvalidHeader A cookie header was received [g_state={"i_l":0,"i_ll":1775510408702,"i_b":"LYUHFhBGQhmhSeJwB57yCa/HYCB0IrdiH7WS1DOGycM","i_e":{"enable_itp_optimization":0}}] that contained an invalid cookie. That cookie will be ignored.
+ Note: further occurrences of this error will be logged at DEBUG level.
+07-Apr-2026 03:07:54.106 INFO [Catalina-utility-2] org.apache.catalina.startup.HostConfig.reload Reloading context [/voyastra]
+07-Apr-2026 03:07:55.674 INFO [Catalina-utility-2] org.apache.catalina.core.StandardContext.reload Reloading Context with name [/voyastra] has started
+07-Apr-2026 03:07:58.512 INFO [Catalina-utility-2] com.voyastra.filter.ErrorHandlingFilter.destroy ErrorHandlingFilter destroyed.
+07-Apr-2026 03:08:17.113 WARNING [Catalina-utility-2] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesJdbc The web application [voyastra] registered the JDBC driver [com.mysql.cj.jdbc.Driver] but failed to unregister it when the web application was stopped. To prevent a memory leak, the JDBC Driver has been forcibly unregistered.
+07-Apr-2026 03:08:18.301 WARNING [Catalina-utility-2] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesThreads The web application [voyastra] appears to have started a thread named [mysql-cj-abandoned-connection-cleanup] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base/java.lang.Object.wait0(Native Method)
+ java.base/java.lang.Object.wait(Object.java:389)
+ java.base/java.lang.ref.ReferenceQueue.remove0(ReferenceQueue.java:124)
+ java.base/java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:215)
+ com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.run(AbandonedConnectionCleanupThread.java:91)
+ java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1095)
+ java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:619)
+ java.base/java.lang.Thread.run(Thread.java:1447)
+07-Apr-2026 03:08:23.541 INFO [mysql-cj-abandoned-connection-cleanup] org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+	java.lang.IllegalStateException: Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+		at org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading(WebappClassLoaderBase.java:1370)
+		at org.apache.catalina.loader.WebappClassLoaderBase.getResource(WebappClassLoaderBase.java:994)
+		at com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.checkThreadContextClassLoader(AbandonedConnectionCleanupThread.java:123)
+		at com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.run(AbandonedConnectionCleanupThread.java:90)
+		at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1095)
+		at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:619)
+		at java.base/java.lang.Thread.run(Thread.java:1447)
+07-Apr-2026 03:09:01.604 INFO [Catalina-utility-2] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+07-Apr-2026 03:09:05.709 INFO [Catalina-utility-2] com.voyastra.filter.ErrorHandlingFilter.init ErrorHandlingFilter initialized.
+07-Apr-2026 03:09:06.097 INFO [Catalina-utility-2] org.apache.catalina.core.StandardContext.reload Reloading Context with name [/voyastra] is completed
+07-Apr-2026 15:01:03.388 SEVERE [http-nio-8080-exec-34] com.voyastra.filter.ErrorHandlingFilter.doFilter Unhandled Exception at http://localhost:8080/voyastra/
+	java.lang.NullPointerException: Cannot invoke "java.sql.Connection.prepareStatement(String)" because "<local3>" is null
+		at com.voyastra.dao.DestinationDAO.getAllDestinations(DestinationDAO.java:68)
+		at com.voyastra.servlet.HomeServlet.doGet(HomeServlet.java:38)
+		at javax.servlet.http.HttpServlet.service(HttpServlet.java:529)
+		at javax.servlet.http.HttpServlet.service(HttpServlet.java:623)
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:197)
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:142)
+		at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:166)
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:142)
+		at com.voyastra.filter.SecurityFilter.doFilter(SecurityFilter.java:67)
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:166)
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:142)
+		at com.voyastra.filter.ErrorHandlingFilter.doFilter(ErrorHandlingFilter.java:30)
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:166)
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:142)
+		at com.voyastra.filter.SecurityFilter.doFilter(SecurityFilter.java:67)
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:166)
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:142)
+		at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:166)
+		at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:88)
+		at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:491)
+		at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:127)
+		at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+		at org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:643)
+		at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:72)
+		at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+		at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:398)
+		at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+		at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:939)
+		at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1854)
+		at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+		at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:973)
+		at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:491)
+		at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+		at java.base/java.lang.Thread.run(Thread.java:1447)
+07-Apr-2026 15:16:41.374 WARNING [http-nio-8080-exec-37] org.apache.jasper.compiler.Compiler.removeGeneratedClassFiles Failed to delete generated class file [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\work\Catalina\localhost\voyastra\org\apache\jsp\explore_jsp.class]
+07-Apr-2026 15:16:41.645 SEVERE [http-nio-8080-exec-32] com.voyastra.filter.ErrorHandlingFilter.doFilter Unhandled Exception at http://localhost:8080/voyastra/explore.jsp
+	org.apache.jasper.JasperException: org.apache.jasper.JasperException: Unable to compile class for JSP
+		at org.apache.jasper.servlet.JspServletWrapper.handleJspException(JspServletWrapper.java:561)
+		at org.apache.jasper.servlet.JspServletWrapper.service(JspServletWrapper.java:397)
+		at org.apache.jasper.servlet.JspServlet.serviceJspFile(JspServlet.java:349)
+		at org.apache.jasper.servlet.JspServlet.service(JspServlet.java:300)
+		at javax.servlet.http.HttpServlet.service(HttpServlet.java:623)
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:197)
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:142)
+		at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:166)
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:142)
+		at com.voyastra.filter.SecurityFilter.doFilter(SecurityFilter.java:67)
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:166)
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:142)
+		at com.voyastra.filter.ErrorHandlingFilter.doFilter(ErrorHandlingFilter.java:30)
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:166)
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:142)
+		at com.voyastra.filter.SecurityFilter.doFilter(SecurityFilter.java:67)
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:166)
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:142)
+		at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:166)
+		at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:88)
+		at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:491)
+		at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:127)
+		at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+		at org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:643)
+		at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:72)
+		at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+		at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:398)
+		at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+		at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:939)
+		at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1854)
+		at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+		at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:973)
+		at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:491)
+		at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+		at java.base/java.lang.Thread.run(Thread.java:1447)
+	Caused by: org.apache.jasper.JasperException: Unable to compile class for JSP
+		at org.apache.jasper.JspCompilationContext.compile(JspCompilationContext.java:599)
+		at org.apache.jasper.servlet.JspServletWrapper.service(JspServletWrapper.java:371)
+		... 34 more
+	Caused by: java.io.IOException: Unable to delete class file [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\work\Catalina\localhost\voyastra\org\apache\jsp\explore_jsp.class]
+		at org.apache.jasper.compiler.SmapUtil$SDEInstaller.install(SmapUtil.java:156)
+		at org.apache.jasper.compiler.SmapUtil.installSmap(SmapUtil.java:121)
+		at org.apache.jasper.compiler.JDTCompiler.generateClass(JDTCompiler.java:607)
+		at org.apache.jasper.compiler.Compiler.compile(Compiler.java:365)
+		at org.apache.jasper.compiler.Compiler.compile(Compiler.java:337)
+		at org.apache.jasper.compiler.Compiler.compile(Compiler.java:323)
+		at org.apache.jasper.JspCompilationContext.compile(JspCompilationContext.java:585)
+		... 35 more
+07-Apr-2026 16:55:55.071 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version name:   Apache Tomcat/9.0.117
+07-Apr-2026 16:55:55.078 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server built:          Mar 30 2026 18:21:16 UTC
+07-Apr-2026 16:55:55.079 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version number: 9.0.117.0
+07-Apr-2026 16:55:55.080 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Name:               Windows 11
+07-Apr-2026 16:55:55.080 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Version:            10.0
+07-Apr-2026 16:55:55.081 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Architecture:          amd64
+07-Apr-2026 16:55:55.082 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Java Home:             C:\Program Files\Java\jdk-24
+07-Apr-2026 16:55:55.083 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Version:           24.0.2+12-54
+07-Apr-2026 16:55:55.084 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Vendor:            Oracle Corporation
+07-Apr-2026 16:55:55.085 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_BASE:         C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+07-Apr-2026 16:55:55.086 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_HOME:         C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+07-Apr-2026 16:55:55.128 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang=ALL-UNNAMED
+07-Apr-2026 16:55:55.129 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang.invoke=ALL-UNNAMED
+07-Apr-2026 16:55:55.130 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang.reflect=ALL-UNNAMED
+07-Apr-2026 16:55:55.131 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.io=ALL-UNNAMED
+07-Apr-2026 16:55:55.132 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util=ALL-UNNAMED
+07-Apr-2026 16:55:55.132 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util.concurrent=ALL-UNNAMED
+07-Apr-2026 16:55:55.133 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED
+07-Apr-2026 16:55:55.133 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.config.file=C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\conf\logging.properties
+07-Apr-2026 16:55:55.134 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+07-Apr-2026 16:55:55.134 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djdk.tls.ephemeralDHKeySize=2048
+07-Apr-2026 16:55:55.136 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.protocol.handler.pkgs=org.apache.catalina.webresources
+07-Apr-2026 16:55:55.137 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dsun.io.useCanonCaches=false
+07-Apr-2026 16:55:55.138 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dignore.endorsed.dirs=
+07-Apr-2026 16:55:55.138 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.base=C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+07-Apr-2026 16:55:55.139 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.home=C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+07-Apr-2026 16:55:55.140 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.io.tmpdir=C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\temp
+07-Apr-2026 16:55:55.165 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent Loaded Apache Tomcat Native library [1.3.7] using APR version [1.7.6].
+07-Apr-2026 16:55:55.168 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent APR capabilities: IPv6 [true], sendfile [true], accept filters [false], random [true], UDS [true].
+07-Apr-2026 16:55:55.170 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent APR/OpenSSL configuration: useAprConnector [false], useOpenSSL [true]
+07-Apr-2026 16:55:55.218 INFO [main] org.apache.catalina.core.AprLifecycleListener.initializeSSL OpenSSL successfully initialized [OpenSSL 3.0.19 27 Jan 2026]
+07-Apr-2026 16:55:56.609 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["http-nio-8080"]
+07-Apr-2026 16:55:56.718 INFO [main] org.apache.catalina.startup.Catalina.load Server initialization in [2301] milliseconds
+07-Apr-2026 16:55:56.909 INFO [main] org.apache.catalina.core.StandardService.startInternal Starting service [Catalina]
+07-Apr-2026 16:55:56.910 INFO [main] org.apache.catalina.core.StandardEngine.startInternal Starting Servlet engine: [Apache Tomcat/9.0.117]
+07-Apr-2026 16:55:56.983 INFO [main] org.apache.catalina.startup.HostConfig.deployWAR Deploying web application archive [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\voyastra.war]
+07-Apr-2026 16:56:01.350 INFO [main] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+07-Apr-2026 16:56:01.568 INFO [main] com.voyastra.filter.ErrorHandlingFilter.init ErrorHandlingFilter initialized.
+07-Apr-2026 16:56:01.637 INFO [main] org.apache.catalina.startup.HostConfig.deployWAR Deployment of web application archive [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\voyastra.war] has finished in [4,651] ms
+07-Apr-2026 16:56:01.641 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\docs]
+07-Apr-2026 16:56:01.802 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\docs] has finished in [161] ms
+07-Apr-2026 16:56:01.804 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\examples]
+07-Apr-2026 16:56:03.538 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\examples] has finished in [1,732] ms
+07-Apr-2026 16:56:03.540 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\host-manager]
+07-Apr-2026 16:56:03.760 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\host-manager] has finished in [221] ms
+07-Apr-2026 16:56:03.760 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\manager]
+07-Apr-2026 16:56:03.948 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\manager] has finished in [188] ms
+07-Apr-2026 16:56:03.950 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\ROOT]
+07-Apr-2026 16:56:04.104 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\ROOT] has finished in [154] ms
+07-Apr-2026 16:56:04.119 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8080"]
+07-Apr-2026 16:56:04.225 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in [7496] milliseconds
+07-Apr-2026 17:11:55.645 INFO [http-nio-8080-exec-2] org.apache.tomcat.util.http.parser.Cookie.logInvalidHeader A cookie header was received [g_state={"i_l":0,"i_ll":1775552639878,"i_b":"6/Ny/Cs6+bBLc0HW2Q2PlBiPX3tctbEoBU3z89F4o/8","i_e":{"enable_itp_optimization":0}}] that contained an invalid cookie. That cookie will be ignored.
+ Note: further occurrences of this error will be logged at DEBUG level.
+07-Apr-2026 17:11:57.150 SEVERE [http-nio-8080-exec-2] com.voyastra.filter.ErrorHandlingFilter.doFilter Unhandled Exception at http://localhost:8080/voyastra/
+	java.lang.NullPointerException: Cannot invoke "java.sql.Connection.prepareStatement(String)" because "<local3>" is null
+		at com.voyastra.dao.DestinationDAO.getAllDestinations(DestinationDAO.java:68)
+		at com.voyastra.servlet.HomeServlet.doGet(HomeServlet.java:38)
+		at javax.servlet.http.HttpServlet.service(HttpServlet.java:529)
+		at javax.servlet.http.HttpServlet.service(HttpServlet.java:623)
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:197)
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:142)
+		at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:166)
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:142)
+		at com.voyastra.filter.SecurityFilter.doFilter(SecurityFilter.java:67)
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:166)
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:142)
+		at com.voyastra.filter.ErrorHandlingFilter.doFilter(ErrorHandlingFilter.java:30)
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:166)
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:142)
+		at com.voyastra.filter.SecurityFilter.doFilter(SecurityFilter.java:67)
+		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:166)
+		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:142)
+		at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:166)
+		at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:88)
+		at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:491)
+		at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:127)
+		at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+		at org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:643)
+		at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:72)
+		at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+		at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:398)
+		at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+		at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:939)
+		at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1854)
+		at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+		at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:973)
+		at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:491)
+		at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+		at java.base/java.lang.Thread.run(Thread.java:1447)
+07-Apr-2026 17:13:46.150 INFO [Catalina-utility-1] org.apache.catalina.startup.HostConfig.undeploy Undeploying context [/voyastra]
+07-Apr-2026 17:13:46.285 INFO [Catalina-utility-1] com.voyastra.filter.ErrorHandlingFilter.destroy ErrorHandlingFilter destroyed.
+07-Apr-2026 17:13:49.976 WARNING [Catalina-utility-1] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesJdbc The web application [voyastra] registered the JDBC driver [com.mysql.cj.jdbc.Driver] but failed to unregister it when the web application was stopped. To prevent a memory leak, the JDBC Driver has been forcibly unregistered.
+07-Apr-2026 17:13:49.979 WARNING [Catalina-utility-1] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesThreads The web application [voyastra] appears to have started a thread named [mysql-cj-abandoned-connection-cleanup] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base/java.lang.Object.wait0(Native Method)
+ java.base/java.lang.Object.wait(Object.java:389)
+ java.base/java.lang.ref.ReferenceQueue.remove0(ReferenceQueue.java:124)
+ java.base/java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:215)
+ com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.run(AbandonedConnectionCleanupThread.java:91)
+ java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1095)
+ java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:619)
+ java.base/java.lang.Thread.run(Thread.java:1447)
+07-Apr-2026 17:13:51.012 INFO [mysql-cj-abandoned-connection-cleanup] org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+	java.lang.IllegalStateException: Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+		at org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading(WebappClassLoaderBase.java:1370)
+		at org.apache.catalina.loader.WebappClassLoaderBase.getResource(WebappClassLoaderBase.java:994)
+		at com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.checkThreadContextClassLoader(AbandonedConnectionCleanupThread.java:123)
+		at com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.run(AbandonedConnectionCleanupThread.java:90)
+		at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1095)
+		at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:619)
+		at java.base/java.lang.Thread.run(Thread.java:1447)
+07-Apr-2026 17:19:47.989 INFO [Catalina-utility-2] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\voyastra]
+07-Apr-2026 17:19:50.926 WARNING [Catalina-utility-2] org.apache.catalina.util.SessionIdGeneratorBase.createSecureRandom Creation of SecureRandom instance for session ID generation using [SHA1PRNG] took [298] milliseconds.
+07-Apr-2026 17:19:50.954 INFO [Catalina-utility-2] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\voyastra] has finished in [3,011] ms
+07-Apr-2026 17:20:21.023 INFO [Catalina-utility-2] org.apache.catalina.startup.HostConfig.reload Reloading context [/voyastra]
+07-Apr-2026 17:20:21.074 INFO [Catalina-utility-2] org.apache.catalina.core.StandardContext.reload Reloading Context with name [/voyastra] has started
+07-Apr-2026 17:20:23.902 INFO [Catalina-utility-2] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+07-Apr-2026 17:20:24.064 INFO [Catalina-utility-2] com.voyastra.filter.ErrorHandlingFilter.init ErrorHandlingFilter initialized.
+07-Apr-2026 17:20:24.100 INFO [Catalina-utility-2] org.apache.catalina.core.StandardContext.reload Reloading Context with name [/voyastra] is completed
+07-Apr-2026 19:46:55.127 INFO [Thread-1] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["http-nio-8080"]
+07-Apr-2026 19:47:00.219 INFO [Thread-1] org.apache.catalina.core.StandardService.stopInternal Stopping service [Catalina]
+07-Apr-2026 19:47:17.331 INFO [Thread-1] com.voyastra.filter.ErrorHandlingFilter.destroy ErrorHandlingFilter destroyed.
+07-Apr-2026 19:47:18.481 WARNING [Thread-1] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesJdbc The web application [voyastra] registered the JDBC driver [com.mysql.cj.jdbc.Driver] but failed to unregister it when the web application was stopped. To prevent a memory leak, the JDBC Driver has been forcibly unregistered.
+07-Apr-2026 19:47:18.621 WARNING [Thread-1] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesThreads The web application [voyastra] appears to have started a thread named [mysql-cj-abandoned-connection-cleanup] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base/java.lang.Object.wait0(Native Method)
+ java.base/java.lang.Object.wait(Object.java:389)
+ java.base/java.lang.ref.ReferenceQueue.remove0(ReferenceQueue.java:124)
+ java.base/java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:215)
+ com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.run(AbandonedConnectionCleanupThread.java:91)
+ java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1095)
+ java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:619)
+ java.base/java.lang.Thread.run(Thread.java:1447)
+07-Apr-2026 19:47:19.021 INFO [Thread-1] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["http-nio-8080"]
+07-Apr-2026 19:47:20.302 INFO [mysql-cj-abandoned-connection-cleanup] org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+	java.lang.IllegalStateException: Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+		at org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading(WebappClassLoaderBase.java:1370)
+		at org.apache.catalina.loader.WebappClassLoaderBase.getResource(WebappClassLoaderBase.java:994)
+		at com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.checkThreadContextClassLoader(AbandonedConnectionCleanupThread.java:123)
+		at com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.run(AbandonedConnectionCleanupThread.java:90)
+		at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1095)
+		at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:619)
+		at java.base/java.lang.Thread.run(Thread.java:1447)
+07-Apr-2026 19:47:23.968 INFO [Thread-1] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["http-nio-8080"]
+07-Apr-2026 21:12:14.636 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version name:   Apache Tomcat/9.0.117
+07-Apr-2026 21:12:14.641 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server built:          Mar 30 2026 18:21:16 UTC
+07-Apr-2026 21:12:14.642 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version number: 9.0.117.0
+07-Apr-2026 21:12:14.642 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Name:               Windows 11
+07-Apr-2026 21:12:14.643 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Version:            10.0
+07-Apr-2026 21:12:14.643 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Architecture:          amd64
+07-Apr-2026 21:12:14.644 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Java Home:             C:\Program Files\Java\jdk-24
+07-Apr-2026 21:12:14.644 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Version:           24.0.2+12-54
+07-Apr-2026 21:12:14.645 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Vendor:            Oracle Corporation
+07-Apr-2026 21:12:14.646 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_BASE:         C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+07-Apr-2026 21:12:14.647 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_HOME:         C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+07-Apr-2026 21:12:14.664 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang=ALL-UNNAMED
+07-Apr-2026 21:12:14.664 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang.invoke=ALL-UNNAMED
+07-Apr-2026 21:12:14.664 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang.reflect=ALL-UNNAMED
+07-Apr-2026 21:12:14.665 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.io=ALL-UNNAMED
+07-Apr-2026 21:12:14.665 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util=ALL-UNNAMED
+07-Apr-2026 21:12:14.666 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util.concurrent=ALL-UNNAMED
+07-Apr-2026 21:12:14.666 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED
+07-Apr-2026 21:12:14.666 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.config.file=tomcat\apache-tomcat-9.0.117\conf\logging.properties
+07-Apr-2026 21:12:14.666 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+07-Apr-2026 21:12:14.667 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djdk.tls.ephemeralDHKeySize=2048
+07-Apr-2026 21:12:14.667 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.protocol.handler.pkgs=org.apache.catalina.webresources
+07-Apr-2026 21:12:14.667 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dsun.io.useCanonCaches=false
+07-Apr-2026 21:12:14.667 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dignore.endorsed.dirs=
+07-Apr-2026 21:12:14.667 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.base=tomcat\apache-tomcat-9.0.117
+07-Apr-2026 21:12:14.668 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.home=tomcat\apache-tomcat-9.0.117
+07-Apr-2026 21:12:14.668 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.io.tmpdir=tomcat\apache-tomcat-9.0.117\temp
+07-Apr-2026 21:12:14.684 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent Loaded Apache Tomcat Native library [1.3.7] using APR version [1.7.6].
+07-Apr-2026 21:12:14.684 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent APR capabilities: IPv6 [true], sendfile [true], accept filters [false], random [true], UDS [true].
+07-Apr-2026 21:12:14.685 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent APR/OpenSSL configuration: useAprConnector [false], useOpenSSL [true]
+07-Apr-2026 21:12:14.715 INFO [main] org.apache.catalina.core.AprLifecycleListener.initializeSSL OpenSSL successfully initialized [OpenSSL 3.0.19 27 Jan 2026]
+07-Apr-2026 21:12:15.409 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["http-nio-8080"]
+07-Apr-2026 21:12:15.471 INFO [main] org.apache.catalina.startup.Catalina.load Server initialization in [1275] milliseconds
+07-Apr-2026 21:12:15.576 INFO [main] org.apache.catalina.core.StandardService.startInternal Starting service [Catalina]
+07-Apr-2026 21:12:15.576 INFO [main] org.apache.catalina.core.StandardEngine.startInternal Starting Servlet engine: [Apache Tomcat/9.0.117]
+07-Apr-2026 21:12:15.612 INFO [main] org.apache.catalina.startup.HostConfig.deployWAR Deploying web application archive [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\voyastra.war]
+07-Apr-2026 21:12:19.091 INFO [main] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+07-Apr-2026 21:12:19.345 INFO [main] com.voyastra.filter.ErrorHandlingFilter.init ErrorHandlingFilter initialized.
+07-Apr-2026 21:12:19.405 INFO [main] org.apache.catalina.startup.HostConfig.deployWAR Deployment of web application archive [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\voyastra.war] has finished in [3,790] ms
+07-Apr-2026 21:12:19.408 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\docs]
+07-Apr-2026 21:12:19.529 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\docs] has finished in [121] ms
+07-Apr-2026 21:12:19.541 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\examples]
+07-Apr-2026 21:12:20.737 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\examples] has finished in [1,195] ms
+07-Apr-2026 21:12:20.738 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\host-manager]
+07-Apr-2026 21:12:20.858 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\host-manager] has finished in [121] ms
+07-Apr-2026 21:12:20.858 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\manager]
+07-Apr-2026 21:12:20.957 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\manager] has finished in [98] ms
+07-Apr-2026 21:12:20.957 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\ROOT]
+07-Apr-2026 21:12:21.030 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\ROOT] has finished in [73] ms
+07-Apr-2026 21:12:21.042 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler ["http-nio-8080"]
+07-Apr-2026 21:12:21.101 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in [5625] milliseconds
+07-Apr-2026 21:14:48.265 INFO [http-nio-8080-exec-4] org.apache.tomcat.util.http.parser.Cookie.logInvalidHeader A cookie header was received [g_state={"i_l":0,"i_ll":1775576629020,"i_b":"fC86PDc83/+DJruTyRavFFJO1g/hwxfIX9OoPrOaJb8","i_e":{"enable_itp_optimization":0}}] that contained an invalid cookie. That cookie will be ignored.
+ Note: further occurrences of this error will be logged at DEBUG level.
+07-Apr-2026 21:37:13.736 INFO [Catalina-utility-2] org.apache.catalina.startup.HostConfig.undeploy Undeploying context [/voyastra]
+07-Apr-2026 21:37:13.834 INFO [Catalina-utility-2] com.voyastra.filter.ErrorHandlingFilter.destroy ErrorHandlingFilter destroyed.
+07-Apr-2026 21:37:14.159 WARNING [Catalina-utility-2] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesJdbc The web application [voyastra] registered the JDBC driver [com.mysql.cj.jdbc.Driver] but failed to unregister it when the web application was stopped. To prevent a memory leak, the JDBC Driver has been forcibly unregistered.
+07-Apr-2026 21:37:14.226 WARNING [Catalina-utility-2] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesThreads The web application [voyastra] appears to have started a thread named [mysql-cj-abandoned-connection-cleanup] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.base/java.lang.Object.wait0(Native Method)
+ java.base/java.lang.Object.wait(Object.java:389)
+ java.base/java.lang.ref.ReferenceQueue.remove0(ReferenceQueue.java:124)
+ java.base/java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:215)
+ com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.run(AbandonedConnectionCleanupThread.java:91)
+ java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1095)
+ java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:619)
+ java.base/java.lang.Thread.run(Thread.java:1447)
+07-Apr-2026 21:37:14.488 SEVERE [Catalina-utility-2] org.apache.catalina.startup.ExpandWar.deleteDir [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\work\Catalina\localhost\voyastra] could not be completely deleted. The presence of the remaining files may cause problems
+07-Apr-2026 21:37:14.490 SEVERE [Catalina-utility-2] org.apache.catalina.startup.ExpandWar.delete [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\work\Catalina\localhost\voyastra] could not be completely deleted. The presence of the remaining files may cause problems
+07-Apr-2026 21:37:14.533 INFO [Catalina-utility-2] org.apache.catalina.startup.HostConfig.deployWAR Deploying web application archive [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\voyastra.war]
+07-Apr-2026 21:37:16.099 INFO [mysql-cj-abandoned-connection-cleanup] org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+	java.lang.IllegalStateException: Illegal access: this web application instance has been stopped already. Could not load []. The following stack trace is thrown for debugging purposes as well as to attempt to terminate the thread which caused the illegal access.
+		at org.apache.catalina.loader.WebappClassLoaderBase.checkStateForResourceLoading(WebappClassLoaderBase.java:1370)
+		at org.apache.catalina.loader.WebappClassLoaderBase.getResource(WebappClassLoaderBase.java:994)
+		at com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.checkThreadContextClassLoader(AbandonedConnectionCleanupThread.java:123)
+		at com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.run(AbandonedConnectionCleanupThread.java:90)
+		at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1095)
+		at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:619)
+		at java.base/java.lang.Thread.run(Thread.java:1447)
+07-Apr-2026 21:37:26.934 INFO [Catalina-utility-2] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+07-Apr-2026 21:37:27.103 INFO [Catalina-utility-2] com.voyastra.filter.ErrorHandlingFilter.init ErrorHandlingFilter initialized.
+07-Apr-2026 21:37:27.175 INFO [Catalina-utility-2] org.apache.catalina.startup.HostConfig.deployWAR Deployment of web application archive [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\voyastra.war] has finished in [12,596] ms
+07-Apr-2026 21:41:34.597 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version name:   Apache Tomcat/9.0.117
+07-Apr-2026 21:41:34.604 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server built:          Mar 30 2026 18:21:16 UTC
+07-Apr-2026 21:41:34.605 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version number: 9.0.117.0
+07-Apr-2026 21:41:34.606 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Name:               Windows 11
+07-Apr-2026 21:41:34.606 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Version:            10.0
+07-Apr-2026 21:41:34.607 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Architecture:          amd64
+07-Apr-2026 21:41:34.607 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Java Home:             C:\Program Files\Java\jdk-24
+07-Apr-2026 21:41:34.608 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Version:           24.0.2+12-54
+07-Apr-2026 21:41:34.609 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Vendor:            Oracle Corporation
+07-Apr-2026 21:41:34.609 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_BASE:         C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+07-Apr-2026 21:41:34.609 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_HOME:         C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117
+07-Apr-2026 21:41:34.640 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang=ALL-UNNAMED
+07-Apr-2026 21:41:34.641 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang.invoke=ALL-UNNAMED
+07-Apr-2026 21:41:34.641 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.lang.reflect=ALL-UNNAMED
+07-Apr-2026 21:41:34.641 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.io=ALL-UNNAMED
+07-Apr-2026 21:41:34.641 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util=ALL-UNNAMED
+07-Apr-2026 21:41:34.641 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.base/java.util.concurrent=ALL-UNNAMED
+07-Apr-2026 21:41:34.642 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: --add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED
+07-Apr-2026 21:41:34.642 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.config.file=tomcat\apache-tomcat-9.0.117\conf\logging.properties
+07-Apr-2026 21:41:34.643 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+07-Apr-2026 21:41:34.643 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djdk.tls.ephemeralDHKeySize=2048
+07-Apr-2026 21:41:34.644 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.protocol.handler.pkgs=org.apache.catalina.webresources
+07-Apr-2026 21:41:34.644 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dsun.io.useCanonCaches=false
+07-Apr-2026 21:41:34.645 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dignore.endorsed.dirs=
+07-Apr-2026 21:41:34.645 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.base=tomcat\apache-tomcat-9.0.117
+07-Apr-2026 21:41:34.645 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.home=tomcat\apache-tomcat-9.0.117
+07-Apr-2026 21:41:34.646 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.io.tmpdir=tomcat\apache-tomcat-9.0.117\temp
+07-Apr-2026 21:41:34.671 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent Loaded Apache Tomcat Native library [1.3.7] using APR version [1.7.6].
+07-Apr-2026 21:41:34.673 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent APR capabilities: IPv6 [true], sendfile [true], accept filters [false], random [true], UDS [true].
+07-Apr-2026 21:41:34.674 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent APR/OpenSSL configuration: useAprConnector [false], useOpenSSL [true]
+07-Apr-2026 21:41:34.797 INFO [main] org.apache.catalina.core.AprLifecycleListener.initializeSSL OpenSSL successfully initialized [OpenSSL 3.0.19 27 Jan 2026]
+07-Apr-2026 21:41:36.227 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["http-nio-8080"]
+07-Apr-2026 21:41:36.293 SEVERE [main] org.apache.catalina.util.LifecycleBase.handleSubClassException Failed to initialize component [Connector["http-nio-8080"]]
+	org.apache.catalina.LifecycleException: Protocol handler initialization failed
+		at org.apache.catalina.connector.Connector.initInternal(Connector.java:1084)
+		at org.apache.catalina.util.LifecycleBase.init(LifecycleBase.java:122)
+		at org.apache.catalina.core.StandardService.initInternal(StandardService.java:520)
+		at org.apache.catalina.util.LifecycleBase.init(LifecycleBase.java:122)
+		at org.apache.catalina.core.StandardServer.initInternal(StandardServer.java:984)
+		at org.apache.catalina.util.LifecycleBase.init(LifecycleBase.java:122)
+		at org.apache.catalina.startup.Catalina.load(Catalina.java:687)
+		at org.apache.catalina.startup.Catalina.load(Catalina.java:710)
+		at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+		at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+		at org.apache.catalina.startup.Bootstrap.load(Bootstrap.java:299)
+		at org.apache.catalina.startup.Bootstrap.main(Bootstrap.java:472)
+	Caused by: java.net.BindException: Address already in use: bind
+		at java.base/sun.nio.ch.Net.bind0(Native Method)
+		at java.base/sun.nio.ch.Net.bind(Net.java:511)
+		at java.base/sun.nio.ch.ServerSocketChannelImpl.netBind(ServerSocketChannelImpl.java:335)
+		at java.base/sun.nio.ch.ServerSocketChannelImpl.bind(ServerSocketChannelImpl.java:297)
+		at org.apache.tomcat.util.net.NioEndpoint.initServerSocket(NioEndpoint.java:296)
+		at org.apache.tomcat.util.net.NioEndpoint.bind(NioEndpoint.java:251)
+		at org.apache.tomcat.util.net.AbstractEndpoint.bindWithCleanup(AbstractEndpoint.java:1498)
+		at org.apache.tomcat.util.net.AbstractEndpoint.init(AbstractEndpoint.java:1511)
+		at org.apache.coyote.AbstractProtocol.init(AbstractProtocol.java:667)
+		at org.apache.coyote.http11.AbstractHttp11Protocol.init(AbstractHttp11Protocol.java:80)
+		at org.apache.catalina.connector.Connector.initInternal(Connector.java:1082)
+		... 11 more
+07-Apr-2026 21:41:36.298 INFO [main] org.apache.catalina.startup.Catalina.load Server initialization in [2219] milliseconds
+07-Apr-2026 21:41:36.465 INFO [main] org.apache.catalina.core.StandardService.startInternal Starting service [Catalina]
+07-Apr-2026 21:41:36.466 INFO [main] org.apache.catalina.core.StandardEngine.startInternal Starting Servlet engine: [Apache Tomcat/9.0.117]
+07-Apr-2026 21:41:36.557 INFO [main] org.apache.catalina.startup.HostConfig.deployWAR Deploying web application archive [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\voyastra.war]
+07-Apr-2026 21:41:39.290 INFO [main] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+07-Apr-2026 21:41:39.410 INFO [main] com.voyastra.filter.ErrorHandlingFilter.init ErrorHandlingFilter initialized.
+07-Apr-2026 21:41:39.451 INFO [main] org.apache.catalina.startup.HostConfig.deployWAR Deployment of web application archive [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\voyastra.war] has finished in [2,892] ms
+07-Apr-2026 21:41:39.454 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\docs]
+07-Apr-2026 21:41:39.547 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\docs] has finished in [92] ms
+07-Apr-2026 21:41:39.547 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\examples]
+07-Apr-2026 21:41:41.406 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\examples] has finished in [1,859] ms
+07-Apr-2026 21:41:41.408 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\host-manager]
+07-Apr-2026 21:41:41.518 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\host-manager] has finished in [111] ms
+07-Apr-2026 21:41:41.519 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\manager]
+07-Apr-2026 21:41:41.619 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\manager] has finished in [100] ms
+07-Apr-2026 21:41:41.619 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\ROOT]
+07-Apr-2026 21:41:41.704 INFO [main] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory [C:\Users\Dell\Desktop\antigravity\tomcat\apache-tomcat-9.0.117\webapps\ROOT] has finished in [85] ms
+07-Apr-2026 21:41:41.716 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in [5413] milliseconds
+07-Apr-2026 21:41:41.779 SEVERE [main] org.apache.catalina.core.StandardServer.await Failed to create server shutdown socket on address [localhost] and port [8005] (base port [8005] and offset [0])
+	java.net.BindException: Address already in use: bind
+		at java.base/sun.nio.ch.Net.bind0(Native Method)
+		at java.base/sun.nio.ch.Net.bind(Net.java:511)
+		at java.base/sun.nio.ch.Net.bind(Net.java:500)
+		at java.base/sun.nio.ch.NioSocketImpl.bind(NioSocketImpl.java:630)
+		at java.base/java.net.ServerSocket.bind(ServerSocket.java:326)
+		at java.base/java.net.ServerSocket.<init>(ServerSocket.java:222)
+		at org.apache.catalina.core.StandardServer.await(StandardServer.java:535)
+		at org.apache.catalina.startup.Catalina.await(Catalina.java:826)
+		at org.apache.catalina.startup.Catalina.start(Catalina.java:774)
+		at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+		at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+		at org.apache.catalina.startup.Bootstrap.start(Bootstrap.java:342)
+		at org.apache.catalina.startup.Bootstrap.main(Bootstrap.java:473)
+07-Apr-2026 21:41:41.780 INFO [main] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["http-nio-8080"]
+07-Apr-2026 21:41:41.781 INFO [main] org.apache.catalina.core.StandardService.stopInternal Stopping service [Catalina]
+07-Apr-2026 21:41:41.817 INFO [main] com.voyastra.filter.ErrorHandlingFilter.destroy ErrorHandlingFilter destroyed.
+07-Apr-2026 21:41:41.840 INFO [main] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["http-nio-8080"]
+07-Apr-2026 21:41:41.843 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["http-nio-8080"]

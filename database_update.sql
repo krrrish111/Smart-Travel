@@ -1,0 +1,7 @@
+USE voyastra;
+
+CREATE TABLE IF NOT EXISTS uploaded_images (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    file_path VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

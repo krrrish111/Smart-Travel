@@ -1,0 +1,27 @@
+# --- Secrets / Config ---
+oauth.properties
+
+# --- Build artifacts ---
+*.war
+*.class
+target/
+build_war/
+
+# --- Tomcat runtime ---
+tomcat/
+
+# --- IDE ---
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
+
+# --- OS ---
+.DS_Store
+Thumbs.db
+
+# --- Env files ---
+.env
+*.env

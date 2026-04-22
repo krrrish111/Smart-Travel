@@ -1,0 +1,689 @@
+[
+    {
+        "id": 1,
+        "title": "Emirati Extravagance",
+        "destination": "Dubai",
+        "country": "United Arab Emirates",
+        "duration": "5 Days, 4 Nights",
+        "starting_price_inr": 125000,
+        "image_url": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c",
+        "short_description": "Experience the pinnacle of luxury with a desert safari, Burj Khalifa dining, and a private yacht tour along the Marina.",
+        "category": "Luxury",
+        "rating": 4.9,
+        "featured": true,
+        "overview": "Dubai is the definition of opulence. This 5-day luxury tour takes you through the dazzling heights of the Burj Khalifa, the golden dunes of the Arabian desert in a vintage Land Rover, and exclusive VIP shopping experiences. Perfect for those who demand the finest things in life.",
+        "highlights": [
+            "Private Yacht Charter in Dubai Marina",
+            "VIP Desert Safari with Falconry",
+            "Dinner at At.mosphere, Burj Khalifa",
+            "Exclusive Gold Souk Tour"
+        ],
+        "day_wise_itinerary": {
+            "Day 1": "Arrival in Dubai, private transfer in a Rolls Royce to your luxury suite. Evening welcome dinner at Pierchic.",
+            "Day 2": "VIP Desert Safari in a vintage Land Rover, private falconry show, and a 6-course dinner under the stars.",
+            "Day 3": "Ascend the Burj Khalifa with fast-track access. Lunch at At.mosphere. Evening private yacht tour in the Marina.",
+            "Day 4": "Helicopter tour over the Palm Jumeirah. Afternoon at leisure for high-end shopping at the Dubai Mall.",
+            "Day 5": "Private transfer to DXB airport for departure."
+        },
+        "inclusions": [
+            "5-Star Accommodation",
+            "Private Chauffeur",
+            "VIP Attraction Tickets",
+            "Daily Gourmet Breakfast"
+        ],
+        "exclusions": [
+            "International Flights",
+            "Personal Shopping",
+            "Travel Insurance"
+        ],
+        "hotel_options": "Burj Al Arab, Atlantis The Royal, Armani Hotel Dubai",
+        "best_time_to_visit": "November to March",
+        "pickup_drop_info": "Door-to-door private chauffeur service from DXB Airport.",
+        "cancellation_policy": "Free cancellation up to 14 days before departure.",
+        "gallery_images": [
+            "https://images.unsplash.com/photo-1518684079-3c830dcef090",
+            "https://images.unsplash.com/photo-1546412414-e1885259563a"
+        ],
+        "faq": [
+            {
+                "q": "Is the yacht private?",
+                "a": "Yes, the yacht is exclusively chartered for your party."
+            },
+            {
+                "q": "What is the dress code for At.mosphere?",
+                "a": "Smart elegant. No sportswear or flip-flops."
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "title": "Ubud Serenity & Seminyak Sunsets",
+        "destination": "Bali",
+        "country": "Indonesia",
+        "duration": "7 Days, 6 Nights",
+        "starting_price_inr": 85000,
+        "image_url": "https://images.unsplash.com/photo-1537996194471-e657df975ab4",
+        "short_description": "A perfect romantic getaway blending the lush tranquility of Ubud's rice terraces with the chic beach clubs of Seminyak.",
+        "category": "Honeymoon",
+        "rating": 4.8,
+        "featured": true,
+        "overview": "Immerse yourself in the spiritual heart of Bali. This romantic itinerary balances the jungle serenity of Ubud with the vibrant sunsets and beach clubs of Seminyak. Indulge in couples' spa treatments, private pool villas, and floating breakfasts.",
+        "highlights": [
+            "Private Pool Villa Stay",
+            "Floating Breakfast Experience",
+            "Couples' Balinese Spa Treatment",
+            "Sunset Dinner at Rock Bar"
+        ],
+        "day_wise_itinerary": {
+            "Day 1": "Arrival at Ngurah Rai Airport, transfer to your private pool villa in Ubud. Welcome flower bath.",
+            "Day 2": "Floating breakfast. Private tour of the Tegalalang Rice Terraces and the Sacred Monkey Forest.",
+            "Day 3": "Morning yoga session. Afternoon couples' traditional Balinese spa ritual.",
+            "Day 4": "Transfer to Seminyak. Check-in to beachside luxury resort. Evening at leisure.",
+            "Day 5": "Day trip to Uluwatu Temple, followed by a spectacular sunset dinner at Rock Bar.",
+            "Day 6": "Beach club day passes in Seminyak. Farewell romantic dinner on the beach.",
+            "Day 7": "Departure transfer to the airport."
+        },
+        "inclusions": [
+            "Private Pool Villa",
+            "Daily Breakfast including one Floating Breakfast",
+            "Spa Treatment",
+            "Airport Transfers"
+        ],
+        "exclusions": [
+            "Flights",
+            "Visa on Arrival",
+            "Meals not specified"
+        ],
+        "hotel_options": "Viceroy Bali, The Legian Seminyak, W Bali",
+        "best_time_to_visit": "April to October",
+        "pickup_drop_info": "Private airport transfers included.",
+        "cancellation_policy": "100% refund if cancelled 30 days prior.",
+        "gallery_images": [
+            "https://images.unsplash.com/photo-1518548419970-58e3b4079ab2",
+            "https://images.unsplash.com/photo-1537953773345-d172ccf13cf1"
+        ],
+        "faq": [
+            {
+                "q": "Are the villas totally private?",
+                "a": "Yes, our selected villas offer complete privacy, perfect for honeymoons."
+            },
+            {
+                "q": "Is vegetarian food available?",
+                "a": "Absolutely, Bali is a haven for vegetarian and vegan cuisine."
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "title": "Overwater Oasis",
+        "destination": "Maldives",
+        "country": "Maldives",
+        "duration": "5 Days, 4 Nights",
+        "starting_price_inr": 210000,
+        "image_url": "https://images.unsplash.com/photo-1514282401047-d79a71a590e8",
+        "short_description": "Wake up to the sound of crystal-clear waves in a luxurious overwater bungalow.",
+        "category": "Luxury",
+        "rating": 5.0,
+        "featured": true,
+        "overview": "Escape to a paradise where luxury meets the ocean. Your overwater bungalow features a glass floor and direct lagoon access. Enjoy sunset dolphin cruises, underwater dining, and world-class snorkeling.",
+        "highlights": [
+            "Overwater Bungalow Stay",
+            "Seaplane Transfer",
+            "Underwater Restaurant Dinner",
+            "Private Sunset Cruise"
+        ],
+        "day_wise_itinerary": {
+            "Day 1": "Arrive in Mal\u00e9, scenic seaplane transfer to your private island resort.",
+            "Day 2": "Day at leisure in your overwater villa. Afternoon snorkeling right off your deck.",
+            "Day 3": "Private sunset dolphin cruise with champagne and canap\u00e9s.",
+            "Day 4": "Exclusive 5-course dinner at an underwater restaurant surrounded by marine life.",
+            "Day 5": "Morning spa session. Seaplane transfer back to Mal\u00e9 for departure."
+        },
+        "inclusions": [
+            "Overwater Villa",
+            "All-Inclusive Meals & Drinks",
+            "Seaplane Transfers",
+            "Non-motorized Water Sports"
+        ],
+        "exclusions": [
+            "International Flights",
+            "Premium alcoholic beverages"
+        ],
+        "hotel_options": "Soneva Jani, Gili Lankanfushi, Conrad Maldives",
+        "best_time_to_visit": "November to April",
+        "pickup_drop_info": "Meet and greet at Mal\u00e9 airport, followed by Seaplane transfer.",
+        "cancellation_policy": "Strict. 50% refund if cancelled 45 days prior.",
+        "gallery_images": [
+            "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2",
+            "https://images.unsplash.com/photo-1506929562872-bb421503ef21"
+        ],
+        "faq": [
+            {
+                "q": "Is the seaplane transfer included?",
+                "a": "Yes, round-trip seaplane transfers are fully covered in the package."
+            },
+            {
+                "q": "Can we arrange a private beach dinner?",
+                "a": "Yes, private beach dining can be arranged upon request."
+            }
+        ]
+    },
+    {
+        "id": 4,
+        "title": "Alpine Elegance & Glacier Express",
+        "destination": "Switzerland",
+        "country": "Switzerland",
+        "duration": "8 Days, 7 Nights",
+        "starting_price_inr": 275000,
+        "image_url": "https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99",
+        "short_description": "Traverse the Swiss Alps in first-class panoramic trains and stay in historic luxury chalets.",
+        "category": "Luxury",
+        "rating": 4.9,
+        "featured": true,
+        "overview": "Experience the majestic Swiss Alps. This premium journey includes first-class travel on the famed Glacier Express, stays in 5-star alpine resorts in Zermatt and St. Moritz, and private chocolate and cheese tasting tours.",
+        "highlights": [
+            "First-Class Glacier Express Ticket",
+            "Matterhorn Glacier Paradise",
+            "Private Swiss Chocolate Making Class",
+            "Luxury Alpine Chalet Stays"
+        ],
+        "day_wise_itinerary": {
+            "Day 1": "Arrive in Zurich. Private transfer to a luxury hotel. Evening city walking tour.",
+            "Day 2": "Train to Zermatt. Check-in to a luxury chalet with Matterhorn views.",
+            "Day 3": "Excursion to Matterhorn Glacier Paradise. Afternoon at leisure in Zermatt.",
+            "Day 4": "Board the Glacier Express in First Class. Enjoy a multi-course lunch while traveling to St. Moritz.",
+            "Day 5": "Explore St. Moritz. Private horse-drawn carriage ride around the lake.",
+            "Day 6": "Train to Lucerne. Private sunset cruise on Lake Lucerne.",
+            "Day 7": "Private Swiss chocolate making workshop and cheese tasting experience.",
+            "Day 8": "Transfer to Zurich airport for departure."
+        },
+        "inclusions": [
+            "First Class Swiss Travel Pass",
+            "5-Star Accommodations",
+            "Glacier Express Reservation & Meals",
+            "Guided Tours"
+        ],
+        "exclusions": [
+            "Flights",
+            "Visa Fees",
+            "Dinners not specified"
+        ],
+        "hotel_options": "Badrutt's Palace, The Omnia Zermatt, Buergenstock Resort",
+        "best_time_to_visit": "June to September (Summer) or December to March (Winter)",
+        "pickup_drop_info": "Private transfer from Zurich Airport.",
+        "cancellation_policy": "Free cancellation up to 30 days before departure.",
+        "gallery_images": [
+            "https://images.unsplash.com/photo-1469522867761-12c8b030438a",
+            "https://images.unsplash.com/photo-1491555103944-7c647fd85f52"
+        ],
+        "faq": [
+            {
+                "q": "Is the Swiss Travel Pass included?",
+                "a": "Yes, a 8-Day First Class Swiss Travel Pass is included."
+            },
+            {
+                "q": "Do we need winter gear in Summer?",
+                "a": "For the Matterhorn Glacier excursion, a warm jacket is recommended even in summer."
+            }
+        ]
+    },
+    {
+        "id": 5,
+        "title": "Romance & Renaissance",
+        "destination": "Paris",
+        "country": "France",
+        "duration": "6 Days, 5 Nights",
+        "starting_price_inr": 165000,
+        "image_url": "https://images.unsplash.com/photo-1502602898657-3e9076006e23",
+        "short_description": "A deeply romantic Parisian escape featuring Michelin-starred dining and private Louvre tours.",
+        "category": "Honeymoon",
+        "rating": 4.8,
+        "featured": false,
+        "overview": "Discover the magic of Paris. Stay in a luxury suite with views of the Eiffel Tower, enjoy a private Seine river cruise at sunset, and bypass the crowds with a VIP after-hours tour of the Louvre.",
+        "highlights": [
+            "Eiffel Tower View Suite",
+            "Private Seine River Yacht",
+            "Michelin-Star Dining",
+            "VIP After-Hours Louvre Tour"
+        ],
+        "day_wise_itinerary": {
+            "Day 1": "Arrive in Paris. Chauffeur transfer to your luxury hotel. Evening Champagne welcome.",
+            "Day 2": "VIP After-hours private tour of the Louvre. Afternoon shopping in the Marais.",
+            "Day 3": "Day trip to Versailles with private guide. Evening dinner at a 3-Michelin-star restaurant.",
+            "Day 4": "Montmartre walking tour. Sunset private yacht cruise on the Seine with dinner.",
+            "Day 5": "Leisure day. Optional perfume-making workshop or high tea at the Ritz.",
+            "Day 6": "Chauffeur transfer to Charles de Gaulle Airport."
+        },
+        "inclusions": [
+            "5-Star Hotel",
+            "Private Guides",
+            "Seine Yacht Charter",
+            "Daily Breakfast"
+        ],
+        "exclusions": [
+            "International Flights",
+            "Schengen Visa"
+        ],
+        "hotel_options": "H\u00f4tel Plaza Ath\u00e9n\u00e9e, Le Meurice, The Peninsula Paris",
+        "best_time_to_visit": "April to June, September to October",
+        "pickup_drop_info": "Private airport chauffeur service included.",
+        "cancellation_policy": "Cancel up to 21 days in advance for a full refund.",
+        "gallery_images": [
+            "https://images.unsplash.com/photo-1499856871958-5b9627545d1a",
+            "https://images.unsplash.com/photo-1511739001486-6bfe10ce785f"
+        ],
+        "faq": [
+            {
+                "q": "Does the room have a view of the Eiffel Tower?",
+                "a": "Yes, we guarantee an Eiffel view suite."
+            },
+            {
+                "q": "Is the Louvre tour truly private?",
+                "a": "Yes, you will have a dedicated art historian guiding just you."
+            }
+        ]
+    },
+    {
+        "id": 6,
+        "title": "Paradise on Earth",
+        "destination": "Kashmir",
+        "country": "India",
+        "duration": "6 Days, 5 Nights",
+        "starting_price_inr": 55000,
+        "image_url": "https://images.unsplash.com/photo-1626301646278-f7b2437648f9",
+        "short_description": "Luxury houseboats, snow-capped peaks, and blooming tulip gardens in the crown of India.",
+        "category": "Family",
+        "rating": 4.9,
+        "featured": true,
+        "overview": "Experience the surreal beauty of Kashmir. Spend a night in a premium heritage houseboat on Dal Lake, take a gondola ride in Gulmarg, and enjoy the lush valleys of Pahalgam with your family.",
+        "highlights": [
+            "Premium Heritage Houseboat Stay",
+            "Gulmarg Gondola Phase 2",
+            "Shikara Ride at Sunset",
+            "Pahalgam Valley Tour"
+        ],
+        "day_wise_itinerary": {
+            "Day 1": "Arrive in Srinagar. Transfer to Premium Houseboat. Evening Shikara ride on Dal Lake.",
+            "Day 2": "Srinagar local sightseeing: Mughal Gardens, Shankaracharya Temple.",
+            "Day 3": "Day trip to Gulmarg. Ride the famous Gondola to Phase 2 for snow activities.",
+            "Day 4": "Drive to Pahalgam. En route visit saffron fields and apple orchards.",
+            "Day 5": "Explore Betaab Valley and Aru Valley. Return to Srinagar hotel.",
+            "Day 6": "Departure from Srinagar Airport."
+        },
+        "inclusions": [
+            "Premium Hotels & Houseboat",
+            "Daily Breakfast & Dinner",
+            "AC Innova Crysta for Sightseeing",
+            "Gondola Tickets"
+        ],
+        "exclusions": [
+            "Flights",
+            "Lunch",
+            "Pony rides"
+        ],
+        "hotel_options": "Taj Dal View, Khyber Himalayan Resort (Gulmarg), Premium Nigeen Lake Houseboat",
+        "best_time_to_visit": "March to August",
+        "pickup_drop_info": "Pick up and drop at Srinagar Airport.",
+        "cancellation_policy": "Full refund if cancelled 15 days before travel.",
+        "gallery_images": [
+            "https://images.unsplash.com/photo-1595815771614-ade9d652a65d",
+            "https://images.unsplash.com/photo-1610488424077-d64e9a036ec4"
+        ],
+        "faq": [
+            {
+                "q": "Is it safe to travel to Kashmir?",
+                "a": "Yes, Kashmir is very safe for tourists and locals are highly welcoming."
+            },
+            {
+                "q": "Are heaters provided in the houseboat?",
+                "a": "Yes, all premium houseboats are fully heated."
+            }
+        ]
+    },
+    {
+        "id": 7,
+        "title": "Sun, Sand & Susegad",
+        "destination": "Goa",
+        "country": "India",
+        "duration": "4 Days, 3 Nights",
+        "starting_price_inr": 45000,
+        "image_url": "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2",
+        "short_description": "Luxury beachfront resorts, private yacht parties, and the finest Goan culinary experiences.",
+        "category": "Beach",
+        "rating": 4.7,
+        "featured": false,
+        "overview": "Discover the luxurious side of Goa. Stay in a 5-star beachfront property in South Goa, enjoy a private sunset yacht cruise on the Mandovi river, and indulge in fine dining and spa treatments.",
+        "highlights": [
+            "5-Star Beachfront Resort",
+            "Private Sunset Yacht Cruise",
+            "Heritage Fontainhas Tour",
+            "Luxury Spa Day"
+        ],
+        "day_wise_itinerary": {
+            "Day 1": "Arrive in Goa. Transfer to your luxury South Goa resort. Welcome drinks and beach relaxation.",
+            "Day 2": "Morning spa session. Afternoon guided heritage walk in Fontainhas (Latin Quarter).",
+            "Day 3": "Day at leisure. Evening private yacht cruise with champagne and sunset views.",
+            "Day 4": "Leisurely breakfast. Transfer to Dabolim/Mopa airport."
+        },
+        "inclusions": [
+            "5-Star Resort Stay",
+            "Private Airport Transfers",
+            "Yacht Charter",
+            "Daily Breakfast"
+        ],
+        "exclusions": [
+            "Flights",
+            "Meals outside of breakfast"
+        ],
+        "hotel_options": "The Leela Goa, Taj Exotica, W Goa",
+        "best_time_to_visit": "October to March",
+        "pickup_drop_info": "Private transfer from Dabolim or Mopa Airport.",
+        "cancellation_policy": "Free cancellation 7 days before check-in.",
+        "gallery_images": [
+            "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1",
+            "https://images.unsplash.com/photo-1620023447368-23e595460830"
+        ],
+        "faq": [
+            {
+                "q": "Is the yacht cruise private?",
+                "a": "Yes, the yacht is reserved exclusively for you."
+            },
+            {
+                "q": "Which airport is better to fly into?",
+                "a": "Either is fine, but Dabolim is closer to South Goa resorts."
+            }
+        ]
+    },
+    {
+        "id": 8,
+        "title": "Siamese Splendor & Islands",
+        "destination": "Thailand",
+        "country": "Thailand",
+        "duration": "8 Days, 7 Nights",
+        "starting_price_inr": 95000,
+        "image_url": "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a",
+        "short_description": "From the grand temples of Bangkok to the luxurious private pool villas of Koh Samui.",
+        "category": "Beach",
+        "rating": 4.8,
+        "featured": true,
+        "overview": "A perfect blend of culture and relaxation. Explore the majestic Grand Palace in Bangkok, dine on a luxury river cruise, and then fly to the pristine beaches of Koh Samui for a tranquil retreat.",
+        "highlights": [
+            "Luxury Chao Phraya Dinner Cruise",
+            "Grand Palace VIP Tour",
+            "Private Island Hopping",
+            "Koh Samui Pool Villa"
+        ],
+        "day_wise_itinerary": {
+            "Day 1": "Arrive in Bangkok. Transfer to a riverside luxury hotel. Evening free.",
+            "Day 2": "VIP guided tour of the Grand Palace and Wat Pho. Evening luxury dinner cruise.",
+            "Day 3": "Fly to Koh Samui. Check-in to a private ocean-view pool villa.",
+            "Day 4": "Private speedboat tour to Ang Thong Marine Park.",
+            "Day 5": "Day at leisure. Enjoy an in-villa BBQ dinner cooked by a private chef.",
+            "Day 6": "Couples' Thai massage and spa day.",
+            "Day 7": "Explore local markets or relax on the beach.",
+            "Day 8": "Transfer to Koh Samui airport for departure."
+        },
+        "inclusions": [
+            "Domestic Flights (BKK to USM)",
+            "5-Star Hotels",
+            "Private Speedboat Tour",
+            "Select Dinners"
+        ],
+        "exclusions": [
+            "International Flights",
+            "Visa Fees"
+        ],
+        "hotel_options": "Mandarin Oriental Bangkok, Four Seasons Koh Samui",
+        "best_time_to_visit": "November to April",
+        "pickup_drop_info": "All airport transfers in private luxury vehicles.",
+        "cancellation_policy": "Cancel up to 14 days in advance for a refund.",
+        "gallery_images": [
+            "https://images.unsplash.com/photo-1589394815804-964ce0fa5894",
+            "https://images.unsplash.com/photo-1510615206307-88544d671b56"
+        ],
+        "faq": [
+            {
+                "q": "Is the flight to Koh Samui included?",
+                "a": "Yes, the domestic flight from Bangkok to Koh Samui is included."
+            },
+            {
+                "q": "Are the tours in a group?",
+                "a": "No, all specified tours are completely private."
+            }
+        ]
+    },
+    {
+        "id": 9,
+        "title": "Cherry Blossoms & Bullet Trains",
+        "destination": "Japan",
+        "country": "Japan",
+        "duration": "10 Days, 9 Nights",
+        "starting_price_inr": 310000,
+        "image_url": "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e",
+        "short_description": "An immersive luxury journey through Tokyo's neon streets and Kyoto's ancient temples.",
+        "category": "Cultural",
+        "rating": 5.0,
+        "featured": true,
+        "overview": "Experience the beautiful contrast of modern and traditional Japan. Travel via first-class Shinkansen, stay in a luxury Ryokan with private hot springs (Onsen), and enjoy private tea ceremonies and sushi-making masterclasses.",
+        "highlights": [
+            "First-Class Shinkansen Passes",
+            "Luxury Ryokan Stay in Hakone",
+            "Private Tea Ceremony in Kyoto",
+            "Omakase Sushi Dinner"
+        ],
+        "day_wise_itinerary": {
+            "Day 1": "Arrive in Tokyo. Transfer to a 5-star hotel in Shinjuku. Evening welcome dinner.",
+            "Day 2": "Private Tokyo tour: Meiji Shrine, Shibuya Crossing, and an Omakase sushi dinner.",
+            "Day 3": "Bullet train to Hakone. Check-in to a luxury Ryokan. Enjoy your private outdoor Onsen.",
+            "Day 4": "Bullet train to Kyoto. Visit the Golden Pavilion (Kinkaku-ji) and Arashiyama Bamboo Grove.",
+            "Day 5": "Private traditional tea ceremony wearing a Kimono. Evening walk through Gion.",
+            "Day 6": "Day trip to Nara to see the Todai-ji Temple and friendly deer.",
+            "Day 7": "Bullet train to Osaka. Food tour in Dotonbori.",
+            "Day 8": "Explore Osaka Castle and Universal Studios VIP access.",
+            "Day 9": "Bullet train back to Tokyo. Final shopping day in Ginza.",
+            "Day 10": "Transfer to Narita/Haneda airport."
+        },
+        "inclusions": [
+            "First Class JR Pass",
+            "Luxury Hotels & Ryokan",
+            "Private English-speaking Guides",
+            "Luggage Forwarding"
+        ],
+        "exclusions": [
+            "International Flights",
+            "Meals not specified"
+        ],
+        "hotel_options": "Aman Tokyo, Gora Kadan (Hakone), Ritz-Carlton Kyoto",
+        "best_time_to_visit": "March to May (Spring) or Sept to Nov (Autumn)",
+        "pickup_drop_info": "Meet and greet at the airport with private transfer.",
+        "cancellation_policy": "Refundable up to 30 days before the trip.",
+        "gallery_images": [
+            "https://images.unsplash.com/photo-1528360983277-13d401cdc186",
+            "https://images.unsplash.com/photo-1542051812871-75750d8c0b03"
+        ],
+        "faq": [
+            {
+                "q": "Is the Ryokan Onsen private?",
+                "a": "Yes, we book suites that feature a private open-air bath (Rotenburo)."
+            },
+            {
+                "q": "Do the guides speak English?",
+                "a": "Yes, all our local guides are highly fluent in English."
+            }
+        ]
+    },
+    {
+        "id": 10,
+        "title": "Lion City Luxury",
+        "destination": "Singapore",
+        "country": "Singapore",
+        "duration": "5 Days, 4 Nights",
+        "starting_price_inr": 115000,
+        "image_url": "https://images.unsplash.com/photo-1525625293386-3f8f99389edd",
+        "short_description": "Experience the ultimate modern luxury with Marina Bay views, VIP Universal Studios access, and fine dining.",
+        "category": "Family",
+        "rating": 4.8,
+        "featured": false,
+        "overview": "A perfect luxury family getaway. Stay in the iconic Marina Bay Sands, enjoy VIP fast-track access to Universal Studios, and dine under the futuristic Supertrees at Gardens by the Bay.",
+        "highlights": [
+            "Marina Bay Sands Infinity Pool",
+            "VIP Universal Studios Tour",
+            "Night Safari with Private Buggy",
+            "Michelin-Star Dining"
+        ],
+        "day_wise_itinerary": {
+            "Day 1": "Arrive in Singapore. VIP transfer to Marina Bay Sands. Evening at the Infinity Pool.",
+            "Day 2": "Gardens by the Bay and Cloud Forest tour. Evening Night Safari in a private buggy.",
+            "Day 3": "Full day at Sentosa Island. VIP Tour at Universal Studios (skip all lines).",
+            "Day 4": "Explore the S.E.A. Aquarium. Afternoon high tea at Raffles Hotel. Evening luxury river cruise.",
+            "Day 5": "Changi Airport Jewel tour. Departure."
+        },
+        "inclusions": [
+            "5-Star Accommodation",
+            "VIP Attraction Tickets",
+            "Private Transfers",
+            "Daily Breakfast"
+        ],
+        "exclusions": [
+            "Flights",
+            "Visa",
+            "Lunches & Dinners"
+        ],
+        "hotel_options": "Marina Bay Sands, Raffles Hotel, Capella Singapore",
+        "best_time_to_visit": "Year-round",
+        "pickup_drop_info": "Luxury private airport transfer included.",
+        "cancellation_policy": "Free cancellation 14 days prior.",
+        "gallery_images": [
+            "https://images.unsplash.com/photo-1508009603885-247a5b51dd26",
+            "https://images.unsplash.com/photo-1496898382483-9a789dd1f807"
+        ],
+        "faq": [
+            {
+                "q": "Do we get access to the MBS Infinity Pool?",
+                "a": "Yes, staying at MBS guarantees access to the iconic rooftop pool."
+            },
+            {
+                "q": "What does the Universal VIP tour include?",
+                "a": "A personal guide, VIP access to rides, and complimentary meals."
+            }
+        ]
+    },
+    {
+        "id": 11,
+        "title": "Himalayan High Passes",
+        "destination": "Ladakh",
+        "country": "India",
+        "duration": "8 Days, 7 Nights",
+        "starting_price_inr": 85000,
+        "image_url": "https://images.unsplash.com/photo-1581793745862-99fde7fa73d2",
+        "short_description": "An adventurous yet luxurious expedition across the highest motorable roads and azure glacial lakes.",
+        "category": "Adventure",
+        "rating": 4.9,
+        "featured": false,
+        "overview": "Adventure meets luxury in the remote trans-Himalayas. Stay in premium boutique hotels and luxury glamping camps at Pangong Lake. Traverse the Khardung La pass in a private luxury SUV.",
+        "highlights": [
+            "Luxury Glamping at Pangong Lake",
+            "Premium SUV for Travel",
+            "Nubra Valley Camel Safari",
+            "Monastery Tours"
+        ],
+        "day_wise_itinerary": {
+            "Day 1": "Arrive in Leh. Complete rest for acclimatization. Stay in a luxury boutique hotel.",
+            "Day 2": "Leh local sightseeing: Shanti Stupa, Leh Palace, and Hall of Fame.",
+            "Day 3": "Drive to Nubra Valley via Khardung La. Check-in to a luxury camp. Evening double-humped camel ride.",
+            "Day 4": "Visit Diskit Monastery. Afternoon at leisure in the cold desert.",
+            "Day 5": "Drive to Pangong Tso via Shyok river route. Stay in a premium lake-facing luxury tent.",
+            "Day 6": "Witness the spectacular sunrise over Pangong. Drive back to Leh.",
+            "Day 7": "Day trip to Alchi and Likir Monasteries, viewing the Magnetic Hill and Sangam.",
+            "Day 8": "Transfer to Kushok Bakula Rimpochee Airport for departure."
+        },
+        "inclusions": [
+            "Premium Boutique Hotels & Luxury Camps",
+            "All Meals",
+            "Private Innova Crysta/Fortuner",
+            "Inner Line Permits"
+        ],
+        "exclusions": [
+            "Flights",
+            "Oxygen cylinders for personal use (available on rent)"
+        ],
+        "hotel_options": "The Grand Dragon Ladakh, Chamba Camp Thiksey",
+        "best_time_to_visit": "May to September",
+        "pickup_drop_info": "Pick up from Leh Airport.",
+        "cancellation_policy": "50% refund if cancelled 20 days prior.",
+        "gallery_images": [
+            "https://images.unsplash.com/photo-1620301289196-857ce79c2f6d",
+            "https://images.unsplash.com/photo-1589808383838-89c564cdb153"
+        ],
+        "faq": [
+            {
+                "q": "Is oxygen provided in the vehicle?",
+                "a": "Yes, our luxury SUVs carry emergency oxygen cylinders."
+            },
+            {
+                "q": "Are the luxury camps heated?",
+                "a": "Yes, the premium glamping tents have heating facilities."
+            }
+        ]
+    },
+    {
+        "id": 12,
+        "title": "Ottoman Odyssey & Cappadocian Skies",
+        "destination": "Turkey",
+        "country": "Turkey",
+        "duration": "9 Days, 8 Nights",
+        "starting_price_inr": 185000,
+        "image_url": "https://images.unsplash.com/photo-1524231757912-21f4fe3a7200",
+        "short_description": "Hot air balloons, ancient empires, and luxury cave suites in a transcontinental journey.",
+        "category": "Cultural",
+        "rating": 4.9,
+        "featured": true,
+        "overview": "Discover the magic of Turkey in unparalleled luxury. Explore the historic wonders of Istanbul with a private guide, cruise the Bosphorus on a private yacht, and sleep in a luxury cave hotel in Cappadocia before taking a sunrise hot air balloon flight.",
+        "highlights": [
+            "Private Hot Air Balloon Ride",
+            "Luxury Cave Hotel Stay",
+            "Bosphorus Private Yacht Cruise",
+            "VIP Istanbul Heritage Tour"
+        ],
+        "day_wise_itinerary": {
+            "Day 1": "Arrive in Istanbul. VIP transfer to your Bosphorus-view luxury hotel.",
+            "Day 2": "Private guided tour of Hagia Sophia, Topkapi Palace, and the Blue Mosque.",
+            "Day 3": "Explore the Grand Bazaar. Sunset private yacht cruise on the Bosphorus.",
+            "Day 4": "Fly to Cappadocia. Transfer to your luxury Cave Suite. Evening Whirling Dervish show.",
+            "Day 5": "Sunrise private hot air balloon flight over the fairy chimneys. Champagne breakfast.",
+            "Day 6": "Private tour of the Underground City and Goreme Open Air Museum.",
+            "Day 7": "Fly to Antalya. Check-in to a luxury cliff-top resort overlooking the Mediterranean.",
+            "Day 8": "Day at leisure. Enjoy the resort spa and pristine beaches.",
+            "Day 9": "Transfer to Antalya airport for your flight home."
+        },
+        "inclusions": [
+            "Domestic Flights",
+            "5-Star & Luxury Cave Hotels",
+            "Hot Air Balloon Flight",
+            "Private Guides"
+        ],
+        "exclusions": [
+            "International Flights",
+            "E-Visa",
+            "Gratuities"
+        ],
+        "hotel_options": "Four Seasons Istanbul, Museum Hotel Cappadocia",
+        "best_time_to_visit": "April to May, September to November",
+        "pickup_drop_info": "Private airport transfers in all cities.",
+        "cancellation_policy": "Refundable up to 21 days before departure.",
+        "gallery_images": [
+            "https://images.unsplash.com/photo-1506198539655-7c320d3bfaee",
+            "https://images.unsplash.com/photo-1527838832700-5059252407fa"
+        ],
+        "faq": [
+            {
+                "q": "Is the hot air balloon flight guaranteed?",
+                "a": "Flights are subject to weather conditions. If cancelled, a full refund for the flight is provided."
+            },
+            {
+                "q": "Are the cave hotels comfortable?",
+                "a": "Yes, our selected cave hotels offer 5-star luxury with all modern amenities."
+            }
+        ]
+    }
+]

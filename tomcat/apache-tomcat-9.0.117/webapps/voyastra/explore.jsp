@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ include file="components/header.jsp" %>
 
@@ -9,12 +10,12 @@
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.get('noQuery') === 'true') {
             if (window.VoyastraToast) {
-                VoyastraToast.show('🔍 Please enter a search term.', 'info');
+                VoyastraToast.show('ðŸ” Please enter a search term.', 'info');
             }
         }
         if (urlParams.get('error') === 'searchFailed') {
             if (window.VoyastraToast) {
-                VoyastraToast.show('❌ Search failed. Please try again.', 'error');
+                VoyastraToast.show('âŒ Search failed. Please try again.', 'error');
             }
         }
     });
@@ -27,7 +28,7 @@
     
         <div class="mb-8 text-center slide-up">
             <h1 class="text-white mb-1 editorial" style="font-size: 3rem; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">Explore & Discover</h1>
-            <p class="text-white opacity-80" style="font-size: 1.1rem; font-family: 'Poppins', sans-serif;">Find out where everyone is going, or go where no one is.</p>
+            <p class="text-white opacity-80" style="font-size: 1.1rem; font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;">Find out where everyone is going, or go where no one is.</p>
             
             <!-- Modern Search Bar (wired to SearchServlet) -->
             <form id="exploreSearchForm" action="${pageContext.request.contextPath}/search" method="get"
@@ -64,12 +65,12 @@
         <div class="mb-12 w-full relative slide-up delay-1">
             <div class="flex justify-between items-end mb-4">
                 <div>
-                    <h2 class="text-main editorial" style="font-size: 2rem;">Trending Now 🔥</h2>
+                    <h2 class="text-main editorial" style="font-size: 2rem;">Trending Now ðŸ”¥</h2>
                     <p class="text-muted text-sm font-body">Viral spots, seasonal places, and Instagram favorites.</p>
                 </div>
                 <!-- Toggle Map View -->
                 <button class="btn btn-secondary px-4 py-2 flex items-center gap-2" onclick="toggleTrendingMap()" style="font-size:0.85rem; font-weight:bold;">
-                    <span id="mapToggleTx">📍 View on Map</span>
+                    <span id="mapToggleTx">ðŸ“ View on Map</span>
                 </button>
             </div>
 
@@ -92,7 +93,7 @@
                                     <span style="background: var(--color-primary); color: #000; font-size: 0.65rem; font-weight: 800; padding: 2px 6px; border-radius: 4px;">TRENDING</span>
                                 </div>
                                 <p class="text-muted text-xs mb-3" style="display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;">${dest.description}</p>
-                                <div class="text-xs font-bold text-main">⭐ 5.0  <span class="text-primary italic ml-2">Top Choice</span></div>
+                                <div class="text-xs font-bold text-main">â­ 5.0  <span class="text-primary italic ml-2">Top Choice</span></div>
                             </div>
                         </a>
                     </div>
@@ -125,12 +126,12 @@
                     Results for &ldquo;<span style="color:var(--color-primary);">${searchQuery}</span>&rdquo;
                 </h2>
                 <span class="chip" style="margin:0;">${resultCount} found</span>
-                <a href="explore.jsp" class="btn btn-secondary" style="margin-left:auto; font-size:0.8rem; padding:6px 14px;">✕ Clear</a>
+                <a href="explore.jsp" class="btn btn-secondary" style="margin-left:auto; font-size:0.8rem; padding:6px 14px;">âœ• Clear</a>
             </div>
 
-            <%-- ── Destination results ── --%>
+            <%-- â”€â”€ Destination results â”€â”€ --%>
             <c:if test="${not empty destResults}">
-                <p class="text-muted mb-3" style="font-size:0.85rem; text-transform:uppercase; letter-spacing:0.08em; font-weight:700;">📍 Destinations</p>
+                <p class="text-muted mb-3" style="font-size:0.85rem; text-transform:uppercase; letter-spacing:0.08em; font-weight:700;">ðŸ“ Destinations</p>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
                     <c:forEach var="r" items="${destResults}">
                         <a href="destination?id=${r.id}" class="glass-panel" style="overflow:hidden; display:block; border-radius:var(--border-radius-lg);">
@@ -142,16 +143,16 @@
                             <div style="padding:16px;">
                                 <h3 class="text-main mb-1" style="font-size:1.15rem;">${r.name}</h3>
                                 <p class="text-white opacity-80 text-sm" style="display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${r.description}</p>
-                                <span class="text-primary text-xs font-bold" style="margin-top:6px; display:block;">View Details →</span>
+                                <span class="text-primary text-xs font-bold" style="margin-top:6px; display:block;">View Details â†’</span>
                             </div>
                         </a>
                     </c:forEach>
                 </div>
             </c:if>
 
-            <%-- ── Plan results ── --%>
+            <%-- â”€â”€ Plan results â”€â”€ --%>
             <c:if test="${not empty planResults}">
-                <p class="text-muted mb-3" style="font-size:0.85rem; text-transform:uppercase; letter-spacing:0.08em; font-weight:700;">🗺️ Travel Plans</p>
+                <p class="text-muted mb-3" style="font-size:0.85rem; text-transform:uppercase; letter-spacing:0.08em; font-weight:700;">ðŸ—ºï¸ Travel Plans</p>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
                     <c:forEach var="r" items="${planResults}">
                         <a href="planner.jsp?location=${r.title}" class="glass-panel" style="overflow:hidden; display:block; border-radius:var(--border-radius-lg);">
@@ -162,7 +163,7 @@
                             </div>
                             <div style="padding:16px;">
                                 <h3 class="text-main mb-1" style="font-size:1.15rem;">${r.title}</h3>
-                                <p class="text-primary text-xs font-bold">📍 <c:out value="${not empty r.destinationName ? r.destinationName : 'Unknown'}"/></p>
+                                <p class="text-primary text-xs font-bold">ðŸ“ <c:out value="${not empty r.destinationName ? r.destinationName : 'Unknown'}"/></p>
                                 <div class="flex justify-between items-center mt-3 pt-3" style="border-top:1px solid rgba(255,255,255,0.1);">
                                     <span class="font-bold text-primary">₹${r.price}</span>
                                     <span class="text-muted" style="font-size:0.8rem;">${r.days}D / ${r.nights}N</span>
@@ -173,10 +174,10 @@
                 </div>
             </c:if>
 
-            <%-- ── No results ── --%>
+            <%-- â”€â”€ No results â”€â”€ --%>
             <c:if test="${empty planResults and empty destResults}">
                 <div class="vx-empty-state slide-up">
-                    <div class="vx-empty-icon">🗺️</div>
+                    <div class="vx-empty-icon">ðŸ—ºï¸</div>
                     <h3 class="vx-empty-title">No matches found</h3>
                     <p class="vx-empty-desc">We couldn't find any destinations or plans for "${searchQuery}". Try searching for something broader like "Beach" or "Mountains".</p>
                     <a href="explore.jsp" class="btn btn-primary" style="padding: 10px 24px;">Browse All Destinations</a>
@@ -221,7 +222,7 @@
                         ${dest.description}
                     </p>
                     <div class="mt-4 pt-3" style="border-top: 1px solid rgba(255,255,255,0.1); text-align: right;">
-                        <span class="text-primary text-sm font-bold">View Plans →</span>
+                        <span class="text-primary text-sm font-bold">View Plans â†’</span>
                     </div>
                 </div>
             </a>
@@ -253,7 +254,7 @@
                 </div>
                 <div style="padding: 20px;">
                     <h3 class="text-main mb-1" style="font-size: 1.25rem;">${plan.title}</h3>
-                    <p class="text-primary text-xs mb-2 font-bold" style="letter-spacing: 0.5px;">📍 <c:out value="${not empty plan.destinationName ? plan.destinationName : 'Unknown Destination'}"/></p>
+                    <p class="text-primary text-xs mb-2 font-bold" style="letter-spacing: 0.5px;">ðŸ“ <c:out value="${not empty plan.destinationName ? plan.destinationName : 'Unknown Destination'}"/></p>
                     <p class="text-white opacity-80 text-sm mb-2" style="display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
                         ${plan.description}
                     </p>
@@ -290,10 +291,10 @@
 </style>
 
 <script>
-/* ──────────────────────────────────────────────────────
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
    Dynamic Autocomplete — calls /search?q=<input>&mode=suggest
    and renders a dropdown list beneath the search bar.
-────────────────────────────────────────────────────── */
+â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 (function () {
     const input   = document.getElementById('exploreSearchInput');
     const suggest = document.getElementById('exploreSearchSuggest');
@@ -326,7 +327,7 @@
         items.forEach((text, i) => {
             const li = document.createElement('li');
             li.textContent = text;
-            li.style.cssText = 'padding:10px 18px; cursor:pointer; font-family:Poppins,sans-serif; font-size:0.9rem; color:var(--text-main); transition:background 0.15s;';
+            li.style.cssText = 'padding:10px 18px; cursor:pointer; font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif; font-size:0.9rem; color:var(--text-main); transition:background 0.15s;';
             li.addEventListener('mouseenter', () => setActive(i));
             li.addEventListener('click', () => { input.value = text; hideSuggest(); form.submit(); });
             suggest.appendChild(li);
@@ -372,7 +373,7 @@ function toggleTrendingMap() {
         // Show Map, Hide List
         list.classList.add('hidden');
         mapBox.classList.remove('hidden');
-        btnText.innerText = "🗓️ View as Grid";
+        btnText.innerText = "ðŸ—“ï¸ View as Grid";
         
         if (!exploreMapInit) {
             if (typeof loadGoogleMaps === 'function') {
@@ -385,7 +386,7 @@ function toggleTrendingMap() {
         // Show List, Hide Map
         mapBox.classList.add('hidden');
         list.classList.remove('hidden');
-        btnText.innerText = "📍 View on Map";
+        btnText.innerText = "ðŸ“ View on Map";
     }
 }
 
@@ -435,3 +436,4 @@ function initExploreMap() {
 </script>
 
 <%@ include file="components/footer.jsp" %>
+

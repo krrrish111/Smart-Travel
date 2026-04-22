@@ -33,7 +33,7 @@ public class RegisterServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        response.setContentType("application/json");
+        response.setContentType("application/json;charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
         Map<String, Object> result = new HashMap<>();
 
@@ -107,3 +107,4 @@ public class RegisterServlet extends HttpServlet {
         }
     }
 }
+

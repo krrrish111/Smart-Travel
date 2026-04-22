@@ -49,13 +49,13 @@ public class SearchServlet extends HttpServlet {
 
         String searchTrimmed = keyword.trim();
 
-        // ── AUTOCOMPLETE / SUGGEST mode ──────────────────────────────────────
+        // â”€â”€ AUTOCOMPLETE / SUGGEST mode â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         if ("suggest".equals(mode)) {
             serveSuggestions(request, response, searchTrimmed);
             return;
         }
 
-        // ── FULL SEARCH mode ─────────────────────────────────────────────────
+        // â”€â”€ FULL SEARCH mode â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         try {
             List<Plan> planResults = planDAO.searchPlans(searchTrimmed);
             List<Destination> destResults = destinationDAO.searchDestinations(searchTrimmed);
@@ -76,7 +76,7 @@ public class SearchServlet extends HttpServlet {
     private void serveSuggestions(HttpServletRequest request,
                                   HttpServletResponse response,
                                   String keyword) throws IOException {
-        response.setContentType("application/json");
+        response.setContentType("application/json;charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
 
         // Simple suggestion logic: take top 4 plans and top 4 destinations
@@ -95,3 +95,4 @@ public class SearchServlet extends HttpServlet {
         new Gson().toJson(planSuggestions, response.getWriter());
     }
 }
+

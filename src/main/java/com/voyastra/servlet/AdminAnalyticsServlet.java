@@ -37,7 +37,7 @@ public class AdminAnalyticsServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        response.setContentType("application/json");
+        response.setContentType("application/json;charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
 
         try {
@@ -65,3 +65,4 @@ public class AdminAnalyticsServlet extends HttpServlet {
         }
     }
 }
+

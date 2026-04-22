@@ -114,7 +114,7 @@ public class ActivityServlet extends HttpServlet {
                 List<Activity> allActivities = activityDAO.getAllActivities();
                 
                 if ("json".equals(request.getParameter("format"))) {
-                    response.setContentType("application/json");
+                    response.setContentType("application/json;charset=UTF-8");
                     response.setCharacterEncoding("UTF-8");
                     new Gson().toJson(allActivities, response.getWriter());
                 } else {
@@ -124,3 +124,4 @@ public class ActivityServlet extends HttpServlet {
             }
     }
 }
+

@@ -25,10 +25,10 @@ public class AdminLogServlet extends HttpServlet {
     }
 
     /**
-     * GET /admin/logs              → All logs (newest first)
-     * GET /admin/logs?action=DELETE → Filtered by action type
-     * GET /admin/logs?admin=john   → Filtered by admin username
-     * GET /admin/logs?limit=20     → Recent N logs for dashboard widget
+     * GET /admin/logs              â†’ All logs (newest first)
+     * GET /admin/logs?action=DELETE â†’ Filtered by action type
+     * GET /admin/logs?admin=john   â†’ Filtered by admin username
+     * GET /admin/logs?limit=20     â†’ Recent N logs for dashboard widget
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -65,7 +65,7 @@ public class AdminLogServlet extends HttpServlet {
 
             // If format=json, return JSON instead of forwarding
             if ("json".equalsIgnoreCase(format)) {
-                response.setContentType("application/json");
+                response.setContentType("application/json;charset=UTF-8");
                 response.setCharacterEncoding("UTF-8");
                 PrintWriter out = response.getWriter();
                 
@@ -112,10 +112,10 @@ public class AdminLogServlet extends HttpServlet {
     /**
      * POST /admin/logs
      *
-     * action=clear  → Truncates entire admin_logs table (superadmin action)
+     * action=clear  â†’ Truncates entire admin_logs table (superadmin action)
      *
      * Note: Individual log entries are inserted automatically via AdminLogger
-     * utility from other servlets — not via this endpoint.
+     * utility from other servlets â€” not via this endpoint.
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -136,7 +136,7 @@ public class AdminLogServlet extends HttpServlet {
         }
     }
 
-    // ── Helper ────────────────────────────────────────────────────────────
+    // â”€â”€ Helper â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     private boolean isAdmin(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
@@ -148,3 +148,4 @@ public class AdminLogServlet extends HttpServlet {
         return true;
     }
 }
+

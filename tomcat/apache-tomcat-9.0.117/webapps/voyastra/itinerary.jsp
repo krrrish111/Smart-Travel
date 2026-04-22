@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="components/header.jsp" %>
 
 <main class="container" style="padding-top: 100px; min-height: calc(100vh - 80px); padding-bottom: 40px;">
@@ -166,3 +167,4 @@
 </main>
 
 <%@ include file="components/footer.jsp" %>
+

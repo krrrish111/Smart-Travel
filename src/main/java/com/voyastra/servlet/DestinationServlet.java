@@ -36,7 +36,7 @@ public class DestinationServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        response.setContentType("application/json");
+        response.setContentType("application/json;charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
 
@@ -93,7 +93,7 @@ public class DestinationServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        response.setContentType("application/json");
+        response.setContentType("application/json;charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
 
@@ -282,3 +282,4 @@ public class DestinationServlet extends HttpServlet {
                     .replace("\r", "\\r");
     }
 }
+

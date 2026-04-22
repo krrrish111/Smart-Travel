@@ -16,7 +16,7 @@
         body {
             background-color: var(--bg);
             color: var(--text);
-            font-family: 'Inter', sans-serif;
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
             margin: 0;
             display: flex;
             align-items: center;
@@ -32,7 +32,7 @@
             z-index: 10;
         }
         .error-code {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
             font-size: 10rem;
             font-weight: 800;
             margin: 0;
@@ -44,7 +44,7 @@
             line-height: 1;
         }
         h1 {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
             font-size: 1.8rem;
             margin: 20px 0 10px;
         }

@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="components/header.jsp" %>
 <%@ include file="components/global_ui.jsp" %>
 <style>
@@ -50,7 +51,7 @@
     <aside class="glass-panel slide-up slide-right" style="width: 400px; height: 100%; overflow-y: auto; border-radius: 0; border-right: 1px solid var(--color-border); display: flex; flex-direction: column;">
         
         <div class="px-6 py-4 sticky top-0" style="background: var(--surface-glass); backdrop-filter: blur(16px); z-index: 10; border-bottom: 1px solid var(--color-border);">
-            <a href="booking.jsp" class="text-primary font-bold text-sm mb-3 inline-block">← Back to Bookings</a>
+            <a href="booking.jsp" class="text-primary font-bold text-sm mb-3 inline-block">â† Back to Bookings</a>
             <h2 class="editorial text-main mb-1" style="font-size: 1.8rem;">Route Navigation</h2>
             <div class="flex gap-4 text-xs font-bold uppercase tracking-wider text-muted">
                 <span><i class="opacity-80">Dist:</i> <span id="navTotalDist" class="text-primary">--</span></span>
@@ -102,7 +103,7 @@
 
             </div>
             
-            <button class="btn btn-primary w-full mt-4" style="padding: 14px; font-weight: 700; font-size: 1rem;">Start Live Navigation ➔</button>
+            <button class="btn btn-primary w-full mt-4" style="padding: 14px; font-weight: 700; font-size: 1rem;">Start Live Navigation →</button>
 
         </div>
     </aside>
@@ -189,3 +190,4 @@ window.addEventListener('DOMContentLoaded', () => {
 <!-- Note: Footer omitted to keep map full screen -->
 </body>
 </html>
+

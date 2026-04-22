@@ -51,7 +51,7 @@ public class TransportServlet extends HttpServlet {
             }
 
             if ("json".equals(request.getParameter("format"))) {
-                response.setContentType("application/json");
+                response.setContentType("application/json;charset=UTF-8");
                 response.setCharacterEncoding("UTF-8");
                 new Gson().toJson(results, response.getWriter());
             } else {
@@ -100,7 +100,7 @@ public class TransportServlet extends HttpServlet {
                 t.setBadge(request.getParameter("badge")); // Optional e.g. "Cheapest"
 
                 transportDAO.addTransport(t);
-                AdminLogger.log(request, "ADD", "Transport", 0, "Added " + t.getType() + " '" + t.getCompanyName() + "' (" + t.getOriginCode() + " → " + t.getDestinationCode() + ")");
+                AdminLogger.log(request, "ADD", "Transport", 0, "Added " + t.getType() + " '" + t.getCompanyName() + "' (" + t.getOriginCode() + " â†’ " + t.getDestinationCode() + ")");
                 response.sendRedirect(redirectUrl + "?transportAdded=true");
 
             } else if ("delete".equals(action)) {
@@ -117,3 +117,4 @@ public class TransportServlet extends HttpServlet {
         }
     }
 }
+

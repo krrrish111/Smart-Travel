@@ -95,9 +95,9 @@ public class GoogleLoginServlet extends HttpServlet {
 
             // 5. Redirect based on role
             if ("admin".equals(user.getRole())) {
-                response.sendRedirect("admin-dashboard.jsp");
+                response.sendRedirect(request.getContextPath() + "/");
             } else {
-                response.sendRedirect("dashboard.jsp");
+                response.sendRedirect(request.getContextPath() + "/");
             }
 
         } catch (Exception e) {

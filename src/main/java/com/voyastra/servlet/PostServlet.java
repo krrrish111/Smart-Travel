@@ -68,7 +68,7 @@ public class PostServlet extends HttpServlet {
             // Security Check: Only Admins can delete community posts
             if (session == null || !"admin".equals(session.getAttribute("role"))) {
                 response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                response.setContentType("application/json");
+                response.setContentType("application/json;charset=UTF-8");
                 response.getWriter().print("{\"status\":\"error\", \"message\":\"Not authorized\"}");
                 return;
             }
@@ -77,7 +77,7 @@ public class PostServlet extends HttpServlet {
                 int postId = Integer.parseInt(request.getParameter("id"));
                 boolean success = postDAO.deletePost(postId);
                 
-                response.setContentType("application/json");
+                response.setContentType("application/json;charset=UTF-8");
                 if (success) {
                     AdminLogger.log(request, "DELETE", "Post", postId, "Deleted community post #" + postId);
                     response.getWriter().print("{\"status\":\"success\", \"message\":\"Post deleted successfully.\"}");
@@ -86,7 +86,7 @@ public class PostServlet extends HttpServlet {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                response.setContentType("application/json");
+                response.setContentType("application/json;charset=UTF-8");
                 response.getWriter().print("{\"status\":\"error\", \"message\":\"Server error executing operation.\"}");
             }
         }
@@ -120,7 +120,7 @@ public class PostServlet extends HttpServlet {
                 }
                 json.append("]");
                 
-                response.setContentType("application/json");
+                response.setContentType("application/json;charset=UTF-8");
                 response.setCharacterEncoding("UTF-8");
                 response.getWriter().print(json.toString());
             } catch (Exception e) {
@@ -152,3 +152,4 @@ public class PostServlet extends HttpServlet {
                     .replace("\r", "\\r");
     }
 }
+

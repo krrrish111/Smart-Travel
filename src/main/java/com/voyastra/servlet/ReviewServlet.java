@@ -109,12 +109,12 @@ public class ReviewServlet extends HttpServlet {
                     res.put("message", "Failed to delete review.");
                 }
                 
-                response.setContentType("application/json");
+                response.setContentType("application/json;charset=UTF-8");
                 gson.toJson(res, response.getWriter());
 
             } catch (Exception e) {
                 e.printStackTrace();
-                response.setContentType("application/json");
+                response.setContentType("application/json;charset=UTF-8");
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 response.getWriter().write("{\"status\":\"error\", \"message\":\"Server error executing operation.\"}");
             }
@@ -141,7 +141,7 @@ public class ReviewServlet extends HttpServlet {
                     return map;
                 }).collect(Collectors.toList());
                 
-                response.setContentType("application/json");
+                response.setContentType("application/json;charset=UTF-8");
                 response.setCharacterEncoding("UTF-8");
                 gson.toJson(mappedResults, response.getWriter());
 
@@ -176,3 +176,4 @@ public class ReviewServlet extends HttpServlet {
         }
     }
 }
+

@@ -118,7 +118,7 @@ h1, h2, h3, h4 {
     border-radius: var(--border-radius-md) !important;
     border: 1px solid var(--color-border) !important;
     box-shadow: 0 10px 40px rgba(0,0,0,0.3) !important;
-    font-family: 'Inter', sans-serif !important;
+    font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
 }
 
 /* Remove "Oops! Something went wrong" Google Maps Error Overlay */
@@ -153,7 +153,7 @@ h1, h2, h3, h4 {
 .nav-brand {
     font-size: 1.5rem; font-weight: 800; color: var(--text-main);
     display: flex; align-items: center; gap: 8px; text-decoration: none;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
     transition: transform 0.3s ease;
 }
 .nav-brand:hover {
@@ -545,11 +545,11 @@ h1, h2, h3, h4 {
 }
 
 @keyframes dynamicFontCycle {
-    0%   { font-family: 'Poppins', sans-serif; font-weight: 300; letter-spacing: 0.15em; font-style: normal; }
-    25%  { font-family: 'Playfair Display', serif; font-weight: 400; letter-spacing: 0.25em; font-style: italic; }
-    50%  { font-family: 'Inter', sans-serif; font-weight: 800; letter-spacing: 0.4em; font-style: normal; }
-    75%  { font-family: 'Cormorant Garamond', serif; font-weight: 700; letter-spacing: 0.2em; font-style: normal; }
-    100% { font-family: 'Poppins', sans-serif; font-weight: 300; letter-spacing: 0.15em; font-style: normal; }
+    0%   { font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif; font-weight: 300; letter-spacing: 0.15em; font-style: normal; }
+    25%  { font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif; font-weight: 400; letter-spacing: 0.25em; font-style: italic; }
+    50%  { font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif; font-weight: 800; letter-spacing: 0.4em; font-style: normal; }
+    75%  { font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif; font-weight: 700; letter-spacing: 0.2em; font-style: normal; }
+    100% { font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif; font-weight: 300; letter-spacing: 0.15em; font-style: normal; }
 }
 
 /* ===== INTELLIGENT SEARCH MODAL ===== */
@@ -585,7 +585,7 @@ h1, h2, h3, h4 {
     color: var(--text-main);
     outline: none;
     margin-bottom: 16px;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
     transition: border-color 0.2s, box-shadow 0.2s;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'%3E%3C/circle%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'%3E%3C/line%3E%3C/svg%3E");
     background-repeat: no-repeat;
@@ -754,7 +754,7 @@ h1, h2, h3, h4 {
 .voyastra-toast-info    .toast-icon { color: #3b82f6; background: rgba(59, 130, 246, 0.1); }
 
 .toast-msg {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
     font-size: 0.85rem;
     font-weight: 600;
     color: var(--text-main);
@@ -793,7 +793,7 @@ h1, h2, h3, h4 {
 
 .vx-field-error {
     display: none;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
     font-size: 0.78rem;
     font-weight: 500;
     color: #ef4444;
@@ -1106,7 +1106,7 @@ h1, h2, h3, h4 {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     outline: none;
-    font-family: inherit;
+    font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
     box-sizing: border-box; /* Ensure padding doesn't increase width/height */
 }
 
@@ -1265,7 +1265,7 @@ h1, h2, h3, h4 {
     font-weight: 700;
     color: var(--text-main);
     letter-spacing: 1px;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
     margin-bottom: 8px;
 }
 
@@ -1307,7 +1307,7 @@ h1, h2, h3, h4 {
 }
 
 .vx-empty-title {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
     font-size: 1.5rem;
     font-weight: 700;
     color: var(--text-main);
@@ -1315,7 +1315,7 @@ h1, h2, h3, h4 {
 }
 
 .vx-empty-desc {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
     font-size: 1rem;
     color: var(--text-muted);
     max-width: 400px;

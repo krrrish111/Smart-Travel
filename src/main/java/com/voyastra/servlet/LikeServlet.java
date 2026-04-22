@@ -31,7 +31,7 @@ public class LikeServlet extends HttpServlet {
             throws ServletException, IOException {
             
         // Set up JSON response format
-        response.setContentType("application/json");
+        response.setContentType("application/json;charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
 
@@ -96,7 +96,7 @@ public class LikeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
             
-        response.setContentType("application/json");
+        response.setContentType("application/json;charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
         
@@ -113,3 +113,4 @@ public class LikeServlet extends HttpServlet {
         }
     }
 }
+

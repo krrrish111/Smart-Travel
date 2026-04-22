@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ include file="components/header.jsp" %>
@@ -21,7 +22,7 @@
                 
                 <div class="mt-8">
                     <a href="planner.jsp?location=${destination.name}" class="btn btn-primary" style="padding: 14px 32px; font-size: 1.1rem; border-radius: 50px;">
-                        Plan a Trip Here ✨
+                        Plan a Trip Here âœ¨
                     </a>
                 </div>
             </div>
@@ -51,7 +52,7 @@
                             <div class="text-primary font-bold" style="font-size: 1.2rem;">
                                 <!-- Simple Star Rating -->
                                 <c:forEach begin="1" end="5" var="i">
-                                    <span style="color: ${i <= review.rating ? 'var(--color-primary)' : 'rgba(255,255,255,0.2)'}">★</span>
+                                    <span style="color: ${i <= review.rating ? 'var(--color-primary)' : 'rgba(255,255,255,0.2)'}">â˜…</span>
                                 </c:forEach>
                             </div>
                         </div>
@@ -74,7 +75,7 @@
                 </div>
                 <div class="flex items-baseline gap-2">
                     <div id="weatherTemp" class="text-main font-bold" style="font-size: 2.5rem; line-height: 1;">--</div>
-                    <div class="text-muted text-sm">°C</div>
+                    <div class="text-muted text-sm">Â°C</div>
                 </div>
                 <div id="weatherDesc" class="text-primary font-medium mt-2 capitalize" style="font-size: 0.9rem;">Loading forecast...</div>
                 
@@ -102,11 +103,11 @@
                         <select name="rating" id="reviewRating" class="form-control"
                                 data-v-required data-v-label="Rating"
                                 style="appearance: none; background-color: rgba(255,255,255,0.05);">
-                            <option value="5" style="color:#000">⭐⭐⭐⭐⭐ (5) Excellent</option>
-                            <option value="4" style="color:#000">⭐⭐⭐⭐ (4) Very Good</option>
-                            <option value="3" style="color:#000">⭐⭐⭐ (3) Average</option>
-                            <option value="2" style="color:#000">⭐⭐ (2) Poor</option>
-                            <option value="1" style="color:#000">⭐ (1) Terrible</option>
+                            <option value="5" style="color:#000">â­â­â­â­â­ (5) Excellent</option>
+                            <option value="4" style="color:#000">â­â­â­â­ (4) Very Good</option>
+                            <option value="3" style="color:#000">â­â­â­ (3) Average</option>
+                            <option value="2" style="color:#000">â­â­ (2) Poor</option>
+                            <option value="1" style="color:#000">â­ (1) Terrible</option>
                         </select>
                     </div>
                     
@@ -149,19 +150,19 @@
 
             // Mapping OpenWeather icons to emojis
             const iconMap = {
-                'Clear': '☀️',
-                'Clouds': '☁️',
-                'Rain': '🌧️',
-                'Drizzle': '🌦️',
-                'Thunderstorm': '⛈️',
-                'Snow': '❄️',
-                'Mist': '🌫️',
-                'Smoke': '🌫️',
-                'Haze': '🌫️'
+                'Clear': 'â˜€ï¸',
+                'Clouds': 'â˜ï¸',
+                'Rain': 'ðŸŒ§ï¸',
+                'Drizzle': 'ðŸŒ¦ï¸',
+                'Thunderstorm': 'â›ˆï¸',
+                'Snow': 'â„ï¸',
+                'Mist': 'ðŸŒ«ï¸',
+                'Smoke': 'ðŸŒ«ï¸',
+                'Haze': 'ðŸŒ«ï¸'
             };
 
             const condition = data.weather[0].main;
-            document.getElementById('weatherIcon').innerText = iconMap[condition] || '⛅';
+            document.getElementById('weatherIcon').innerText = iconMap[condition] || 'â›…';
             document.getElementById('weatherTemp').innerText = Math.round(data.main.temp);
             document.getElementById('weatherDesc').innerText = data.weather[0].description;
             document.getElementById('weatherHum').innerText = data.main.humidity + '%';
@@ -183,3 +184,4 @@
 </main>
 
 <%@ include file="components/footer.jsp" %>
+

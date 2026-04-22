@@ -34,7 +34,7 @@
     background-clip: text;
     -webkit-text-fill-color: transparent;
     margin-bottom: 10px;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
     line-height: 1.15;
 }
 
@@ -65,7 +65,7 @@
     font-size: 1.15rem;
     font-weight: 800;
     color: var(--color-primary);
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
     line-height: 1.1;
 }
 
@@ -267,7 +267,7 @@
     padding: 11px 20px;
     color: var(--text-muted);
     font-size: 0.93rem;
-    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
     outline: none;
     cursor: pointer;
     transition: all 0.25s ease;
@@ -293,7 +293,7 @@
     resize: none;
     color: var(--text-main);
     font-size: 1rem;
-    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
     line-height: 1.6;
     min-height: 80px;
     padding: 0;
@@ -345,7 +345,7 @@
     color: var(--text-muted);
     font-size: 0.83rem;
     font-weight: 600;
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
     cursor: pointer;
     padding: 7px 11px;
     border-radius: 8px;
@@ -366,7 +366,7 @@
     padding: 9px 22px;
     font-weight: 700;
     font-size: 0.9rem;
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
     cursor: pointer;
     transition: all 0.25s ease;
     display: inline-flex;
@@ -405,7 +405,7 @@
     color: var(--text-muted);
     font-size: 0.835rem;
     font-weight: 600;
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
     cursor: pointer;
     transition: all 0.2s ease;
 }
@@ -501,7 +501,7 @@
     font-size: 0.98rem;
     font-weight: 700;
     color: var(--text-main);
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
     display: flex;
     align-items: center;
     gap: 6px;
@@ -582,7 +582,7 @@
     color: var(--text-main);
     font-size: 0.95rem;
     line-height: 1.7;
-    font-family: 'DM Sans', 'Inter', sans-serif;
+    font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
     margin: 0;
 }
 
@@ -692,7 +692,7 @@
     color: var(--text-muted);
     font-size: 0.85rem;
     font-weight: 600;
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
     cursor: pointer;
     border-radius: 8px;
     transition: all 0.2s ease;
@@ -815,7 +815,7 @@
     padding: 9px 16px;
     color: var(--text-main);
     font-size: 0.86rem;
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
     outline: none;
     transition: all 0.2s ease;
     min-width: 0;
@@ -929,7 +929,7 @@
     padding: 4px 12px;
     font-size: 0.76rem;
     font-weight: 700;
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
     cursor: pointer;
     transition: all 0.2s ease;
     flex-shrink: 0;
@@ -985,7 +985,7 @@
     font-size: 0.95rem;
     font-weight: 800;
     color: var(--color-border);
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
     flex-shrink: 0;
     width: 22px;
     text-align: center;

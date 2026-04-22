@@ -13,6 +13,7 @@ C:\Users\Dell\Desktop\antigravity\src\main\java\com\voyastra\dao\TransportDAO.ja
 C:\Users\Dell\Desktop\antigravity\src\main\java\com\voyastra\dao\TrendingDAO.java
 C:\Users\Dell\Desktop\antigravity\src\main\java\com\voyastra\dao\UserDAO.java
 C:\Users\Dell\Desktop\antigravity\src\main\java\com\voyastra\filter\ErrorHandlingFilter.java
+C:\Users\Dell\Desktop\antigravity\src\main\java\com\voyastra\filter\GlobalExceptionFilter.java
 C:\Users\Dell\Desktop\antigravity\src\main\java\com\voyastra\filter\SecurityFilter.java
 C:\Users\Dell\Desktop\antigravity\src\main\java\com\voyastra\model\Activity.java
 C:\Users\Dell\Desktop\antigravity\src\main\java\com\voyastra\model\AdminLog.java
@@ -37,7 +38,10 @@ C:\Users\Dell\Desktop\antigravity\src\main\java\com\voyastra\servlet\DeletePlanS
 C:\Users\Dell\Desktop\antigravity\src\main\java\com\voyastra\servlet\DestinationDetailsServlet.java
 C:\Users\Dell\Desktop\antigravity\src\main\java\com\voyastra\servlet\DestinationServlet.java
 C:\Users\Dell\Desktop\antigravity\src\main\java\com\voyastra\servlet\ExploreServlet.java
+C:\Users\Dell\Desktop\antigravity\src\main\java\com\voyastra\servlet\ForgotPasswordServlet.java
 C:\Users\Dell\Desktop\antigravity\src\main\java\com\voyastra\servlet\GetPlansServlet.java
+C:\Users\Dell\Desktop\antigravity\src\main\java\com\voyastra\servlet\GoogleLoginServlet.java
+C:\Users\Dell\Desktop\antigravity\src\main\java\com\voyastra\servlet\GoogleOAuthServlet.java
 C:\Users\Dell\Desktop\antigravity\src\main\java\com\voyastra\servlet\HomeServlet.java
 C:\Users\Dell\Desktop\antigravity\src\main\java\com\voyastra\servlet\ImageUploadServlet.java
 C:\Users\Dell\Desktop\antigravity\src\main\java\com\voyastra\servlet\ItineraryServlet.java
@@ -47,6 +51,7 @@ C:\Users\Dell\Desktop\antigravity\src\main\java\com\voyastra\servlet\LogoutServl
 C:\Users\Dell\Desktop\antigravity\src\main\java\com\voyastra\servlet\PlannerServlet.java
 C:\Users\Dell\Desktop\antigravity\src\main\java\com\voyastra\servlet\PostServlet.java
 C:\Users\Dell\Desktop\antigravity\src\main\java\com\voyastra\servlet\RegisterServlet.java
+C:\Users\Dell\Desktop\antigravity\src\main\java\com\voyastra\servlet\ResetPasswordServlet.java
 C:\Users\Dell\Desktop\antigravity\src\main\java\com\voyastra\servlet\ReviewServlet.java
 C:\Users\Dell\Desktop\antigravity\src\main\java\com\voyastra\servlet\SearchServlet.java
 C:\Users\Dell\Desktop\antigravity\src\main\java\com\voyastra\servlet\StayServlet.java
@@ -54,8 +59,15 @@ C:\Users\Dell\Desktop\antigravity\src\main\java\com\voyastra\servlet\TestDBServl
 C:\Users\Dell\Desktop\antigravity\src\main\java\com\voyastra\servlet\TransportServlet.java
 C:\Users\Dell\Desktop\antigravity\src\main\java\com\voyastra\servlet\TrendingServlet.java
 C:\Users\Dell\Desktop\antigravity\src\main\java\com\voyastra\servlet\UpdatePlanServlet.java
+C:\Users\Dell\Desktop\antigravity\src\main\java\com\voyastra\servlet\VerifyEmailServlet.java
 C:\Users\Dell\Desktop\antigravity\src\main\java\com\voyastra\servlet\WeatherServlet.java
+C:\Users\Dell\Desktop\antigravity\src\main\java\com\voyastra\test\TestLoginLogic.java
 C:\Users\Dell\Desktop\antigravity\src\main\java\com\voyastra\util\AdminLogger.java
 C:\Users\Dell\Desktop\antigravity\src\main\java\com\voyastra\util\CreateTable.java
+C:\Users\Dell\Desktop\antigravity\src\main\java\com\voyastra\util\DatabaseInitializer.java
 C:\Users\Dell\Desktop\antigravity\src\main\java\com\voyastra\util\DBConnection.java
 C:\Users\Dell\Desktop\antigravity\src\main\java\com\voyastra\util\DBTableCheck.java
+C:\Users\Dell\Desktop\antigravity\src\main\java\com\voyastra\util\DBTest.java
+C:\Users\Dell\Desktop\antigravity\src\main\java\com\voyastra\util\EmailService.java
+C:\Users\Dell\Desktop\antigravity\src\main\java\com\voyastra\util\OAuthConfig.java
+C:\Users\Dell\Desktop\antigravity\src\main\java\com\voyastra\util\SqlFileRunner.java

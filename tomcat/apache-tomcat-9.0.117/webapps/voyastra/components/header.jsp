@@ -121,7 +121,7 @@
             border: 1.5px solid var(--color-primary);
             background: transparent;
             color: var(--color-primary);
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
             font-size: 0.8rem;
             font-weight: 700;
             letter-spacing: 0.07em;
@@ -172,7 +172,7 @@
         }
 
         .nav-avatar-name {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
             font-size: 0.82rem;
             font-weight: 600;
             color: var(--text-main);
@@ -217,13 +217,13 @@
             margin-bottom: 6px;
         }
         .nav-dropdown-uname {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
             font-size: 0.9rem;
             font-weight: 700;
             color: var(--text-main);
         }
         .nav-dropdown-email {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
             font-size: 0.74rem;
             color: var(--text-muted);
             margin-top: 2px;
@@ -237,7 +237,7 @@
             border-radius: 9px;
             text-decoration: none;
             color: var(--text-main);
-            font-family: 'Inter', sans-serif;
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
             font-size: 0.84rem;
             font-weight: 500;
             cursor: pointer;
@@ -491,7 +491,7 @@
                 }).join(' ');
                 mainEl.insertAdjacentHTML('afterbegin',
                     '<div class="container relative z-20 slide-up" style="padding-top:10px;margin-bottom:25px;animation-delay:0.1s;">' +
-                    '<nav aria-label="Breadcrumb"><ol class="flex items-center gap-2 text-sm" style="font-family:\'Inter\',sans-serif;">' +
+                    '<nav aria-label="Breadcrumb"><ol class="flex items-center gap-2 text-sm" style="font-family: Poppins, Inter, Roboto, Arial, sans-serif;">' +
                     '<li><a href="index.jsp" class="text-muted breadcrumb-link" style="transition:color 0.2s;">Home</a></li>' +
                     '<li class="text-muted" style="opacity:0.5;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></li>' +
                     '<li class="text-primary font-medium" aria-current="page">' + formatted + '</li>' +

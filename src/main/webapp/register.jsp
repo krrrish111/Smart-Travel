@@ -55,7 +55,7 @@
             animation: loginBrandIn 1s 0.3s ease forwards;
         }
         .login-brand-title {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
             font-size: 2.8rem;
             font-weight: 800;
             letter-spacing: -0.02em;
@@ -65,7 +65,7 @@
             animation: loginBrandIn 1s 0.5s ease forwards;
         }
         .login-brand-sub {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
             font-size: 0.95rem;
             font-weight: 400;
             color: rgba(255,255,255,0.5);
@@ -106,7 +106,7 @@
             animation: loginFormIn 0.9s 0.4s cubic-bezier(0.25,1,0.5,1) forwards;
         }
         .login-eyebrow {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
             font-size: 0.72rem;
             font-weight: 700;
             letter-spacing: 0.18em;
@@ -115,7 +115,7 @@
             margin-bottom: 10px;
         }
         .login-heading {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
             font-size: 2rem;
             font-weight: 800;
             letter-spacing: -0.03em;
@@ -124,7 +124,7 @@
         }
         [data-theme="dark"] .login-heading { color: #ffffff; }
         .login-subhead {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
             font-size: 0.88rem;
             color: rgba(15,11,8,0.5);
             margin-bottom: 36px;
@@ -138,7 +138,7 @@
         }
         .login-field label {
             display: block;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
             font-size: 0.78rem;
             font-weight: 600;
             color: #0f0b08;
@@ -151,7 +151,7 @@
             padding: 13px 16px;
             border: 1.5px solid rgba(15,11,8,0.15);
             border-radius: 10px;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
             font-size: 0.92rem;
             color: #0f0b08;
             background: #fafafa;
@@ -196,7 +196,7 @@
             border: 1px solid rgba(239,68,68,0.25);
             border-radius: 8px;
             padding: 10px 14px;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
             font-size: 0.82rem;
             color: #ef4444;
             margin-bottom: 18px;
@@ -204,7 +204,7 @@
 
         /* Hint */
         .login-hint {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
             font-size: 0.76rem;
             color: rgba(15,11,8,0.35);
             background: rgba(79,70,229,0.06);
@@ -231,7 +231,7 @@
             color: #ffffff;
             border: none;
             border-radius: 10px;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
             font-size: 0.9rem;
             font-weight: 700;
             letter-spacing: 0.06em;
@@ -250,7 +250,7 @@
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
             font-size: 0.82rem;
             color: rgba(15,11,8,0.45);
             text-decoration: none;

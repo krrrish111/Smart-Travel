@@ -55,7 +55,7 @@
             animation: loginBrandIn 1s 0.3s ease forwards;
         }
         .login-brand-title {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
             font-size: 2.8rem;
             font-weight: 800;
             letter-spacing: -0.02em;
@@ -65,7 +65,7 @@
             animation: loginBrandIn 1s 0.5s ease forwards;
         }
         .login-brand-sub {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
             font-size: 0.95rem;
             font-weight: 400;
             color: rgba(255,255,255,0.5);
@@ -106,7 +106,7 @@
             animation: loginFormIn 0.9s 0.4s cubic-bezier(0.25,1,0.5,1) forwards;
         }
         .login-eyebrow {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
             font-size: 0.72rem;
             font-weight: 700;
             letter-spacing: 0.18em;
@@ -115,7 +115,7 @@
             margin-bottom: 10px;
         }
         .login-heading {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
             font-size: 2rem;
             font-weight: 800;
             letter-spacing: -0.03em;
@@ -124,7 +124,7 @@
         }
         [data-theme="dark"] .login-heading { color: #ffffff; }
         .login-subhead {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
             font-size: 0.88rem;
             color: rgba(15,11,8,0.5);
             margin-bottom: 36px;
@@ -138,7 +138,7 @@
         }
         .login-field label {
             display: block;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
             font-size: 0.78rem;
             font-weight: 600;
             color: #0f0b08;
@@ -151,7 +151,7 @@
             padding: 13px 16px;
             border: 1.5px solid rgba(15,11,8,0.15);
             border-radius: 10px;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
             font-size: 0.92rem;
             color: #0f0b08;
             background: #fafafa;
@@ -196,7 +196,7 @@
             border: 1px solid rgba(239,68,68,0.25);
             border-radius: 8px;
             padding: 10px 14px;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
             font-size: 0.82rem;
             color: #ef4444;
             margin-bottom: 18px;
@@ -204,7 +204,7 @@
 
         /* Hint */
         .login-hint {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
             font-size: 0.76rem;
             color: rgba(15,11,8,0.35);
             background: rgba(79,70,229,0.06);
@@ -231,7 +231,7 @@
             color: #ffffff;
             border: none;
             border-radius: 10px;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
             font-size: 0.9rem;
             font-weight: 700;
             letter-spacing: 0.06em;
@@ -250,7 +250,7 @@
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
             font-size: 0.82rem;
             color: rgba(15,11,8,0.45);
             text-decoration: none;
@@ -375,27 +375,17 @@
 </div>
 
 <script>
-    // ── Dummy credential store
-    // TODO: Replace with real server-side authentication when backend is ready
-    var DUMMY_USERS = [
-        { email: 'demo@voyastra.com', password: 'voyastra123', name: 'Raj' },
-        { email: 'admin@voyastra.com', password: 'admin123',    name: 'Admin' }
-    ];
+    // Expose Java session bridge for registration context
+    window.javaSession = {
+        userId: "${sessionScope.user_id}",
+        role:   "${sessionScope.role}",
+        name:   "${sessionScope.name}",
+        email:  "${sessionScope.email}"
+    };
 
-    var SESSION_KEY = 'voyastra_user';
-
-    // Read redirect destination from query param (e.g. login.jsp?redirect=planner.jsp)
-    var params       = new URLSearchParams(window.location.search);
-    var redirectTo   = params.get('redirect') || 'dashboard.jsp';
-
-    // If already logged in, skip login and go straight to the destination
-    if (localStorage.getItem(SESSION_KEY)) {
-        window.location.replace(redirectTo);
-    } else if (params.get('redirect')) {
-        // Show warning toast that login is required for this action
-        setTimeout(function() {
-            if (window.VoyastraToast) VoyastraToast.show('Please log in to continue.', 'warning');
-        }, 100);
+    // If already logged in, redirect
+    if (VoyastraAuth.isLoggedIn()) {
+        window.location.replace('dashboard.jsp');
     }
 
     // Toggle password visibility
@@ -411,11 +401,61 @@
         }
     });
 
-    // Standard form submission handles registration now.
+    // --- AJAX REGISTER FLOW ---
     document.getElementById('registerForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        
         var btn = document.getElementById('registerBtn');
+        var errBox = document.getElementById('loginError');
+        var name = document.getElementById('loginName').value;
+        var email = document.getElementById('loginEmail').value;
+        var password = document.getElementById('loginPassword').value;
+
+        if (!name || !email || !password) return;
+
         btn.classList.add('loading');
-        btn.textContent = 'Creating Account…';
+        btn.disabled = true;
+        btn.textContent = 'Processing...';
+        if (errBox) errBox.style.display = 'none';
+
+        fetch('register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: name, email: email, password: password })
+        })
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+            if (data.success) {
+                // SYNC SESSION
+                if (window.VoyastraAuth) VoyastraAuth.login(data);
+                
+                if (window.VoyastraToast) VoyastraToast.show(data.message, 'success');
+                setTimeout(function() {
+                    window.location.href = data.redirect || 'dashboard.jsp';
+                }, 1200);
+            } else {
+                btn.classList.remove('loading');
+                btn.disabled = false;
+                btn.textContent = 'Create Account';
+                
+                if (window.VoyastraToast) VoyastraToast.show(data.message, 'error');
+                
+                if (!errBox) {
+                    errBox = document.createElement('div');
+                    errBox.id = 'loginError';
+                    errBox.style.cssText = 'display:flex; align-items:center; gap:8px; padding:10px 14px; background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); border-radius:8px; color:#ef4444; font-size:0.875rem; margin-bottom:16px;';
+                    document.getElementById('registerForm').insertAdjacentElement('beforebegin', errBox);
+                }
+                errBox.style.display = 'flex';
+                errBox.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>' + data.message;
+            }
+        })
+        .catch(function(err) {
+            btn.classList.remove('loading');
+            btn.disabled = false;
+            btn.textContent = 'Create Account';
+            if (window.VoyastraToast) VoyastraToast.show('Network error. Please try again.', 'error');
+        });
     });
 </script>
 

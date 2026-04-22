@@ -13,7 +13,7 @@
             --card-bg: rgba(30, 41, 59, 0.7);
         }
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
             background: radial-gradient(circle at bottom left, #1e293b, #0f172a);
             color: #f8fafc;
             height: 100vh;

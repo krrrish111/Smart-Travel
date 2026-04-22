@@ -149,7 +149,7 @@
 
     /* Brand label inside sidebar header */
     .sidebar-brand-label {
-        font-family: 'Inter', sans-serif;
+        font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
         font-weight: 800;
         font-size: 1.05rem;
         letter-spacing: -0.02em;
@@ -164,7 +164,7 @@
     .nav-links .nav-link {
         font-size: 0.95rem !important;
         font-weight: 600 !important;
-        font-family: 'Inter', sans-serif;
+        font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
         padding: 16px 24px !important;
         width: 100% !important;
         display: flex !important;
@@ -601,7 +601,7 @@
     cursor: pointer;
     transition: all 0.2s ease;
     white-space: nowrap;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
 }
 .chip:hover, .chip.active {
     background: var(--color-primary);

@@ -347,9 +347,9 @@
                                                             </div>
                                                             <p class="stay-location">📍 ${s.location}</p>
                                                             <ul class="stay-amenities">
-                                                                <c:forEach items="${s.amenities.split(',')}"
+                                                                <c:forEach items="${fn:split(s.amenities, ',')}"
                                                                     var="amenity">
-                                                                    <li>${amenity.trim()}</li>
+                                                                    <li>${fn:trim(amenity)}</li>
                                                                 </c:forEach>
                                                             </ul>
                                                             <div class="stay-footer">
@@ -395,8 +395,10 @@
                                 <div class="results-section" style="margin-bottom: 16px;">
                                     <div class="results-header">
                                         <h2 class="results-title">Things to Do in
-                                            <c:out
-                                                value="${destinationName != null ? destinationName : 'Local Areas'}" />
+                                            <c:choose>
+                                                <c:when test="${not empty destinationName}"><c:out value="${destinationName}"/></c:when>
+                                                <c:otherwise>Local Areas</c:otherwise>
+                                            </c:choose>
                                         </h2>
                                         <a href="#" class="results-view-all">View all →</a>
                                     </div>
@@ -492,7 +494,7 @@
                             dirServ.route({
                                 origin: "New Delhi, India",
                                 destination: "Mumbai, India",
-                                travelMode: google.maps.TravelMode.FLIGHT || google.maps.TravelMode.DRIVING
+                                travelMode: google.maps.TravelMode.DRIVING
                             }, (resp, stat) => {
                                 if (stat === "OK") {
                                     dirRen.setDirections(resp);
@@ -694,7 +696,7 @@
                         }
 
                         .results-title {
-                            font-family: 'Georgia', serif;
+                            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
                             font-size: 1.5rem;
                             font-weight: 700;
                             color: var(--color-main);
@@ -1156,6 +1158,5 @@
                             }
                         }
                     </script>
-                    </body>
 
-                    </html>
+                <%@ include file="components/footer.jsp" %>

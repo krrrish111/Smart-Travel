@@ -1,135 +1,118 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" isErrorPage="true" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isErrorPage="true" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Error Encountered | Voyastra</title>
-    <!-- Add Google Fonts and a polished stylesheet for premium quality -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>System Error | Voyastra</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary: #4f46e5;
+            --bg: #0d0d11;
+            --text: #f9fafb;
+            --text-muted: rgba(249, 250, 251, 0.5);
+        }
         body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
             margin: 0;
-            padding: 0;
             display: flex;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            color: #333;
-        }
-
-        .error-container {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
-            max-width: 600px;
-            width: 90%;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            padding: 40px;
-            text-align: center;
-            position: relative;
             overflow: hidden;
+            text-align: center;
         }
-
-        .error-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 6px;
-            background: linear-gradient(90deg, #ff416c 0%, #ff4b2b 100%);
+        .container {
+            max-width: 500px;
+            padding: 40px;
+            position: relative;
+            z-index: 10;
         }
-
-        h1 {
-            font-size: 80px;
+        .error-code {
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
+            font-size: 10rem;
+            font-weight: 800;
             margin: 0;
-            font-weight: 700;
-            background: linear-gradient(90deg, #ff416c 0%, #ff4b2b 100%);
+            background: linear-gradient(135deg, #4f46e5, #06b6d4);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
+            opacity: 0.8;
+            line-height: 1;
         }
-
-        .error-title {
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: #2b2d42;
+        h1 {
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
+            font-size: 1.8rem;
+            margin: 20px 0 10px;
         }
-
-        .error-message {
-            font-size: 16px;
-            color: #6c757d;
+        p {
+            color: var(--text-muted);
             line-height: 1.6;
             margin-bottom: 30px;
-            padding: 15px;
-            background: #fff5f5;
+        }
+        .error-id {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 10px 15px;
             border-radius: 8px;
-            border: 1px solid #ffccd5;
-            text-align: left;
-            word-break: break-word;
-        }
-
-        .error-illustration {
-            font-size: 60px;
-            margin-bottom: 20px;
-        }
-
-        .back-btn {
+            font-family: monospace;
             display: inline-block;
-            background: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 100%);
-            color: #fff;
-            padding: 12px 28px;
-            border-radius: 50px;
+            margin-bottom: 30px;
+            font-size: 0.9rem;
+        }
+        .btn {
+            display: inline-block;
+            background: white;
+            color: #0d0d11;
+            padding: 14px 28px;
+            border-radius: 10px;
             text-decoration: none;
-            font-weight: 500;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
+            font-weight: 600;
+            transition: 0.3s;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
         }
-
-        .back-btn:hover {
+        .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(13, 110, 253, 0.4);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
         }
+        /* Background decor */
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            z-index: 1;
+        }
+        .orb-1 { width: 400px; height: 400px; background: rgba(79, 70, 229, 0.15); top: -100px; left: -100px; }
+        .orb-2 { width: 300px; height: 300px; background: rgba(6, 182, 212, 0.1); bottom: -50px; right: -50px; }
     </style>
 </head>
 <body>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
 
-    <div class="error-container">
-        <div class="error-illustration">⚠️</div>
+    <div class="container">
+        <div class="error-code">
+            <% 
+                Object code = request.getAttribute("javax.servlet.error.status_code");
+                out.print(code != null ? code : "!!!");
+            %>
+        </div>
+        <h1>Oops! Systems offline.</h1>
+        <p>
+            It seems we've encountered a slight distortion in the space-time continuum. 
+            Our engineers have been notified and are on it.
+        </p>
         
-        <c:choose>
-            <c:when test="${not empty errorType}">
-                <h1>OOPS!</h1>
-                <div class="error-title">We hit a roadblock.</div>
-            </c:when>
-            <c:otherwise>
-                <h1>500</h1>
-                <div class="error-title">Internal Server Error</div>
-            </c:otherwise>
-        </c:choose>
-
-        <div class="error-message">
-            <strong>What happened?</strong><br>
-            <c:choose>
-                <c:when test="${not empty errorMsg}">
-                    <c:out value="${errorMsg}" escapeXml="true" />
-                </c:when>
-                <c:when test="${not empty errorMessage}">
-                    <c:out value="${errorMessage}" escapeXml="true" />
-                </c:when>
-                <c:otherwise>
-                    Looks like something broke on our end. Please try again or navigate back.
-                </c:otherwise>
-            </c:choose>
+        <div class="error-id">
+            Event ID: <%= request.getAttribute("errorId") != null ? request.getAttribute("errorId") : "SYSTEM_FAILURE" %>
         </div>
 
-        <a href="${pageContext.request.contextPath}/index.jsp" class="back-btn">Return to Safety</a>
+        <div>
+            <a href="index.jsp" class="btn">Take Me Home</a>
+        </div>
     </div>
-
 </body>
 </html>

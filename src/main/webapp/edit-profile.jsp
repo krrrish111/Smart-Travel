@@ -18,7 +18,7 @@
     }
     .form-label {
         display: block;
-        font-family: 'Poppins', sans-serif;
+        font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
         font-size: 0.9rem;
         font-weight: 600;
         color: var(--text-main);
@@ -30,7 +30,7 @@
         padding: 14px 18px;
         border: 1.5px solid rgba(15,11,8,0.15);
         border-radius: 12px;
-        font-family: 'Inter', sans-serif;
+        font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
         font-size: 1rem;
         color: var(--text-main);
         background: rgba(255,255,255,0.7);
@@ -101,7 +101,7 @@
         
         <div class="flex justify-center mb-8 slide-up">
             <div class="text-center">
-                <h1 class="text-main mb-2 mt-4" style="font-size: 2.5rem; font-family: 'Poppins', sans-serif; font-weight: 700;">Edit Profile</h1>
+                <h1 class="text-main mb-2 mt-4" style="font-size: 2.5rem; font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif; font-weight: 700;">Edit Profile</h1>
                 <p class="text-muted" style="font-size: 1.1rem;">Update your personal details and how we can reach you.</p>
             </div>
         </div>

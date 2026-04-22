@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -117,7 +118,7 @@
                 <c:choose>
                     <c:when test="${empty userBookings}">
                         <div class="vx-empty-state">
-                            <div class="vx-empty-icon">🎒</div>
+                            <div class="vx-empty-icon">ðŸŽ’</div>
                             <h3 class="vx-empty-title">No trips confirmed yet</h3>
                             <p class="vx-empty-desc">Your booked itineraries and travel history will appear here. Ready to start your first journey?</p>
                             <a href="explore.jsp" class="btn btn-primary" style="padding: 14px 32px; border-radius: 50px;">
@@ -144,7 +145,7 @@
                                             <div class="booking-price">
                                                 ₹<fmt:formatNumber value="${booking.totalPrice}" pattern="#,###" />
                                             </div>
-                                            <a href="plan-details.jsp?id=${booking.planId}" class="text-primary font-bold text-sm hover-underline" style="text-decoration: none;">View Itinerary →</a>
+                                            <a href="plan-details.jsp?id=${booking.planId}" class="text-primary font-bold text-sm hover-underline" style="text-decoration: none;">View Itinerary â†’</a>
                                         </div>
                                     </div>
                                 </div>
@@ -161,7 +162,7 @@
                 <c:choose>
                     <c:when test="${empty userItineraries}">
                         <div class="vx-empty-state" style="padding: 40px;">
-                            <div class="vx-empty-icon">🤖</div>
+                            <div class="vx-empty-icon">ðŸ¤–</div>
                             <h3 class="vx-empty-title">No AI plans saved yet</h3>
                             <p class="vx-empty-desc">Your personalized itineraries from the AI Travel Planner will appear here.</p>
                             <a href="planner.jsp" class="btn btn-outline" style="padding: 12px 28px; border-radius: 50px;">
@@ -244,3 +245,4 @@
 
 
 <%@ include file="components/footer.jsp" %>
+

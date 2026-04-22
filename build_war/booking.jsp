@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ include file="components/header.jsp" %>
 
 <%@ include file="components/global_ui.jsp" %>
@@ -195,7 +196,8 @@
                                         </div>
                                     </div>
                                     <c:if test="${not empty t.badge}">
-                                        <span class="result-badge <c:out value="${t.badge.toLowerCase()}"/>"><c:out value="${t.badge}"/></span>
+                                        <c:set var="badgeClass" value="${fn:toLowerCase(t.badge)}"/>
+                                        <span class="result-badge ${badgeClass}"><c:out value="${t.badge}"/></span>
                                     </c:if>
                                 </div>
 
@@ -313,7 +315,12 @@
         <!-- ACTIVITIES -->
         <div class="results-section" style="margin-bottom: 16px;">
             <div class="results-header">
-                <h2 class="results-title">Things to Do in <c:out value="${destinationName != null ? destinationName : 'Local Areas'}" /></h2>
+                <h2 class="results-title">Things to Do in
+                    <c:choose>
+                        <c:when test="${not empty destinationName}"><c:out value="${destinationName}"/></c:when>
+                        <c:otherwise>Local Areas</c:otherwise>
+                    </c:choose>
+                </h2>
                 <a href="#" class="results-view-all">View all →</a>
             </div>
             <div class="results-grid results-grid-4" data-skeleton="trending" data-skeleton-count="4">
@@ -342,7 +349,6 @@
                     </c:otherwise>
                 </c:choose>
 
-            </div>
             </div>
         </div>
 
@@ -399,7 +405,7 @@ function initMiniMap() {
     dirServ.route({
         origin: "New Delhi, India",
         destination: "Mumbai, India",
-        travelMode: google.maps.TravelMode.FLIGHT || google.maps.TravelMode.DRIVING 
+        travelMode: google.maps.TravelMode.DRIVING
     }, (resp, stat) => {
         if (stat === "OK") {
             dirRen.setDirections(resp);

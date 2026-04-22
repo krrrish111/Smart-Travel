@@ -37,7 +37,7 @@ public class WeatherServlet extends HttpServlet {
             return;
         }
 
-        response.setContentType("application/json");
+        response.setContentType("application/json;charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
 
         try {
@@ -79,3 +79,4 @@ public class WeatherServlet extends HttpServlet {
         }
     }
 }
+

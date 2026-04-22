@@ -47,7 +47,7 @@ public class StayServlet extends HttpServlet {
             }
 
             if ("json".equals(request.getParameter("format"))) {
-                response.setContentType("application/json");
+                response.setContentType("application/json;charset=UTF-8");
                 response.setCharacterEncoding("UTF-8");
                 new Gson().toJson(results, response.getWriter());
             } else {
@@ -111,3 +111,4 @@ public class StayServlet extends HttpServlet {
         }
     }
 }
+

@@ -1,0 +1,743 @@
+/* ================================================================
+   VOYASTRA — MICRO-ANIMATIONS & INTERACTION LIBRARY
+   Philosophy: Feel → Fast, Purposeful, Polished
+   All durations 150ms–350ms. No spinning. No bouncing excess.
+   ================================================================ */
+
+/* ──────────────────────────────────────────────────────────────
+   1. KEYFRAME DEFINITIONS
+────────────────────────────────────────────────────────────── */
+
+/* Fade + rise (page entry) */
+@keyframes va-fadeUp {
+    from { opacity: 0; transform: translateY(22px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Fade in only */
+@keyframes va-fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Soft pop (modals, badges, toasts) */
+@keyframes va-pop {
+    0%   { opacity: 0; transform: scale(0.88); }
+    70%  { transform: scale(1.03); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+/* Like heart beat */
+@keyframes va-heartbeat {
+    0%   { transform: scale(1); }
+    30%  { transform: scale(1.35); }
+    60%  { transform: scale(0.92); }
+    100% { transform: scale(1); }
+}
+
+/* Shimmer sweep for CTAs */
+@keyframes va-shimmer {
+    0%   { background-position: -200% center; }
+    100% { background-position: 200% center; }
+}
+
+/* Subtle pulse for badges / notifications */
+@keyframes va-pulse-ring {
+    0%   { box-shadow: 0 0 0 0 rgba(212, 165, 116, 0.45); }
+    70%  { box-shadow: 0 0 0 8px rgba(212, 165, 116, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(212, 165, 116, 0); }
+}
+
+/* Slide in from right (toasts, modals) */
+@keyframes va-slideInRight {
+    from { opacity: 0; transform: translateX(24px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Ripple for buttons */
+@keyframes va-ripple {
+    0%   { transform: scale(0); opacity: 0.5; }
+    100% { transform: scale(4); opacity: 0; }
+}
+
+/* Spin (loading only) */
+@keyframes va-spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+
+/* Stagger children fade-up */
+@keyframes va-stagger {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Count-up flash */
+@keyframes va-countFlash {
+    0%   { color: var(--color-primary); transform: scale(1.15); }
+    100% { color: inherit; transform: scale(1); }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   2. UTILITY ANIMATION CLASSES
+────────────────────────────────────────────────────────────── */
+.va-fade-up   { animation: va-fadeUp   0.45s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.va-fade-in   { animation: va-fadeIn   0.35s ease both; }
+.va-pop       { animation: va-pop      0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+.va-slide-in  { animation: va-slideInRight 0.35s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+/* Staggered children — apply to parent */
+.va-stagger-children > * {
+    animation: va-stagger 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.va-stagger-children > *:nth-child(1)  { animation-delay: 0.05s; }
+.va-stagger-children > *:nth-child(2)  { animation-delay: 0.10s; }
+.va-stagger-children > *:nth-child(3)  { animation-delay: 0.15s; }
+.va-stagger-children > *:nth-child(4)  { animation-delay: 0.20s; }
+.va-stagger-children > *:nth-child(5)  { animation-delay: 0.25s; }
+.va-stagger-children > *:nth-child(6)  { animation-delay: 0.30s; }
+.va-stagger-children > *:nth-child(7)  { animation-delay: 0.35s; }
+.va-stagger-children > *:nth-child(8)  { animation-delay: 0.40s; }
+
+/* ──────────────────────────────────────────────────────────────
+   3. BUTTONS — HOVER / FOCUS / ACTIVE
+────────────────────────────────────────────────────────────── */
+
+/* Base transition for ALL buttons */
+.btn,
+button:not(.mobile-menu-btn):not(.theme-toggle):not(.post-options-btn) {
+    transition:
+        transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+        box-shadow 0.25s ease,
+        background 0.25s ease,
+        color 0.25s ease,
+        border-color 0.25s ease,
+        opacity 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Lift on hover — only for non-touch */
+@media (hover: hover) {
+    .btn:hover {
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+    }
+
+    .btn:active {
+        transform: translateY(0) scale(0.98);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        transition-duration: 0.1s;
+    }
+
+    /* Primary — golden glow */
+    .btn-primary:hover {
+        box-shadow: 0 8px 28px rgba(212, 165, 116, 0.45);
+    }
+
+    /* Outline — border brightens */
+    .btn-outline:hover {
+        border-color: var(--color-primary);
+        box-shadow: 0 6px 20px rgba(212, 165, 116, 0.2);
+    }
+}
+
+/* Ripple effect on click */
+.btn::after {
+    content: '';
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.18);
+    transform: scale(0);
+    opacity: 0;
+    top: 50%;
+    left: 50%;
+    margin-top: -50px;
+    margin-left: -50px;
+    pointer-events: none;
+}
+
+.btn:active::after {
+    animation: va-ripple 0.45s ease-out forwards;
+}
+
+/* Shimmer on primary CTA */
+.btn-primary {
+    background-size: 200% auto;
+    background-image: linear-gradient(
+        135deg,
+        var(--color-primary) 0%,
+        var(--color-accent) 40%,
+        var(--color-primary) 60%,
+        var(--color-primary) 100%
+    );
+    background-position: 0% center;
+    transition:
+        background-position 0.6s ease,
+        transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+        box-shadow 0.25s ease;
+}
+
+@media (hover: hover) {
+    .btn-primary:hover {
+        background-position: 100% center;
+    }
+}
+
+/* Search CTA button */
+.search-cta-btn {
+    transition: background 0.25s ease, filter 0.25s ease, transform 0.2s ease !important;
+}
+@media (hover: hover) {
+    .search-cta-btn:hover {
+        transform: none;
+        filter: brightness(1.1);
+        box-shadow: inset 0 0 20px rgba(255,255,255,0.1);
+    }
+}
+
+/* Submit / post submit */
+.post-submit-btn {
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, background 0.2s ease !important;
+}
+@media (hover: hover) {
+    .post-submit-btn:hover {
+        transform: translateY(-1px) scale(1.04);
+        box-shadow: 0 4px 16px rgba(212, 165, 116, 0.4);
+    }
+    .post-submit-btn:active { transform: scale(0.96); }
+}
+
+/* Follow button toggle feel */
+.follow-btn {
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.25s ease, color 0.25s ease, border-color 0.25s ease !important;
+}
+@media (hover: hover) {
+    .follow-btn:hover { transform: scale(1.06); }
+    .follow-btn:active { transform: scale(0.94); }
+}
+
+/* Like button heart burst */
+.like-btn {
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.25s ease !important;
+}
+.like-btn.liked svg,
+.like-btn.animate-heart svg {
+    animation: va-heartbeat 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Comment / share toolbar */
+.post-action-btn,
+.post-tool-btn {
+    transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease !important;
+}
+@media (hover: hover) {
+    .post-action-btn:hover { transform: translateY(-1px); }
+    .post-action-btn:active { transform: scale(0.94); }
+    .post-tool-btn:hover { transform: scale(1.04); }
+}
+
+/* Comment like button */
+.comment-like-btn {
+    transition: transform 0.18s ease, color 0.2s ease !important;
+}
+@media (hover: hover) {
+    .comment-like-btn:hover { transform: scale(1.1); color: #ef4444; }
+}
+
+/* Send comment */
+.send-comment-btn {
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s ease !important;
+}
+@media (hover: hover) {
+    .send-comment-btn:hover { transform: scale(1.12) rotate(-10deg); }
+    .send-comment-btn:active { transform: scale(0.9) translateX(3px); }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   4. CARDS — HOVER LIFT & GLOW
+────────────────────────────────────────────────────────────── */
+
+/* Transition base for all card types */
+.card,
+.glass-panel,
+.social-post-card,
+.plan-card,
+.trending-card,
+.itin-card,
+.sidebar-card {
+    transition:
+        transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.28s ease,
+        border-color 0.28s ease !important;
+}
+
+@media (hover: hover) {
+    /* Generic glass card lift */
+    .glass-panel:hover {
+        transform: translateY(-4px);
+        box-shadow:
+            0 12px 32px rgba(0, 0, 0, 0.18),
+            0 0 0 1px rgba(212, 165, 116, 0.12);
+    }
+
+    /* Post card — subtle left-border accent on hover */
+    .social-post-card:hover {
+        transform: translateY(-3px);
+        box-shadow:
+            0 10px 28px rgba(0, 0, 0, 0.15),
+            0 0 0 1px rgba(212, 165, 116, 0.15);
+        border-color: rgba(212, 165, 116, 0.25);
+    }
+
+    /* Plan card */
+    .plan-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.22);
+    }
+
+    /* Trending / explore card */
+    .trending-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Itinerary strip card */
+    .itin-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 14px 36px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Sidebar cards — very subtle */
+    .sidebar-card:hover {
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        border-color: rgba(212, 165, 116, 0.2);
+    }
+
+    /* Destination grid items */
+    .dest-item:hover {
+        transform: translateY(-6px) scale(1.01);
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+        z-index: 10;
+    }
+}
+
+/* Image zoom inside cards */
+.plan-card img,
+.trending-card img,
+.itin-card-img,
+.dest-item img,
+.post-img {
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1) !important;
+    will-change: transform;
+}
+@media (hover: hover) {
+    .plan-card:hover img      { transform: scale(1.06); }
+    .trending-card:hover img  { transform: scale(1.06); }
+    .itin-card:hover .itin-card-img { transform: scale(1.05); }
+    .dest-item:hover img      { transform: scale(1.08); }
+}
+
+/* Explore page hidden gem cards */
+@media (hover: hover) {
+    .glass-panel:hover .explore-img { transform: scale(1.05); }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   5. NAV LINKS — ENHANCED UNDERLINE
+────────────────────────────────────────────────────────────── */
+.nav-link {
+    transition: color 0.25s ease, transform 0.2s ease !important;
+}
+.nav-link::after {
+    transition: width 0.3s cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+@media (hover: hover) {
+    .nav-link:hover { transform: translateY(-1px); }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   6. FORM INPUTS — FOCUS GLOW
+────────────────────────────────────────────────────────────── */
+.form-control,
+.create-post-input,
+.create-post-textarea,
+.add-comment-input,
+.search-dropdown-input {
+    transition:
+        border-color 0.25s ease,
+        box-shadow 0.25s ease,
+        background 0.25s ease !important;
+}
+
+.form-control:focus,
+.create-post-textarea:focus,
+.add-comment-input:focus {
+    box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.18) !important;
+    border-color: var(--color-primary) !important;
+}
+
+.create-post-input:hover {
+    border-color: rgba(212, 165, 116, 0.35) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   7. STORY AVATARS — HOVER SCALE
+────────────────────────────────────────────────────────────── */
+.story-item {
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    cursor: pointer;
+}
+@media (hover: hover) {
+    .story-item:hover { transform: scale(1.08) translateY(-2px); }
+    .story-item:active { transform: scale(0.96); }
+}
+
+.story-avatar-ring {
+    transition: box-shadow 0.25s ease !important;
+}
+@media (hover: hover) {
+    .story-item:hover .story-avatar-ring {
+        box-shadow: 0 0 0 2px var(--color-primary), 0 4px 14px rgba(212, 165, 116, 0.3);
+    }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   8. CHIPS / FILTER TAGS
+────────────────────────────────────────────────────────────── */
+.chip,
+.feed-tab,
+.post-tag {
+    transition:
+        background 0.22s ease,
+        color 0.22s ease,
+        border-color 0.22s ease,
+        transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+        box-shadow 0.22s ease !important;
+}
+@media (hover: hover) {
+    .chip:hover, .feed-tab:hover { transform: scale(1.05); }
+    .chip:active, .feed-tab:active { transform: scale(0.95); }
+    .post-tag:hover {
+        transform: scale(1.04);
+        background: rgba(212, 165, 116, 0.15);
+        border-color: rgba(212, 165, 116, 0.35);
+        color: var(--color-primary);
+    }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   9. CONTRIBUTOR / SIDEBAR ROWS — SLIDE RIGHT
+────────────────────────────────────────────────────────────── */
+.contributor-item,
+.trending-dest {
+    transition: padding-left 0.22s ease, background 0.22s ease !important;
+}
+@media (hover: hover) {
+    .contributor-item:hover { padding-left: 6px !important; background: rgba(212, 165, 116, 0.05); }
+    .trending-dest:hover    { padding-left: 5px !important; background: rgba(212, 165, 116, 0.05); }
+}
+
+/* Contributor avatar pulse on hover */
+.contributor-avatar {
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease !important;
+}
+@media (hover: hover) {
+    .contributor-item:hover .contributor-avatar {
+        transform: scale(1.08);
+        box-shadow: 0 0 0 2px var(--color-primary);
+    }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   10. NAVBAR BRAND LOGO
+────────────────────────────────────────────────────────────── */
+.nav-brand {
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease !important;
+}
+@media (hover: hover) {
+    .nav-brand:hover { transform: scale(1.04); opacity: 0.9; }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   11. THEME TOGGLE
+────────────────────────────────────────────────────────────── */
+.theme-toggle {
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease !important;
+}
+@media (hover: hover) {
+    .theme-toggle:hover {
+        transform: scale(1.08);
+        box-shadow: 0 0 12px rgba(212, 165, 116, 0.25);
+    }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   12. POST OPTIONS (⋮) BUTTON
+────────────────────────────────────────────────────────────── */
+.post-options-btn {
+    transition: background 0.2s ease, transform 0.2s ease, opacity 0.2s ease !important;
+    opacity: 0.5;
+}
+@media (hover: hover) {
+    .post-options-btn:hover { opacity: 1; transform: scale(1.1); }
+}
+.social-post-card:hover .post-options-btn { opacity: 0.8; }
+
+/* ──────────────────────────────────────────────────────────────
+   13. AVATAR BADGES (STAR ICON)
+────────────────────────────────────────────────────────────── */
+.post-avatar-badge {
+    animation: va-pulse-ring 2.5s ease-out infinite;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   14. SCROLL REVEAL — ENHANCED ENTRANCE
+    Targets .scroll-reveal and .scroll-fade — both should work
+────────────────────────────────────────────────────────────── */
+.scroll-reveal,
+.scroll-fade {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.55s cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+
+.scroll-reveal.visible,
+.scroll-fade.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Stagger reveal for children of .va-reveal-group */
+.va-reveal-group > .scroll-reveal:nth-child(1) { transition-delay: 0.03s; }
+.va-reveal-group > .scroll-reveal:nth-child(2) { transition-delay: 0.08s; }
+.va-reveal-group > .scroll-reveal:nth-child(3) { transition-delay: 0.13s; }
+.va-reveal-group > .scroll-reveal:nth-child(4) { transition-delay: 0.18s; }
+.va-reveal-group > .scroll-reveal:nth-child(5) { transition-delay: 0.23s; }
+
+/* ──────────────────────────────────────────────────────────────
+   15. COMMUNITY HERO STATS — COUNT FLASH ON LOAD
+────────────────────────────────────────────────────────────── */
+.community-stat-value {
+    animation: va-fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.community-stat:nth-child(1) .community-stat-value { animation-delay: 0.1s; }
+.community-stat:nth-child(2) .community-stat-value { animation-delay: 0.2s; }
+.community-stat:nth-child(3) .community-stat-value { animation-delay: 0.3s; }
+.community-stat:nth-child(4) .community-stat-value { animation-delay: 0.4s; }
+
+/* ──────────────────────────────────────────────────────────────
+   16. CREATE POST CARD — EXPAND ANIMATION
+────────────────────────────────────────────────────────────── */
+.create-post-expanded {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+                opacity     0.25s ease !important;
+}
+.create-post-expanded.active {
+    max-height: 280px;
+    opacity: 1;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   17. FEED FILTER TABS — ACTIVE INDICATOR SLIDE
+────────────────────────────────────────────────────────────── */
+.feed-tab {
+    position: relative;
+}
+.feed-tab::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background: var(--color-primary);
+    border-radius: 2px;
+    transition: width 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.feed-tab.active::after { width: 60%; }
+
+/* ──────────────────────────────────────────────────────────────
+   18. TOAST NOTIFICATION
+────────────────────────────────────────────────────────────── */
+.toast-notification {
+    animation-fill-mode: both;
+    transition:
+        transform 0.38s cubic-bezier(0.34, 1.56, 0.64, 1),
+        opacity 0.3s ease !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   19. BOOKING PANEL TABS
+────────────────────────────────────────────────────────────── */
+.booking-tab {
+    transition: opacity 0.25s ease !important;
+}
+
+/* Booking tab switch buttons */
+[data-tab], .tab-btn {
+    position: relative;
+    transition: color 0.25s ease, background 0.25s ease !important;
+}
+[data-tab]::after, .tab-btn::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--color-primary);
+    transition: width 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+[data-tab].active::after, .tab-btn.active::after { width: 100%; }
+
+/* ──────────────────────────────────────────────────────────────
+   20. COMMENT INPUT ROW — SEND BUTTON REVEAL
+────────────────────────────────────────────────────────────── */
+.add-comment-row {
+    transition: background 0.25s ease !important;
+}
+.send-comment-btn {
+    opacity: 0.5;
+    transition: opacity 0.2s ease, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s ease !important;
+}
+.add-comment-input:focus ~ .send-comment-btn,
+.add-comment-row:focus-within .send-comment-btn {
+    opacity: 1;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   21. POST USER AVATAR WRAP — ONLINE RING
+────────────────────────────────────────────────────────────── */
+.post-avatar-wrap {
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+@media (hover: hover) {
+    .post-user-info:hover .post-avatar-wrap { transform: scale(1.06); }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   22. SIDEBAR CARD ENTRY ANIMATION
+────────────────────────────────────────────────────────────── */
+.sidebar-card {
+    animation: va-fadeUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.community-sidebar .sidebar-card:nth-child(1) { animation-delay: 0.05s; }
+.community-sidebar .sidebar-card:nth-child(2) { animation-delay: 0.12s; }
+.community-sidebar .sidebar-card:nth-child(3) { animation-delay: 0.19s; }
+
+/* ──────────────────────────────────────────────────────────────
+   23. POST IMAGE GRID HOVER — OVERLAY TINT
+────────────────────────────────────────────────────────────── */
+.post-image-grid {
+    position: relative;
+}
+.post-img {
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+                filter 0.3s ease !important;
+}
+@media (hover: hover) {
+    .post-img:hover {
+        transform: scale(1.03);
+        filter: brightness(1.08);
+        z-index: 2;
+    }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   24. PLAN CARD BODY TEXT — SLIGHT REVEAL ON HOVER
+────────────────────────────────────────────────────────────── */
+.plan-card .plan-card-content {
+    transition: transform 0.28s ease !important;
+}
+@media (hover: hover) {
+    .plan-card:hover .plan-card-content { transform: translateY(-2px); }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   25. DESTINATION BADGE — SLIDE UP ON HOVER
+   (Already partially in theme.css — enhanced timing)
+────────────────────────────────────────────────────────────── */
+.dest-badge {
+    transition: bottom 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   26. SEARCH DROPDOWN — SMOOTH APPEAR
+────────────────────────────────────────────────────────────── */
+.search-dropdown {
+    transition:
+        opacity 0.22s ease,
+        transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+        visibility 0.22s ease !important;
+}
+.search-dropdown:not(.hidden) {
+    animation: va-pop 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.suggestion-item {
+    transition: background 0.16s ease, transform 0.16s ease !important;
+}
+@media (hover: hover) {
+    .suggestion-item:hover { transform: translateX(3px); }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   27. MOBILE MENU DRAWER — SMOOTH TRANSITION
+────────────────────────────────────────────────────────────── */
+.nav-links {
+    transition: right 0.42s cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+
+/* Links inside drawer fade up when menu opens */
+.nav-links.active .nav-link {
+    animation: va-fadeUp 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.nav-links.active .nav-link:nth-child(1) { animation-delay: 0.05s; }
+.nav-links.active .nav-link:nth-child(2) { animation-delay: 0.10s; }
+.nav-links.active .nav-link:nth-child(3) { animation-delay: 0.15s; }
+.nav-links.active .nav-link:nth-child(4) { animation-delay: 0.20s; }
+.nav-links.active .nav-link:nth-child(5) { animation-delay: 0.25s; }
+.nav-links.active .nav-link:nth-child(6) { animation-delay: 0.30s; }
+
+/* ──────────────────────────────────────────────────────────────
+   28. STAR RATING ICONS IN POSTS
+────────────────────────────────────────────────────────────── */
+.rating-stars svg {
+    transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+@media (hover: hover) {
+    .rating-stars:hover svg { transform: scale(1.2); }
+    .rating-stars svg:hover { transform: scale(1.4) rotate(-5deg) !important; color: #f59e0b; }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   29. FOOTER LINKS
+────────────────────────────────────────────────────────────── */
+footer a {
+    transition: color 0.22s ease, transform 0.2s ease !important;
+    display: inline-block;
+}
+@media (hover: hover) {
+    footer a:hover { transform: translateX(2px); color: var(--color-primary) !important; }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   30. REDUCED MOTION — FULL OVERRIDE
+────────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration:        0.01ms !important;
+        animation-iteration-count: 1      !important;
+        transition-duration:       0.01ms !important;
+    }
+}

@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="components/header.jsp" %>
 <%@ include file="components/global_ui.jsp" %>
 
@@ -12,7 +13,7 @@
     
     <div class="text-center mb-6 slide-up">
         <h1 class="text-primary mb-1 editorial" style="font-size: 2.5rem;">Interactive Trip Planner</h1>
-        <p class="text-muted text-sm" style="font-family: 'Poppins', sans-serif;">Map your route and let AI optimize your Indian adventure.</p>
+        <p class="text-muted text-sm" style="font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;">Map your route and let AI optimize your Indian adventure.</p>
     </div>
 
     <div class="flex flex-col lg:flex-row gap-6 w-full slide-up delay-1" style="flex: 1; overflow: visible; padding-bottom:20px;">
@@ -76,7 +77,7 @@
                 <!-- Submit Action (Chat Send) -->
                 <div class="mt-auto pt-4 text-center slide-up delay-3">
                     <button type="submit" id="btnGenerateAI" class="btn btn-primary w-full" style="padding: 14px; font-size: 1rem; border-radius: 50px;">
-                        ✨ Generate AI Itinerary
+                        âœ¨ Generate AI Itinerary
                     </button>
                 </div>
             </form>
@@ -93,7 +94,7 @@
             
             <!-- Map Overlay Info (Distance, Time) -->
             <div id="routeInfoOverlay" class="absolute top-4 left-4 glass-panel" style="padding: 16px 24px; z-index: 10; display: none; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
-                <h4 class="text-main mb-2" style="font-family: 'Poppins', sans-serif; font-weight:700; font-size:0.95rem;">Route Summary</h4>
+                <h4 class="text-main mb-2" style="font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif; font-weight:700; font-size:0.95rem;">Route Summary</h4>
                 <div class="flex gap-6">
                     <div>
                         <span class="text-[0.65rem] text-muted uppercase font-bold tracking-wider">Distance</span>
@@ -453,8 +454,8 @@ document.getElementById('btnSavePlan')?.addEventListener('click', function() {
     .then(response => response.json())
     .then(data => {
         if (data.status === 'success') {
-            VoyastraToast.show("✨ Trip saved successfully to your Profile!", "success");
-            saveBtn.innerHTML = '✓ Saved';
+            VoyastraToast.show("âœ¨ Trip saved successfully to your Profile!", "success");
+            saveBtn.innerHTML = 'âœ“ Saved';
             saveBtn.classList.replace('btn-primary', 'btn-outline');
             saveBtn.disabled = true;
         } else {
@@ -481,3 +482,4 @@ document.getElementById('budgetSlider')?.addEventListener('input', function(e) {
 </script>
 
 <%@ include file="components/footer.jsp" %>
+

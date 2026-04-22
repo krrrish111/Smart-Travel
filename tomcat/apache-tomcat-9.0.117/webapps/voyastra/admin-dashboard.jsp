@@ -23,13 +23,13 @@ body {
     min-height: 100vh;
     padding-top: 0 !important; /* Standalone layout */
     background: var(--bg-base);
-    font-family: 'Inter', sans-serif;
+    font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
 }
 
 /* Hide Redundant Global Navbar & Breadcrumbs for Standalone Admin Feel */
 .navbar, .nav-overlay { display: none !important; }
 main > .container.relative.z-20 { display: none !important; } 
-h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif !important; letter-spacing: -0.02em; }
+h1, h2, h3, h4, h5 { font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif; letter-spacing: -0.02em; }
 
 .admin-sidebar {
     width: 260px;
@@ -52,7 +52,7 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif !important; letter-spacing
     gap: 12px;
     color: var(--text-muted);
     font-weight: 600;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
     cursor: pointer;
     transition: all 0.2s;
     border-left: 4px solid transparent;
@@ -229,7 +229,7 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif !important; letter-spacing
     padding: 16px 20px;
     border-bottom: 1px solid var(--color-border);
     color: var(--text-main);
-    font-family: 'Inter', sans-serif;
+    font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
     font-size: 0.95rem;
 }
 .admin-table tr:hover {
@@ -266,12 +266,67 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif !important; letter-spacing
     background: var(--surface-light);
     border: 1px solid var(--color-border);
     border-radius: 16px;
-    width: 90%; max-width: 500px;
-    padding: 30px;
+    width: 95%; 
+    max-width: 500px;
+    
+    /* ABSOLUTE CONSTRAINTS */
+    max-height: 90vh !important; 
+    height: auto;
+    
+    display: flex;
+    flex-direction: column;
+    
     box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    position: relative;
     transform: translateY(20px); transition: transform 0.3s;
+    overflow: hidden !important; 
+    box-sizing: border-box;
 }
 .admin-modal-overlay.active .admin-modal { transform: translateY(0); }
+
+.admin-modal-header {
+    padding: 24px 30px;
+    border-bottom: 1px solid var(--color-border);
+    background: var(--surface-light);
+    z-index: 10;
+    box-sizing: border-box;
+}
+.admin-modal-body {
+    padding: 24px 30px; 
+    overflow-y: auto !important; 
+    min-height: 0;
+    box-sizing: border-box;
+    flex: 1; /* Expand to fill space */
+}
+.admin-modal-footer {
+    padding: 20px 30px;
+    border-top: 1px solid var(--color-border);
+    background: var(--surface-light); /* Ensure opaque background for stickiness */
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    z-index: 20;
+    box-sizing: border-box;
+    position: sticky;
+    bottom: 0;
+    flex-shrink: 0;
+}
+#destForm, #activityForm, #contentForm {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    margin: 0;
+}
+/* Ensure preview image is never too tall */
+.image-preview-box {
+    margin-top: 12px;
+    width: 100%;
+    max-height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+    display: none;
+}
 
 /* AUTH DENIED SCREEN */
 .access-denied-screen {
@@ -299,7 +354,7 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif !important; letter-spacing
 .editable-cell { cursor: text; padding: 4px; border-radius: 4px; border: 1px solid transparent; transition: all 0.2s; position: relative; }
 .editable-cell:hover { background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.1); }
 [data-theme="dark"] .editable-cell:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); }
-.editable-input { width: 100%; padding: 4px; border: 1px solid var(--color-primary); border-radius: 4px; background: var(--bg-base); color: var(--text-main); font-size: inherit; font-family: inherit; font-weight: inherit; outline: none; box-shadow: 0 0 0 2px rgba(79,70,229,0.2); }
+.editable-input { width: 100%; padding: 4px; border: 1px solid var(--color-primary); border-radius: 4px; background: var(--bg-base); color: var(--text-main); font-size: inherit; font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif; font-weight: inherit; outline: none; box-shadow: 0 0 0 2px rgba(79,70,229,0.2); }
 
 /* BULK ACTIONS BAR */
 .bulk-action-bar {
@@ -333,7 +388,7 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif !important; letter-spacing
 /* ADMIN TOPBAR & EXTRAS */
 .admin-topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid var(--color-border); }
 .admin-topbar-search { position: relative; width: 280px; max-width: 100%; }
-.admin-topbar-search input { width: 100%; padding: 10px 16px 10px 42px; border: 1px solid var(--color-border); border-radius: 30px; background: var(--surface-light); color: var(--text-main); transition: box-shadow 0.3s ease, border-color 0.3s ease; outline:none; font-family:'Inter',sans-serif; }
+.admin-topbar-search input { width: 100%; padding: 10px 16px 10px 42px; border: 1px solid var(--color-border); border-radius: 30px; background: var(--surface-light); color: var(--text-main); transition: box-shadow 0.3s ease, border-color 0.3s ease; outline:none; font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif; }
 .admin-topbar-search input:focus { border-color: var(--color-primary); box-shadow: 0 4px 12px rgba(79,70,229,0.15); }
 .admin-topbar-search svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none; }
 .admin-profile { display: flex; align-items: center; gap: 12px; }
@@ -380,7 +435,7 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif !important; letter-spacing
                 <path d="M 22 2 L 15 22 L 11 13 L 2 9 L 22 2 L 11 13" />
                 <path d="M -4 -3 L 5 0 L -4 3 L -2 0 Z" fill="#06b6d4" stroke="none" />
             </svg>
-            <span style="font-size:1.4rem; font-weight:800; font-family:'Poppins',sans-serif; letter-spacing:-0.03em; color:var(--text-main);">Voyastra</span>
+            <span style="font-size:1.4rem; font-weight:800; font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif; letter-spacing:-0.03em; color:var(--text-main);">Voyastra</span>
         </div>
 
         <div class="admin-nav-item active" data-target="dashboard">
@@ -447,7 +502,7 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif !important; letter-spacing
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
                 </button>
                 <div style="text-align:right;">
-                    <div style="font-weight:600; font-family:'Inter', sans-serif;">Systems Admin</div>
+                    <div style="font-weight:600; font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;">Systems Admin</div>
                     <div style="font-size:0.75rem; color:var(--text-muted);">Master Access</div>
                 </div>
                 <div class="admin-avatar" style="box-shadow: 0 4px 12px rgba(79,70,229,0.2);">SA</div>
@@ -670,19 +725,19 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif !important; letter-spacing
             <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(160px,1fr)); gap:16px; margin-bottom:28px;">
                 <div class="stat-card" style="padding:16px 20px;">
                     <div style="font-size:0.78rem; color:var(--text-muted); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.05em;">Total Posts</div>
-                    <div id="communityStatTotal" style="font-size:1.8rem; font-weight:700; font-family:'Poppins',sans-serif;">—</div>
+                    <div id="communityStatTotal" style="font-size:1.8rem; font-weight:700; font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;">—</div>
                 </div>
                 <div class="stat-card" style="padding:16px 20px;">
                     <div style="font-size:0.78rem; color:var(--text-muted); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.05em;">Visible</div>
-                    <div id="communityStatVisible" style="font-size:1.8rem; font-weight:700; font-family:'Poppins',sans-serif; color:#10b981;">—</div>
+                    <div id="communityStatVisible" style="font-size:1.8rem; font-weight:700; font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif; color:#10b981;">—</div>
                 </div>
                 <div class="stat-card" style="padding:16px 20px;">
                     <div style="font-size:0.78rem; color:var(--text-muted); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.05em;">Hidden</div>
-                    <div id="communityStatHidden" style="font-size:1.8rem; font-weight:700; font-family:'Poppins',sans-serif; color:#f59e0b;">—</div>
+                    <div id="communityStatHidden" style="font-size:1.8rem; font-weight:700; font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif; color:#f59e0b;">—</div>
                 </div>
                 <div class="stat-card" style="padding:16px 20px;">
                     <div style="font-size:0.78rem; color:var(--text-muted); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.05em;">Deleted Today</div>
-                    <div id="communityStatDeleted" style="font-size:1.8rem; font-weight:700; font-family:'Poppins',sans-serif; color:#ef4444;">0</div>
+                    <div id="communityStatDeleted" style="font-size:1.8rem; font-weight:700; font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif; color:#ef4444;">0</div>
                 </div>
             </div>
 
@@ -922,48 +977,58 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif !important; letter-spacing
 </div>
 
 <!-- Add/Edit Destination Modal -->
+<!-- Add/Edit Destination Modal -->
 <div class="admin-modal-overlay" id="destModal">
     <div class="admin-modal">
-        <h3 id="destModalTitle" style="margin-bottom: 20px;">Add Destination</h3>
-        <form id="destForm">
-            <input type="hidden" id="destId">
-            <div class="form-group">
-                <label class="form-label">Destination Name</label>
-                <input type="text" class="form-control" id="destName" required placeholder="e.g. Santorini">
-            </div>
-            <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
-                <div>
-                    <label class="form-label">Location</label>
-                    <input type="text" class="form-control" id="destLocation" required placeholder="e.g. Greece">
-                </div>
-                <div>
-                    <label class="form-label">Category</label>
-                    <select class="form-control" id="destCategory" required style="padding-right:32px;">
-                        <option value="Beach & Island">Beach & Island</option>
-                        <option value="Mountain Retreat">Mountain Retreat</option>
-                        <option value="City Escape">City Escape</option>
-                        <option value="Heritage & Culture">Heritage & Culture</option>
-                    </select>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Destination Image</label>
-                <div style="border:2px dashed var(--color-border); border-radius:8px; padding:20px; text-align:center; position:relative; overflow:hidden; background:var(--surface-light); transition:border-color 0.2s;" id="destImageUploadBox">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color:var(--text-muted); margin-bottom:8px; display:inline-block;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                    <div style="font-size:0.9rem; color:var(--text-muted); margin-bottom:8px;">Drag & Drop image here, click to browse, or paste URL</div>
-                    <input type="text" class="form-control" id="destImage" required placeholder="Paste an image URL..." style="position:relative; z-index:10;" autocomplete="off" oninput="previewImg('destImage','destImagePreview')">
-                    <input type="file" id="destImageFile" accept="image/*" style="opacity:0; position:absolute; top:0; left:0; width:100%; height:100%; cursor:pointer; z-index:5;">
-                </div>
-                <img id="destImagePreview" src="" alt="Preview" style="display:none; margin-top:10px; width:100%; height:120px; object-fit:cover; border-radius:8px; border:1px solid var(--color-border);">
-            </div>
-            <div class="form-group">
-                <label class="form-label">Description</label>
-                <textarea class="form-control" id="destDesc" required placeholder="A beautiful island in Greece..." rows="3" style="resize: vertical;"></textarea>
+        <form id="destForm" action="${pageContext.request.contextPath}/destinations" method="POST" enctype="multipart/form-data">
+            <div class="admin-modal-header">
+                <h3 id="destModalTitle" style="margin: 0;">Add Destination</h3>
             </div>
             
-            <div class="flex justify-end" style="gap: 12px; margin-top: 30px;">
+            <div class="admin-modal-body">
+                <input type="hidden" id="destId" name="id">
+                <input type="hidden" id="destAction" name="action" value="add">
+                <div class="form-group">
+                    <label class="form-label" for="destName">Destination Name</label>
+                    <input type="text" class="form-control" id="destName" name="name" required placeholder="e.g. Santorini">
+                </div>
+                <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+                    <div>
+                        <label class="form-label" for="destLocation">Location (State, Country)</label>
+                        <input type="text" class="form-control" id="destLocation" name="location" required placeholder="e.g. Cyclades, Greece">
+                    </div>
+                    <div>
+                        <label class="form-label" for="destCategory">Category</label>
+                        <select class="form-control" id="destCategory" name="category" required style="padding-right:32px;">
+                            <option value="Beach & Island">Beach & Island</option>
+                            <option value="Mountain Retreat">Mountain Retreat</option>
+                            <option value="City Escape">City Escape</option>
+                            <option value="Heritage & Culture">Heritage & Culture</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Destination Image</label>
+                    <div style="border:2px dashed var(--color-border); border-radius:8px; padding:20px; text-align:center; position:relative; overflow:hidden; background:var(--surface-light); transition:border-color 0.2s;" id="destImageUploadBox">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="color:var(--text-muted); margin-bottom:8px; display:inline-block;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                        <div style="font-size:0.9rem; color:var(--text-muted); margin-bottom:8px;">Upload image or paste URL below</div>
+                        <input type="text" class="form-control" id="destImage" name="image" placeholder="Paste an image URL..." style="position:relative; z-index:10; margin-bottom: 10px;" autocomplete="off" oninput="previewImg('destImage','destImagePreview')">
+                        <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:5px;">— OR —</div>
+                        <input type="file" id="destImageFile" name="destImageFile" accept="image/*" class="form-control" style="font-size: 0.8rem;">
+                    </div>
+                    <img id="destImagePreview" class="image-preview-box" src="" alt="Preview">
+                </div>
+
+                <div class="form-group" style="padding-bottom: 20px;">
+                    <label class="form-label" for="destDesc">Description</label>
+                    <textarea class="form-control" id="destDesc" name="desc" required placeholder="A beautiful island in Greece..." rows="4" style="resize: vertical;"></textarea>
+                </div>
+            </div>
+            
+            <div class="admin-modal-footer">
                 <button type="button" class="btn btn-outline" onclick="closeDestModal()">Cancel</button>
-                <button type="submit" class="btn btn-primary">Save Destination</button>
+                <button type="submit" class="btn btn-primary" id="saveDestBtn">Save Destination</button>
             </div>
         </form>
     </div>
@@ -1067,7 +1132,7 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif !important; letter-spacing
 <div class="admin-modal-overlay" id="confirmModal">
     <div class="admin-modal" style="text-align: center; max-width: 400px; border-top: 4px solid #ef4444;">
         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" style="margin: 0 auto 16px auto;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-        <h3 id="confirmTitle" style="margin-bottom: 12px; font-family:'Poppins', sans-serif;">Are you sure?</h3>
+        <h3 id="confirmTitle" style="margin-bottom: 12px; font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;">Are you sure?</h3>
         <p id="confirmMessage" class="text-muted" style="margin-bottom: 24px;">This action cannot be undone.</p>
         <div class="flex justify-center" style="gap: 12px;">
             <button class="btn btn-outline" onclick="closeConfirmModal()">Cancel</button>
@@ -1087,6 +1152,15 @@ h1, h2, h3, h4, h5 { font-family: 'Inter', sans-serif !important; letter-spacing
 </div>
 
 <script>
+const CONTEXT_PATH = '${pageContext.request.contextPath}';
+
+// State Accessor Helpers
+function getDests() { return activeDests; }
+function getReviews() { return activeReviews; }
+function getUsers() { return activeUsers; }
+function getContent() { return activeContent || []; }
+
+
 /* =========================================================
    AUTH & GUARD SCRIPT
 ========================================================= */
@@ -1257,7 +1331,7 @@ let allActivities = [];
 
 async function loadActivities() {
     try {
-        const response = await fetch('`${pageContext.request.contextPath}/activities?format=json');
+        const response = await fetch(CONTEXT_PATH + '/activities?format=json');
         if (!response.ok) throw new Error('Failed to load activities');
         allActivities = await response.json();
         renderActivitiesTable();
@@ -1347,7 +1421,7 @@ document.getElementById('activityForm').addEventListener('submit', async functio
     const body = new URLSearchParams(formData);
 
     try {
-        const response = await fetch('`${pageContext.request.contextPath}/activities', {
+        const response = await fetch(CONTEXT_PATH + '/activities', {
             method: 'POST',
             body: body
         });
@@ -1369,7 +1443,7 @@ function deleteActivity(id) {
         body.append('id', id);
 
         try {
-            await fetch('`${pageContext.request.contextPath}/activities', {
+            await fetch(`${CONTEXT_PATH}/activities`, {
                 method: 'POST',
                 body: body
             });
@@ -1563,7 +1637,7 @@ let activeDests = []; // Local state caching exactly what the database has
 
 async function fetchDestsFromDB() {
     try {
-        const response = await fetch('`${pageContext.request.contextPath}/destinations');
+        const response = await fetch(CONTEXT_PATH + '/destinations');
         const data = await response.json();
         activeDests = data;
         loadDestsRenderer();
@@ -1617,7 +1691,7 @@ function loadDestsRenderer() {
             + '<span style="position:absolute; top:12px; right:12px; background:rgba(0,0,0,0.65); backdrop-filter:blur(4px); color:#fff; padding:4px 10px; border-radius:20px; font-size:0.7rem; font-weight:600;">' + (d.category || 'Destination') + '</span>'
             + '</div>'
             + '<div style="padding: 20px; flex: 1; display:flex; flex-direction: column;">'
-            + '<h3 style="margin-bottom: 4px; font-family:\'Poppins\', sans-serif;">' + d.name + '</h3>'
+            + '<h3 style="margin-bottom: 4px; font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;">' + d.name + '</h3>'
             + '<div style="color:var(--text-muted); font-size:0.85rem; margin-bottom: 12px; display:flex; align-items:center; gap:4px;">'
             + '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> ' + (d.location || 'Global')
             + '</div>'
@@ -1633,9 +1707,11 @@ const destModal = document.getElementById('destModal');
 function openDestModal(mode='add', id=null) {
     document.getElementById('destForm').reset();
     document.getElementById('destId').value = '';
+    document.getElementById('destAction').value = mode;
     
     if (mode === 'edit' && id !== null) {
         document.getElementById('destModalTitle').innerText = 'Edit Destination';
+        document.getElementById('destAction').value = 'update';
         const dest = activeDests.find(d => d.id === id);
         if (dest) {
             document.getElementById('destId').value = dest.id;
@@ -1656,53 +1732,20 @@ function closeDestModal() {
     destModal.classList.remove('active');
 }
 
-document.getElementById('destForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    
-    const idField = document.getElementById('destId').value;
-    const isEdit = !!idField;
-    
-    const formData = new URLSearchParams();
-    formData.append('action', isEdit ? 'update' : 'add');
-    if (isEdit) formData.append('id', idField);
-    formData.append('name', document.getElementById('destName').value);
-    formData.append('desc', document.getElementById('destDesc').value);
-    formData.append('image', document.getElementById('destImage').value);
-    // category and location inputs not sent to DB right now due to schema limitations, 
-    // but the DB has desc and we fetch/map it back. Update DB if schema supports it later.
-
-    try {
-        const response = await fetch('`${pageContext.request.contextPath}/destinations', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            body: formData.toString()
-        });
-        
-        const data = await response.json();
-        if (data.status === 'success') {
-            typeof showToast === 'function' ? showToast(data.message, 'success') : false;
-            closeDestModal();
-            fetchDestsFromDB(); // Refreshes the local state from the backend automatically
-            if (typeof fetchDashboardStats === 'function') fetchDashboardStats();
-        } else {
-            VoyastraToast.show(data.message || 'Validation failed.', 'error');
-        }
-    } catch (error) {
-        console.error('Submit Error:', error);
-        typeof showToast === 'function' ? showToast('Network error while saving.', 'error') : false;
-    }
-});
+// Removed AJAX listener for destForm to allow standard form submission with redirect.
+// Functionality is now handled by native browser form post to /destinations.
 
 function editDest(id) { openDestModal('edit', id); }
 
-function deleteDest(id) {
-    advancedConfirm('Are you sure you want to delete this destination?', async () => {
+async function deleteDest(id) {
+    advancedConfirm('Delete this destination permanently?', async () => {
         try {
             const formData = new URLSearchParams();
             formData.append('action', 'delete');
             formData.append('id', id);
             
-            const response = await fetch('`${pageContext.request.contextPath}/destinations', {
+            const response = await fetch(CONTEXT_PATH + '/destinations', {
+
                 method: 'POST',
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'},
                 body: formData.toString()
@@ -1722,6 +1765,7 @@ function deleteDest(id) {
     });
 }
 
+
 /* =========================================================
    REVIEWS CRUD LOGIC (Moderation)
 ========================================================= */
@@ -1729,7 +1773,7 @@ let activeReviews = []; // Local state caching DB reviews
 
 async function fetchReviewsFromDB() {
     try {
-        const response = await fetch('`${pageContext.request.contextPath}/review?action=list');
+        const response = await fetch(`${pageContext.request.contextPath}/review?action=list`);
         if (!response.ok) throw new Error('Failed to load reviews');
         const data = await response.json();
         activeReviews = data;
@@ -1794,7 +1838,7 @@ function loadReviewsRenderer() {
         <div class="stat-card" style="position:relative; display:flex; flex-direction:column; gap:12px;">
             <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                 <div>
-                    <h4 style="margin:0; font-family:'Poppins', sans-serif;">\${r.userName}</h4>
+                    <h4 style="margin:0; font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;">\${r.userName}</h4>
                     <div style="font-size:0.75rem; color:var(--text-muted); display:flex; gap:6px; align-items:center; margin-top:4px;">
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
                         \${r.location}
@@ -1823,7 +1867,7 @@ function deleteReview(id) {
             formData.append('action', 'delete');
             formData.append('id', id);
             
-            const response = await fetch('`${pageContext.request.contextPath}/review', {
+            const response = await fetch(`${pageContext.request.contextPath}/review`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'},
                 body: formData.toString()
@@ -1859,7 +1903,7 @@ async function fetchCommunityPostsFromDB() {
     if (empty)    empty.style.display    = 'none';
 
     try {
-        const response = await fetch('`${pageContext.request.contextPath}/community?action=list');
+        const response = await fetch(`${pageContext.request.contextPath}/community?action=list`);
         if (!response.ok) throw new Error('Failed to load community posts');
         const data = await response.json();
         allCommunityPosts = data.map(p => ({ ...p, _hidden: false }));
@@ -2079,7 +2123,7 @@ function loadContent() {
             + '<span style="position:absolute; top:12px; right:12px; background:rgba(0,0,0,0.65); backdrop-filter:blur(4px); color:#ebaa54; padding:4px 10px; border-radius:20px; font-size:0.75rem; font-weight:700;">' + c.section + '</span>'
             + '</div>'
             + '<div style="padding: 20px; flex: 1; display:flex; flex-direction: column;">'
-            + '<h3 style="margin-bottom: 4px; font-family:\'Poppins\', sans-serif;">' + c.title + '</h3>'
+            + '<h3 style="margin-bottom: 4px; font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;">' + c.title + '</h3>'
             + '<div style="color:var(--color-primary); font-size:0.95rem; margin-bottom: 12px; font-weight:600;">' + c.price + '</div>'
             + '<div style="margin-bottom:16px;">' + tagHtml + '</div>'
             + '<div style="display:flex; justify-content:space-between; margin-top:auto; border-top:1px solid var(--color-border); padding-top:16px;">'
@@ -2177,7 +2221,7 @@ setTimeout(() => {
 ========================================================= */
 function loadAnalytics() {
     // 1. Fetch real-time statistics from DB via AdminAnalyticsServlet
-    fetch('admin/stats')
+    fetch(CONTEXT_PATH + '/admin/stats')
         .then(response => response.json())
         .then(data => {
             // Update Dashboard Overview Cards
@@ -2277,17 +2321,44 @@ function getUsers() {
     if (!raw) { localStorage.setItem(LS_USERS_KEY, JSON.stringify(initialUsers)); return initialUsers; }
     return JSON.parse(raw);
 }
-function saveUsers(users) { localStorage.setItem(LS_USERS_KEY, JSON.stringify(users)); }
+   USERS MANAGEMENT LOGIC (Servlet-backed)
+ ========================================================= */
+let activeUsers = [];
+
+async function fetchUsersFromDB() {
+    try {
+        const response = await fetch(CONTEXT_PATH + '/users?action=list');
+        if (!response.ok) throw new Error('Failed to fetch users');
+        activeUsers = await response.json();
+        renderUsersTable();
+    } catch (error) {
+        console.error('Users load error:', error);
+    }
+}
 
 function loadUsers() {
-    let users = getUsers();
-    const query = document.getElementById('searchUsers') ? document.getElementById('searchUsers').value.toLowerCase() : '';
-    if (query) users = users.filter(u => u.name.toLowerCase().includes(query) || u.email.toLowerCase().includes(query));
-    
+    if (activeUsers.length === 0) {
+        fetchUsersFromDB();
+    } else {
+        renderUsersTable();
+    }
+}
+
+function renderUsersTable() {
+    const query = (document.getElementById('searchUsers')?.value || '').toLowerCase();
     const tbody = document.getElementById('usersTableBody');
     if (!tbody) return;
-    if (users.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4" class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><br>No registered users found.</td></tr>';
+
+    let filtered = [...activeUsers];
+    if (query) {
+        filtered = filtered.filter(u => 
+            (u.name && u.name.toLowerCase().includes(query)) || 
+            (u.email && u.email.toLowerCase().includes(query))
+        );
+    }
+
+    if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding: 30px; color:#888;">No users found.</td></tr>';
         return;
     }
 
@@ -2563,5 +2634,27 @@ function toggleAdminSidebar() {
         document.body.style.overflow = 'hidden';
     }
 }
+
+// --- Handle Redirect Status Messages ---
+window.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const status = params.get('status');
+    const message = params.get('message');
+    
+    if (status) {
+        if (status === 'add_success') {
+            VoyastraToast.show('New destination created successfully!', 'success');
+        } else if (status === 'update_success') {
+            VoyastraToast.show('Destination details updated.', 'success');
+        } else if (status === 'error') {
+            VoyastraToast.show(message || 'An error occurred while saving.', 'error');
+        }
+        
+        // Clean the URL so the toast doesn't reappear on manual refresh
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
+    
+    setupGlobalSearch();
+});
 </script>
 

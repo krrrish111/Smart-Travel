@@ -22,7 +22,7 @@ public class SecurityFilter implements Filter {
         "/community.jsp", "/destination.jsp", "/error.jsp", "/gallery.jsp",
         "/route.jsp",
         // Public servlets
-        "/login", "/register", "/logout", "/google-auth",
+        "/login", "/register", "/logout", "/google-auth", "/google-login",
         "/DestinationServlet", "/destination", "/GetPlansServlet",
         "/explore", "/PostServlet", "/ReviewServlet", "/SearchServlet",
         "/TrendingServlet", "/gallery", "/activities", "/weather"

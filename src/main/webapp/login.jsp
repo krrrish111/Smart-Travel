@@ -76,7 +76,7 @@
             animation: loginBrandIn 1s 0.3s ease forwards;
         }
         .login-brand-title {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
             font-size: 2.8rem;
             font-weight: 800;
             letter-spacing: -0.02em;
@@ -86,7 +86,7 @@
             animation: loginBrandIn 1s 0.5s ease forwards;
         }
         .login-brand-sub {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
             font-size: 0.95rem;
             font-weight: 400;
             color: rgba(255,255,255,0.5);
@@ -127,7 +127,7 @@
             animation: loginFormIn 0.9s 0.4s cubic-bezier(0.25,1,0.5,1) forwards;
         }
         .login-eyebrow {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
             font-size: 0.72rem;
             font-weight: 700;
             letter-spacing: 0.18em;
@@ -136,7 +136,7 @@
             margin-bottom: 10px;
         }
         .login-heading {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
             font-size: 2rem;
             font-weight: 800;
             letter-spacing: -0.03em;
@@ -145,7 +145,7 @@
         }
         [data-theme="dark"] .login-heading { color: #ffffff; }
         .login-subhead {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
             font-size: 0.88rem;
             color: rgba(15,11,8,0.5);
             margin-bottom: 36px;
@@ -159,7 +159,7 @@
         }
         .login-field label {
             display: block;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
             font-size: 0.78rem;
             font-weight: 600;
             color: #0f0b08;
@@ -172,7 +172,7 @@
             padding: 13px 16px;
             border: 1.5px solid rgba(15,11,8,0.15);
             border-radius: 10px;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
             font-size: 0.92rem;
             color: #0f0b08;
             background: #fafafa;
@@ -217,7 +217,7 @@
             border: 1px solid rgba(239,68,68,0.25);
             border-radius: 8px;
             padding: 10px 14px;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
             font-size: 0.82rem;
             color: #ef4444;
             margin-bottom: 18px;
@@ -225,7 +225,7 @@
 
         /* Hint */
         .login-hint {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
             font-size: 0.76rem;
             color: rgba(15,11,8,0.35);
             background: rgba(79,70,229,0.06);
@@ -252,7 +252,7 @@
             color: #ffffff;
             border: none;
             border-radius: 10px;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
             font-size: 0.9rem;
             font-weight: 700;
             letter-spacing: 0.06em;
@@ -271,7 +271,7 @@
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
             font-size: 0.82rem;
             color: rgba(15,11,8,0.45);
             text-decoration: none;
@@ -352,12 +352,6 @@
             <h1 class="login-heading">Sign in</h1>
             <p class="login-subhead">Access your travel dashboard and itineraries.</p>
 
-            <!-- Demo credentials hint -->
-            <div class="login-hint">
-                <strong>Demo credentials:</strong><br>
-                Admin: <code>admin@voyastra.com</code> &nbsp;|&nbsp; Password: <code>1234</code><br>
-                User: <code>arjun@example.com</code> &nbsp;|&nbsp; Password: <code>password123</code>
-            </div>
 
             <!-- Server-side error -->
             <c:if test="${not empty errorMsg}">
@@ -389,11 +383,6 @@
                     </div>
                 </div>
 
-                <!-- 2. NEW: Server-Side Redirect Button (Auth Code Flow) -->
-                <a href="google-login" class="login-btn" style="background:#4285F4; color:#fff; display:flex; align-items:center; justify-content:center; gap:10px; text-transform:none; font-size:0.85rem; letter-spacing:normal;">
-                    <svg width="18" height="18" viewBox="0 0 18 18"><path d="M17.64 9.2c0-.63-.06-1.25-.16-1.84H9v3.47h4.84c-.21 1.12-.84 2.07-1.8 2.73v2.27h2.9c1.7-1.57 2.7-3.87 2.7-6.63z" fill="#4285F4"/><path d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.9-2.27c-.8.54-1.84.87-3.06.87-2.35 0-4.33-1.58-5.04-3.71h-3v2.33C2.43 15.5 5.5 18 9 18z" fill="#34A853"/><path d="M3.96 10.71c-.18-.54-.28-1.12-.28-1.71s.1-1.17.28-1.71V4.96h-3V7.3c-.62 1.23-.96 2.62-.96 4.07s.35 2.84.96 4.07l3-2.33z" fill="#FBBC05"/><path d="M9 3.58c1.32 0 2.5.45 3.44 1.35L15 2.47C13.47 1.03 11.43.2 9 .2 5.5.2 2.43 2.7 1.46 6.1l3 2.33c.71-2.13 2.69-3.71 5.04-3.71z" fill="#EA4335"/></svg>
-                    Sign in with Google (Redirect Flow)
-                </a>
             </div>
 
             <!-- Divider -->
@@ -427,7 +416,7 @@
 
             <div style="display:flex; flex-direction:column; align-items:center; gap:12px; margin-top:24px;">
                 <a href="register.jsp" class="login-back" style="margin-top:0;">Don't have an account? Sign up</a>
-                <a href="index.jsp" class="login-back" style="margin-top:0;">
+                <a href="${pageContext.request.contextPath}/" class="login-back" style="margin-top:0;">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
                     Back to home
                 </a>

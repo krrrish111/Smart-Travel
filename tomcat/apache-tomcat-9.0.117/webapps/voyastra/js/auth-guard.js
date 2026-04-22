@@ -1,112 +1,141 @@
 /**
- * Voyastra Auth Guard — v2
+ * Voyastra Auth Guard — v3
  * ─────────────────────────
- * Primary source of truth: window.javaSession (set by header.jsp from Java HttpSession).
- * localStorage fallback is kept only for compatibility but no longer drives auth decisions.
+ * Synchronizes Java Server Sessions with the Frontend UI.
+ * 
+ * Sources of Truth:
+ * 1. PRIMARY: window.javaSession (Populated by header.jsp from Java HttpSession)
+ * 2. LIVE: Memory state maintained during AJAX login/logout cycles.
+ * 
+ * Note: localStorage is avoided for authentication state to prevent "stale sessions" 
+ * where the frontend thinks it's logged in but the server session has expired.
  */
 
 ;(function (window) {
     'use strict';
 
-    var SESSION_KEY = 'voyastra_user';
-    var TOKEN_KEY   = 'voyastra_token';
-    var ROLE_KEY    = 'voyastra_role';
+    // Internal state tracking for the current page lifecycle
+    var _state = {
+        session: null,
+        initialized: false
+    };
 
-    /* ── Helpers ──────────────────────────────────────────────── */
-    function getSession() {
-        // PRIMARY: Java HttpSession state (always authoritative)
-        if (window.javaSession &&
-            window.javaSession.userId &&
-            String(window.javaSession.userId).trim().length > 0 &&
-            window.javaSession.userId !== '0') {
-            
-            var session = {
-                name:  window.javaSession.name  || 'User',
+    /**
+     * Initializes the session from the bridge provided by the server.
+     */
+    function _init() {
+        if (window.javaSession && window.javaSession.userId && window.javaSession.userId !== '0' && window.javaSession.userId !== '') {
+            _state.session = {
+                id:    window.javaSession.userId,
+                name:  window.javaSession.name || 'Explorer',
                 email: window.javaSession.email || '',
-                role:  window.javaSession.role  || 'user'
+                role:  window.javaSession.role || 'user'
             };
-
-            // Sync with localStorage for "JWT" / persistence requirement
-            try {
-                localStorage.setItem(ROLE_KEY, session.role);
-                // Create a mock JWT (Base64 of user info) if no real token exists
-                if (!localStorage.getItem(TOKEN_KEY)) {
-                    var mockToken = btoa(JSON.stringify({ id: window.javaSession.userId, exp: Date.now() + 86400000 }));
-                    localStorage.setItem(TOKEN_KEY, mockToken);
-                }
-            } catch (e) {}
-
-            return session;
+        } else {
+            _state.session = null;
         }
-        // FALLBACK: localStorage (for pages that don't include header.jsp)
-        try {
-            var raw = localStorage.getItem(SESSION_KEY);
-            return raw ? JSON.parse(raw) : null;
-        } catch (e) {
-            return null;
-        }
+        _state.initialized = true;
     }
 
+    /**
+     * Retrieves the current session object.
+     */
+    function getSession() {
+        if (!_state.initialized) _init();
+        return _state.session;
+    }
+
+    /**
+     * Checks if a user is currently authenticated on the server.
+     */
     function isAuthenticated() {
         return !!getSession();
     }
 
+    /**
+     * Checks if the authenticated user has administrative privileges.
+     */
     function isAdmin() {
         var s = getSession();
-        return s && s.role === 'admin';
+        return s && (s.role === 'admin' || s.role === 'ADMIN');
     }
 
-    function setSession(data) {
-        try { 
-            localStorage.setItem(SESSION_KEY, JSON.stringify(data));
-            if (data.role) localStorage.setItem(ROLE_KEY, data.role);
-        } catch(e) {}
+    /**
+     * Updates the frontend session state immediately (used after AJAX success).
+     * @param {Object} data - The user session data from the server response.
+     */
+    function login(data) {
+        if (!data) return;
+        
+        // Update the bridge and the local state
+        window.javaSession = {
+            userId: data.userId || data.id,
+            name:   data.name,
+            email:  data.email,
+            role:   data.role
+        };
+        
+        _state.session = {
+            id:    window.javaSession.userId,
+            name:  window.javaSession.name,
+            email: window.javaSession.email,
+            role:  window.javaSession.role
+        };
+        
         _dispatch();
     }
 
-    function clearSession() {
-        try { 
-            localStorage.removeItem(SESSION_KEY);
-            localStorage.removeItem(TOKEN_KEY);
-            localStorage.removeItem(ROLE_KEY);
-        } catch(e) {}
-        _dispatch();
-    }
-
-    function _dispatch() {
-        try { window.dispatchEvent(new Event('va:authChange')); } catch (e) {}
-    }
-
-    /* ── Core API ─────────────────────────────────────────────── */
-    function requireAuth(destination, callback) {
-        if (getSession()) {
-            if (typeof callback === 'function') callback();
-            return true;
-        }
-        var target   = destination || window.location.pathname;
-        var loginUrl = 'login?error=auth_required';
-        window.location.href = loginUrl;
-        return false;
-    }
-
-    function login(name, email) {
-        setSession({ name: name, email: email });
-    }
-
+    /**
+     * Triggers a server-side logout and clears local state.
+     */
     function logout() {
-        clearSession();
+        _state.session = null;
+        window.javaSession = { userId: '0', role: 'user', name: '', email: '' };
+        _dispatch();
+        
+        // Finalize on server
         window.location.href = 'logout';
     }
 
-    /* ── Expose ───────────────────────────────────────────────── */
+    /**
+     * Route protector for JSP pages that require authentication.
+     */
+    function requireAuth(role) {
+        var s = getSession();
+        if (!s) {
+            window.location.href = 'login?error=auth_required&redirect=' + encodeURIComponent(window.location.pathname);
+            return false;
+        }
+        if (role === 'admin' && !isAdmin()) {
+            window.location.href = 'index.jsp?error=unauthorized';
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Notifies UI components (like the header widget) that auth state has changed.
+     */
+    function _dispatch() {
+        try {
+            window.dispatchEvent(new Event('va:authChange'));
+        } catch (e) {
+            console.error('Auth event dispatch failed', e);
+        }
+    }
+
+    // Initialize on load
+    _init();
+
+    /* ── API Exposure ─────────────────────────────────────────── */
     window.VoyastraAuth = {
-        requireAuth:     requireAuth,
         getSession:      getSession,
         isLoggedIn:      isAuthenticated,
         isAuthenticated: isAuthenticated,
         isAdmin:         isAdmin,
         login:           login,
-        logout:          logout
+        logout:          logout,
+        requireAuth:     requireAuth
     };
 
 })(window);

@@ -110,7 +110,7 @@ public class GoogleOAuthServlet extends HttpServlet {
 
         // 7. Return redirect URL based on role
         // 7. Return redirect URL (always homepage for minimal flow change)
-        String redirectUrl = request.getContextPath() + "/index.jsp";
+        String redirectUrl = request.getContextPath() + "/";
 
         response.setStatus(HttpServletResponse.SC_OK);
         out.write("{\"success\":true,\"redirect\":\"" + redirectUrl + "\",\"role\":\"" + user.getRole()

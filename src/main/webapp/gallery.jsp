@@ -9,7 +9,7 @@
     <title>Image Gallery | Voyastra</title>
     <!-- Include the common Voyager CSS or standard CSS -->
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; color: #333; }
+        body { font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; color: #333; }
         .gallery-container { max-width: 1200px; margin: 0 auto; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         h1 { margin-bottom: 20px; }
         .upload-section { margin-bottom: 30px; padding: 20px; border: 2px dashed #ccc; border-radius: 8px; text-align: center; }

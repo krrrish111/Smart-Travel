@@ -34,6 +34,6 @@ public class GetPlansServlet extends HttpServlet {
         request.setAttribute("destinations", destinations);
 
         // Send to explore.jsp
-        request.getRequestDispatcher("/explore.jsp").forward(request, response);
+        request.getRequestDispatcher("/pages/explore.jsp").forward(request, response);
     }
 }

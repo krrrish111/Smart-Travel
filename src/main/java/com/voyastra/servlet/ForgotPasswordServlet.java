@@ -21,7 +21,7 @@ public class ForgotPasswordServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-        request.getRequestDispatcher("/forgot-password.jsp").forward(request, response);
+        request.getRequestDispatcher("/pages/forgot-password.jsp").forward(request, response);
     }
 
     @Override
@@ -31,7 +31,7 @@ public class ForgotPasswordServlet extends HttpServlet {
         String email = request.getParameter("email");
         if (email == null || email.isEmpty()) {
             request.setAttribute("errorMsg", "Email is required.");
-            request.getRequestDispatcher("/forgot-password.jsp").forward(request, response);
+            request.getRequestDispatcher("/pages/forgot-password.jsp").forward(request, response);
             return;
         }
 
@@ -49,6 +49,6 @@ public class ForgotPasswordServlet extends HttpServlet {
 
         // Always show success message for security (prevent email enumeration)
         request.setAttribute("successMsg", "If an account exists for that email, a password reset link has been sent.");
-        request.getRequestDispatcher("/forgot-password.jsp").forward(request, response);
+        request.getRequestDispatcher("/pages/forgot-password.jsp").forward(request, response);
     }
 }

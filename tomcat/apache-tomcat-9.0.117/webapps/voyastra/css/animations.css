@@ -741,3 +741,21 @@ footer a {
         transition-duration:       0.01ms !important;
     }
 }
+/* ──────────────────────────────────────────────────────────────
+   31. SEAMLESS MARQUEE — POPULAR TRIP PLANS
+────────────────────────────────────────────────────────────── */
+@keyframes plan-scroll {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-33.3333%); }
+}
+
+.plan-scroll-inner {
+    display: flex;
+    width: max-content;
+    animation: plan-scroll 60s linear infinite;
+    will-change: transform;
+}
+
+.plan-scroll-inner:hover {
+    animation-play-state: paused;
+}

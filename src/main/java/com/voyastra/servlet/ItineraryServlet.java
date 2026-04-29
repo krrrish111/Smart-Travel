@@ -49,7 +49,7 @@ public class ItineraryServlet extends HttpServlet {
 
                 if (itinerary != null && itinerary.getUserId() == (Integer) session.getAttribute("user_id")) {
                     request.setAttribute("itinerary", itinerary);
-                    request.getRequestDispatcher("/view-itinerary.jsp").forward(request, response);
+                    request.getRequestDispatcher("/pages/view-itinerary.jsp").forward(request, response);
                 } else {
                     response.sendError(HttpServletResponse.SC_NOT_FOUND, "Itinerary not found or access denied.");
                 }

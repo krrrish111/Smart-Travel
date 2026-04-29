@@ -39,7 +39,7 @@ public class DeletePlanServlet extends HttpServlet {
             String idParam = request.getParameter("id");
             if (idParam == null || idParam.trim().isEmpty()) {
                 session.setAttribute("errorMsg", "Plan ID is required for deletion.");
-                response.sendRedirect(request.getContextPath() + "/admin-dashboard.jsp");
+                response.sendRedirect(request.getContextPath() + "/admin/plans.jsp");
                 return;
             }
             int id = Integer.parseInt(idParam);
@@ -51,20 +51,20 @@ public class DeletePlanServlet extends HttpServlet {
             if (success) {
                 AdminLogger.log(request, "DELETE", "Plan", id, "Deleted travel plan #" + id);
                 session.setAttribute("successMsg", "🗑️ Plan #" + id + " deleted successfully.");
-                response.sendRedirect(request.getContextPath() + "/admin-dashboard.jsp");
+                response.sendRedirect(request.getContextPath() + "/admin/plans.jsp");
             } else {
                 session.setAttribute("errorMsg", "Failed to delete the plan from the database.");
-                response.sendRedirect(request.getContextPath() + "/admin-dashboard.jsp");
+                response.sendRedirect(request.getContextPath() + "/admin/plans.jsp");
             }
 
         } catch (NumberFormatException e) {
             System.err.println("ERROR: Invalid number format in DeletePlanServlet.");
             session.setAttribute("errorMsg", "Invalid Plan ID provided.");
-            response.sendRedirect(request.getContextPath() + "/admin-dashboard.jsp");
+            response.sendRedirect(request.getContextPath() + "/admin/plans.jsp");
         } catch (Exception e) {
             e.printStackTrace();
             session.setAttribute("errorMsg", "An unexpected error occurred. Please try again.");
-            response.sendRedirect(request.getContextPath() + "/admin-dashboard.jsp");
+            response.sendRedirect(request.getContextPath() + "/admin/plans.jsp");
         }
     }
 
@@ -72,6 +72,6 @@ public class DeletePlanServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-        response.sendRedirect(request.getContextPath() + "/admin-dashboard.jsp");
+        response.sendRedirect(request.getContextPath() + "/admin/plans.jsp");
     }
 }

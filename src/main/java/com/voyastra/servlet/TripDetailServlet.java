@@ -25,16 +25,25 @@ public class TripDetailServlet extends HttpServlet {
             throws ServletException, IOException {
             
         String slug = request.getParameter("slug");
+        String idStr = request.getParameter("id");
+        
+        PremiumTrip trip = null;
         
         if (slug != null && !slug.trim().isEmpty()) {
-            PremiumTrip trip = tripDAO.getTripBySlug(slug);
+            trip = tripDAO.getTripBySlug(slug);
+        } else if (idStr != null && !idStr.trim().isEmpty()) {
+            try {
+                trip = tripDAO.getTripById(Integer.parseInt(idStr));
+            } catch (NumberFormatException e) {
+                // Ignore
+            }
+        }
             
             if (trip != null) {
                 request.setAttribute("trip", trip);
-                request.getRequestDispatcher("/trip-detail.jsp").forward(request, response);
+                request.getRequestDispatcher("/pages/trip-detail.jsp").forward(request, response);
                 return;
             }
-        }
         
         // Redirect to explore if not found
         response.sendRedirect("explore.jsp");

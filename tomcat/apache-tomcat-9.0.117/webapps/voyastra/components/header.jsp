@@ -5,20 +5,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Voyastra - Travel Smarter</title>
-    <link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+    <link rel="icon" type="image/svg+xml" href="${pageContext.request.contextPath}/images/favicon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/components.css">
-    <link rel="stylesheet" href="css/theme.css">
-    <link rel="stylesheet" href="css/animations.css">
-    <link rel="stylesheet" href="css/responsive.css">
-    <script src="js/loader.js"></script>
-    <script src="js/auth-guard.js"></script>
-    <script src="js/toast.js"></script>
-    <script src="js/validate.js"></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/components.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/theme.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/animations.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/responsive.css">
+    <script src="${pageContext.request.contextPath}/js/loader.js"></script>
+    <script src="${pageContext.request.contextPath}/js/auth-guard.js"></script>
+    <script src="${pageContext.request.contextPath}/js/toast.js"></script>
+    <script src="${pageContext.request.contextPath}/js/validate.js"></script>
     <script>
+        window.CONTEXT_PATH = "${pageContext.request.contextPath}";
         (function(){
             var t = localStorage.getItem('theme') || 'dark';
             document.documentElement.setAttribute('data-theme', t);
@@ -41,7 +44,7 @@
 <body>
     <nav class="navbar">
         <div class="container nav-container">
-            <a href="index.jsp" class="nav-brand voyastra-logo">
+            <a href="home" class="nav-brand voyastra-logo">
                 <svg class="voyastra-icon" viewBox="0 -1 26 26" fill="none" stroke="url(#voyastraGradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <defs>
                         <linearGradient id="voyastraGradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -62,11 +65,11 @@
                         <span class="sidebar-brand-label">Voyastra</span>
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                     </button>
-                    <a href="index.jsp" class="nav-link">Home</a>
-                    <a href="explore.jsp" class="nav-link">Explore</a>
-                    <a href="community.jsp" class="nav-link">Community</a>
-                    <a href="planner.jsp" class="nav-link">Planner</a>
-                    <a href="booking" class="nav-link">Bookings</a>
+                    <a href="${pageContext.request.contextPath}/" class="nav-link">Home</a>
+                    <a href="${pageContext.request.contextPath}/explore" class="nav-link">Explore</a>
+                    <a href="${pageContext.request.contextPath}/community" class="nav-link">Community</a>
+                    <a href="${pageContext.request.contextPath}/planner" class="nav-link">Planner</a>
+                    <a href="${pageContext.request.contextPath}/booking" class="nav-link">Bookings</a>
                     <!-- ── Auth widget (Login btn OR avatar menu) ──
                          Hidden by default; JS renders the correct state -->
                     <div id="navAuthWidget" class="nav-auth-widget" style="display:none;"></div>
@@ -346,7 +349,7 @@
                 if (!session) {
                     /* ── Logged OUT: show Login button ── */
                     var loginBtn = document.createElement('a');
-                    loginBtn.href      = 'login'; // Go through Servlet
+                    loginBtn.href      = CONTEXT_PATH + '/login'; // Go through Servlet
                     loginBtn.className = 'nav-login-btn';
                     loginBtn.innerHTML =
                         '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>' +
@@ -379,11 +382,14 @@
                     /* ── Build Dropdown ── */
                     function buildDropdown() {
                         var isAdmin = (session.role === 'admin');
-                        var adminLink = isAdmin ? 
-                            '<a href="admin-dashboard.jsp" class="nav-dropdown-item" role="menuitem" style="color:var(--color-primary);">' +
-                                '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>' +
-                                'Admin Panel' +
-                            '</a>' : '';
+                        var adminLink = '';
+                        if (isAdmin) {
+                            adminLink = 
+                                '<a href="' + CONTEXT_PATH + '/admin" class="nav-dropdown-item" role="menuitem" style="color:var(--color-primary);">' +
+                                     '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>' +
+                                     'Admin Panel' +
+                                 '</a>';
+                        }
 
                         var dd = document.createElement('div');
                         dd.className = 'nav-user-dropdown';
@@ -394,23 +400,23 @@
                                 '<div class="nav-dropdown-email">' + (session.email || '') + '</div>' +
                             '</div>' +
                              adminLink +
-                            '<a href="edit-profile.jsp" class="nav-dropdown-item" role="menuitem">' +
+                            '<a href="' + CONTEXT_PATH + '/profile" class="nav-dropdown-item" role="menuitem">' +
                                 '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>' +
                                 'Profile' +
                             '</a>' +
-                            '<a href="booking?action=history" class="nav-dropdown-item" role="menuitem">' +
+                            '<a href="' + CONTEXT_PATH + '/booking-history" class="nav-dropdown-item" role="menuitem">' +
                                 '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>' +
                                 'Dashboard' +
                             '</a>' +
-                            '<a href="planner.jsp" class="nav-dropdown-item" role="menuitem">' +
+                            '<a href="' + CONTEXT_PATH + '/planner" class="nav-dropdown-item" role="menuitem">' +
                                 '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 3a2 2 0 0 1 4 0v1H3V3a2 2 0 0 1 4 0"/><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="16" y2="14"/></svg>' +
                                 'My Plans' +
                             '</a>' +
-                            '<a href="booking" class="nav-dropdown-item" role="menuitem">' +
+                            '<a href="' + CONTEXT_PATH + '/booking" class="nav-dropdown-item" role="menuitem">' +
                                 '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.15 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.06 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21 16v.92z"/></svg>' +
                                 'My Bookings' +
                             '</a>' +
-                            '<a href="settings.jsp" class="nav-dropdown-item" role="menuitem">' +
+                            '<a href="' + CONTEXT_PATH + '/settings" class="nav-dropdown-item" role="menuitem">' +
                                 '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>' +
                                 'Settings' +
                             '</a>' +
@@ -470,29 +476,28 @@
             window.addEventListener('va:authChange', renderAuthWidget);
 
             /* ── Active Nav Highlight ──────────────────────────── */
-            var fullPath = window.location.pathname;
-            var page = fullPath.split('/').pop() || 'index.jsp';
-            if (!page.includes('.')) page += '.jsp'; // handle extensionless routers if any
+            var currentPath = window.location.pathname;
+            var pageName = currentPath.split('/').pop() || 'home';
+            if (pageName.endsWith('.jsp')) pageName = pageName.substring(0, pageName.length - 4);
             
             document.querySelectorAll('.nav-link').forEach(function (link) {
                 var href = link.getAttribute('href');
-                if (href === page || (page === 'index.jsp' && href === 'index.jsp')) {
+                if (href && (href.endsWith('/' + pageName) || (pageName === 'home' && (href.endsWith('/') || href.endsWith('/home'))))) {
                     link.classList.add('active');
                 }
             });
 
             /* ── Breadcrumbs ───────────────────────────────────── */
             var mainEl = document.querySelector('main');
-            var skipBC = ['index.jsp', 'login.jsp', ''];
-            if (mainEl && !skipBC.includes(currentPath)) {
-                var pageName = currentPath.replace('.jsp', '');
+            var skipBC = ['home', 'login', 'register', 'index.jsp', 'login.jsp', ''];
+            if (mainEl && !skipBC.includes(pageName)) {
                 var formatted = pageName.split('-').map(function (w) {
                     return w.charAt(0).toUpperCase() + w.slice(1);
                 }).join(' ');
                 mainEl.insertAdjacentHTML('afterbegin',
                     '<div class="container relative z-20 slide-up" style="padding-top:10px;margin-bottom:25px;animation-delay:0.1s;">' +
                     '<nav aria-label="Breadcrumb"><ol class="flex items-center gap-2 text-sm" style="font-family: Poppins, Inter, Roboto, Arial, sans-serif;">' +
-                    '<li><a href="index.jsp" class="text-muted breadcrumb-link" style="transition:color 0.2s;">Home</a></li>' +
+                    '<li><a href="' + window.CONTEXT_PATH + '/home" class="text-muted breadcrumb-link" style="transition:color 0.2s;">Home</a></li>' +
                     '<li class="text-muted" style="opacity:0.5;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></li>' +
                     '<li class="text-primary font-medium" aria-current="page">' + formatted + '</li>' +
                     '</ol></nav></div>');

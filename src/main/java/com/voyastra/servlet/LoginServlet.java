@@ -34,10 +34,10 @@ public class LoginServlet extends HttpServlet {
         HttpSession session = request.getSession(false);
         if (session != null && session.getAttribute("user_id") != null) {
             String role = (String) session.getAttribute("role");
-            response.sendRedirect(request.getContextPath() + ("admin".equals(role) ? "/admin-dashboard.jsp" : "/dashboard.jsp"));
+            response.sendRedirect(request.getContextPath() + ("admin".equals(role) ? "/admin" : "/user-home"));
             return;
         }
-        request.getRequestDispatcher("/login.jsp").forward(request, response);
+        request.getRequestDispatcher("/pages/login.jsp").forward(request, response);
     }
 
     @Override
@@ -106,6 +106,7 @@ public class LoginServlet extends HttpServlet {
                 session.setAttribute("username",  userName);
                 session.setAttribute("email",     user.getEmail());
                 session.setAttribute("role",      userRole);
+                session.setAttribute("user",      user);
                 session.setMaxInactiveInterval(30 * 60);
 
                 try { AdminLogger.log(request, "LOGIN", "User", user.getId(), "User '" + user.getEmail() + "' logged in."); } catch (Exception e) {}
@@ -114,7 +115,7 @@ public class LoginServlet extends HttpServlet {
                 result.put("success", true);
                 result.put("message", "Login successful! Redirecting...");
                 
-                String redirect = "admin".equals(userRole) ? "admin-dashboard.jsp" : "dashboard.jsp";
+                String redirect = "admin".equals(userRole) ? "admin" : "user-home";
                 result.put("redirect", request.getContextPath() + "/" + redirect);
                 
             } else {

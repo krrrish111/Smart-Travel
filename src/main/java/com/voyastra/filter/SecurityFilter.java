@@ -18,20 +18,16 @@ public class SecurityFilter implements Filter {
 
     // Public paths: no login required
     private static final List<String> PUBLIC_PATHS = Arrays.asList(
-        "/", "/index.jsp", "/explore.jsp", "/login.jsp", "/register.jsp",
-        "/community.jsp", "/destination.jsp", "/error.jsp", "/gallery.jsp",
-        "/route.jsp",
-        // Public servlets
-        "/login", "/register", "/logout", "/google-auth", "/google-login",
-        "/DestinationServlet", "/destination", "/GetPlansServlet",
-        "/explore", "/PostServlet", "/ReviewServlet", "/SearchServlet",
-        "/TrendingServlet", "/gallery", "/activities", "/weather"
+        "/", "/index", "/home", "/explore", "/login", "/register",
+        "/community", "/destination", "/destinations", "/error", 
+        "/route", "/logout", "/google-auth", "/google-login",
+        "/getPlans", "/review", "/search", "/trending", "/activities", "/weather"
     );
 
     // Admin-only paths
     private static final List<String> ADMIN_PATHS = Arrays.asList(
-        "/admin-home.jsp", "/admin-dashboard.jsp", "/UpdatePlanServlet", "/DeletePlanServlet",
-        "/AddPlanServlet", "/AdminAnalyticsServlet", "/AdminLogServlet"
+        "/admin", "/admin-dashboard.jsp", "/updatePlan", "/deletePlan",
+        "/addPlan", "/admin/stats", "/admin/logs", "/AdminBookingServlet", "/AdminUserServlet"
     );
 
     @Override
@@ -80,7 +76,7 @@ public class SecurityFilter implements Filter {
                 String target = path;
                 if (queryString != null)
                     target += "?" + queryString;
-                resp.sendRedirect(req.getContextPath() + "/login.jsp?redirect=" +
+                resp.sendRedirect(req.getContextPath() + "/login?redirect=" +
                         java.net.URLEncoder.encode(target, "UTF-8"));
                 return;
             }
@@ -90,7 +86,7 @@ public class SecurityFilter implements Filter {
             if (isAdminPath) {
                 String role = (String) session.getAttribute("role");
                 if (!"admin".equals(role)) {
-                    resp.sendRedirect(req.getContextPath() + "/login.jsp?error=admin_only");
+                    resp.sendRedirect(req.getContextPath() + "/login?error=admin_only");
                     return;
                 }
             }

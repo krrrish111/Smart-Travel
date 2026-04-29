@@ -106,6 +106,7 @@ public class GoogleOAuthServlet extends HttpServlet {
         session.setAttribute("name", user.getName());
         session.setAttribute("email", user.getEmail());
         session.setAttribute("role", user.getRole());
+        session.setAttribute("user", user);
         session.setAttribute("auth_method", "google");
 
         // 7. Return redirect URL based on role

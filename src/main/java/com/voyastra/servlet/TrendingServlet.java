@@ -43,7 +43,7 @@ public class TrendingServlet extends HttpServlet {
             }
 
             request.setAttribute("trendingPlaces", places);
-            request.getRequestDispatcher("/index.jsp").forward(request, response);
+            request.getRequestDispatcher("/pages/index.jsp").forward(request, response);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -60,7 +60,7 @@ public class TrendingServlet extends HttpServlet {
 
         request.setCharacterEncoding("UTF-8");
         String action = request.getParameter("action");
-        String redirectUrl = request.getContextPath() + "/admin-dashboard.jsp";
+        String redirectUrl = request.getContextPath() + "/admin/index.jsp";
 
         // RBAC guard — admin sessions only
         HttpSession session = request.getSession(false);

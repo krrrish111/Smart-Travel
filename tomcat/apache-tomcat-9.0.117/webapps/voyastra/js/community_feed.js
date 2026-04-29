@@ -33,7 +33,7 @@
                 // Auth check
                 if (typeof VoyastraAuth !== 'undefined' && typeof VoyastraAuth.isAuthenticated === 'function') {
                     if (!VoyastraAuth.isAuthenticated()) {
-                        VoyastraAuth.requireAuth('community.jsp');
+                        VoyastraAuth.requireAuth(window.CONTEXT_PATH + '/community');
                         return;
                     }
                 }
@@ -48,14 +48,14 @@
                 }, { once: true });
 
                 // AJAX toggle
-                fetch('api/like', {
+                fetch(window.CONTEXT_PATH + '/api/like', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                     body: 'postId=' + encodeURIComponent(postId)
                 })
                 .then(function(res) { 
                     if (res.status === 401) {
-                        VoyastraAuth.requireAuth('community.jsp');
+                        VoyastraAuth.requireAuth(window.CONTEXT_PATH + '/community');
                         throw new Error('Unauthorized');
                     }
                     return res.json(); 
@@ -100,10 +100,70 @@
         });
     }
 
-    /* ── Comment Toggle ──────────────────────────────────────── */
+    /* ── Comment Toggle & Load ───────────────────────────────── */
+    function loadComments(postId, listContainer) {
+        listContainer.innerHTML = '<div style="text-align:center;padding:10px;"><div style="width:20px;height:20px;border:2px solid var(--color-primary);border-top-color:transparent;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto;"></div></div>';
+        
+        fetch(window.CONTEXT_PATH + '/CommentServlet?postId=' + encodeURIComponent(postId))
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+                if (data.error) {
+                    listContainer.innerHTML = '<div style="color:red;padding:10px;text-align:center;">' + data.error + '</div>';
+                    return;
+                }
+                if (data.length === 0) {
+                    listContainer.innerHTML = '<div style="color:var(--text-muted);padding:10px;text-align:center;font-size:0.9rem;">No comments yet. Be the first!</div>';
+                    return;
+                }
+                
+                var html = '';
+                var currentUserId = typeof VoyastraAuth !== 'undefined' ? window.currentUserId : null; // Assume window.currentUserId is set if needed, or we just rely on backend auth to show delete btn. Actually we can check backend response for ownership.
+                
+                data.forEach(function(c) {
+                    var dateStr = new Date(c.createdAt).toLocaleString();
+                    html += '<div class="comment-item scroll-reveal visible" id="comment-' + c.id + '">';
+                    html += '<img src="https://ui-avatars.com/api/?name=' + escapeHtml(c.userName) + '&background=random" class="comment-avatar">';
+                    html += '<div class="comment-bubble">';
+                    html += '<div class="comment-author">' + escapeHtml(c.userName) + '</div>';
+                    html += '<div class="comment-text">' + escapeHtml(c.text) + '</div>';
+                    html += '<div class="comment-meta">';
+                    html += '<span class="post-time">' + dateStr + '</span>';
+                    html += '<button class="comment-like-btn" onclick="this.classList.toggle(\'liked\')">❤️ Like</button>';
+                    html += '<button class="comment-delete-btn text-xs text-muted" onclick="deleteComment(' + c.id + ', this)" style="border:none;background:none;cursor:pointer;margin-left:10px;">Delete</button>';
+                    html += '</div></div></div>';
+                });
+                listContainer.innerHTML = html;
+            })
+            .catch(function(err) {
+                listContainer.innerHTML = '<div style="color:red;padding:10px;text-align:center;">Failed to load comments</div>';
+            });
+    }
+
+    window.deleteComment = function(commentId, btnEl) {
+        if (!confirm('Delete this comment?')) return;
+        
+        fetch(window.CONTEXT_PATH + '/CommentServlet', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'action=delete&commentId=' + encodeURIComponent(commentId)
+        })
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+            if (data.success) {
+                var item = document.getElementById('comment-' + commentId);
+                if (item) item.remove();
+                showToast('Comment deleted', '🗑️');
+            } else {
+                showToast('Cannot delete comment (unauthorized)', '⚠️');
+            }
+        })
+        .catch(function() { showToast('Error deleting comment', '❌'); });
+    };
+
     function initCommentToggle() {
         document.querySelectorAll('.comment-toggle-btn').forEach(function (btn) {
             btn.addEventListener('click', function () {
+                var postId = btn.getAttribute('data-post-id');
                 var postCard = btn.closest('.social-post-card');
                 if (!postCard) return;
                 var section = postCard.querySelector('.comments-section');
@@ -113,6 +173,10 @@
                 section.classList.toggle('active', !isOpen);
 
                 if (!isOpen) {
+                    var list = section.querySelector('.comments-list');
+                    if (list && postId) {
+                        loadComments(postId, list);
+                    }
                     var input = section.querySelector('.add-comment-input');
                     if (input) setTimeout(function () { input.focus(); }, 100);
                 }
@@ -124,9 +188,8 @@
             el.addEventListener('click', function () {
                 var postCard = el.closest('.social-post-card');
                 if (!postCard) return;
-                var section = postCard.querySelector('.comments-section');
-                if (!section) return;
-                section.classList.toggle('active');
+                var btn = postCard.querySelector('.comment-toggle-btn');
+                if (btn) btn.click();
             });
         });
     }
@@ -137,55 +200,59 @@
             var input = row.querySelector('.add-comment-input');
             var sendBtn = row.querySelector('.send-comment-btn');
             var section = row.closest('.comments-section');
+            var list = section ? section.querySelector('.comments-list') : null;
 
             function sendComment() {
                 var text = input.value.trim();
-                if (!text) return;
-
-                var newComment = document.createElement('div');
-                newComment.className = 'comment-item scroll-reveal';
-                newComment.innerHTML =
-                    '<img src="https://ui-avatars.com/api/?name=You&background=d4a574&color=1a0f08&bold=true" alt="You" class="comment-avatar">' +
-                    '<div class="comment-bubble">' +
-                        '<div class="comment-author">You <span class="post-user-badge badge-verified">✓ Verified</span></div>' +
-                        '<div class="comment-text">' + escapeHtml(text) + '</div>' +
-                        '<div class="comment-meta">' +
-                            '<span class="post-time">Just now</span>' +
-                            '<button class="comment-like-btn">❤️ Like</button>' +
-                            '<span style="cursor:pointer">Reply</span>' +
-                        '</div>' +
-                    '</div>';
-
-                // Insert before the add-comment row
-                section.insertBefore(newComment, row);
-
-                // Trigger reveal animation
-                requestAnimationFrame(function () {
-                    requestAnimationFrame(function () {
-                        newComment.classList.add('visible');
-                    });
-                });
-
-                // Update comment count in stats
-                var postCard = section.closest('.social-post-card');
-                if (postCard) {
-                    var statsCommentsEl = postCard.querySelector('.post-stats-comments');
-                    if (statsCommentsEl) {
-                        var cur = parseInt(statsCommentsEl.textContent.replace(/[^0-9]/g, ''), 10) || 0;
-                        statsCommentsEl.textContent = (cur + 1) + ' comments';
+                var postId = sendBtn.getAttribute('data-post-id');
+                if (!text || !postId) return;
+                
+                // Auth check
+                if (typeof VoyastraAuth !== 'undefined' && typeof VoyastraAuth.isAuthenticated === 'function') {
+                    if (!VoyastraAuth.isAuthenticated()) {
+                        VoyastraAuth.requireAuth(window.CONTEXT_PATH + '/community');
+                        return;
                     }
                 }
 
-                input.value = '';
-                showToast('Comment posted!', '💬');
+                // disable input while sending
+                input.disabled = true;
+                sendBtn.disabled = true;
+                sendBtn.textContent = '...';
 
-                // Add like behavior for the new comment
-                var newLikeBtn = newComment.querySelector('.comment-like-btn');
-                if (newLikeBtn) {
-                    newLikeBtn.addEventListener('click', function () {
-                        newLikeBtn.classList.toggle('liked');
-                    });
-                }
+                fetch(window.CONTEXT_PATH + '/CommentServlet', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: 'action=add&postId=' + encodeURIComponent(postId) + '&text=' + encodeURIComponent(text)
+                })
+                .then(function(res) { 
+                    if (res.status === 401) {
+                        VoyastraAuth.requireAuth(window.CONTEXT_PATH + '/community');
+                        throw new Error('Unauthorized');
+                    }
+                    return res.json(); 
+                })
+                .then(function(data) {
+                    if (data.success) {
+                        input.value = '';
+                        showToast('Comment posted!', '💬');
+                        // Reload comments to show the new one
+                        loadComments(postId, list);
+                    } else {
+                        showToast(data.error || 'Failed to add comment', '⚠️');
+                    }
+                })
+                .catch(function(err) {
+                    if (err.message !== 'Unauthorized') {
+                        showToast('Connection error', '❌');
+                    }
+                })
+                .finally(function() {
+                    input.disabled = false;
+                    sendBtn.disabled = false;
+                    sendBtn.textContent = 'Send';
+                    input.focus();
+                });
             }
 
             if (sendBtn) {
@@ -301,7 +368,7 @@
                 if (typeof VoyastraAuth !== 'undefined' && typeof VoyastraAuth.isAuthenticated === 'function') {
                     if (!VoyastraAuth.isAuthenticated()) {
                         e.preventDefault();
-                        VoyastraAuth.requireAuth('community.jsp');
+                        VoyastraAuth.requireAuth(window.CONTEXT_PATH + '/community');
                         return;
                     }
                 }

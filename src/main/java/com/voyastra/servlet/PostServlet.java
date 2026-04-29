@@ -141,7 +141,7 @@ public class PostServlet extends HttpServlet {
             request.setAttribute("posts", posts);
             
             // Dispatch to the JSP view
-            request.getRequestDispatcher("/community.jsp").forward(request, response);
+            request.getRequestDispatcher("/pages/community.jsp").forward(request, response);
     }
 
     private String escapeJson(String input) {

@@ -38,18 +38,151 @@
     <!-- Global Error Pages mapped to our custom error.jsp -->
     <error-page>
         <error-code>404</error-code>
-        <location>/error.jsp</location>
+        <location>/pages/error.jsp</location>
     </error-page>
 
     <error-page>
         <error-code>500</error-code>
-        <location>/error.jsp</location>
+        <location>/pages/error.jsp</location>
     </error-page>
 
     <error-page>
         <exception-type>java.lang.Throwable</exception-type>
-        <location>/error.jsp</location>
+        <location>/pages/error.jsp</location>
     </error-page>
+
+    <!-- Professional URL Mappings for JSPs -->
+    <servlet>
+        <servlet-name>AdminDashboard</servlet-name>
+        <jsp-file>/admin/index.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AdminDashboard</servlet-name>
+        <url-pattern>/admin</url-pattern>
+        <url-pattern>/admin/</url-pattern>
+        <url-pattern>/admin/index</url-pattern>
+        <url-pattern>/admin-dashboard.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>AdminUsers</servlet-name>
+        <jsp-file>/admin/users.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AdminUsers</servlet-name>
+        <url-pattern>/admin/users</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>AdminBookings</servlet-name>
+        <jsp-file>/admin/bookings.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AdminBookings</servlet-name>
+        <url-pattern>/admin/bookings</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>AdminPlans</servlet-name>
+        <jsp-file>/admin/plans.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AdminPlans</servlet-name>
+        <url-pattern>/admin/plans</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>AdminDestinations</servlet-name>
+        <jsp-file>/admin/destinations.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AdminDestinations</servlet-name>
+        <url-pattern>/admin/destinations</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>AdminReviews</servlet-name>
+        <jsp-file>/admin/reviews.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AdminReviews</servlet-name>
+        <url-pattern>/admin/reviews</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>AdminCommunity</servlet-name>
+        <jsp-file>/admin/community.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AdminCommunity</servlet-name>
+        <url-pattern>/admin/community</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>AdminContent</servlet-name>
+        <jsp-file>/admin/content.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AdminContent</servlet-name>
+        <url-pattern>/admin/content</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>AdminActivities</servlet-name>
+        <jsp-file>/admin/activities.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AdminActivities</servlet-name>
+        <url-pattern>/admin/activities</url-pattern>
+    </servlet-mapping>
+
+
+
+    <servlet>
+        <servlet-name>AdminSettings</servlet-name>
+        <jsp-file>/admin/settings.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AdminSettings</servlet-name>
+        <url-pattern>/admin/settings</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>UserHome</servlet-name>
+        <jsp-file>/pages/user-home.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UserHome</servlet-name>
+        <url-pattern>/user-home</url-pattern>
+        <url-pattern>/dashboard.jsp</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Profile</servlet-name>
+        <jsp-file>/pages/edit-profile.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Profile</servlet-name>
+        <url-pattern>/profile</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Settings</servlet-name>
+        <jsp-file>/pages/settings.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Settings</servlet-name>
+        <url-pattern>/settings</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>BookingHistory</servlet-name>
+        <jsp-file>/pages/booking.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>BookingHistory</servlet-name>
+        <url-pattern>/booking-history</url-pattern>
+    </servlet-mapping>
 
     <!-- Welcome File List: Routes root to HomeServlet -->
     <welcome-file-list>

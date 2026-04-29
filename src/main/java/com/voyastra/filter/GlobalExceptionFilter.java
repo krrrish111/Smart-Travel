@@ -35,7 +35,7 @@ public class GlobalExceptionFilter implements Filter {
             request.setAttribute("errorMessage", "An unexpected system error occurred.");
             
             // Forward to standard error page
-            request.getRequestDispatcher("/error.jsp").forward(request, response);
+            request.getRequestDispatcher("/pages/error.jsp").forward(request, response);
         }
     }
 

@@ -48,7 +48,7 @@ public class AddPlanServlet extends HttpServlet {
             if (title == null || title.trim().isEmpty() || title.length() > 100 ||
                 category == null || category.trim().isEmpty() || category.length() > 50) {
                 session.setAttribute("errorMsg", "Validation Failed: Title (max 100) and Category (max 50) required.");
-                response.sendRedirect(request.getContextPath() + "/admin-dashboard.jsp");
+                response.sendRedirect(request.getContextPath() + "/admin/plans.jsp");
                 return;
             }
 
@@ -93,20 +93,20 @@ public class AddPlanServlet extends HttpServlet {
             if (success) {
                 AdminLogger.log(request, "ADD", "Plan", plan.getId(), "Created travel plan '" + plan.getTitle() + "'");
                 session.setAttribute("successMsg", "✅ Plan '" + plan.getTitle() + "' added successfully!");
-                response.sendRedirect(request.getContextPath() + "/admin-dashboard.jsp");
+                response.sendRedirect(request.getContextPath() + "/admin/plans.jsp");
             } else {
                 session.setAttribute("errorMsg", "Failed to insert the plan into the database.");
-                response.sendRedirect(request.getContextPath() + "/admin-dashboard.jsp");
+                response.sendRedirect(request.getContextPath() + "/admin/plans.jsp");
             }
 
         } catch (NumberFormatException e) {
             System.err.println("ERROR: Invalid number format in AddPlanServlet.");
             session.setAttribute("errorMsg", "Invalid numerical data — please check numbers and try again.");
-            response.sendRedirect(request.getContextPath() + "/admin-dashboard.jsp");
+            response.sendRedirect(request.getContextPath() + "/admin/plans.jsp");
         } catch (Exception e) {
             e.printStackTrace();
             session.setAttribute("errorMsg", "An unexpected error occurred. Please try again.");
-            response.sendRedirect(request.getContextPath() + "/admin-dashboard.jsp");
+            response.sendRedirect(request.getContextPath() + "/admin/plans.jsp");
         }
     }
 }

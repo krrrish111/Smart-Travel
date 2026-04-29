@@ -42,6 +42,6 @@ public class ExploreServlet extends HttpServlet {
         request.setAttribute("plans", plans);
         
         // Forward to explore.jsp
-        request.getRequestDispatcher("/explore.jsp").forward(request, response);
+        request.getRequestDispatcher("/pages/explore.jsp").forward(request, response);
     }
 }

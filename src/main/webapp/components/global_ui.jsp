@@ -1,19 +1,19 @@
 <!-- ===== BACKGROUND SLIDER ===== -->
 <div class="bg-slider-container" id="bgSliderContainer">
     <div class="bg-slide active" data-index="0"
-        style="background-image: url('https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=1920&q=80')">
+        style="background-image: url('https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format,compress&fit=crop&w=1920&q=70')">
     </div>
     <div class="bg-slide" data-index="1"
-        style="background-image: url('https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=1920&q=80')">
+        style="background-image: url('https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format,compress&fit=crop&w=1920&q=70')">
     </div>
     <div class="bg-slide" data-index="2"
-        style="background-image: url('https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=1920&q=80')">
+        style="background-image: url('https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format,compress&fit=crop&w=1920&q=70')">
     </div>
     <div class="bg-slide" data-index="3"
-        style="background-image: url('https://images.unsplash.com/photo-1561359313-0639aad073f0?auto=format&fit=crop&w=1920&q=80')">
+        style="background-image: url('https://images.unsplash.com/photo-1561359313-0639aad073f0?auto=format,compress&fit=crop&w=1920&q=70')">
     </div>
     <div class="bg-slide" data-index="4"
-        style="background-image: url('https://images.unsplash.com/photo-1626082896492-766af4eb65ed?auto=format&fit=crop&w=1920&q=80')">
+        style="background-image: url('https://images.unsplash.com/photo-1626082896492-766af4eb65ed?auto=format,compress&fit=crop&w=1920&q=70')">
     </div>
 </div>
 

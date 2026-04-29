@@ -26,7 +26,7 @@ public class ResetPasswordServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/forgot-password.jsp?error=invalid_token");
         } else {
             request.setAttribute("token", token);
-            request.getRequestDispatcher("/reset-password.jsp").forward(request, response);
+            request.getRequestDispatcher("/pages/reset-password.jsp").forward(request, response);
         }
     }
 
@@ -41,7 +41,7 @@ public class ResetPasswordServlet extends HttpServlet {
         if (password == null || password.length() < 6 || !password.equals(confirm)) {
             request.setAttribute("errorMsg", "Passwords must match and be at least 6 characters.");
             request.setAttribute("token", token);
-            request.getRequestDispatcher("/reset-password.jsp").forward(request, response);
+            request.getRequestDispatcher("/pages/reset-password.jsp").forward(request, response);
             return;
         }
 

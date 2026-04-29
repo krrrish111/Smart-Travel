@@ -21,7 +21,7 @@ import java.nio.charset.StandardCharsets;
  * AI-powered Trip Planner Servlet.
  * Uses Google Gemini API to generate personalized itineraries.
  */
-@WebServlet("/generatePlan")
+@WebServlet(urlPatterns = {"/generatePlan", "/planner"})
 public class PlannerServlet extends HttpServlet {
 
     // API Key moved to Configurable property (Env var preferred in Production)
@@ -30,6 +30,12 @@ public class PlannerServlet extends HttpServlet {
     
     private static final String GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key="
             + API_KEY;
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        request.getRequestDispatcher("/pages/planner.jsp").forward(request, response);
+    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -43,7 +49,7 @@ public class PlannerServlet extends HttpServlet {
 
         if (destination == null || budget == null || days == null || type == null) {
             request.setAttribute("error", "Missing required parameters.");
-            request.getRequestDispatcher("planner.jsp").forward(request, response);
+            request.getRequestDispatcher("/pages/planner.jsp").forward(request, response);
             return;
         }
 
@@ -84,7 +90,7 @@ public class PlannerServlet extends HttpServlet {
             int status = conn.getResponseCode();
             if (status != 200) {
                 request.setAttribute("error", "AI service unavailable (Status: " + status + "). Please check API Key.");
-                request.getRequestDispatcher("planner.jsp").forward(request, response);
+                request.getRequestDispatcher("/pages/planner.jsp").forward(request, response);
                 return;
             }
 
@@ -128,17 +134,17 @@ public class PlannerServlet extends HttpServlet {
                 
                 // 5. Send AI response using request attribute
                 request.setAttribute("itineraryJson", rawAiText);
-                request.getRequestDispatcher("planner.jsp").forward(request, response);
+                request.getRequestDispatcher("/pages/planner.jsp").forward(request, response);
                 
             } catch (Exception parseError) {
                 System.err.println("AI Parser Error: " + parseError.getMessage());
                 request.setAttribute("error", "AI returned an invalid format. Please refine your request.");
-                request.getRequestDispatcher("planner.jsp").forward(request, response);
+                request.getRequestDispatcher("/pages/planner.jsp").forward(request, response);
             }
 
         } catch (Exception e) {
             request.setAttribute("error", "Failed to generate plan: " + e.getMessage());
-            request.getRequestDispatcher("planner.jsp").forward(request, response);
+            request.getRequestDispatcher("/pages/planner.jsp").forward(request, response);
         }
     }
 }

@@ -41,7 +41,7 @@ public class UpdatePlanServlet extends HttpServlet {
             String idParam = request.getParameter("id");
             if (idParam == null || idParam.trim().isEmpty()) {
                 session.setAttribute("errorMsg", "Plan ID is required for update.");
-                response.sendRedirect(request.getContextPath() + "/admin-dashboard.jsp");
+                response.sendRedirect(request.getContextPath() + "/admin/plans.jsp");
                 return;
             }
             int id = Integer.parseInt(idParam);
@@ -76,7 +76,7 @@ public class UpdatePlanServlet extends HttpServlet {
             // Basic validation
             if (title == null || title.trim().isEmpty() || category == null || category.trim().isEmpty()) {
                 session.setAttribute("errorMsg", "Title and Category are required fields.");
-                response.sendRedirect(request.getContextPath() + "/admin-dashboard.jsp");
+                response.sendRedirect(request.getContextPath() + "/admin/plans.jsp");
                 return;
             }
 
@@ -99,10 +99,10 @@ public class UpdatePlanServlet extends HttpServlet {
             if (success) {
                 AdminLogger.log(request, "UPDATE", "Plan", id, "Updated travel plan '" + title + "' (Plan ID: " + id + ")");
                 session.setAttribute("successMsg", "✏️ Plan '" + title + "' updated successfully!");
-                response.sendRedirect(request.getContextPath() + "/admin-dashboard.jsp");
+                response.sendRedirect(request.getContextPath() + "/admin/plans.jsp");
             } else {
                 session.setAttribute("errorMsg", "Failed to update the plan in the database.");
-                response.sendRedirect(request.getContextPath() + "/admin-dashboard.jsp");
+                response.sendRedirect(request.getContextPath() + "/admin/plans.jsp");
             }
     }
 }

@@ -15,6 +15,18 @@ public class Booking {
     private String planTitle;
     private String planImage;
 
+    // Trip booking detail fields
+    private String travelDate;
+    private int numAdults;
+    private int numChildren;
+    private String roomType;
+    private String pickupCity;
+    private String customerName;
+    private String customerEmail;
+    private String customerPhone;
+    private String specialRequests;
+    private String bookingCode;
+
     public Booking() {}
 
     public int getId() { return id; }
@@ -43,4 +55,34 @@ public class Booking {
 
     public String getPlanImage() { return planImage; }
     public void setPlanImage(String planImage) { this.planImage = planImage; }
+
+    public String getTravelDate() { return travelDate; }
+    public void setTravelDate(String travelDate) { this.travelDate = travelDate; }
+
+    public int getNumAdults() { return numAdults; }
+    public void setNumAdults(int numAdults) { this.numAdults = numAdults; }
+
+    public int getNumChildren() { return numChildren; }
+    public void setNumChildren(int numChildren) { this.numChildren = numChildren; }
+
+    public String getRoomType() { return roomType; }
+    public void setRoomType(String roomType) { this.roomType = roomType; }
+
+    public String getPickupCity() { return pickupCity; }
+    public void setPickupCity(String pickupCity) { this.pickupCity = pickupCity; }
+
+    public String getCustomerName() { return customerName; }
+    public void setCustomerName(String customerName) { this.customerName = customerName; }
+
+    public String getCustomerEmail() { return customerEmail; }
+    public void setCustomerEmail(String customerEmail) { this.customerEmail = customerEmail; }
+
+    public String getCustomerPhone() { return customerPhone; }
+    public void setCustomerPhone(String customerPhone) { this.customerPhone = customerPhone; }
+
+    public String getSpecialRequests() { return specialRequests; }
+    public void setSpecialRequests(String specialRequests) { this.specialRequests = specialRequests; }
+
+    public String getBookingCode() { return bookingCode; }
+    public void setBookingCode(String bookingCode) { this.bookingCode = bookingCode; }
 }

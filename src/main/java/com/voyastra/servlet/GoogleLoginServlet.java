@@ -80,7 +80,7 @@ public class GoogleLoginServlet extends HttpServlet {
             User user = userDAO.findOrCreateGoogleUser(googleId, email, name);
             if (user == null) {
                 request.setAttribute("errorMsg", "Failed to link Google account.");
-                request.getRequestDispatcher("login.jsp").forward(request, response);
+                request.getRequestDispatcher("/pages/login.jsp").forward(request, response);
                 return;
             }
 
@@ -91,6 +91,7 @@ public class GoogleLoginServlet extends HttpServlet {
             session.setAttribute("username", user.getName());
             session.setAttribute("email", user.getEmail());
             session.setAttribute("role", user.getRole());
+            session.setAttribute("user", user);
             session.setAttribute("auth_method", "google_oauth2");
 
             // 5. Redirect based on role
@@ -103,7 +104,7 @@ public class GoogleLoginServlet extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("errorMsg", "Google Authentication failed: " + e.getMessage());
-            request.getRequestDispatcher("login.jsp").forward(request, response);
+            request.getRequestDispatcher("/pages/login.jsp").forward(request, response);
         }
     }
 

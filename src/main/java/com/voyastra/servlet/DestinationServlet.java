@@ -185,13 +185,13 @@ public class DestinationServlet extends HttpServlet {
             boolean success = destinationDAO.addDestination(dest);
             if (success) {
                 AdminLogger.log(request, "ADD", "Destination", 0, "Created destination: " + dest.getName());
-                response.sendRedirect(request.getContextPath() + "/admin-dashboard.jsp?status=add_success");
+                response.sendRedirect(request.getContextPath() + "/admin/destinations.jsp");
             } else {
-                response.sendRedirect(request.getContextPath() + "/admin-dashboard.jsp?status=error&message=db_failed");
+                response.sendRedirect(request.getContextPath() + "/admin/destinations.jsp?status=error&message=db_failed");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect(request.getContextPath() + "/admin-dashboard.jsp?status=error&message=" + java.net.URLEncoder.encode(e.getMessage(), "UTF-8"));
+            response.sendRedirect(request.getContextPath() + "/admin/destinations.jsp?status=error&message=" + java.net.URLEncoder.encode(e.getMessage(), "UTF-8"));
         }
     }
 
@@ -240,13 +240,13 @@ public class DestinationServlet extends HttpServlet {
             boolean success = destinationDAO.updateDestination(dest);
             if (success) {
                 AdminLogger.log(request, "UPDATE", "Destination", id, "Updated destination: " + name);
-                response.sendRedirect(request.getContextPath() + "/admin-dashboard.jsp?status=update_success");
+                response.sendRedirect(request.getContextPath() + "/admin/destinations.jsp?status=update_success");
             } else {
-                response.sendRedirect(request.getContextPath() + "/admin-dashboard.jsp?status=error&message=db_failed");
+                response.sendRedirect(request.getContextPath() + "/admin/destinations.jsp?status=error&message=db_failed");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect(request.getContextPath() + "/admin-dashboard.jsp?status=error&message=" + java.net.URLEncoder.encode(e.getMessage(), "UTF-8"));
+            response.sendRedirect(request.getContextPath() + "/admin/destinations.jsp?status=error&message=" + java.net.URLEncoder.encode(e.getMessage(), "UTF-8"));
         }
     }
 

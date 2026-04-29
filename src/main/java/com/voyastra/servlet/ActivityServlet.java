@@ -38,7 +38,7 @@ public class ActivityServlet extends HttpServlet {
             
         request.setCharacterEncoding("UTF-8");
         String action = request.getParameter("action");
-        String redirectUrl = request.getContextPath() + "/admin-dashboard.jsp";
+        String redirectUrl = request.getContextPath() + "/admin/activities.jsp";
 
         // Security Authentication Filter: Only Administrators
         HttpSession session = request.getSession(false);
@@ -108,7 +108,7 @@ public class ActivityServlet extends HttpServlet {
                 request.setAttribute("activities", localActivities);
                 request.setAttribute("selectedDestinationId", destinationId);
                 
-                request.getRequestDispatcher("/booking.jsp").forward(request, response);
+                request.getRequestDispatcher("/pages/booking.jsp").forward(request, response);
             } else {
                 // Return default/all activities if no destination specified
                 List<Activity> allActivities = activityDAO.getAllActivities();
@@ -119,7 +119,7 @@ public class ActivityServlet extends HttpServlet {
                     new Gson().toJson(allActivities, response.getWriter());
                 } else {
                     request.setAttribute("activities", allActivities);
-                    request.getRequestDispatcher("/booking.jsp").forward(request, response);
+                    request.getRequestDispatcher("/pages/booking.jsp").forward(request, response);
                 }
             }
     }

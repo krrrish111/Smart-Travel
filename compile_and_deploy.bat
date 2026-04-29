@@ -16,7 +16,8 @@ javac -encoding UTF-8 -cp "%CP%" -d "%OUTDIR%" ^
   %SRCROOT%\com\voyastra\util\DBConnection.java ^
   %SRCROOT%\com\voyastra\model\*.java ^
   %SRCROOT%\com\voyastra\dao\*.java ^
-  %SRCROOT%\com\voyastra\servlet\*.java
+  %SRCROOT%\com\voyastra\servlet\*.java ^
+  %SRCROOT%\com\voyastra\filter\*.java
 
 if %ERRORLEVEL% == 0 (
     echo SUCCESS: Compilation complete.
@@ -26,6 +27,10 @@ if %ERRORLEVEL% == 0 (
     xcopy /S /Y src\main\webapp\components\*.jsp "%WEBAPP_DIR%\components\"
     xcopy /S /Y src\main\webapp\css\*.css "%WEBAPP_DIR%\css\"
     xcopy /S /Y src\main\webapp\js\*.js "%WEBAPP_DIR%\js\"
+    xcopy /S /Y src\main\webapp\WEB-INF\* "%WEBAPP_DIR%\WEB-INF\"
+    xcopy /S /Y src\main\webapp\admin\*.jsp "%WEBAPP_DIR%\admin\"
+    xcopy /S /Y src\main\webapp\admin\css\*.css "%WEBAPP_DIR%\admin\css\"
+    xcopy /S /Y src\main\webapp\admin\js\*.js "%WEBAPP_DIR%\admin\js\"
     echo Done! Visit http://localhost:8080/voyastra/ to see the live site.
 ) else (
     echo FAILURE: Compilation failed. See errors above.

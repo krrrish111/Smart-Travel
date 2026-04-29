@@ -63,24 +63,28 @@ public class AdminLogServlet extends HttpServlet {
                 request.setAttribute("activeFilter", "all");
             }
 
-            // If format=json, return JSON instead of forwarding
-            if ("json".equalsIgnoreCase(format)) {
+            // If format=json OR it's an AJAX request, return JSON
+            String requestedWith = request.getHeader("X-Requested-With");
+            if ("json".equalsIgnoreCase(format) || "XMLHttpRequest".equals(requestedWith)) {
                 response.setContentType("application/json;charset=UTF-8");
                 response.setCharacterEncoding("UTF-8");
                 PrintWriter out = response.getWriter();
                 
                 // Simple JSON serialization for the logs
-                String json = "[" + logs.stream().map(log -> 
-                    String.format("{\"id\":%d, \"adminUsername\":\"%s\", \"action\":\"%s\", \"targetTable\":\"%s\", \"targetId\":%d, \"details\":\"%s\", \"timestamp\":\"%s\", \"color\":\"%s\"}",
+                String json = "[" + logs.stream().map(log -> {
+                    String action = log.getAction().toUpperCase();
+                    String type = "info";
+                    if ("DELETE".equals(action)) type = "error";
+                    else if ("UPDATE".equals(action)) type = "warning";
+                    
+                    return String.format("{\"id\":%d, \"user\":\"%s\", \"action\":\"%s\", \"type\":\"%s\", \"details\":\"%s\", \"timestamp\":%d}",
                         log.getId(), 
                         escapeJson(log.getAdminUsername()), 
                         log.getAction(), 
-                        log.getEntity(), 
-                        log.getEntityId(), 
+                        type, 
                         escapeJson(log.getDetails()), 
-                        log.getCreatedAt().toString(),
-                        log.getActionColor())
-                ).collect(Collectors.joining(",")) + "]";
+                        log.getCreatedAt().getTime());
+                }).collect(Collectors.joining(",")) + "]";
                 
                 out.print(json);
                 out.flush();
@@ -91,7 +95,7 @@ public class AdminLogServlet extends HttpServlet {
             request.setAttribute("adminLogs", logs);
             request.setAttribute("logCount", logs.size());
 
-            request.getRequestDispatcher("/admin-dashboard.jsp").forward(request, response);
+            request.getRequestDispatcher("/admin/logs.jsp").forward(request, response);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -99,7 +103,7 @@ public class AdminLogServlet extends HttpServlet {
                 response.setStatus(500);
                 response.getWriter().print("{\"error\":\"logFetchFailed\"}");
             } else {
-                response.sendRedirect(request.getContextPath() + "/admin-dashboard.jsp?error=logFetchFailed");
+                response.sendRedirect(request.getContextPath() + "/admin/logs.jsp?error=logFetchFailed");
             }
         }
     }

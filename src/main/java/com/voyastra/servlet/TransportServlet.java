@@ -57,7 +57,7 @@ public class TransportServlet extends HttpServlet {
             } else {
                 // Bind the results wrapper to the JSP and dispatch
                 request.setAttribute("transports", results);
-                request.getRequestDispatcher("/booking.jsp").forward(request, response);
+                request.getRequestDispatcher("/pages/booking.jsp").forward(request, response);
             }
 
         } catch (Exception e) {
@@ -75,7 +75,7 @@ public class TransportServlet extends HttpServlet {
         
         request.setCharacterEncoding("UTF-8");
         String action = request.getParameter("action");
-        String redirectUrl = request.getContextPath() + "/admin-dashboard.jsp";
+        String redirectUrl = request.getContextPath() + "/admin/index.jsp";
 
         // Filter: Admin Verification Only
         HttpSession session = request.getSession(false);

@@ -65,7 +65,7 @@ public class SearchServlet extends HttpServlet {
             request.setAttribute("destResults", destResults);
             request.setAttribute("resultCount", planResults.size() + destResults.size());
 
-            request.getRequestDispatcher("/explore.jsp").forward(request, response);
+            request.getRequestDispatcher("/pages/explore.jsp").forward(request, response);
 
         } catch (Exception e) {
             e.printStackTrace();

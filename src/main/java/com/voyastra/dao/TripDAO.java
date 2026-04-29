@@ -9,6 +9,45 @@ import java.util.List;
 
 public class TripDAO {
     
+    public PremiumTrip getTripById(int id) {
+        PremiumTrip trip = null;
+        String query = "SELECT * FROM trip_plans WHERE id = ?";
+        
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+             
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            
+            if (rs.next()) {
+                trip = new PremiumTrip();
+                trip.setId(rs.getInt("id"));
+                trip.setTitle(rs.getString("title"));
+                trip.setSlug(rs.getString("slug"));
+                trip.setDestination(rs.getString("destination"));
+                trip.setShortDescription(rs.getString("short_description"));
+                trip.setFullDescription(rs.getString("full_description"));
+                trip.setDuration(rs.getString("duration"));
+                trip.setPriceInr(rs.getDouble("price_inr"));
+                trip.setDiscountPrice(rs.getDouble("discount_price"));
+                trip.setImageUrl(rs.getString("image_url"));
+                trip.setRating(rs.getDouble("rating"));
+                trip.setCategory(rs.getString("category"));
+                trip.setBestSeason(rs.getString("best_season"));
+                trip.setStartingCity(rs.getString("starting_city"));
+                trip.setFeatured(rs.getBoolean("featured"));
+                
+                // Fetch nested collections
+                trip.setItinerary(getItineraryForTrip(trip.getId(), conn));
+                trip.setInclusions(getInclusionsForTrip(trip.getId(), conn));
+                trip.setGallery(getGalleryForTrip(trip.getId(), conn));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return trip;
+    }
+
     public PremiumTrip getTripBySlug(String slug) {
         PremiumTrip trip = null;
         String query = "SELECT * FROM trip_plans WHERE slug = ?";

@@ -58,6 +58,6 @@ public class HomeServlet extends HttpServlet {
         request.setAttribute("premiumTrips", premiumTrips);
         
         // Forward to the renamed JSP file (home.jsp) to avoid recursion
-        request.getRequestDispatcher("/home.jsp").forward(request, response);
+        request.getRequestDispatcher("/pages/home.jsp").forward(request, response);
     }
 }

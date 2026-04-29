@@ -54,7 +54,7 @@ public class DestinationDetailsServlet extends HttpServlet {
             request.setAttribute("reviews", reviews);
             
             // 4. Forward to the dynamic jsp
-            request.getRequestDispatcher("/destination.jsp").forward(request, response);
+            request.getRequestDispatcher("/pages/destination.jsp").forward(request, response);
             
         } catch (NumberFormatException e) {
             response.sendRedirect(request.getContextPath() + "/explore.jsp");

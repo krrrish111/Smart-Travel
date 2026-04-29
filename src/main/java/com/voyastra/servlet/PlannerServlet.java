@@ -21,7 +21,7 @@ import java.nio.charset.StandardCharsets;
  * AI-powered Trip Planner Servlet.
  * Uses Google Gemini API to generate personalized itineraries.
  */
-@WebServlet(urlPatterns = {"/generatePlan", "/planner"})
+@WebServlet(urlPatterns = {"/generatePlan", "/planner", "/my-plans"})
 public class PlannerServlet extends HttpServlet {
 
     // API Key moved to Configurable property (Env var preferred in Production)

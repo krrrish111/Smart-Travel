@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 
-@WebServlet("/booking")
+@WebServlet(urlPatterns = {"/booking", "/booking-history"})
 public class BookingServlet extends HttpServlet {
 
     private BookingDAO bookingDAO;

@@ -1,4 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -70,9 +73,64 @@
                     <a href="${pageContext.request.contextPath}/community" class="nav-link">Community</a>
                     <a href="${pageContext.request.contextPath}/planner" class="nav-link">Planner</a>
                     <a href="${pageContext.request.contextPath}/booking" class="nav-link">Bookings</a>
-                    <!-- ── Auth widget (Login btn OR avatar menu) ──
-                         Hidden by default; JS renders the correct state -->
-                    <div id="navAuthWidget" class="nav-auth-widget" style="display:none;"></div>
+                    <!-- ── Auth widget (Server-side rendering) ── -->
+                    <div class="nav-auth-widget">
+                        <c:choose>
+                            <c:when test="${not empty sessionScope.user_id}">
+                                <%
+                                    String sName = (String) session.getAttribute("name");
+                                    String sFirstName = (sName != null && sName.contains(" ")) ? sName.split(" ")[0] : (sName != null && !sName.isEmpty() ? sName : "User");
+                                    String sInitials = (sName != null && sName.length() >= 2) ? sName.substring(0, 2).toUpperCase() : "US";
+                                    String encodedName = java.net.URLEncoder.encode(sName != null ? sName : "User", "UTF-8");
+                                %>
+                                <div style="position:relative;">
+                                    <button class="nav-avatar-trigger" id="navAvatarTrigger" aria-haspopup="true" aria-expanded="false" aria-label="User menu">
+                                        <img src="https://ui-avatars.com/api/?name=<%=encodedName%>&background=d4a574&color=1a0f08&bold=true&size=64" alt="<%=sInitials%>" class="nav-avatar-img" onerror="this.style.display='none'">
+                                        <span class="nav-avatar-name"><%=sFirstName%></span>
+                                        <svg class="nav-avatar-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+                                    </button>
+                                    
+                                    <div class="nav-user-dropdown" id="navUserDropdown" role="menu" style="display:none;">
+                                        <div class="nav-dropdown-header">
+                                            <div class="nav-dropdown-uname">${sessionScope.name}</div>
+                                            <div class="nav-dropdown-email">${sessionScope.email}</div>
+                                        </div>
+                                        
+                                        <c:if test="${sessionScope.role eq 'admin'}">
+                                            <a href="${pageContext.request.contextPath}/admin" class="nav-dropdown-item" role="menuitem" style="color:var(--color-primary);">
+                                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Admin Panel
+                                            </a>
+                                        </c:if>
+                                        
+                                        <a href="${pageContext.request.contextPath}/profile" class="nav-dropdown-item" role="menuitem">
+                                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile
+                                        </a>
+                                        <a href="${pageContext.request.contextPath}/dashboard" class="nav-dropdown-item" role="menuitem">
+                                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard
+                                        </a>
+                                        <a href="${pageContext.request.contextPath}/my-plans" class="nav-dropdown-item" role="menuitem">
+                                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 3a2 2 0 0 1 4 0v1H3V3a2 2 0 0 1 4 0"/><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="16" y2="14"/></svg>My Plans
+                                        </a>
+                                        <a href="${pageContext.request.contextPath}/booking" class="nav-dropdown-item" role="menuitem">
+                                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.15 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.06 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21 16v.92z"/></svg>My Bookings
+                                        </a>
+                                        <a href="${pageContext.request.contextPath}/settings" class="nav-dropdown-item" role="menuitem">
+                                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings
+                                        </a>
+                                        <div class="nav-dropdown-divider"></div>
+                                        <a href="${pageContext.request.contextPath}/logout" class="nav-dropdown-item logout-item" role="menuitem">
+                                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Log Out
+                                        </a>
+                                    </div>
+                                </div>
+                            </c:when>
+                            <c:otherwise>
+                                <a href="${pageContext.request.contextPath}/login" class="nav-login-btn">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>Login
+                                </a>
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
                 </div>
 
                 <!-- Theme toggle -->
@@ -283,6 +341,12 @@
         @media (max-width: 480px) {
             .nav-avatar-name { display: none; }
         }
+
+        /* Dropdown pop-in animation */
+        @keyframes va-pop {
+            from { opacity: 0; transform: scale(0.92) translateY(-6px); }
+            to   { opacity: 1; transform: scale(1) translateY(0); }
+        }
     </style>
 
     <script>
@@ -339,141 +403,38 @@
                 if (e.key === 'Escape') closeMenu();
             });
 
-            /* ── Auth Widget Renderer ──────────────────────────── */
-            function renderAuthWidget() {
-                if (!widget) return;
-                var session = VoyastraAuth.getSession();
-                widget.innerHTML = '';
-                dropdown = null;
-
-                if (!session) {
-                    /* ── Logged OUT: show Login button ── */
-                    var loginBtn = document.createElement('a');
-                    loginBtn.href      = CONTEXT_PATH + '/login'; // Go through Servlet
-                    loginBtn.className = 'nav-login-btn';
-                    loginBtn.innerHTML =
-                        '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>' +
-                        'Login';
-                    widget.appendChild(loginBtn);
-                    widget.style.display = 'block';
-
-                } else {
-                    /* ── Logged IN: show avatar trigger ── */
-                    var firstName = (session.name || 'User').split(' ')[0];
-                    var initials  = (session.name || 'U').slice(0, 2).toUpperCase();
-                    var avatarUrl = 'https://ui-avatars.com/api/?name=' +
-                                   encodeURIComponent(session.name || 'User') +
-                                   '&background=d4a574&color=1a0f08&bold=true&size=64';
-
-                    var trigger = document.createElement('button');
-                    trigger.className    = 'nav-avatar-trigger';
-                    trigger.setAttribute('aria-haspopup', 'true');
+            /* ── Dropdown Toggle Logic for JSP rendered widget ── */
+            var trigger = document.getElementById('navAvatarTrigger');
+            var dropdown = document.getElementById('navUserDropdown');
+            if (trigger && dropdown) {
+                function closeDropdown() {
                     trigger.setAttribute('aria-expanded', 'false');
-                    trigger.setAttribute('aria-label', 'User menu');
-                    trigger.innerHTML =
-                        '<img src="' + avatarUrl + '" alt="' + initials + '" class="nav-avatar-img" ' +
-                             'onerror="this.style.display=\'none\'">' +
-                        '<span class="nav-avatar-name">' + firstName + '</span>' +
-                        '<svg class="nav-avatar-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>';
-
-                    widget.appendChild(trigger);
-                    widget.style.display = 'block';
-
-                    /* ── Build Dropdown ── */
-                    function buildDropdown() {
-                        var isAdmin = (session.role === 'admin');
-                        var adminLink = '';
-                        if (isAdmin) {
-                            adminLink = 
-                                '<a href="' + CONTEXT_PATH + '/admin" class="nav-dropdown-item" role="menuitem" style="color:var(--color-primary);">' +
-                                     '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>' +
-                                     'Admin Panel' +
-                                 '</a>';
-                        }
-
-                        var dd = document.createElement('div');
-                        dd.className = 'nav-user-dropdown';
-                        dd.setAttribute('role', 'menu');
-                        dd.innerHTML =
-                            '<div class="nav-dropdown-header">' +
-                                '<div class="nav-dropdown-uname">' + (session.name || 'Traveller') + '</div>' +
-                                '<div class="nav-dropdown-email">' + (session.email || '') + '</div>' +
-                            '</div>' +
-                             adminLink +
-                            '<a href="' + CONTEXT_PATH + '/profile" class="nav-dropdown-item" role="menuitem">' +
-                                '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>' +
-                                'Profile' +
-                            '</a>' +
-                            '<a href="' + CONTEXT_PATH + '/booking-history" class="nav-dropdown-item" role="menuitem">' +
-                                '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>' +
-                                'Dashboard' +
-                            '</a>' +
-                            '<a href="' + CONTEXT_PATH + '/planner" class="nav-dropdown-item" role="menuitem">' +
-                                '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 3a2 2 0 0 1 4 0v1H3V3a2 2 0 0 1 4 0"/><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="16" y2="14"/></svg>' +
-                                'My Plans' +
-                            '</a>' +
-                            '<a href="' + CONTEXT_PATH + '/booking" class="nav-dropdown-item" role="menuitem">' +
-                                '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.15 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.06 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21 16v.92z"/></svg>' +
-                                'My Bookings' +
-                            '</a>' +
-                            '<a href="' + CONTEXT_PATH + '/settings" class="nav-dropdown-item" role="menuitem">' +
-                                '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>' +
-                                'Settings' +
-                            '</a>' +
-                            '<div class="nav-dropdown-divider"></div>' +
-                            '<button class="nav-dropdown-item logout-item" id="navLogoutBtn" role="menuitem">' +
-                                '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>' +
-                                'Log Out' +
-                            '</button>';
-
-                        dd.querySelector('#navLogoutBtn').addEventListener('click', function () {
-                            VoyastraAuth.logout();
-                        });
-                        return dd;
-                    }
-
-                    /* ── Toggle dropdown ── */
-                    function handleOutsideClick(e) {
-                        if (dropdown && !widget.contains(e.target)) {
-                            closeDropdown();
-                        }
-                    }
-
-                    trigger.addEventListener('click', function (e) {
-                        e.stopPropagation();
-                        if (dropdown) {
-                            closeDropdown();
-                        } else {
-                            dropdown = buildDropdown();
-                            widget.appendChild(dropdown);
-                            trigger.setAttribute('aria-expanded', 'true');
-                            
-                            // Add listener in next tick to avoid capturing current click
-                            setTimeout(function() {
-                                document.addEventListener('click', handleOutsideClick);
-                            }, 0);
-                        }
-                    });
-
-                    function closeDropdown() {
-                        if (dropdown) {
-                            dropdown.remove();
-                            dropdown = null;
-                            document.removeEventListener('click', handleOutsideClick);
-                        }
-                        trigger.setAttribute('aria-expanded', 'false');
-                    }
-
-                    /* Close on Escape */
-                    document.addEventListener('keydown', function (e) {
-                        if (e.key === 'Escape' && dropdown) closeDropdown();
-                    });
+                    dropdown.style.display = 'none';
                 }
-            }
 
-            /* ── Initial render + live updates ────────────────── */
-            renderAuthWidget();
-            window.addEventListener('va:authChange', renderAuthWidget);
+                trigger.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    var isExpanded = trigger.getAttribute('aria-expanded') === 'true';
+                    if (isExpanded) {
+                        closeDropdown();
+                    } else {
+                        trigger.setAttribute('aria-expanded', 'true');
+                        dropdown.style.display = 'block';
+                    }
+                });
+
+                document.addEventListener('click', function(e) {
+                    if (!trigger.contains(e.target) && !dropdown.contains(e.target)) {
+                        closeDropdown();
+                    }
+                });
+
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && trigger.getAttribute('aria-expanded') === 'true') {
+                        closeDropdown();
+                    }
+                });
+            }
 
             /* ── Active Nav Highlight ──────────────────────────── */
             var currentPath = window.location.pathname;

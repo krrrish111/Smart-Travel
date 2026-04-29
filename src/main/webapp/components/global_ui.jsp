@@ -134,7 +134,7 @@
      Attributes are consumed (removed) immediately after reading so they
      don't appear on subsequent page navigations.
 ════════════════════════════════════════════════════════════════════ --%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 
 <c:if test="${not empty sessionScope.successMsg}">
     <script>

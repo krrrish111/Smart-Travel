@@ -154,6 +154,7 @@
     <servlet-mapping>
         <servlet-name>UserHome</servlet-name>
         <url-pattern>/user-home</url-pattern>
+        <url-pattern>/dashboard</url-pattern>
         <url-pattern>/dashboard.jsp</url-pattern>
     </servlet-mapping>
 
@@ -173,15 +174,6 @@
     <servlet-mapping>
         <servlet-name>Settings</servlet-name>
         <url-pattern>/settings</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>BookingHistory</servlet-name>
-        <jsp-file>/pages/booking.jsp</jsp-file>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>BookingHistory</servlet-name>
-        <url-pattern>/booking-history</url-pattern>
     </servlet-mapping>
 
     <!-- Welcome File List: Routes root to HomeServlet -->

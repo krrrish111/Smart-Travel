@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -459,7 +459,8 @@
         fetch(window.CONTEXT_PATH + '/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: email, password: password })
+            body: JSON.stringify({ email: email, password: password }),
+            credentials: 'same-origin'
         })
         .then(function(res) { return res.json(); })
         .then(function(data) {
@@ -522,7 +523,8 @@
         fetch(window.CONTEXT_PATH + '/google-auth', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ credential: response.credential })
+            body: JSON.stringify({ credential: response.credential }),
+            credentials: 'same-origin'
         })
         .then(function(res) { return res.json(); })
         .then(function(data) {

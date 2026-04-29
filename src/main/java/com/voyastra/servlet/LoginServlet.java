@@ -111,9 +111,13 @@ public class LoginServlet extends HttpServlet {
 
                 try { AdminLogger.log(request, "LOGIN", "User", user.getId(), "User '" + user.getEmail() + "' logged in."); } catch (Exception e) {}
 
-                // 4. Return Success
+                // 4. Return Success (include user data for frontend auth sync)
                 result.put("success", true);
                 result.put("message", "Login successful! Redirecting...");
+                result.put("userId", String.valueOf(user.getId()));
+                result.put("name", userName);
+                result.put("email", user.getEmail());
+                result.put("role", userRole);
                 
                 String redirect = "admin".equals(userRole) ? "admin" : "user-home";
                 result.put("redirect", request.getContextPath() + "/" + redirect);

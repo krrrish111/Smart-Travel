@@ -158,13 +158,15 @@
         <url-pattern>/dashboard.jsp</url-pattern>
     </servlet-mapping>
 
+
+
     <servlet>
-        <servlet-name>Profile</servlet-name>
-        <jsp-file>/pages/edit-profile.jsp</jsp-file>
+        <servlet-name>AdminProfile</servlet-name>
+        <jsp-file>/admin/profile.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
-        <servlet-name>Profile</servlet-name>
-        <url-pattern>/profile</url-pattern>
+        <servlet-name>AdminProfile</servlet-name>
+        <url-pattern>/admin/profile</url-pattern>
     </servlet-mapping>
 
     <servlet>

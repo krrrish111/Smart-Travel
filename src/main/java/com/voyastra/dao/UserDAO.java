@@ -27,6 +27,10 @@ public class UserDAO {
             user.setVerified(rs.getBoolean("is_verified"));
             user.setVerificationToken(rs.getString("verification_token"));
             user.setResetToken(rs.getString("reset_token"));
+            user.setPhone(rs.getString("phone"));
+            user.setProfileImage(rs.getString("profile_image"));
+            user.setLocation(rs.getString("location"));
+            user.setBio(rs.getString("bio"));
         } catch (SQLException e) {
             System.err.println("WARN: UserDAO mapRow error: " + e.getMessage());
         }
@@ -34,7 +38,7 @@ public class UserDAO {
     }
 
     public User getUserById(int id) {
-        String sql = "SELECT id, name, email, password, role, is_verified, verification_token, reset_token, created_at FROM users WHERE id = ?";
+        String sql = "SELECT id, name, email, password, role, is_verified, verification_token, reset_token, created_at, phone, profile_image, location, bio FROM users WHERE id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
@@ -199,19 +203,48 @@ public class UserDAO {
     }
 
     public boolean updateUser(User user) {
-        String sql = "UPDATE users SET name = ?, email = ?, role = ? WHERE id = ?";
+        String sql = "UPDATE users SET name = ?, email = ?, role = ?, phone = ?, profile_image = ? WHERE id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, user.getName().trim());
             stmt.setString(2, user.getEmail().toLowerCase().trim());
             stmt.setString(3, user.getRole());
-            stmt.setInt(4, user.getId());
+            stmt.setString(4, user.getPhone());
+            stmt.setString(5, user.getProfileImage());
+            stmt.setInt(6, user.getId());
             boolean ok = stmt.executeUpdate() > 0;
             if (ok) System.out.println("[AUDIT] User updated: " + user.getEmail());
             return ok;
         } catch (SQLException e) {
             return false;
         }
+    }
+
+    public boolean updateUserProfile(User user) {
+        String sql = "UPDATE users SET name = ?, phone = ?, profile_image = ?, location = ?, bio = ? WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, user.getName().trim());
+            stmt.setString(2, user.getPhone());
+            stmt.setString(3, user.getProfileImage());
+            stmt.setString(4, user.getLocation());
+            stmt.setString(5, user.getBio());
+            stmt.setInt(6, user.getId());
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("[DB ERROR] updateUserProfile: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean changePassword(int userId, String currentPassword, String newPassword) {
+        User user = getUserById(userId);
+        if (user == null || user.getPassword() == null) return false;
+
+        if (BCrypt.checkpw(currentPassword, user.getPassword())) {
+            return updatePassword(userId, newPassword);
+        }
+        return false;
     }
 
     public boolean deleteUser(int id) {

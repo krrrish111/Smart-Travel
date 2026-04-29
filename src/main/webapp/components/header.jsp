@@ -102,12 +102,24 @@
                                             </a>
                                         </c:if>
                                         
-                                        <a href="${pageContext.request.contextPath}/profile" class="nav-dropdown-item" role="menuitem">
-                                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile
-                                        </a>
-                                        <a href="${pageContext.request.contextPath}/dashboard" class="nav-dropdown-item" role="menuitem">
-                                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard
-                                        </a>
+                                        <c:choose>
+                                            <c:when test="${fn:toLowerCase(sessionScope.role) eq 'admin'}">
+                                                <a href="${pageContext.request.contextPath}/admin/profile" class="nav-dropdown-item" role="menuitem">
+                                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile
+                                                </a>
+                                                <a href="${pageContext.request.contextPath}/admin" class="nav-dropdown-item" role="menuitem">
+                                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard
+                                                </a>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <a href="${pageContext.request.contextPath}/profile" class="nav-dropdown-item" role="menuitem">
+                                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile
+                                                </a>
+                                                <a href="${pageContext.request.contextPath}/dashboard" class="nav-dropdown-item" role="menuitem">
+                                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard
+                                                </a>
+                                            </c:otherwise>
+                                        </c:choose>
                                         <a href="${pageContext.request.contextPath}/my-plans" class="nav-dropdown-item" role="menuitem">
                                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 3a2 2 0 0 1 4 0v1H3V3a2 2 0 0 1 4 0"/><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="16" y2="14"/></svg>My Plans
                                         </a>

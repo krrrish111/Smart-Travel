@@ -6,18 +6,26 @@ import com.voyastra.dao.ItineraryDAO;
 import com.voyastra.model.User;
 import com.voyastra.model.Booking;
 import com.voyastra.model.Itinerary;
-import org.mindrot.jbcrypt.BCrypt;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 @WebServlet("/profile")
+@MultipartConfig(
+    fileSizeThreshold = 1024 * 1024 * 2, // 2MB
+    maxFileSize = 1024 * 1024 * 10,      // 10MB
+    maxRequestSize = 1024 * 1024 * 50   // 50MB
+)
 public class ProfileServlet extends HttpServlet {
 
     private final UserDAO userDAO = new UserDAO();
@@ -36,7 +44,7 @@ public class ProfileServlet extends HttpServlet {
 
         int userId = (int) session.getAttribute("user_id");
         
-        // 1. Fetch Basic User Data
+        // 1. Fetch Fresh User Data
         User user = userDAO.getUserById(userId);
         request.setAttribute("user", user);
 
@@ -47,7 +55,6 @@ public class ProfileServlet extends HttpServlet {
 
         // 3. Fetch Data based on active tab / Statistics
         try {
-            // Stats (Always fetched for header/overview)
             List<Booking> userBookings = bookingDAO.getUserBookings(userId);
             List<Itinerary> userPlans = itineraryDAO.getSavedPlans(userId);
             
@@ -90,18 +97,55 @@ public class ProfileServlet extends HttpServlet {
         }
     }
 
-    private void handleUpdateProfile(HttpServletRequest request, HttpServletResponse response, int userId) throws IOException {
-        User user = userDAO.getUserById(userId);
-        user.setName(request.getParameter("name"));
-        user.setPhone(request.getParameter("phone"));
-        user.setLocation(request.getParameter("location"));
-        user.setBio(request.getParameter("bio"));
+    private void handleUpdateProfile(HttpServletRequest request, HttpServletResponse response, int userId) throws IOException, ServletException {
+        try {
+            User user = userDAO.getUserById(userId);
+            if (user == null) {
+                response.sendRedirect(request.getContextPath() + "/profile?error=user_not_found");
+                return;
+            }
 
-        if (userDAO.updateUser(user)) {
-            response.sendRedirect(request.getContextPath() + "/profile?tab=edit-profile&success=profile_updated");
-        } else {
-            response.sendRedirect(request.getContextPath() + "/profile?tab=edit-profile&error=update_failed");
+            user.setName(request.getParameter("name"));
+            user.setEmail(request.getParameter("email"));
+            user.setPhone(request.getParameter("phone"));
+            user.setBio(request.getParameter("bio"));
+
+            // Handle Profile Image Upload
+            Part filePart = request.getPart("profileImage");
+            if (filePart != null && filePart.getSize() > 0) {
+                String fileName = UUID.randomUUID().toString() + "_" + getFileName(filePart);
+                String uploadPath = getServletContext().getRealPath("") + File.separator + "uploads" + File.separator + "profiles";
+                
+                File uploadDir = new File(uploadPath);
+                if (!uploadDir.exists()) uploadDir.mkdirs();
+
+                filePart.write(uploadPath + File.separator + fileName);
+                user.setProfileImage("uploads/profiles/" + fileName);
+            }
+
+            if (userDAO.updateUser(user)) {
+                // Update Session
+                HttpSession session = request.getSession();
+                session.setAttribute("name", user.getName());
+                session.setAttribute("email", user.getEmail());
+                
+                response.sendRedirect(request.getContextPath() + "/profile?tab=edit-profile&success=true");
+            } else {
+                response.sendRedirect(request.getContextPath() + "/profile?tab=edit-profile&error=db_error");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendRedirect(request.getContextPath() + "/profile?tab=edit-profile&error=exception");
         }
+    }
+
+    private String getFileName(Part part) {
+        for (String content : part.getHeader("content-disposition").split(";")) {
+            if (content.trim().startsWith("filename")) {
+                return content.substring(content.indexOf("=") + 2, content.length() - 1);
+            }
+        }
+        return "default.png";
     }
 
     private void handleChangePassword(HttpServletRequest request, HttpServletResponse response, int userId) throws IOException {

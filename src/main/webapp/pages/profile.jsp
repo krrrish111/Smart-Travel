@@ -380,7 +380,8 @@
         <!-- Header Card -->
         <div class="profile-header-card">
             <div class="avatar-wrapper">
-                <img src="${not empty user.profileImage ? user.profileImage : 'https://ui-avatars.com/api/?name='}${not empty user.profileImage ? '' : user.name}${not empty user.profileImage ? '' : '&background=ff6b00&color=fff'}" alt="${user.name}" class="profile-avatar" id="profileImgPreview">
+                <c:set var="avatarUrl" value="https://ui-avatars.com/api/?name=${user.name}&background=ff6b00&color=fff" />
+                <img src="${not empty user.profileImage ? user.profileImage : avatarUrl}" alt="${user.name}" class="profile-avatar" id="profileImgPreview">
                 <label for="profileUploadInput" class="avatar-edit-overlay">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
                 </label>
@@ -392,7 +393,10 @@
                     ${user.email}
                     <span class="badge">${user.role}</span>
                 </p>
-                <button class="btn btn-primary" onclick="switchSection('edit-profile')">Edit Account Details</button>
+                <p class="user-bio-header" style="margin-top: 10px; opacity: 0.8; font-style: italic;">
+                    ${not empty user.bio ? user.bio : 'Adventure awaits! Add a bio to tell others about your travel style.'}
+                </p>
+                <button class="btn btn-primary" style="margin-top: 15px;" onclick="switchSection('edit-profile')">Edit Account Details</button>
             </div>
         </div>
 
@@ -453,6 +457,18 @@
         <!-- Edit Profile Section -->
         <section id="edit-profile" class="content-section ${activeTab == 'edit-profile' ? 'active' : ''}">
             <h2 class="section-title">Account Details</h2>
+            
+            <c:if test="${param.success == 'true'}">
+                <div style="background: rgba(40, 167, 69, 0.2); color: #28a745; padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #28a745;">
+                    Profile updated successfully!
+                </div>
+            </c:if>
+            <c:if test="${not empty param.error}">
+                <div style="background: rgba(220, 53, 69, 0.2); color: #dc3545; padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #dc3545;">
+                    Update failed. Please try again.
+                </div>
+            </c:if>
+
             <form action="${pageContext.request.contextPath}/profile" method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="action" value="updateProfile">
                 <div class="profile-form-grid">
@@ -465,8 +481,8 @@
                         <input type="text" name="name" class="form-control" value="${user.name}" required>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Email (Read-only)</label>
-                        <input type="email" class="form-control" value="${user.email}" readonly style="opacity: 0.7;">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" name="email" class="form-control" value="${user.email}" required>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Phone Number</label>

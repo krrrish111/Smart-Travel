@@ -101,6 +101,10 @@ public class BookingDAO {
         return booking;
     }
 
+    public List<Booking> getUserBookings(int userId) {
+        return getBookingsByUser(userId);
+    }
+
     /**
      * Fetches all bookings belonging to a specific user, joining with the plans table to get the plan title.
      */

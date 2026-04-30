@@ -34,6 +34,10 @@ public class ItineraryDAO {
         return false;
     }
 
+    public List<Itinerary> getSavedPlans(int userId) {
+        return getByUser(userId);
+    }
+
     public List<Itinerary> getByUser(int userId) {
         List<Itinerary> list = new ArrayList<>();
         String query = "SELECT id, user_id, title, destination, itinerary_data, created_at FROM itineraries WHERE user_id = ? ORDER BY created_at DESC";

@@ -203,24 +203,6 @@ public class UserDAO {
     }
 
     public boolean updateUser(User user) {
-        String sql = "UPDATE users SET name = ?, email = ?, role = ?, phone = ?, profile_image = ? WHERE id = ?";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, user.getName().trim());
-            stmt.setString(2, user.getEmail().toLowerCase().trim());
-            stmt.setString(3, user.getRole());
-            stmt.setString(4, user.getPhone());
-            stmt.setString(5, user.getProfileImage());
-            stmt.setInt(6, user.getId());
-            boolean ok = stmt.executeUpdate() > 0;
-            if (ok) System.out.println("[AUDIT] User updated: " + user.getEmail());
-            return ok;
-        } catch (SQLException e) {
-            return false;
-        }
-    }
-
-    public boolean updateUserProfile(User user) {
         String sql = "UPDATE users SET name = ?, phone = ?, profile_image = ?, location = ?, bio = ? WHERE id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -232,7 +214,7 @@ public class UserDAO {
             stmt.setInt(6, user.getId());
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.err.println("[DB ERROR] updateUserProfile: " + e.getMessage());
+            System.err.println("[DB ERROR] updateUser: " + e.getMessage());
             return false;
         }
     }

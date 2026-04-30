@@ -348,27 +348,27 @@
 <div class="dashboard-container">
     <!-- Sidebar -->
     <aside class="profile-sidebar">
-        <div class="nav-item active" onclick="switchSection('overview')">
+        <div class="nav-item ${activeTab == 'overview' ? 'active' : ''}" onclick="switchSection('overview')">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
             Overview
         </div>
-        <div class="nav-item" onclick="switchSection('edit-profile')">
+        <div class="nav-item ${activeTab == 'edit-profile' ? 'active' : ''}" onclick="switchSection('edit-profile')">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
             Edit Profile
         </div>
-        <div class="nav-item" onclick="switchSection('bookings')">
+        <div class="nav-item ${activeTab == 'bookings' ? 'active' : ''}" onclick="switchSection('bookings')">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
             My Bookings
         </div>
-        <div class="nav-item" onclick="switchSection('saved-plans')">
+        <div class="nav-item ${activeTab == 'saved-plans' ? 'active' : ''}" onclick="switchSection('saved-plans')">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
             Saved Plans
         </div>
-        <div class="nav-item" onclick="switchSection('security')">
+        <div class="nav-item ${activeTab == 'security' ? 'active' : ''}" onclick="switchSection('security')">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
             Security
         </div>
-        <div class="nav-item" onclick="switchSection('settings')">
+        <div class="nav-item ${activeTab == 'settings' ? 'active' : ''}" onclick="switchSection('settings')">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
             Settings
         </div>
@@ -380,7 +380,7 @@
         <!-- Header Card -->
         <div class="profile-header-card">
             <div class="avatar-wrapper">
-                <img src="${not empty user.profileImage ? user.profileImage : 'https://ui-avatars.com/api/?name=' + user.name + '&background=ff6b00&color=fff'}" alt="${user.name}" class="profile-avatar" id="profileImgPreview">
+                <img src="${not empty user.profileImage ? user.profileImage : 'https://ui-avatars.com/api/?name='}${not empty user.profileImage ? '' : user.name}${not empty user.profileImage ? '' : '&background=ff6b00&color=fff'}" alt="${user.name}" class="profile-avatar" id="profileImgPreview">
                 <label for="profileUploadInput" class="avatar-edit-overlay">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
                 </label>
@@ -419,7 +419,7 @@
         <!-- Sections -->
         
         <!-- Overview Section -->
-        <section id="overview" class="content-section active">
+        <section id="overview" class="content-section ${activeTab == 'overview' ? 'active' : ''}">
             <h2 class="section-title">Recent Activity</h2>
             <div class="booking-list">
                 <c:choose>
@@ -451,7 +451,7 @@
         </section>
 
         <!-- Edit Profile Section -->
-        <section id="edit-profile" class="content-section">
+        <section id="edit-profile" class="content-section ${activeTab == 'edit-profile' ? 'active' : ''}">
             <h2 class="section-title">Account Details</h2>
             <form action="${pageContext.request.contextPath}/profile" method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="action" value="updateProfile">
@@ -486,7 +486,7 @@
         </section>
 
         <!-- Bookings Section -->
-        <section id="bookings" class="content-section">
+        <section id="bookings" class="content-section ${activeTab == 'bookings' ? 'active' : ''}">
             <h2 class="section-title">My Bookings</h2>
             <div class="booking-list">
                 <c:forEach var="b" items="${bookings}">
@@ -510,7 +510,7 @@
         </section>
 
         <!-- Saved Plans Section -->
-        <section id="saved-plans" class="content-section">
+        <section id="saved-plans" class="content-section ${activeTab == 'saved-plans' ? 'active' : ''}">
             <h2 class="section-title">Saved Itineraries</h2>
             <div class="stats-grid" style="grid-template-columns: 1fr 1fr;">
                 <c:forEach var="plan" items="${savedPlans}">
@@ -524,7 +524,7 @@
         </section>
 
         <!-- Security Section -->
-        <section id="security" class="content-section">
+        <section id="security" class="content-section ${activeTab == 'security' ? 'active' : ''}">
             <h2 class="section-title">Security & Password</h2>
             <form action="${pageContext.request.contextPath}/profile" method="POST" style="max-width: 500px;">
                 <input type="hidden" name="action" value="changePassword">
@@ -545,7 +545,7 @@
         </section>
 
         <!-- Settings Section -->
-        <section id="settings" class="content-section">
+        <section id="settings" class="content-section ${activeTab == 'settings' ? 'active' : ''}">
             <h2 class="section-title">Preferences</h2>
             <div class="form-group">
                 <label class="checkbox-container" style="color: white; display: flex; align-items: center; gap: 10px; cursor: pointer;">
@@ -590,12 +590,18 @@
         });
         const target = document.getElementById(sectionId);
         if(target) target.classList.add('active');
+        
+        // Sync Sidebar
         const navItems = document.querySelectorAll('.nav-item');
         navItems.forEach(item => {
             if(item.textContent.toLowerCase().includes(sectionId.replace('-', ' '))) {
                 item.classList.add('active');
             }
         });
+
+        // Update URL without refresh
+        const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?tab=' + sectionId;
+        window.history.pushState({path:newUrl},'',newUrl);
     }
 
     function showDeleteConfirm() {

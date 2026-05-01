@@ -148,11 +148,11 @@
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>UserHome</servlet-name>
-        <jsp-file>/pages/user-home.jsp</jsp-file>
+        <servlet-name>DashboardServlet</servlet-name>
+        <servlet-class>com.voyastra.servlet.DashboardServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>UserHome</servlet-name>
+        <servlet-name>DashboardServlet</servlet-name>
         <url-pattern>/user-home</url-pattern>
         <url-pattern>/dashboard</url-pattern>
         <url-pattern>/dashboard.jsp</url-pattern>
@@ -170,12 +170,49 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>BookingDetails</servlet-name>
+        <jsp-file>/pages/booking-details.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>BookingDetails</servlet-name>
+        <url-pattern>/booking-details</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>Settings</servlet-name>
         <jsp-file>/pages/settings.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>Settings</servlet-name>
         <url-pattern>/settings</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet>
+        <servlet-name>BookingPage</servlet-name>
+        <jsp-file>/pages/booking.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>BookingPage</servlet-name>
+        <url-pattern>/booking</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>PaymentPage</servlet-name>
+        <jsp-file>/pages/payment.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PaymentPage</servlet-name>
+        <url-pattern>/payment</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ConfirmationPage</servlet-name>
+        <jsp-file>/pages/confirmation.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ConfirmationPage</servlet-name>
+        <url-pattern>/confirmation</url-pattern>
     </servlet-mapping>
 
     <!-- Welcome File List: Routes root to HomeServlet -->

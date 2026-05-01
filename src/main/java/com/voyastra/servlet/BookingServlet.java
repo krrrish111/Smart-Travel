@@ -1,7 +1,7 @@
 package com.voyastra.servlet;
 
-import com.voyastra.dao.*;
-import com.voyastra.model.*;
+import com.voyastra.dao.BookingDAO;
+import com.voyastra.model.Booking;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,199 +10,189 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
 
-@WebServlet(urlPatterns = {"/booking", "/booking-history"})
+/**
+ * BookingServlet — handles the "Select" button from search results.
+ *
+ * Flow:
+ *   GET /book?type=flight&id=AI-101&price=4800&name=Air+India&class=economy
+ *   → Build Booking object
+ *   → Save to DB via BookingDAO.createBooking()
+ *   → Store in session as "currentBooking"
+ *   → Redirect to /payment
+ */
+@WebServlet("/book")
 public class BookingServlet extends HttpServlet {
 
-    private BookingDAO bookingDAO;
-    private TransportDAO transportDAO;
-    private StayDAO stayDAO;
-    private ActivityDAO activityDAO;
-    private TripDAO tripDAO;
-
-    @Override
-    public void init() throws ServletException {
-        bookingDAO = new BookingDAO();
-        transportDAO = new TransportDAO();
-        stayDAO = new StayDAO();
-        activityDAO = new ActivityDAO();
-        tripDAO = new TripDAO();
-    }
+    private BookingDAO bookingDAO = new BookingDAO();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String action = request.getParameter("action");
-        if (action == null) action = "";
+        HttpSession session = request.getSession(false);
 
-        switch (action) {
-            case "tripBooking": {
-                // Dedicated trip booking form
-                String tripIdStr = request.getParameter("tripId");
-                if (tripIdStr != null) {
-                    try {
-                        PremiumTrip trip = tripDAO.getTripById(Integer.parseInt(tripIdStr));
-                        if (trip != null) {
-                            request.setAttribute("trip", trip);
-                            request.getRequestDispatcher("/pages/trip-booking.jsp").forward(request, response);
-                            return;
-                        }
-                    } catch (Exception e) {
-                        System.err.println("Error loading trip for booking: " + e.getMessage());
-                    }
-                }
-                response.sendRedirect("home");
+        // ── Auth guard ──────────────────────────────────────────────────────
+        if (session == null || session.getAttribute("user_id") == null) {
+            String fullPath = "/book?" + request.getQueryString();
+            response.sendRedirect(request.getContextPath()
+                    + "/login?redirect=" + java.net.URLEncoder.encode(fullPath, "UTF-8"));
+            return;
+        }
+
+        // ── Read URL params ─────────────────────────────────────────────────
+        String type       = getParam(request, "type",  "flight");
+        String refId      = getParam(request, "id",    "N/A");
+        String name       = getParam(request, "name",  "Voyastra Service");
+        String priceStr   = getParam(request, "price", "0");
+        String seatClass  = getParam(request, "class", "economy");
+        String passengers = getParam(request, "passengers", "1");
+        String travelDate = getParam(request, "date",  "");
+        String from       = getParam(request, "from",  "");
+        String to         = getParam(request, "to",    "");
+
+        double price = 0;
+        try { price = Double.parseDouble(priceStr); } catch (Exception ignored) {}
+
+        int userId = 0;
+        try { userId = (int) session.getAttribute("user_id"); } catch (Exception ignored) {}
+
+        String userName  = safeStr(session.getAttribute("name"),  "Guest");
+        String userEmail = safeStr(session.getAttribute("email"), "");
+
+        // ── Build readable details string ───────────────────────────────────
+        String details = buildDetails(type, refId, name, seatClass, passengers, from, to, travelDate);
+
+        // ── Generate unique booking code ────────────────────────────────────
+        String bookingCode = generateBookingCode(type);
+
+        // ── Populate Booking model ──────────────────────────────────────────
+        Booking booking = new Booking();
+        booking.setUserId(userId);
+        booking.setType(type);
+        booking.setDetails(details);
+        booking.setTotalPrice(price + 250);    // add ₹250 taxes
+        booking.setStatus("PENDING");
+        booking.setBookingCode(bookingCode);
+        booking.setCustomerName(userName);
+        booking.setCustomerEmail(userEmail);
+        booking.setCustomerPhone("");
+        booking.setTravelDate(travelDate);
+        booking.setNumAdults(parseIntSafe(passengers, 1));
+        booking.setNumChildren(0);
+        booking.setRoomType(seatClass);
+
+        // ── Persist to DB ───────────────────────────────────────────────────
+        int bookingId = -1;
+        try {
+            bookingId = bookingDAO.createBooking(booking);
+        } catch (Exception e) {
+            System.err.println("[BookingServlet] DB save failed: " + e.getMessage());
+        }
+
+        if (bookingId > 0) {
+            booking.setId(bookingId);
+        } else {
+            // Graceful degradation: proceed without DB (e.g., DB not available)
+            System.err.println("[BookingServlet] DB save failed; continuing in session-only mode.");
+            booking.setId(-1);
+        }
+
+        // ── Extra display fields (not persisted separately, for JSP use) ────
+        booking.setPlanTitle(name);
+        booking.setPlanImage(resolveTypeImage(type));
+
+        // ── Store in session ────────────────────────────────────────────────
+        session.setAttribute("currentBooking", booking);
+        session.setAttribute("bookingId", bookingId);
+
+        System.out.println("[BookingServlet] Booking created: " + bookingCode
+                + " | type=" + type + " | price=₹" + (price + 250)
+                + " | db_id=" + bookingId);
+
+        // ── Redirect to payment ─────────────────────────────────────────────
+        response.sendRedirect(request.getContextPath()
+                + "/pages/payment.jsp?id=" + bookingId);
+    }
+
+    // ──────────────────────── HELPERS ──────────────────────────────────────
+
+    private String buildDetails(String type, String refId, String name,
+                                String seatClass, String passengers,
+                                String from, String to, String date) {
+        StringBuilder sb = new StringBuilder();
+        switch (type.toLowerCase()) {
+            case "flight":
+                sb.append("Flight: ").append(name)
+                  .append(" (").append(refId).append(")")
+                  .append(" | ").append(from.toUpperCase())
+                  .append(" → ").append(to.toUpperCase())
+                  .append(" | Class: ").append(capitalize(seatClass))
+                  .append(" | Passengers: ").append(passengers);
+                if (!date.isEmpty()) sb.append(" | Date: ").append(date);
                 break;
-            }
-            case "confirm": {
-                // Show confirmation page - data passed via session
-                HttpSession session = request.getSession();
-                if (session.getAttribute("pendingBooking") != null) {
-                    request.getRequestDispatcher("/pages/booking-confirm.jsp").forward(request, response);
-                } else {
-                    response.sendRedirect("home");
-                }
+            case "hotel":
+                sb.append("Hotel: ").append(name)
+                  .append(" | Location: ").append(to)
+                  .append(" | Guests: ").append(passengers);
+                if (!date.isEmpty()) sb.append(" | Check-in: ").append(date);
                 break;
-            }
-            case "success": {
-                String code = request.getParameter("code");
-                if (code != null) {
-                    Booking booking = bookingDAO.getBookingByCode(code);
-                    if (booking != null) {
-                        PremiumTrip trip = tripDAO.getTripById(booking.getPlanId());
-                        request.setAttribute("booking", booking);
-                        request.setAttribute("trip", trip);
-                        request.getRequestDispatcher("/pages/booking-success.jsp").forward(request, response);
-                        return;
-                    }
-                }
-                response.sendRedirect("home");
+            case "taxi": case "car": case "bus": case "train":
+                sb.append("Transport: ").append(name)
+                  .append(" (").append(refId).append(")")
+                  .append(" | ").append(from).append(" → ").append(to);
+                if (!date.isEmpty()) sb.append(" | Date: ").append(date);
                 break;
-            }
-            case "new": {
-                // Legacy: redirect to tripBooking
-                String tripId = request.getParameter("tripId");
-                if (tripId != null) {
-                    response.sendRedirect("booking?action=tripBooking&tripId=" + tripId);
-                } else {
-                    response.sendRedirect("booking");
-                }
+            case "tour":
+                sb.append("Tour: ").append(name)
+                  .append(" | Guests: ").append(passengers);
+                if (!date.isEmpty()) sb.append(" | Date: ").append(date);
                 break;
-            }
-            default: {
-                // Default booking page with transport/stays/activities
-                String tripIdStr = request.getParameter("tripId");
-                if (tripIdStr != null && !tripIdStr.isEmpty()) {
-                    // Redirect to dedicated trip booking
-                    response.sendRedirect("booking?action=tripBooking&tripId=" + tripIdStr);
-                    return;
-                }
-                try {
-                    List<Transport> allTransports = transportDAO.getAllTransportOptions();
-                    List<Stay> allStays = stayDAO.getAllStays();
-                    List<Activity> allActivities = activityDAO.getAllActivities();
-                    request.setAttribute("transports", allTransports != null ? allTransports : new java.util.ArrayList<>());
-                    request.setAttribute("stays", allStays != null ? allStays : new java.util.ArrayList<>());
-                    request.setAttribute("activities", allActivities != null ? allActivities : new java.util.ArrayList<>());
-                    request.getRequestDispatcher("/pages/booking.jsp").forward(request, response);
-                } catch (Exception e) {
-                    System.err.println("WARNING: Error fetching booking data.");
-                    e.printStackTrace();
-                    request.setAttribute("transports", new java.util.ArrayList<>());
-                    request.setAttribute("stays", new java.util.ArrayList<>());
-                    request.setAttribute("activities", new java.util.ArrayList<>());
-                    request.getRequestDispatcher("/pages/booking.jsp").forward(request, response);
-                }
-                break;
-            }
+            default:
+                sb.append("Booking: ").append(name).append(" | Ref: ").append(refId);
+        }
+        return sb.toString();
+    }
+
+    private String generateBookingCode(String type) {
+        String prefix = "VYS";
+        if ("flight".equalsIgnoreCase(type))           prefix = "FLT";
+        else if ("hotel".equalsIgnoreCase(type))        prefix = "HTL";
+        else if ("taxi".equalsIgnoreCase(type)
+              || "car".equalsIgnoreCase(type))          prefix = "CAB";
+        else if ("tour".equalsIgnoreCase(type))         prefix = "TUR";
+        String year = new SimpleDateFormat("yyyy").format(new Date());
+        int rand = 10000 + new Random().nextInt(89999);
+        return prefix + "-" + year + "-" + rand;
+    }
+
+    private String resolveTypeImage(String type) {
+        switch (type.toLowerCase()) {
+            case "flight": return "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=600&q=80";
+            case "hotel":  return "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=600&q=80";
+            case "tour":   return "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=600&q=80";
+            default:       return "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&w=600&q=80";
         }
     }
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-        String action = request.getParameter("action");
-        if (action == null) action = "";
-
-        if ("submitBooking".equals(action)) {
-            // Process the trip booking form submission
-            HttpSession session = request.getSession();
-            String tripIdStr = request.getParameter("tripId");
-            if (tripIdStr == null) { response.sendRedirect("home"); return; }
-
-            int tripId = Integer.parseInt(tripIdStr);
-            PremiumTrip trip = tripDAO.getTripById(tripId);
-            if (trip == null) { response.sendRedirect("home"); return; }
-
-            // Build booking object
-            Booking booking = new Booking();
-            Object userObj = session.getAttribute("user");
-            int userId = 0;
-            if (userObj instanceof User) userId = ((User) userObj).getId();
-            booking.setUserId(userId);
-            booking.setPlanId(tripId);
-            booking.setCustomerName(request.getParameter("customerName"));
-            booking.setCustomerEmail(request.getParameter("customerEmail"));
-            booking.setCustomerPhone(request.getParameter("customerPhone"));
-            booking.setTravelDate(request.getParameter("travelDate"));
-            booking.setNumAdults(parseInt(request.getParameter("numAdults"), 1));
-            booking.setNumChildren(parseInt(request.getParameter("numChildren"), 0));
-            booking.setRoomType(request.getParameter("roomType"));
-            booking.setPickupCity(request.getParameter("pickupCity"));
-            booking.setSpecialRequests(request.getParameter("specialRequests"));
-
-            // Calculate price
-            double basePrice = trip.getDiscountPrice() > 0 ? trip.getDiscountPrice() : trip.getPriceInr();
-            int totalTravelers = booking.getNumAdults() + booking.getNumChildren();
-            double roomMultiplier = 1.0;
-            if ("Deluxe".equals(booking.getRoomType())) roomMultiplier = 1.3;
-            else if ("Suite".equals(booking.getRoomType())) roomMultiplier = 1.8;
-            else if ("Premium Suite".equals(booking.getRoomType())) roomMultiplier = 2.5;
-            double subtotal = basePrice * totalTravelers * roomMultiplier;
-            double tax = subtotal * 0.05; // 5% GST
-            double total = subtotal + tax;
-            booking.setTotalPrice(total);
-
-            // Generate booking code
-            String code = "VYS-" + java.time.Year.now().getValue() + "-" + String.format("%05d", new Random().nextInt(99999));
-            booking.setBookingCode(code);
-            booking.setStatus("PENDING");
-
-            // Store in session for confirmation page
-            session.setAttribute("pendingBooking", booking);
-            session.setAttribute("pendingTrip", trip);
-            session.setAttribute("pendingSubtotal", subtotal);
-            session.setAttribute("pendingTax", tax);
-
-            response.sendRedirect("booking?action=confirm");
-
-        } else if ("confirmBooking".equals(action)) {
-            // Final confirmation - save to database
-            HttpSession session = request.getSession();
-            Booking booking = (Booking) session.getAttribute("pendingBooking");
-            if (booking == null) { response.sendRedirect("home"); return; }
-
-            booking.setStatus("CONFIRMED");
-            int id = bookingDAO.addTripBooking(booking);
-            if (id > 0) {
-                String code = booking.getBookingCode();
-                session.removeAttribute("pendingBooking");
-                session.removeAttribute("pendingTrip");
-                session.removeAttribute("pendingSubtotal");
-                session.removeAttribute("pendingTax");
-                response.sendRedirect("booking?action=success&code=" + code);
-            } else {
-                request.setAttribute("error", "Booking failed. Please try again.");
-                request.getRequestDispatcher("/pages/booking-confirm.jsp").forward(request, response);
-            }
-        }
+    private String getParam(HttpServletRequest req, String name, String def) {
+        String v = req.getParameter(name);
+        return (v != null && !v.trim().isEmpty()) ? v.trim() : def;
     }
 
-    private int parseInt(String s, int def) {
+    private String safeStr(Object o, String def) {
+        return (o != null) ? o.toString() : def;
+    }
+
+    private int parseIntSafe(String s, int def) {
         try { return Integer.parseInt(s); } catch (Exception e) { return def; }
+    }
+
+    private String capitalize(String s) {
+        if (s == null || s.isEmpty()) return s;
+        return s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase();
     }
 }

@@ -36,6 +36,28 @@ public class StayDAO {
         return options;
     }
 
+    public List<Stay> getHotelsByCity(String city) {
+        List<Stay> options = new ArrayList<>();
+        // As requested: SELECT * FROM stays WHERE location = ? LIMIT 4
+        // Note: Using 'stays' table as confirmed by project structure
+        String query = "SELECT * FROM stays WHERE LOWER(location) LIKE LOWER(?) LIMIT 4";
+                       
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+             
+            stmt.setString(1, "%" + city + "%");
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    options.add(extractFromResultSet(rs));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return options;
+    }
+
     /**
      * Retrieves the entire stays collection.
      */

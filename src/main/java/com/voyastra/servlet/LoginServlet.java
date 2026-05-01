@@ -59,8 +59,9 @@ public class LoginServlet extends HttpServlet {
             JsonObject jsonRequest = gson.fromJson(sb.toString(), JsonObject.class);
             if (jsonRequest == null) throw new IllegalArgumentException("Invalid JSON");
 
-            String email = jsonRequest.get("email") != null ? jsonRequest.get("email").getAsString() : "";
+            String email    = jsonRequest.get("email")    != null ? jsonRequest.get("email").getAsString() : "";
             String password = jsonRequest.get("password") != null ? jsonRequest.get("password").getAsString() : "";
+            String target   = jsonRequest.get("redirect") != null ? jsonRequest.get("redirect").getAsString() : "";
 
             if (email.trim().isEmpty() || password.trim().isEmpty()) {
                 result.put("success", false);
@@ -120,7 +121,11 @@ public class LoginServlet extends HttpServlet {
                 result.put("role", userRole);
                 
                 String redirect = "admin".equals(userRole) ? "admin" : "user-home";
-                result.put("redirect", request.getContextPath() + "/" + redirect);
+                if (target != null && !target.isEmpty()) {
+                    result.put("redirect", request.getContextPath() + (target.startsWith("/") ? "" : "/") + target);
+                } else {
+                    result.put("redirect", request.getContextPath() + "/" + redirect);
+                }
                 
             } else {
                 result.put("success", false);

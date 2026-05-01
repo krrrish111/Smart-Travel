@@ -34,6 +34,39 @@ public class BookingDAO {
     }
 
     /**
+     * Creates a new flight/hotel booking (Phase 4).
+     * Returns the generated booking ID or -1 on failure.
+     */
+    public int createBooking(com.voyastra.model.Booking b) {
+        String query = "INSERT INTO bookings (user_id, type, details, total_price, status, booking_code, customer_name, customer_email, customer_phone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query, java.sql.Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setInt(1, b.getUserId());
+            stmt.setString(2, b.getType());
+            stmt.setString(3, b.getDetails());
+            stmt.setDouble(4, b.getTotalPrice());
+            stmt.setString(5, b.getStatus() != null ? b.getStatus() : "PENDING");
+            stmt.setString(6, b.getBookingCode());
+            stmt.setString(7, b.getCustomerName());
+            stmt.setString(8, b.getCustomerEmail());
+            stmt.setString(9, b.getCustomerPhone());
+            
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows > 0) {
+                try (ResultSet rs = stmt.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        return rs.getInt(1);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("ERROR: BookingDAO.createBooking failed.");
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    /**
      * Inserts a trip booking with expanded traveler details. Returns the generated booking ID or -1.
      */
     public int addTripBooking(Booking b) {
@@ -110,9 +143,9 @@ public class BookingDAO {
      */
     public List<Booking> getBookingsByUser(int userId) {
         List<Booking> bookings = new ArrayList<>();
-        String query = "SELECT b.id, b.user_id, b.plan_id, b.total_price, b.status, b.created_at, p.title AS plan_title, p.image AS plan_image " +
+        String query = "SELECT b.id, b.user_id, b.plan_id, b.total_price, b.status, b.created_at, b.type, b.details, p.title AS plan_title, p.image AS plan_image " +
                        "FROM bookings b " +
-                       "JOIN plans p ON b.plan_id = p.id " +
+                       "LEFT JOIN plans p ON b.plan_id = p.id " +
                        "WHERE b.user_id = ? " +
                        "ORDER BY b.created_at DESC";
                        
@@ -143,8 +176,8 @@ public class BookingDAO {
 
     public Booking getBookingById(int id) {
         Booking booking = null;
-        String query = "SELECT b.id, b.user_id, b.plan_id, b.total_price, b.status, b.created_at, p.title AS plan_title, p.image AS plan_image " +
-                       "FROM bookings b JOIN plans p ON b.plan_id = p.id WHERE b.id = ?";
+        String query = "SELECT b.id, b.user_id, b.plan_id, b.total_price, b.status, b.created_at, b.type, b.details, p.title AS plan_title, p.image AS plan_image " +
+                       "FROM bookings b LEFT JOIN plans p ON b.plan_id = p.id WHERE b.id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, id);
@@ -170,8 +203,8 @@ public class BookingDAO {
 
     public List<Booking> getAllBookings() {
         List<Booking> list = new ArrayList<>();
-        String query = "SELECT b.id, b.user_id, b.plan_id, b.total_price, b.status, b.created_at, p.title AS plan_title, p.image AS plan_image, u.name AS user_name " +
-                       "FROM bookings b JOIN plans p ON b.plan_id = p.id JOIN users u ON b.user_id = u.id ORDER BY b.created_at DESC";
+        String query = "SELECT b.id, b.user_id, b.plan_id, b.total_price, b.status, b.created_at, b.type, b.details, p.title AS plan_title, p.image AS plan_image, u.name AS user_name " +
+                       "FROM bookings b LEFT JOIN plans p ON b.plan_id = p.id JOIN users u ON b.user_id = u.id ORDER BY b.created_at DESC";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
@@ -207,6 +240,20 @@ public class BookingDAO {
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             System.err.println("ERROR: BookingDAO.updateBooking failed.");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updateBookingStatus(int id, String status) {
+        String query = "UPDATE bookings SET status = ? WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, status);
+            stmt.setInt(2, id);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("ERROR: BookingDAO.updateBookingStatus failed.");
             e.printStackTrace();
             return false;
         }

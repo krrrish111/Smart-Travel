@@ -446,8 +446,10 @@
         
         var btn = document.getElementById('loginBtn');
         var errBox = document.getElementById('loginError');
-        var email = document.getElementById('loginEmail').value;
+        var email    = document.getElementById('loginEmail').value;
         var password = document.getElementById('loginPassword').value;
+        var params   = new URLSearchParams(window.location.search);
+        var redirect = params.get('redirect');
 
         if (!email || !password) return; // Let HTML5 validation handle basic required
 
@@ -459,7 +461,7 @@
         fetch(window.CONTEXT_PATH + '/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: email, password: password }),
+            body: JSON.stringify({ email: email, password: password, redirect: redirect }),
             credentials: 'same-origin'
         })
         .then(function(res) { return res.json(); })

@@ -302,10 +302,39 @@
                                 tabs.forEach(t => t.classList.remove('active'));
                                 tab.classList.add('active');
                             }
-                        });
                     });
-                });
-            </script>
+ 
+                     // --- Search Button Logic ---
+                     document.querySelectorAll('.search-cta-btn').forEach(btn => {
+                         btn.addEventListener('click', (e) => {
+                             const isHotel = btn.innerText.toLowerCase().includes('hotel');
+                             const isTrain = btn.innerText.toLowerCase().includes('train');
+                             
+                             let url = '${pageContext.request.contextPath}/search?';
+                             if (isHotel) {
+                                 const city = document.querySelector('#tab-hotels .field-value').innerText;
+                                 url += 'type=hotel&city=' + encodeURIComponent(city);
+                                 VoyastraUI.showLoader('Finding the best stays...');
+                             } else if (isTrain) {
+                                 const from = document.querySelector('#tab-trains .search-field:nth-child(1) .field-value').innerText;
+                                 const to = document.querySelector('#tab-trains .search-field:nth-child(3) .field-value').innerText;
+                                 url += 'type=train&from=' + encodeURIComponent(from) + '&to=' + encodeURIComponent(to);
+                                 VoyastraUI.showLoader('Tracking available trains...');
+                             } else {
+                                 // Default: Flights
+                                 const from = document.querySelector('#tab-flights .search-field:nth-child(1) .field-value').innerText;
+                                 const to = document.querySelector('#tab-flights .search-field:nth-child(3) .field-value').innerText;
+                                 url += 'type=flight&from=' + encodeURIComponent(from) + '&to=' + encodeURIComponent(to);
+                                 VoyastraUI.showLoader('Searching for lowest fares...');
+                             }
+                             
+                             setTimeout(() => {
+                                 location.href = url;
+                             }, 800); // Small delay for visual polish
+                         });
+                     });
+                 });
+             </script>
 
             <!-- ====== PREMIUM TRIP PLANS CAROUSEL ====== -->
             <section class="premium-carousel-section container scroll-fade">

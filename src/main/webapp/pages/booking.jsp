@@ -34,29 +34,13 @@
                                             onclick="switchTab(this, 'form-hotels')">
                                             <span class="tab-icon">🏨</span><span class="tab-label">Hotels</span>
                                         </button>
-                                        <button class="booking-tab" data-form="form-hotels"
-                                            onclick="switchTab(this, 'form-hotels')">
-                                            <span class="tab-icon">🏡</span><span class="tab-label">Homestays</span>
+                                        <button class="booking-tab" data-form="form-cars"
+                                            onclick="switchTab(this, 'form-cars')">
+                                            <span class="tab-icon">🚖</span><span class="tab-label">Cars</span>
                                         </button>
-                                        <button class="booking-tab" data-form="form-trains"
-                                            onclick="switchTab(this, 'form-trains')">
-                                            <span class="tab-icon">🚆</span><span class="tab-label">Trains</span>
-                                        </button>
-                                        <button class="booking-tab" data-form="form-trains"
-                                            onclick="switchTab(this, 'form-trains')">
-                                            <span class="tab-icon">🚌</span><span class="tab-label">Buses</span>
-                                        </button>
-                                        <button class="booking-tab" data-form="form-trains"
-                                            onclick="switchTab(this, 'form-trains')">
-                                            <span class="tab-icon">🚖</span><span class="tab-label">Cabs</span>
-                                        </button>
-                                        <button class="booking-tab" data-form="form-activities"
-                                            onclick="switchTab(this, 'form-activities')">
+                                        <button class="booking-tab" data-form="form-tours"
+                                            onclick="switchTab(this, 'form-tours')">
                                             <span class="tab-icon">🎟️</span><span class="tab-label">Tours</span>
-                                        </button>
-                                        <button class="booking-tab" data-form="form-activities"
-                                            onclick="switchTab(this, 'form-activities')">
-                                            <span class="tab-icon">🌍</span><span class="tab-label">Packages</span>
                                         </button>
                                     </div>
 
@@ -65,424 +49,512 @@
 
                                         <!-- FLIGHTS FORM -->
                                         <div id="form-flights" class="booking-form active">
-                                            <div class="trip-type-row"
-                                                style="display: flex; gap: 20px; margin-bottom: 14px;">
-                                                <label class="radio-label"><input type="radio" name="tripType"
-                                                        value="one-way" checked> One Way</label>
-                                                <label class="radio-label"><input type="radio" name="tripType"
-                                                        value="round-trip"> Round Trip</label>
-                                                <label class="radio-label"><input type="radio" name="tripType"
-                                                        value="multi-city"> Multi-City</label>
-                                            </div>
-                                            <div class="search-fields-row">
-                                                <div class="search-field">
-                                                    <div class="field-label">From</div>
-                                                    <div class="field-value">Delhi</div>
-                                                    <div class="field-sub">DEL, Indira Gandhi Intl</div>
+                                            <form action="${pageContext.request.contextPath}/search" method="get" id="flightSearchForm">
+                                                <input type="hidden" name="type" value="flight">
+                                                <input type="hidden" name="seatClass" id="seatClassHidden" value="economy">
+                                                <input type="hidden" name="passengers" id="passengersHidden" value="1">
+                                                <div class="trip-type-row" style="display: flex; gap: 20px; margin-bottom: 14px; flex-wrap: wrap; align-items: center;">
+                                                    <label class="radio-label"><input type="radio" name="tripType" value="one-way" checked> One Way</label>
+                                                    <label class="radio-label"><input type="radio" name="tripType" value="round-trip"> Round Trip</label>
+                                                    <label class="radio-label"><input type="radio" name="tripType" value="multi-city"> Multi-City</label>
                                                 </div>
-                                                <div class="swap-btn" title="Swap" onclick="swapFields()">⇄</div>
-                                                <div class="search-field">
-                                                    <div class="field-label">To</div>
-                                                    <div class="field-value">Mumbai</div>
-                                                    <div class="field-sub">BOM, Chhatrapati Shivaji Intl</div>
+                                                <div class="search-fields-row">
+                                                    <div class="search-field">
+                                                        <div class="field-label">From</div>
+                                                        <input type="text" name="from" value="${from != null ? from : 'Delhi'}" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="Origin">
+                                                        <div class="field-sub">DEL, Indira Gandhi Intl</div>
+                                                    </div>
+                                                    <div class="swap-btn" title="Swap" onclick="swapFields()">⇄</div>
+                                                    <div class="search-field">
+                                                        <div class="field-label">To</div>
+                                                        <input type="text" name="to" value="${to != null ? to : 'Mumbai'}" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="Destination">
+                                                        <div class="field-sub">BOM, Chhatrapati Shivaji Intl</div>
+                                                    </div>
+                                                    <div class="search-field">
+                                                        <div class="field-label">Departure Date</div>
+                                                        <input type="date" name="date" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" style="color-scheme: dark;">
+                                                    </div>
+                                                    <!-- Travellers Popup Field -->
+                                                    <div class="search-field" style="position: relative; cursor: pointer;" onclick="toggleTravellersPanel(event)">
+                                                        <div class="field-label">Travellers</div>
+                                                        <div class="font-bold text-lg text-white" id="travellersDisplay">1 Adult</div>
+                                                        <div class="field-sub" id="classDisplay">Economy</div>
+                                                        <!-- Travellers Dropdown Panel -->
+                                                        <div id="travellersPanel" style="display:none; position:absolute; top:100%; left:0; z-index:999; background:#1e1e2e; border:1px solid rgba(255,255,255,0.12); border-radius:12px; padding:20px; min-width:300px; box-shadow:0 8px 32px rgba(0,0,0,0.5);" onclick="event.stopPropagation()">
+                                                            <!-- Adults -->
+                                                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                                                                <div>
+                                                                    <div class="text-white font-bold">Adults</div>
+                                                                    <div style="color:rgba(255,255,255,0.4); font-size:0.78rem;">12+ years</div>
+                                                                </div>
+                                                                <div style="display:flex; align-items:center; gap:12px;">
+                                                                    <button type="button" onclick="changePax('adults',-1)" style="width:30px;height:30px;border-radius:50%;border:1px solid rgba(255,255,255,0.2);background:transparent;color:white;font-size:1.2rem;cursor:pointer;line-height:1;">−</button>
+                                                                    <span id="adultsCount" class="text-white font-bold">1</span>
+                                                                    <button type="button" onclick="changePax('adults',1)" style="width:30px;height:30px;border-radius:50%;border:1px solid rgba(255,255,255,0.2);background:transparent;color:white;font-size:1.2rem;cursor:pointer;line-height:1;">+</button>
+                                                                </div>
+                                                            </div>
+                                                            <!-- Children -->
+                                                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                                                                <div>
+                                                                    <div class="text-white font-bold">Children</div>
+                                                                    <div style="color:rgba(255,255,255,0.4); font-size:0.78rem;">2–11 years</div>
+                                                                </div>
+                                                                <div style="display:flex; align-items:center; gap:12px;">
+                                                                    <button type="button" onclick="changePax('children',-1)" style="width:30px;height:30px;border-radius:50%;border:1px solid rgba(255,255,255,0.2);background:transparent;color:white;font-size:1.2rem;cursor:pointer;line-height:1;">−</button>
+                                                                    <span id="childrenCount" class="text-white font-bold">0</span>
+                                                                    <button type="button" onclick="changePax('children',1)" style="width:30px;height:30px;border-radius:50%;border:1px solid rgba(255,255,255,0.2);background:transparent;color:white;font-size:1.2rem;cursor:pointer;line-height:1;">+</button>
+                                                                </div>
+                                                            </div>
+                                                            <!-- Seat Class -->
+                                                            <div style="border-top:1px solid rgba(255,255,255,0.08); padding-top:16px; margin-top:4px;">
+                                                                <div class="text-white font-bold mb-2" style="margin-bottom:10px;">Cabin Class</div>
+                                                                <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                                                                    <button type="button" onclick="selectClass('economy','Economy')" id="class-economy" class="class-btn active-class" style="padding:8px 12px;border-radius:8px;border:1px solid var(--color-primary);background:rgba(212,165,116,0.15);color:var(--color-primary);font-size:0.85rem;cursor:pointer;font-weight:600;">✈ Economy</button>
+                                                                    <button type="button" onclick="selectClass('premium','Premium Economy')" id="class-premium" class="class-btn" style="padding:8px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:transparent;color:rgba(255,255,255,0.7);font-size:0.85rem;cursor:pointer;font-weight:600;">💺 Premium Eco</button>
+                                                                    <button type="button" onclick="selectClass('business','Business')" id="class-business" class="class-btn" style="padding:8px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:transparent;color:rgba(255,255,255,0.7);font-size:0.85rem;cursor:pointer;font-weight:600;">🥂 Business</button>
+                                                                    <button type="button" onclick="selectClass('first','First Class')" id="class-first" class="class-btn" style="padding:8px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:transparent;color:rgba(255,255,255,0.7);font-size:0.85rem;cursor:pointer;font-weight:600;">👑 First Class</button>
+                                                                </div>
+                                                            </div>
+                                                            <button type="button" onclick="applyTravellers()" style="width:100%;margin-top:16px;padding:10px;border-radius:8px;background:var(--color-primary);color:black;font-weight:bold;border:none;cursor:pointer;font-size:0.95rem;">Apply</button>
+                                                        </div>
+                                                    </div>
+                                                    <button type="submit" class="search-cta-btn">SEARCH</button>
                                                 </div>
-                                                <div class="search-field">
-                                                    <div class="field-label">Departure</div>
-                                                    <div class="field-value">10 Apr <span
-                                                            style="font-size:1rem;font-weight:600;">2026</span></div>
-                                                    <div class="field-sub">Friday</div>
-                                                </div>
-                                                <div class="search-field" style="border-right: none;">
-                                                    <div class="field-label">Travellers &amp; Class</div>
-                                                    <div class="field-value">1 Adult</div>
-                                                    <div class="field-sub">Economy</div>
-                                                </div>
-                                                <button class="search-cta-btn">SEARCH</button>
-                                            </div>
+                                            </form>
                                         </div>
+
 
                                         <!-- HOTELS FORM -->
                                         <div id="form-hotels" class="booking-form">
-                                            <div class="trip-type-row"
-                                                style="display: flex; gap: 20px; margin-bottom: 14px;">
-                                                <label class="radio-label"><input type="radio" name="hotelType"
-                                                        value="rooms" checked> Upto 4 Rooms</label>
-                                                <label class="radio-label"><input type="radio" name="hotelType"
-                                                        value="group"> Group Booking</label>
-                                            </div>
-                                            <div class="search-fields-row">
-                                                <div class="search-field" style="flex: 2;">
-                                                    <div class="field-label">City, Property Name or Location</div>
-                                                    <div class="field-value">Jaipur</div>
-                                                    <div class="field-sub">Rajasthan, India</div>
+                                            <form action="${pageContext.request.contextPath}/search" method="get">
+                                                <input type="hidden" name="type" value="hotel">
+                                                <div class="trip-type-row" style="display: flex; gap: 20px; margin-bottom: 14px; flex-wrap: wrap;">
+                                                    <label class="radio-label"><input type="radio" name="hotelType" value="rooms" checked> Upto 4 Rooms</label>
+                                                    <label class="radio-label"><input type="radio" name="hotelType" value="group"> Group Booking</label>
                                                 </div>
-                                                <div class="search-field">
-                                                    <div class="field-label">Check-In</div>
-                                                    <div class="field-value">15 May <span
-                                                            style="font-size:1rem;">2026</span></div>
-                                                    <div class="field-sub">Thursday</div>
+                                                <div class="search-fields-row">
+                                                    <div class="search-field" style="flex: 2;">
+                                                        <div class="field-label">City or Location</div>
+                                                        <input type="text" name="city" value="${city != null ? city : 'Jaipur'}" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="Destination City">
+                                                        <div class="field-sub">Hotel, area or landmark</div>
+                                                    </div>
+                                                    <div class="search-field">
+                                                        <div class="field-label">Check-In</div>
+                                                        <input type="date" name="checkin" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" style="color-scheme: dark;">
+                                                    </div>
+                                                    <div class="search-field">
+                                                        <div class="field-label">Check-Out</div>
+                                                        <input type="date" name="checkout" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" style="color-scheme: dark;">
+                                                    </div>
+                                                    <div class="search-field" style="border-right: none; min-width: 120px;">
+                                                        <div class="field-label">Rooms &amp; Guests</div>
+                                                        <select name="rooms" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" style="color-scheme: dark; background: transparent;">
+                                                            <option value="1" style="color:black;">1 Room, 2 Guests</option>
+                                                            <option value="2" style="color:black;">2 Rooms, 4 Guests</option>
+                                                            <option value="3" style="color:black;">3 Rooms, 6 Guests</option>
+                                                            <option value="4" style="color:black;">4 Rooms, 8 Guests</option>
+                                                        </select>
+                                                    </div>
+                                                    <button type="submit" class="search-cta-btn">SEARCH</button>
                                                 </div>
-                                                <div class="search-field">
-                                                    <div class="field-label">Check-Out</div>
-                                                    <div class="field-value">18 May <span
-                                                            style="font-size:1rem;">2026</span></div>
-                                                    <div class="field-sub">3 Nights</div>
-                                                </div>
-                                                <div class="search-field" style="border-right: none;">
-                                                    <div class="field-label">Rooms &amp; Guests</div>
-                                                    <div class="field-value">1 Room</div>
-                                                    <div class="field-sub">2 Adults</div>
-                                                </div>
-                                                <button class="search-cta-btn">SEARCH</button>
-                                            </div>
+                                            </form>
                                         </div>
 
-                                        <!-- TRAINS / BUSES / CABS FORM -->
-                                        <div id="form-trains" class="booking-form">
-                                            <div class="search-fields-row">
-                                                <div class="search-field">
-                                                    <div class="field-label">From</div>
-                                                    <div class="field-value">New Delhi</div>
-                                                    <div class="field-sub">NDLS</div>
+                                        <!-- CARS FORM -->
+                                        <div id="form-cars" class="booking-form">
+                                            <form action="${pageContext.request.contextPath}/search" method="get">
+                                                <input type="hidden" name="type" value="car">
+                                                <div class="trip-type-row" style="display: flex; gap: 20px; margin-bottom: 14px; flex-wrap: wrap;">
+                                                    <label class="radio-label"><input type="radio" name="carType" value="outstation" checked> Outstation</label>
+                                                    <label class="radio-label"><input type="radio" name="carType" value="local"> Local</label>
+                                                    <label class="radio-label"><input type="radio" name="carType" value="airport"> Airport Transfer</label>
                                                 </div>
-                                                <div class="swap-btn" title="Swap">⇄</div>
-                                                <div class="search-field">
-                                                    <div class="field-label">To</div>
-                                                    <div class="field-value">Jaipur</div>
-                                                    <div class="field-sub">JP</div>
+                                                <div class="search-fields-row">
+                                                    <div class="search-field" style="flex: 2;">
+                                                        <div class="field-label">Pickup City</div>
+                                                        <input type="text" name="pickup" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="Enter Pickup City">
+                                                        <div class="field-sub">City, airport or address</div>
+                                                    </div>
+                                                    <div class="search-field" style="flex: 2;">
+                                                        <div class="field-label">Drop City</div>
+                                                        <input type="text" name="drop" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="Enter Drop City">
+                                                        <div class="field-sub">City, airport or address</div>
+                                                    </div>
+                                                    <div class="search-field">
+                                                        <div class="field-label">Pickup Date</div>
+                                                        <input type="date" name="date" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" style="color-scheme: dark;">
+                                                    </div>
+                                                    <div class="search-field" style="border-right: none; min-width: 120px;">
+                                                        <div class="field-label">Car Type</div>
+                                                        <select name="carCategory" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" style="color-scheme: dark; background: transparent;">
+                                                            <option value="any" style="color:black;">Any</option>
+                                                            <option value="hatchback" style="color:black;">Hatchback</option>
+                                                            <option value="sedan" style="color:black;">Sedan</option>
+                                                            <option value="suv" style="color:black;">SUV</option>
+                                                            <option value="luxury" style="color:black;">Luxury</option>
+                                                        </select>
+                                                    </div>
+                                                    <button type="submit" class="search-cta-btn">SEARCH</button>
                                                 </div>
-                                                <div class="search-field" style="border-right: none;">
-                                                    <div class="field-label">Travel Date</div>
-                                                    <div class="field-value">12 Apr <span
-                                                            style="font-size:1rem;">2026</span></div>
-                                                    <div class="field-sub">Sunday</div>
-                                                </div>
-                                                <button class="search-cta-btn">SEARCH</button>
-                                            </div>
+                                            </form>
                                         </div>
 
-                                        <!-- TOURS / PACKAGES FORM -->
-                                        <div id="form-activities" class="booking-form">
-                                            <div class="search-fields-row">
-                                                <div class="search-field" style="flex: 2;">
-                                                    <div class="field-label">Destination / Activity</div>
-                                                    <div class="field-value">Goa</div>
-                                                    <div class="field-sub">India</div>
+                                        <!-- TOURS FORM -->
+                                        <div id="form-tours" class="booking-form">
+                                            <form action="${pageContext.request.contextPath}/search" method="get">
+                                                <input type="hidden" name="type" value="tour">
+                                                <div class="trip-type-row" style="display: flex; gap: 20px; margin-bottom: 14px; flex-wrap: wrap;">
+                                                    <label class="radio-label"><input type="radio" name="tourType" value="adventure" checked> Adventure</label>
+                                                    <label class="radio-label"><input type="radio" name="tourType" value="cultural"> Cultural</label>
+                                                    <label class="radio-label"><input type="radio" name="tourType" value="beach"> Beach</label>
+                                                    <label class="radio-label"><input type="radio" name="tourType" value="wildlife"> Wildlife</label>
                                                 </div>
-                                                <div class="search-field" style="border-right: none;">
-                                                    <div class="field-label">When</div>
-                                                    <div class="field-value">18 May <span
-                                                            style="font-size:1rem;">2026</span></div>
-                                                    <div class="field-sub">Flexible</div>
+                                                <div class="search-fields-row">
+                                                    <div class="search-field" style="flex: 2;">
+                                                        <div class="field-label">Destination / Activity</div>
+                                                        <input type="text" name="query" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="Goa, Manali, Safari...">
+                                                        <div class="field-sub">City, landmark or experience</div>
+                                                    </div>
+                                                    <div class="search-field">
+                                                        <div class="field-label">Travel Date</div>
+                                                        <input type="date" name="date" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" style="color-scheme: dark;">
+                                                    </div>
+                                                    <div class="search-field" style="border-right: none; min-width: 140px;">
+                                                        <div class="field-label">People</div>
+                                                        <select name="people" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" style="color-scheme: dark; background: transparent;">
+                                                            <option value="1" style="color:black;">1 Person</option>
+                                                            <option value="2" style="color:black;">2 People</option>
+                                                            <option value="4" style="color:black;">4 People</option>
+                                                            <option value="6" style="color:black;">6 People</option>
+                                                            <option value="10" style="color:black;">10+ People</option>
+                                                        </select>
+                                                    </div>
+                                                    <button type="submit" class="search-cta-btn">SEARCH</button>
                                                 </div>
-                                                <button class="search-cta-btn">SEARCH</button>
-                                            </div>
+                                            </form>
                                         </div>
 
+                                    </div><!-- /Search Forms Area -->
+                                </div><!-- /booking-widget-wrapper -->
+                            </div><!-- /container -->
+                        </div><!-- /booking-hero-section -->
+
+
+                        <!-- ===== RESULTS SECTION ===== -->
+                        <c:if test="${not empty searchType}">
+                        <div class="container" style="padding-bottom: 60px;">
+
+                            <!-- Search Summary Banner -->
+                            <div style="margin-bottom: 24px; padding: 14px 20px; background: rgba(255,255,255,0.03); border-radius: 12px; border: 1px solid var(--color-border); display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
+                                <span style="color: var(--color-primary); font-weight: 700; font-size: 0.9rem;">
+                                    <c:choose>
+                                        <c:when test="${searchType == 'flight'}">✈️ Flights: <c:out value="${searchOrigin}"/> → <c:out value="${searchDestination}"/></c:when>
+                                        <c:when test="${searchType == 'hotel'}">🏨 Hotels in <c:out value="${searchLocation}"/></c:when>
+                                        <c:when test="${searchType == 'car'}">🚖 Cars: <c:out value="${searchOrigin}"/> → <c:out value="${searchDestination}"/></c:when>
+                                        <c:when test="${searchType == 'tour'}">🎟️ Tours: <c:out value="${searchQuery}"/></c:when>
+                                    </c:choose>
+                                </span>
+                                <c:if test="${not empty date}"><span style="color: var(--color-muted); font-size: 0.85rem;">📅 <c:out value="${date}"/></span></c:if>
+                                <c:if test="${not empty searchSeatClass}"><span style="color: var(--color-muted); font-size: 0.85rem;">💺 <c:out value="${searchSeatClass}"/></span></c:if>
+                                <c:if test="${not empty searchPassengers}"><span style="color: var(--color-muted); font-size: 0.85rem;">👥 <c:out value="${searchPassengers}"/> Traveller(s)</span></c:if>
+                            </div>
+
+                            <div style="display: flex; flex-direction: column; gap: 40px;">
+
+                            <!-- ===== 1. FLIGHTS ===== -->
+                            <c:if test="${searchType == 'flight' or not empty flights}">
+                            <div class="results-section section-flights">
+                                <div class="results-header">
+                                    <h2 class="results-title">
+                                        <c:choose>
+                                            <c:when test="${not empty searchOrigin and not empty searchDestination}">
+                                                ✈️ Flights: <c:out value="${searchOrigin}"/> ➔ <c:out value="${searchDestination}"/>
+                                            </c:when>
+                                            <c:otherwise>✈️ Available Flights</c:otherwise>
+                                        </c:choose>
+                                    </h2>
+                                    <span style="color: var(--color-muted); font-size: 0.85rem;">${fn:length(flights)} result(s)</span>
+                                </div>
+
+                                <!-- Filter Bar -->
+                                <div class="search-filters-bar flex flex-wrap justify-between items-center mb-6"
+                                     style="background: rgba(255,255,255,0.02); padding: 12px 20px; border-radius: 12px; border: 1px solid var(--color-border); gap: 10px;">
+                                    <div class="filters flex flex-wrap gap-4 items-center">
+                                        <span class="text-white opacity-50 text-sm">Filters:</span>
+
+                                        <!-- Airline Filter -->
+                                        <select id="airlineFilter" onchange="applyFilters()"
+                                                style="background: transparent; color: white; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 5px 10px; font-size: 0.9rem;">
+                                            <option value="" style="color:black;" ${empty filterAirline ? 'selected' : ''}>All Airlines</option>
+                                            <option value="Air India" style="color:black;" ${'Air India' == filterAirline ? 'selected' : ''}>Air India</option>
+                                            <option value="IndiGo"    style="color:black;" ${'IndiGo'    == filterAirline ? 'selected' : ''}>IndiGo</option>
+                                            <option value="Vistara"   style="color:black;" ${'Vistara'   == filterAirline ? 'selected' : ''}>Vistara</option>
+                                            <option value="SpiceJet"  style="color:black;" ${'SpiceJet'  == filterAirline ? 'selected' : ''}>SpiceJet</option>
+                                            <option value="GoFirst"   style="color:black;" ${'GoFirst'   == filterAirline ? 'selected' : ''}>GoFirst</option>
+                                        </select>
+
+                                        <!-- Price Range Filter -->
+                                        <select id="priceFilter" onchange="applyFilters()"
+                                                style="background: transparent; color: white; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 5px 10px; font-size: 0.9rem;">
+                                            <option value=""      style="color:black;" ${empty filterMaxPrice        ? 'selected' : ''}>Any Price</option>
+                                            <option value="5000"  style="color:black;" ${'5000'  == filterMaxPrice   ? 'selected' : ''}>Under ₹5,000</option>
+                                            <option value="7000"  style="color:black;" ${'7000'  == filterMaxPrice   ? 'selected' : ''}>Under ₹7,000</option>
+                                            <option value="10000" style="color:black;" ${'10000' == filterMaxPrice   ? 'selected' : ''}>Under ₹10,000</option>
+                                            <option value="15000" style="color:black;" ${'15000' == filterMaxPrice   ? 'selected' : ''}>Under ₹15,000</option>
+                                        </select>
+
+                                        <!-- Stops Filter -->
+                                        <select id="stopsFilter" onchange="applyFilters()"
+                                                style="background: transparent; color: white; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 5px 10px; font-size: 0.9rem;">
+                                            <option value="any"     style="color:black;" ${'any'     == filterStops || empty filterStops ? 'selected' : ''}>Any Stops</option>
+                                            <option value="nonstop" style="color:black;" ${'nonstop' == filterStops ? 'selected' : ''}>Non-stop Only</option>
+                                            <option value="1stop"   style="color:black;" ${'1stop'   == filterStops ? 'selected' : ''}>1 Stop</option>
+                                        </select>
                                     </div>
+
+                                    <div class="sorting flex gap-2 items-center">
+                                        <span class="text-white opacity-50 text-sm">Sort:</span>
+                                        <select id="sortSelect" onchange="applyFilters()"
+                                                style="background: transparent; color: var(--color-primary); border: none; font-weight: bold; outline: none; cursor: pointer; font-size: 0.9rem;">
+                                            <option value="cheapest" style="color:black;" ${'cheapest' == sortBy || empty sortBy ? 'selected' : ''}>Cheapest First</option>
+                                            <option value="fastest"  style="color:black;" ${'fastest'  == sortBy ? 'selected' : ''}>Fastest First</option>
+                                            <option value="best"     style="color:black;" ${'best'     == sortBy ? 'selected' : ''}>Best Match</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                                <!-- Flight Cards Grid -->
+                                <div class="flight-results" style="display: flex; flex-direction: column; gap: 16px;" id="flightsContainer">
+                                    <div style="font-size: 0.8rem; color: var(--color-primary); margin-bottom: 8px;">Debug: ${fn:length(flights)} flights loaded.</div>
+                                    <c:choose>
+                                        <c:when test="${not empty flights}">
+                                            <c:forEach items="${flights}" var="t">
+                                                <div class="flight-card"
+                                                     style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding: 24px; flex-wrap: wrap; gap: 20px; background: rgba(255,255,255,0.02); border: 1px solid var(--color-border); border-radius: 12px;"
+                                                     data-airline="<c:out value='${t.companyName}'/>"
+                                                     data-price="${t.price}"
+                                                     data-duration="${t.duration}">
+
+                                                    <!-- Left: Airline, Route, Time, Duration -->
+                                                    <div style="display: flex; align-items: center; gap: 40px; flex-wrap: wrap;">
+                                                        <!-- Airline Info -->
+                                                        <div style="display: flex; align-items: center; gap: 16px; min-width: 150px;">
+                                                            <div class="airline-logo"
+                                                                 style="background: var(--color-primary); color: black; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; border-radius: 50%; width: 48px; height: 48px; font-weight: bold;">
+                                                                <c:out value="${t.companyLogo}"/>
+                                                            </div>
+                                                            <div>
+                                                                <div class="airline-name" style="font-weight: 800; font-size: 1.15rem; color: var(--color-main);"><c:out value="${t.companyName}"/></div>
+                                                                <div class="flight-num" style="font-size: 0.85rem; color: var(--color-muted);"><c:out value="${t.transportNumber}"/></div>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Route & Time & Duration -->
+                                                        <div style="display: flex; align-items: center; gap: 24px;">
+                                                            <div style="text-align: right;">
+                                                                <div style="font-size: 1.3rem; font-weight: 800; color: var(--color-main);"><c:out value="${t.departureTime}"/></div>
+                                                                <div style="font-size: 0.85rem; color: var(--color-muted); font-weight: 600;"><c:out value="${t.originCode}"/></div>
+                                                            </div>
+                                                            
+                                                            <div style="text-align: center; color: var(--color-muted); font-size: 0.8rem; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; padding: 0 15px;">
+                                                                <div class="duration-text" style="font-weight: 600;"><c:out value="${t.duration}"/></div>
+                                                                <div style="color: var(--color-primary); font-weight: 600; font-size: 0.75rem;">
+                                                                    <c:choose>
+                                                                        <c:when test="${t.stops == 0}">Non-stop</c:when>
+                                                                        <c:when test="${t.stops == 1}">1 Stop</c:when>
+                                                                        <c:otherwise>${t.stops} Stops</c:otherwise>
+                                                                    </c:choose>
+                                                                </div>
+                                                            </div>
+
+                                                            <div style="text-align: left;">
+                                                                <div style="font-size: 1.3rem; font-weight: 800; color: var(--color-main);"><c:out value="${t.arrivalTime}"/></div>
+                                                                <div style="font-size: 0.85rem; color: var(--color-muted); font-weight: 600;"><c:out value="${t.destinationCode}"/></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Right: Price & Button -->
+                                                    <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 12px; min-width: 160px; text-align: right;">
+                                                        <div>
+                                                            <div class="result-price" style="font-size: 1.6rem; font-weight: 800; color: var(--color-primary); line-height: 1;">₹<fmt:formatNumber value="${t.price}" groupingUsed="true"/></div>
+                                                            <div style="font-size: 0.75rem; color: var(--color-muted); margin-top: 4px;">
+                                                                <c:out value="${not empty searchSeatClass ? searchSeatClass : 'Economy'}"/> • per adult
+                                                            </div>
+                                                        </div>
+                                                        <button class="btn-select" style="padding: 10px 24px; font-weight: 800; width: 100%; border-radius: 8px;"
+                                                                onclick="location.href='${pageContext.request.contextPath}/book?type=flight&id=${t.transportNumber}&price=${t.price}&name=${t.companyName}&class=${not empty searchSeatClass ? searchSeatClass : 'economy'}'">
+                                                            Select →
+                                                        </button>
+                                                    </div>
+
+                                                </div>
+                                            </c:forEach>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <div class="vx-empty-state"
+                                                 style="padding: 48px; text-align: center; background: rgba(255,255,255,0.02); border-radius: 12px; border: 1px dashed var(--color-border);">
+                                                <div style="font-size: 3rem; margin-bottom: 12px;">✈️</div>
+                                                <h3 style="color: var(--color-main); margin-bottom: 8px;">No flights found</h3>
+                                                <p style="color: var(--color-muted); font-size: 0.9rem;">Try different dates, airports, or a broader search.</p>
+                                            </div>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </div>
                             </div>
-                        </div>
-
-                        <!-- ===== RESULTS & MAP SECTION ===== -->
-                        <div class="container flex flex-col lg:flex-row gap-8" style="padding-bottom: 60px;">
-                            
-                            <c:if test="${not empty preselectedTrip}">
-                                <!-- PRESELECTED TRIP SUMMARY -->
-                                <div class="w-full mb-8 slide-up" style="animation-delay: 0.1s;">
-                                    <div class="glass-panel p-5 flex flex-col md:flex-row items-center gap-6" style="border: 2px solid var(--color-primary); background: rgba(212,165,116,0.05);">
-                                        <div style="width: 120px; height: 120px; border-radius: 12px; overflow: hidden; flex-shrink: 0;">
-                                            <img src="${preselectedTrip.imageUrl}" style="width: 100%; height: 100%; object-fit: cover;">
-                                        </div>
-                                        <div class="flex-1 text-center md:text-left">
-                                            <span class="text-primary fw-bold text-xs uppercase tracking-widest">You are booking</span>
-                                            <h2 class="text-main fw-bold" style="font-size: 1.8rem; margin: 4px 0;">${preselectedTrip.title}</h2>
-                                            <div class="flex flex-wrap justify-center md:justify-start gap-4 mt-2">
-                                                <span class="text-muted"><i class="fas fa-calendar-alt"></i> ${preselectedTrip.duration}</span>
-                                                <span class="text-muted"><i class="fas fa-map-marker-alt"></i> ${preselectedTrip.destination}</span>
-                                            </div>
-                                        </div>
-                                        <div class="text-center md:text-right">
-                                            <div class="price-highlight mb-2">₹${preselectedTrip.discountPrice}</div>
-                                            <button class="btn-primary" style="padding: 12px 32px; border-radius: 8px;" onclick="document.getElementById('form-flights').scrollIntoView({behavior: 'smooth'})">Confirm Selection →</button>
-                                        </div>
-                                    </div>
-                                </div>
                             </c:if>
 
-                            <!-- Left Side: Results -->
-                            <div class="flex-1" style="min-width: 0;">
-
-                                <!-- TRANSPORT OPTIONS -->
-                                <div class="results-section">
-                                    <div class="results-header">
-                                        <h2 class="results-title">
-                                            <c:choose>
-                                                <c:when test="${not empty searchOrigin && not empty searchDestination}">
-                                                    Transportation:
-                                                    <c:out value="${searchOrigin}" /> ➔
-                                                    <c:out value="${searchDestination}" />
-                                                </c:when>
-                                                <c:otherwise>
-                                                    Transportation Options
-                                                </c:otherwise>
-                                            </c:choose>
-                                        </h2>
-                                        <a href="#" class="results-view-all">View all →</a>
-                                    </div>
-                                    <div class="results-grid results-grid-3" data-skeleton="card"
-                                        data-skeleton-count="3">
-
+                            <!-- ===== 2. HOTELS ===== -->
+                            <div class="results-section section-stays" style="margin-top: 40px;">
+                                <div class="results-header" style="margin-bottom: 16px;">
+                                    <h2 class="results-title">
                                         <c:choose>
-                                            <c:when test="${not empty transports}">
-                                                <c:forEach items="${transports}" var="t">
-                                                    <div class="result-card">
-                                                        <div class="result-card-header">
-                                                            <div class="airline-info">
-                                                                <c:set var="logoClass" value="" />
-                                                                <c:if test="${t.type eq 'train'}">
-                                                                    <c:set var="logoClass" value="logo-train" />
-                                                                </c:if>
-                                                                <c:if test="${t.type eq 'cab' || t.type eq 'bus'}">
-                                                                    <c:set var="logoClass" value="logo-cab-bus" />
-                                                                </c:if>
-                                                                <div class="airline-logo ${logoClass}">
-                                                                    <c:out value="${t.companyLogo}" />
-                                                                </div>
-                                                                <div>
-                                                                    <div class="airline-name">
-                                                                        <c:out value="${t.companyName}" />
-                                                                    </div>
-                                                                    <div class="flight-num">
-                                                                        <c:out value="${t.transportNumber}" />
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <c:if test="${not empty t.badge}">
-                                                                <span class="result-badge ${fn:toLowerCase(t.badge)}">
-                                                                    <c:out value="${t.badge}" />
-                                                                </span>
-                                                            </c:if>
-                                                        </div>
-
-                                                        <c:choose>
-                                                            <c:when test="${t.type == 'cab' || t.type == 'bus'}">
-                                                                <div
-                                                                    style="text-align: center; padding: 16px 0; border-bottom: 1px solid var(--color-border);">
-                                                                    <div class="font-bold text-main"
-                                                                        style="font-size: 1rem;">
-                                                                        <c:out value="${t.originCode}" /> →
-                                                                        <c:out value="${t.destinationCode}" />
-                                                                    </div>
-                                                                    <div
-                                                                        style="font-size: 0.8rem; color: var(--color-muted); margin-top: 4px;">
-                                                                        <c:out value="${t.duration}" />
-                                                                    </div>
-                                                                </div>
-                                                            </c:when>
-                                                            <c:otherwise>
-                                                                <div class="flight-times">
-                                                                    <div class="time-block">
-                                                                        <div class="time">
-                                                                            <c:out value="${t.departureTime}" />
-                                                                        </div>
-                                                                        <div class="airport">
-                                                                            <c:out value="${t.originCode}" />
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="flight-duration">
-                                                                        <div class="duration-line"></div>
-                                                                        <div class="duration-text">
-                                                                            <c:out value="${t.duration}" />
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="time-block">
-                                                                        <div class="time">
-                                                                            <c:out value="${t.arrivalTime}" />
-                                                                        </div>
-                                                                        <div class="airport">
-                                                                            <c:out value="${t.destinationCode}" />
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </c:otherwise>
-                                                        </c:choose>
-
-                                                        <div class="result-card-footer">
-                                                            <div class="result-price">₹
-                                                                <fmt:formatNumber value="${t.price}" type="number"
-                                                                    groupingUsed="true" />
-                                                            </div>
-                                                            <button class="btn-select"
-                                                                onclick="VoyastraAuth.requireAuth('${pageContext.request.contextPath}/booking', function(){ alert('Selection Captured! Confirming details...'); })">Select</button>
-                                                        </div>
-                                                    </div>
-                                                </c:forEach>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <div class="vx-empty-state">
-                                                    <div class="vx-empty-icon">🚆</div>
-                                                    <h3 class="vx-empty-title">No routes available</h3>
-                                                    <p class="vx-empty-desc">We couldn't find any transport options for
-                                                        this specific route. Try selecting another destination.</p>
-                                                </div>
-                                            </c:otherwise>
+                                            <c:when test="${not empty searchLocation}">🏨 Stays in <c:out value="${searchLocation}"/></c:when>
+                                            <c:when test="${not empty searchDestination}">🏨 Stays near <c:out value="${searchDestination}"/></c:when>
+                                            <c:otherwise>🏨 Recommended Stays</c:otherwise>
                                         </c:choose>
-
-                                    </div>
+                                    </h2>
+                                    <span style="color: var(--color-muted); font-size: 0.85rem;">Showing top 4</span>
                                 </div>
-
-                                <!-- TOP STAYS -->
-                                <div class="results-section">
-                                    <div class="results-header">
-                                        <h2 class="results-title">
-                                            <c:choose>
-                                                <c:when test="${not empty searchLocation}">
-                                                    Top Recommended Stays in
-                                                    <c:out value="${searchLocation}" />
-                                                </c:when>
-                                                <c:otherwise>
-                                                    Top Recommended Stays
-                                                </c:otherwise>
-                                            </c:choose>
-                                        </h2>
-                                        <a href="#" class="results-view-all">View all →</a>
-                                    </div>
-                                    <div class="results-grid results-grid-2" data-skeleton="card"
-                                        data-skeleton-count="2">
-                                        <c:choose>
-                                            <c:when test="${not empty stays}">
-                                                <c:forEach items="${stays}" var="s">
-                                                    <div class="stay-card result-card"
-                                                        style="display: flex; flex-direction: row; padding: 0; overflow: hidden;">
-                                                        <img src="${s.imageUrl}" alt="${s.name}" class="stay-card-img">
-                                                        <div class="stay-card-body">
-                                                            <div
-                                                                style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px;">
-                                                                <h4 class="stay-name">${s.name}</h4>
-                                                                <c:if test="${not empty s.badge}">
-                                                                    <span class="result-badge ${s.type == 'villa' ? 'bg-villa' : 'bg-primary'}">
-                                                                        ${s.badge}
-                                                                    </span>
-                                                                </c:if>
-                                                            </div>
-                                                            <p class="stay-location">📍 ${s.location}</p>
-                                                            <ul class="stay-amenities">
-                                                                <c:forEach items="${fn:split(s.amenities, ',')}"
-                                                                    var="amenity">
-                                                                    <li>${fn:trim(amenity)}</li>
-                                                                </c:forEach>
-                                                            </ul>
-                                                            <div class="stay-footer">
-                                                                <div>
-                                                                    <c:if test="${s.originalPrice > s.discountedPrice}">
-                                                                        <div class="original-price">₹
-                                                                            <fmt:formatNumber value="${s.originalPrice}"
-                                                                                groupingUsed="true" />
-                                                                        </div>
-                                                                    </c:if>
-                                                                    <div class="discounted-price ${s.type == 'villa' ? 'text-accent' : ''}">
-                                                                        ₹
-                                                                        <fmt:formatNumber value="${s.discountedPrice}"
-                                                                            groupingUsed="true" />
-                                                                    </div>
-                                                                    <div
-                                                                        style="font-size: 0.72rem; color: var(--color-muted);">
-                                                                        ${s.priceNote}</div>
-                                                                </div>
-                                                                <button class="btn-book ${s.type == 'villa' ? 'btn-villa' : ''}"
-                                                                    onclick="VoyastraAuth.requireAuth('${pageContext.request.contextPath}/booking')">
-                                                                    Book ${s.type == 'villa' ? 'Villa' : 'Now'}
-                                                                </button>
-                                                            </div>
-                                                        </div>
+                                
+                                <div class="hotel-results" style="display: flex; flex-direction: column; gap: 16px;">
+                                    <c:choose>
+                                        <c:when test="${not empty hotels}">
+                                            <c:forEach items="${hotels}" var="s" end="3">
+                                                <div class="hotel-card"
+                                                     style="display: flex; flex-direction: row; gap: 24px; align-items: center; padding: 16px; background: rgba(255,255,255,0.02); border: 1px solid var(--color-border); border-radius: 12px; flex-wrap: wrap;">
+                                                    
+                                                    <!-- Hotel Image -->
+                                                    <div style="width: 180px; height: 120px; flex-shrink: 0; border-radius: 8px; overflow: hidden; position: relative;">
+                                                        <img src="${s.imageUrl}" alt="${s.name}"
+                                                             style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s;"
+                                                             onmouseover="this.style.transform='scale(1.05)'"
+                                                             onmouseout="this.style.transform='scale(1)'">
+                                                        <c:if test="${not empty s.badge}">
+                                                            <span style="position: absolute; top: 8px; left: 8px; background: var(--color-primary); color: black; font-size: 0.65rem; font-weight: 700; padding: 4px 10px; border-radius: 20px;">
+                                                                <c:out value="${s.badge}"/>
+                                                            </span>
+                                                        </c:if>
                                                     </div>
-                                                </c:forEach>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <div class="vx-empty-state">
-                                                    <div class="vx-empty-icon">🏨</div>
-                                                    <h3 class="vx-empty-title">No stays found</h3>
-                                                    <p class="vx-empty-desc">We don't have any recommended stays for
-                                                        this location yet. Check back soon for hand-picked villas and
-                                                        hotels.</p>
-                                                </div>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </div>
-                                </div>
-
-                                <!-- ACTIVITIES -->
-                                <div class="results-section" style="margin-bottom: 16px;">
-                                    <div class="results-header">
-                                        <h2 class="results-title">Things to Do in
-                                            <c:choose>
-                                                <c:when test="${not empty destinationName}"><c:out value="${destinationName}"/></c:when>
-                                                <c:otherwise>Local Areas</c:otherwise>
-                                            </c:choose>
-                                        </h2>
-                                        <a href="#" class="results-view-all">View all →</a>
-                                    </div>
-                                    <div class="results-grid results-grid-4" data-skeleton="trending"
-                                        data-skeleton-count="4">
-
-                                        <c:choose>
-                                            <c:when test="${not empty activities}">
-                                                <c:forEach items="${activities}" var="activity">
-                                                    <div class="activity-card"
-                                                        onclick="location.href='activity-details.jsp?id=${activity.id}'">
-                                                        <div class="activity-img-wrap">
-                                                            <img src="${activity.imageUrl}" alt="${activity.name}">
-                                                        </div>
-                                                        <div class="activity-info">
-                                                            <h5 class="activity-name">${activity.name}</h5>
-                                                            <div class="activity-rating">⭐ ${activity.rating} <span
-                                                                    style="color: var(--color-muted); font-weight: 400;">(${activity.reviewsCount}
-                                                                    reviews)</span></div>
-                                                            <div class="activity-price">₹${activity.price} <span>/
-                                                                    person</span></div>
-                                                        </div>
+                                                    
+                                                    <!-- Hotel Info -->
+                                                    <div style="flex: 1; min-width: 200px;">
+                                                        <h4 style="font-size: 1.2rem; font-weight: 800; color: var(--color-main); margin-bottom: 4px;">
+                                                            <c:out value="${s.name}"/>
+                                                        </h4>
+                                                        <p style="font-size: 0.85rem; color: var(--color-muted); margin-bottom: 8px;">📍 <c:out value="${s.location}"/></p>
+                                                        <c:if test="${not empty s.amenities}">
+                                                            <p style="font-size: 0.75rem; color: var(--color-muted);">
+                                                                <c:out value="${s.amenities}"/>
+                                                            </p>
+                                                        </c:if>
                                                     </div>
-                                                </c:forEach>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <div class="vx-empty-state">
-                                                    <div class="vx-empty-icon">🎟️</div>
-                                                    <h3 class="vx-empty-title">No activities found</h3>
-                                                    <p class="vx-empty-desc">Explore other regions to find exciting
-                                                        tours, treks, and cultural experiences.</p>
+                                                    
+                                                    <!-- Price & Button -->
+                                                    <div style="text-align: right; min-width: 140px;">
+                                                        <div style="font-size: 1.6rem; font-weight: 800; color: var(--color-primary); line-height: 1;">
+                                                            ₹<fmt:formatNumber value="${s.discountedPrice}" groupingUsed="true"/>
+                                                        </div>
+                                                        <div style="font-size: 0.75rem; color: var(--color-muted); margin-top: 4px; margin-bottom: 12px;">per night</div>
+                                                        
+                                                        <button class="btn-select" style="padding: 10px 24px; font-weight: 800; width: 100%; border-radius: 8px;"
+                                                                onclick="location.href='${pageContext.request.contextPath}/book?type=hotel&id=${s.id}&price=${s.discountedPrice}&name=${s.name}'">
+                                                            Book →
+                                                        </button>
+                                                    </div>
+                                                    
                                                 </div>
-                                            </c:otherwise>
-                                        </c:choose>
-
-                                    </div>
-                                </div>
-                            </div> <!-- End Left Side Results -->
-
-                        <!-- Right Side: Mini Map Sidebar -->
-                        <div class="w-full lg:w-1/3 xl:w-1/4 hidden lg:block">
-                            <div class="sticky glass-panel slide-up delay-2"
-                                style="top: 120px; padding: 0; overflow: hidden; border-radius: 16px; border: 1px solid var(--color-border); box-shadow: var(--shadow-md);">
-                                <div id="bookingMiniMap" style="width: 100%; height: 350px; background: #e5e3df;"></div>
-                                <div class="p-4"
-                                    style="border-top: 1px solid var(--color-border); background: var(--surface-glass); backdrop-filter: blur(12px);">
-                                    <h5 class="text-main mb-1 editorial" style="font-size: 1.15rem; font-weight: 700;">
-                                        Route Preview</h5>
-                                    <div class="flex justify-between items-center mb-4">
-                                        <span class="text-sm font-bold tracking-wide text-main">DEL ✈ BOM</span>
-                                        <span id="miniMapDist" class="text-sm text-primary font-bold">1,148 km</span>
-                                    </div>
-                                    <a href="${pageContext.request.contextPath}/route"
-                                        class="btn btn-secondary w-full flex justify-center items-center"
-                                        style="padding: 10px; font-size: 0.85rem;">
-                                        View Full Navigation ➔
-                                    </a>
+                                            </c:forEach>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <div class="vx-empty-state"
+                                                 style="padding: 48px; text-align: center; background: rgba(255,255,255,0.02); border-radius: 12px; border: 1px dashed var(--color-border);">
+                                                <div style="font-size: 3rem; margin-bottom: 12px;">🏨</div>
+                                                <h3 style="color: var(--color-main); margin-bottom: 8px;">No hotels found</h3>
+                                                <p style="color: var(--color-muted); font-size: 0.9rem;">Try a different city or dates.</p>
+                                            </div>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </div>
                             </div>
-                        </div>
 
-                        </div> <!-- End Container flex -->
+                            <!-- ===== 3. TRANSPORT / CARS ===== -->
+                            <div class="results-section section-transport" style="margin-top: 40px;">
+                                <div class="results-header" style="margin-bottom: 16px;">
+                                    <h2 class="results-title">🚖 Local Transport & Transfers</h2>
+                                    <span style="color: var(--color-muted); font-size: 0.85rem;">${fn:length(transportServices)} option(s)</span>
+                                </div>
+                                <div class="results-grid results-grid-3">
+                                    <c:choose>
+                                        <c:when test="${not empty transportServices}">
+                                            <c:forEach items="${transportServices}" var="ts">
+                                                <div class="result-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+                                                    <div>
+                                                        <div class="result-card-header">
+                                                            <div class="airline-info">
+                                                                <div class="airline-logo"
+                                                                     style="background: var(--surface-glass); border: 1px solid var(--color-border); font-size: 1.5rem; display: flex; align-items: center; justify-content: center; border-radius: 50%;">
+                                                                    <c:out value="${ts.companyLogo}"/>
+                                                                </div>
+                                                                <div>
+                                                                    <div class="airline-name"><c:out value="${ts.companyName}"/></div>
+                                                                    <div class="flight-num"><c:out value="${ts.transportNumber}"/></div>
+                                                                </div>
+                                                            </div>
+                                                            <c:if test="${not empty ts.badge}">
+                                                                <span class="result-badge"><c:out value="${ts.badge}"/></span>
+                                                            </c:if>
+                                                        </div>
+                                                        <!-- Route + Time -->
+                                                        <div style="padding: 10px 0; border-top: 1px solid rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.06); margin: 8px 0;">
+                                                            <div style="font-size: 0.85rem; color: var(--color-main); font-weight: 600; margin-bottom: 4px;">
+                                                                <c:out value="${ts.departureTime}"/>
+                                                                <c:if test="${not empty ts.duration}"> · <c:out value="${ts.duration}"/></c:if>
+                                                            </div>
+                                                            <c:if test="${not empty ts.originCode and ts.originCode != 'Your Location'}">
+                                                                <div style="font-size: 0.75rem; color: var(--color-muted);">
+                                                                    <c:out value="${ts.originCode}"/>
+                                                                    <c:if test="${not empty ts.destinationCode}"> → <c:out value="${ts.destinationCode}"/></c:if>
+                                                                </div>
+                                                            </c:if>
+                                                        </div>
+                                                    </div>
+                                                    <div class="result-card-footer" style="margin-top: 12px;">
+                                                        <div>
+                                                            <div class="result-price" style="font-size: 1.3rem;">₹<fmt:formatNumber value="${ts.price}" groupingUsed="true"/></div>
+                                                            <div style="font-size: 0.7rem; color: var(--color-muted);">one way</div>
+                                                        </div>
+                                                        <button class="btn-select"
+                                                                onclick="location.href='${pageContext.request.contextPath}/book?type=${ts.type}&id=${ts.transportNumber}&price=${ts.price}&name=${ts.companyName}'">
+                                                            Select →
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </c:forEach>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <div style="grid-column: span 3; padding: 48px; text-align: center; background: rgba(255,255,255,0.02); border-radius: 12px; border: 1px dashed var(--color-border);">
+                                                <div style="font-size: 3rem; margin-bottom: 12px;">🚖</div>
+                                                <h3 style="color: var(--color-main); margin-bottom: 8px;">No transport options found</h3>
+                                                <p style="color: var(--color-muted); font-size: 0.9rem;">No local transport available for this route.</p>
+                                            </div>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
+                            </div>
+
+                            </div><!-- /flex col gap -->
+                        </div><!-- /container -->
+                        </c:if>
+
+                        <!-- Right Side Map Sidebar (only on flight search) -->
+                        <c:if test="${searchType == 'flight' and not empty searchType}">
+                        <div style="display:none;"><!-- Map placeholder kept for future use --></div>
+                        </c:if>
+
                     </main>
+
 
                     <script>
                         // Booking Mini Map Setup
@@ -753,6 +825,17 @@
                             grid-template-columns: repeat(4, 1fr);
                         }
 
+                        /* --- VERTICAL STACKED LAYOUT FIX --- */
+                        .results-container {
+                            display: flex;
+                            flex-direction: column;
+                            gap: 24px;
+                            width: 100%;
+                        }
+
+                        .results-section {
+                            width: 100%;
+                        }
                         /* --- RESULT CARD --- */
                         .result-card {
                             background: var(--color-surface);
@@ -1167,16 +1250,131 @@
                             if (form) form.classList.add('active');
                         }
 
+                        // ===== FILTER & SORT WIRING =====
+                        function applyFilters() {
+                            // Collect current search params from URL
+                            const params = new URLSearchParams(window.location.search);
+
+                            // Overwrite filter/sort params from dropdowns
+                            const airline  = document.getElementById('airlineFilter');
+                            const price    = document.getElementById('priceFilter');
+                            const stops    = document.getElementById('stopsFilter');
+                            const sort     = document.getElementById('sortSelect');
+
+                            if (airline) params.set('filterAirline',  airline.value);
+                            if (price)   params.set('filterMaxPrice', price.value);
+                            if (stops)   params.set('filterStops',    stops.value);
+                            if (sort)    params.set('sort',           sort.value);
+
+                            // Navigate to same servlet with updated filters
+                            window.location.href = window.location.pathname + '?' + params.toString();
+                        }
+
                         // Swap from/to fields (Flights)
                         function swapFields() {
-                            // Simple visual swap for demo
                             const fromVal = document.querySelector('#form-flights .search-field:first-child .field-value');
-                            const toVal = document.querySelector('#form-flights .search-field:nth-child(3) .field-value');
+                            const toVal   = document.querySelector('#form-flights .search-field:nth-child(3) .field-value');
                             if (fromVal && toVal) {
                                 const tmp = fromVal.textContent;
                                 fromVal.textContent = toVal.textContent;
                                 toVal.textContent = tmp;
                             }
+                        }
+
+
+                        // ===== TRAVELLERS PANEL LOGIC =====
+                        let adults = 1, children = 0, selectedClass = 'economy', selectedClassLabel = 'Economy';
+
+                        function toggleTravellersPanel(e) {
+                            e.stopPropagation();
+                            const panel = document.getElementById('travellersPanel');
+                            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+                        }
+
+                        // Close panel when clicking outside
+                        document.addEventListener('click', function() {
+                            const panel = document.getElementById('travellersPanel');
+                            if (panel) panel.style.display = 'none';
+                        });
+
+                        function changePax(type, delta) {
+                            if (type === 'adults') {
+                                adults = Math.max(1, Math.min(9, adults + delta));
+                                document.getElementById('adultsCount').textContent = adults;
+                            } else {
+                                children = Math.max(0, Math.min(6, children + delta));
+                                document.getElementById('childrenCount').textContent = children;
+                            }
+                        }
+
+                        function selectClass(value, label) {
+                            selectedClass = value;
+                            selectedClassLabel = label;
+                            // Reset all buttons
+                            document.querySelectorAll('.class-btn').forEach(btn => {
+                                btn.style.border = '1px solid rgba(255,255,255,0.15)';
+                                btn.style.background = 'transparent';
+                                btn.style.color = 'rgba(255,255,255,0.7)';
+                            });
+                            // Highlight selected
+                            const active = document.getElementById('class-' + value);
+                            if (active) {
+                                active.style.border = '1px solid var(--color-primary)';
+                                active.style.background = 'rgba(212,165,116,0.15)';
+                                active.style.color = 'var(--color-primary)';
+                            }
+                        }
+
+                        function applyTravellers() {
+                            const total = adults + children;
+                            const label = adults + ' Adult' + (adults > 1 ? 's' : '') +
+                                          (children > 0 ? ', ' + children + ' Child' + (children > 1 ? 'ren' : '') : '');
+                            document.getElementById('travellersDisplay').textContent = label;
+                            document.getElementById('classDisplay').textContent = selectedClassLabel;
+                            document.getElementById('seatClassHidden').value = selectedClass;
+                            document.getElementById('passengersHidden').value = total;
+                            document.getElementById('travellersPanel').style.display = 'none';
+                        }
+                    </script>
+
+                    <!-- Loading State Overlay -->
+                    <div id="loadingOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 10, 0.85); backdrop-filter: blur(8px); z-index: 9999; flex-direction: column; justify-content: center; align-items: center;">
+                        <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primary mb-4"></div>
+                        <h2 class="text-white text-2xl font-bold tracking-widest uppercase">Searching...</h2>
+                        <p class="text-white opacity-60 mt-2">Finding the best deals for you</p>
+                    </div>
+
+                    <script>
+                        // Loading State Logic
+                        document.querySelectorAll('form').forEach(form => {
+                            form.addEventListener('submit', function() {
+                                document.getElementById('loadingOverlay').style.display = 'flex';
+                            });
+                        });
+
+                        // Filtering & Sorting Logic
+                        function applyFilters() {
+                            const airline = document.getElementById('airlineFilter').value;
+                            const priceLimit = document.getElementById('priceFilter').value;
+                            const stops = document.getElementById('stopsFilter').value;
+                            const sortBy = document.getElementById('sortSelect').value;
+                            
+                            const url = new URL(window.location.href);
+                            
+                            if (airline) url.searchParams.set('filterAirline', airline);
+                            else url.searchParams.delete('filterAirline');
+                            
+                            if (priceLimit) url.searchParams.set('filterMaxPrice', priceLimit);
+                            else url.searchParams.delete('filterMaxPrice');
+                            
+                            if (stops) url.searchParams.set('filterStops', stops);
+                            else url.searchParams.delete('filterStops');
+                            
+                            if (sortBy) url.searchParams.set('sort', sortBy);
+                            else url.searchParams.delete('sort');
+                            
+                            document.getElementById('loadingOverlay').style.display = 'flex';
+                            window.location.href = url.toString();
                         }
                     </script>
 

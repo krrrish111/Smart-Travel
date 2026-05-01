@@ -17,7 +17,8 @@ javac -encoding UTF-8 -cp "%CP%" -d "%OUTDIR%" ^
   %SRCROOT%\com\voyastra\model\*.java ^
   %SRCROOT%\com\voyastra\dao\*.java ^
   %SRCROOT%\com\voyastra\servlet\*.java ^
-  %SRCROOT%\com\voyastra\filter\*.java
+  %SRCROOT%\com\voyastra\filter\*.java ^
+  %SRCROOT%\com\voyastra\api\*.java
 
 if %ERRORLEVEL% == 0 (
     echo SUCCESS: Compilation complete.

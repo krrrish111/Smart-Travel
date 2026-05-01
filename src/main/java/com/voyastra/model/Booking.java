@@ -6,6 +6,8 @@ public class Booking {
     private int id;
     private int userId;
     private int planId;
+    private String type; // flight, hotel, trip
+    private String details; // JSON or descriptive string
     private double totalPrice;
     private String status;
     private Timestamp createdAt;
@@ -46,6 +48,12 @@ public class Booking {
 
     public Timestamp getCreatedAt() { return createdAt; }
     public void setCreatedAt(Timestamp createdAt) { this.createdAt = createdAt; }
+
+    public String getType() { return type; }
+    public void setType(String type) { this.type = type; }
+
+    public String getDetails() { return details; }
+    public void setDetails(String details) { this.details = details; }
 
     public String getUserName() { return userName; }
     public void setUserName(String userName) { this.userName = userName; }

@@ -200,3 +200,34 @@
         });
     </script>
 </c:if>
+
+<!-- ===== GLOBAL LOADING OVERLAY ===== -->
+<div id="vx-global-overlay" style="display:none; position:fixed; inset:0; background:rgba(255,255,255,0.7); backdrop-filter:blur(10px); z-index:999999; flex-direction:column; align-items:center; justify-content:center; opacity:0; transition:opacity 0.4s ease;">
+    <div class="vx-loader-spinner" style="width:60px; height:60px; border:4px solid var(--color-border); border-top-color:var(--color-primary); border-radius:50%; animation:vx-spin 1s linear infinite;"></div>
+    <div id="vx-overlay-text" style="margin-top:20px; font-family:'Poppins', sans-serif; font-weight:600; color:var(--text-main); letter-spacing:0.1em; text-transform:uppercase;">Searching...</div>
+</div>
+
+<style>
+@keyframes vx-spin { to { transform: rotate(360deg); } }
+.vx-global-overlay-active { display:flex !important; opacity:1 !important; }
+</style>
+
+<script>
+window.VoyastraUI = {
+    showLoader: function(text) {
+        var el = document.getElementById('vx-global-overlay');
+        var txt = document.getElementById('vx-overlay-text');
+        if (el) {
+            if (text) txt.innerText = text;
+            el.classList.add('vx-global-overlay-active');
+        }
+    },
+    hideLoader: function() {
+        var el = document.getElementById('vx-global-overlay');
+        if (el) el.classList.remove('vx-global-overlay-active');
+    },
+    toast: function(msg, type) {
+        if (window.VoyastraToast) window.VoyastraToast.show(msg, type);
+    }
+};
+</script>

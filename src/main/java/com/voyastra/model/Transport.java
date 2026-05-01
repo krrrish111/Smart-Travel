@@ -13,6 +13,7 @@ public class Transport {
     private String destinationCode;
     private double price;
     private String badge; // e.g., "Fastest", "Cheapest"
+    private int stops;    // 0 = non-stop, 1 = 1 stop, 2 = 2 stops
 
     public Transport() {}
 
@@ -51,4 +52,7 @@ public class Transport {
 
     public String getBadge() { return badge; }
     public void setBadge(String badge) { this.badge = badge; }
+
+    public int getStops() { return stops; }
+    public void setStops(int stops) { this.stops = stops; }
 }

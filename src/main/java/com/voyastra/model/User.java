@@ -16,6 +16,8 @@ public class User {
     private String profileImage;
     private String location;
     private String bio;
+    private double walletBalance;
+    private int loyaltyPoints;
 
     public User() {}
 
@@ -57,4 +59,10 @@ public class User {
 
     public String getBio() { return bio; }
     public void setBio(String bio) { this.bio = bio; }
+
+    public double getWalletBalance() { return walletBalance; }
+    public void setWalletBalance(double walletBalance) { this.walletBalance = walletBalance; }
+
+    public int getLoyaltyPoints() { return loyaltyPoints; }
+    public void setLoyaltyPoints(int loyaltyPoints) { this.loyaltyPoints = loyaltyPoints; }
 }

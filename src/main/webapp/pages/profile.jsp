@@ -157,15 +157,16 @@
     /* Stats Grid */
     .stats-grid {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
         gap: 20px;
+        margin-bottom: 30px;
     }
 
     .stat-card {
         background: var(--surface-glass);
         border: 1px solid var(--color-border);
         border-radius: 24px;
-        padding: 24px;
+        padding: 24px 15px;
         text-align: center;
         transition: transform 0.3s ease;
     }
@@ -183,7 +184,7 @@
     }
 
     .stat-label {
-        font-size: 0.85rem;
+        font-size: 0.75rem;
         color: var(--text-secondary);
         text-transform: uppercase;
         letter-spacing: 1px;
@@ -403,6 +404,14 @@
         <!-- Stats -->
         <div class="stats-grid">
             <div class="stat-card">
+                <div class="stat-value" style="color:var(--color-primary);">₹${user.walletBalance}</div>
+                <div class="stat-label">Wallet Balance</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" style="color:#FFD700;">${user.loyaltyPoints}</div>
+                <div class="stat-label">Loyalty Points</div>
+            </div>
+            <div class="stat-card">
                 <div class="stat-value">${totalTrips}</div>
                 <div class="stat-label">Total Trips</div>
             </div>
@@ -504,25 +513,176 @@
         <!-- Bookings Section -->
         <section id="bookings" class="content-section ${activeTab == 'bookings' ? 'active' : ''}">
             <h2 class="section-title">My Bookings</h2>
-            <div class="booking-list">
-                <c:forEach var="b" items="${bookings}">
-                    <div class="booking-item">
-                        <div class="booking-main">
-                            <div class="booking-icon">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                            </div>
-                            <div>
-                                <div style="font-weight: 600;">${b.planTitle}</div>
-                                <div style="color: var(--text-secondary); font-size: 0.85rem;">Booking ID: #${b.id}</div>
-                            </div>
-                        </div>
-                        <div style="text-align: right;">
-                            <div style="font-weight: 700;">$${b.totalPrice}</div>
-                            <span class="status-pill status-${b.status.toLowerCase()}">${b.status}</span>
-                        </div>
-                    </div>
-                </c:forEach>
+            
+            <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                <button class="btn btn-outline" onclick="showBookingTab('upcoming')" id="tab-upcoming" style="border-color:var(--color-primary); color:white;">Upcoming</button>
+                <button class="btn btn-outline" onclick="showBookingTab('past')" id="tab-past">Past</button>
+                <button class="btn btn-outline" onclick="showBookingTab('cancelled')" id="tab-cancelled">Cancelled</button>
             </div>
+
+            <!-- Upcoming Bookings -->
+            <div id="booking-list-upcoming" class="booking-list">
+                <c:choose>
+                    <c:when test="${not empty upcomingBookings or not empty upcomingHotelBookings}">
+                        <c:forEach var="b" items="${upcomingBookings}">
+                            <div class="booking-item">
+                                <div class="booking-main">
+                                    <div class="booking-icon">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                                    </div>
+                                    <div>
+                                        <div style="font-weight: 600;">Booking #${b.id}</div>
+                                        <div style="color: var(--text-secondary); font-size: 0.85rem;">${b.details}</div>
+                                    </div>
+                                </div>
+                                <div style="text-align: right; display:flex; flex-direction:column; gap:8px;">
+                                    <div><span class="status-pill status-${b.status.toLowerCase()}">${b.status}</span> <span style="font-weight: 700;">$${b.totalPrice}</span></div>
+                                    <div style="display:flex; gap:5px; justify-content: flex-end;">
+                                        <a href="${pageContext.request.contextPath}/booking-details?code=${b.bookingCode}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">Timeline</a>
+                                        <a href="${pageContext.request.contextPath}/ticket?code=${b.bookingCode}" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">View Ticket</a>
+                                        <button type="button" class="btn btn-danger" style="padding: 6px 12px; font-size: 0.8rem;" onclick="openCancelModal('${b.id}', '${b.totalPrice}')">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </c:forEach>
+                        <c:forEach var="hb" items="${upcomingHotelBookings}">
+                            <div class="booking-item">
+                                <div class="booking-main">
+                                    <div class="booking-icon" style="background: rgba(255, 107, 0, 0.1); color: var(--color-primary);">
+                                        <i class="fas fa-hotel" style="font-size: 1.2rem;"></i>
+                                    </div>
+                                    <div>
+                                        <div style="font-weight: 600;">Hotel Booking #${hb.id}</div>
+                                        <div style="color: var(--text-secondary); font-size: 0.85rem;">${hb.hotel.name} - ${hb.room.type}</div>
+                                    </div>
+                                </div>
+                                <div style="text-align: right; display:flex; flex-direction:column; gap:8px;">
+                                    <div><span class="status-pill status-${hb.status.toLowerCase()}">${hb.status}</span> <span style="font-weight: 700;">$${hb.totalPrice}</span></div>
+                                    <div style="display:flex; gap:5px; justify-content: flex-end;">
+                                        <a href="${pageContext.request.contextPath}/hotel-voucher?id=${hb.id}" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Download PDF Voucher</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </c:forEach>
+                    </c:when>
+                    <c:otherwise>
+                        <p style="color: var(--text-secondary); text-align: center; padding: 20px;">No upcoming trips or hotels.</p>
+                    </c:otherwise>
+                </c:choose>
+            </div>
+
+            <!-- Past Bookings -->
+            <div id="booking-list-past" class="booking-list" style="display:none;">
+                <c:choose>
+                    <c:when test="${not empty pastBookings or not empty pastHotelBookings}">
+                        <c:forEach var="b" items="${pastBookings}">
+                            <div class="booking-item" style="opacity: 0.7;">
+                                <div class="booking-main">
+                                    <div class="booking-icon" style="background:#333; color:#888;">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                                    </div>
+                                    <div>
+                                        <div style="font-weight: 600;">Booking #${b.id}</div>
+                                        <div style="color: var(--text-secondary); font-size: 0.85rem;">${b.details}</div>
+                                    </div>
+                                </div>
+                                <div style="text-align: right; display:flex; flex-direction:column; gap:8px;">
+                                    <div><span class="status-pill status-completed">COMPLETED</span> <span style="font-weight: 700;">$${b.totalPrice}</span></div>
+                                    <div style="display:flex; gap:5px; justify-content: flex-end;">
+                                        <a href="${pageContext.request.contextPath}/invoice?code=${b.bookingCode}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem; border-color:#888; color:#888;">Invoice</a>
+                                        <a href="${pageContext.request.contextPath}/ticket?code=${b.bookingCode}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">View Receipt</a>
+                                        <a href="${pageContext.request.contextPath}/search?type=flight" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Rebook</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </c:forEach>
+                        <c:forEach var="hb" items="${pastHotelBookings}">
+                            <div class="booking-item" style="opacity: 0.7;">
+                                <div class="booking-main">
+                                    <div class="booking-icon" style="background:#333; color:#888;">
+                                        <i class="fas fa-hotel" style="font-size: 1.2rem;"></i>
+                                    </div>
+                                    <div>
+                                        <div style="font-weight: 600;">Hotel Booking #${hb.id}</div>
+                                        <div style="color: var(--text-secondary); font-size: 0.85rem;">${hb.hotel.name} - ${hb.room.type}</div>
+                                    </div>
+                                </div>
+                                <div style="text-align: right; display:flex; flex-direction:column; gap:8px;">
+                                    <div><span class="status-pill status-completed">COMPLETED</span> <span style="font-weight: 700;">$${hb.totalPrice}</span></div>
+                                    <div style="display:flex; gap:5px; justify-content: flex-end;">
+                                        <a href="${pageContext.request.contextPath}/hotel-voucher?id=${hb.id}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem; border-color:#888; color:#888;">View Voucher</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </c:forEach>
+                    </c:when>
+                    <c:otherwise>
+                        <p style="color: var(--text-secondary); text-align: center; padding: 20px;">No past trips or hotels.</p>
+                    </c:otherwise>
+                </c:choose>
+            </div>
+
+            <!-- Cancelled Bookings -->
+            <div id="booking-list-cancelled" class="booking-list" style="display:none;">
+                <c:choose>
+                    <c:when test="${not empty cancelledBookings or not empty cancelledHotelBookings}">
+                        <c:forEach var="b" items="${cancelledBookings}">
+                            <div class="booking-item" style="border-color: rgba(255, 59, 48, 0.3);">
+                                <div class="booking-main">
+                                    <div class="booking-icon" style="background: rgba(255, 59, 48, 0.1); color: #ff3b30;">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                                    </div>
+                                    <div>
+                                        <div style="font-weight: 600; text-decoration: line-through;">Booking #${b.id}</div>
+                                        <div style="color: var(--text-secondary); font-size: 0.85rem;">${b.details}</div>
+                                    </div>
+                                </div>
+                                <div style="text-align: right; display:flex; flex-direction:column; gap:8px;">
+                                    <div><span class="status-pill" style="background: rgba(255, 59, 48, 0.1); color: #ff3b30;">CANCELLED</span> <span style="font-weight: 700;">$${b.totalPrice}</span></div>
+                                </div>
+                            </div>
+                        </c:forEach>
+                        <c:forEach var="hb" items="${cancelledHotelBookings}">
+                            <div class="booking-item" style="border-color: rgba(255, 59, 48, 0.3);">
+                                <div class="booking-main">
+                                    <div class="booking-icon" style="background: rgba(255, 59, 48, 0.1); color: #ff3b30;">
+                                        <i class="fas fa-hotel" style="font-size: 1.2rem;"></i>
+                                    </div>
+                                    <div>
+                                        <div style="font-weight: 600; text-decoration: line-through;">Hotel Booking #${hb.id}</div>
+                                        <div style="color: var(--text-secondary); font-size: 0.85rem;">${hb.hotel.name} - ${hb.room.type}</div>
+                                    </div>
+                                </div>
+                                <div style="text-align: right; display:flex; flex-direction:column; gap:8px;">
+                                    <div><span class="status-pill" style="background: rgba(255, 59, 48, 0.1); color: #ff3b30;">CANCELLED</span> <span style="font-weight: 700;">$${hb.totalPrice}</span></div>
+                                </div>
+                            </div>
+                        </c:forEach>
+                    </c:when>
+                    <c:otherwise>
+                        <p style="color: var(--text-secondary); text-align: center; padding: 20px;">No cancelled trips or hotels.</p>
+                    </c:otherwise>
+                </c:choose>
+            </div>
+            
+            <script>
+                function showBookingTab(tab) {
+                    document.getElementById('booking-list-upcoming').style.display = 'none';
+                    document.getElementById('booking-list-past').style.display = 'none';
+                    document.getElementById('booking-list-cancelled').style.display = 'none';
+                    
+                    document.getElementById('tab-upcoming').style.borderColor = 'var(--color-border)';
+                    document.getElementById('tab-upcoming').style.color = 'var(--text-secondary)';
+                    document.getElementById('tab-past').style.borderColor = 'var(--color-border)';
+                    document.getElementById('tab-past').style.color = 'var(--text-secondary)';
+                    document.getElementById('tab-cancelled').style.borderColor = 'var(--color-border)';
+                    document.getElementById('tab-cancelled').style.color = 'var(--text-secondary)';
+                    
+                    document.getElementById('booking-list-' + tab).style.display = 'flex';
+                    document.getElementById('tab-' + tab).style.borderColor = 'var(--color-primary)';
+                    document.getElementById('tab-' + tab).style.color = 'white';
+                }
+            </script>
         </section>
 
         <!-- Saved Plans Section -->
@@ -593,6 +753,47 @@
 
     </main>
 </div>
+
+<!-- Cancel/Refund Modal -->
+<div id="cancelModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:1000; justify-content:center; align-items:center;">
+    <div style="background:var(--bg-main); width:90%; max-width:500px; padding:30px; border-radius:16px; border:1px solid var(--color-border); box-shadow:0 10px 40px rgba(0,0,0,0.5);">
+        <h3 style="margin-top:0; color:var(--text-main);">Cancel Booking</h3>
+        <p style="color:var(--text-secondary); margin-bottom:20px;">Please select how you would like to receive your refund for <strong style="color:white;" id="cancelAmountDisplay"></strong>.</p>
+        
+        <form action="${pageContext.request.contextPath}/profile" method="POST" id="cancelForm">
+            <input type="hidden" name="action" value="cancelBooking">
+            <input type="hidden" name="bookingId" id="cancelBookingId" value="">
+            
+            <label style="display:block; padding:15px; border:2px solid var(--color-primary); border-radius:8px; margin-bottom:15px; cursor:pointer; background:rgba(212,165,116,0.1);">
+                <input type="radio" name="refundMethod" value="WALLET" checked>
+                <strong style="color:var(--color-primary);">Instant Wallet Refund</strong>
+                <p style="margin:5px 0 0 0; font-size:0.85rem; color:var(--text-secondary);">Get your refund instantly credited to your Voyastra Wallet. You can use it immediately for your next booking.</p>
+            </label>
+            
+            <label style="display:block; padding:15px; border:1px solid var(--color-border); border-radius:8px; margin-bottom:25px; cursor:pointer;">
+                <input type="radio" name="refundMethod" value="ORIGINAL">
+                <strong>Original Payment Method</strong>
+                <p style="margin:5px 0 0 0; font-size:0.85rem; color:var(--text-secondary);">Takes 3-5 business days to reflect in your bank account or credit card.</p>
+            </label>
+            
+            <div style="display:flex; justify-content:flex-end; gap:10px;">
+                <button type="button" class="btn btn-outline" onclick="closeCancelModal()">Keep Booking</button>
+                <button type="submit" class="btn btn-danger">Confirm Cancellation</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openCancelModal(bookingId, amount) {
+        document.getElementById('cancelBookingId').value = bookingId;
+        document.getElementById('cancelAmountDisplay').innerText = '$' + amount;
+        document.getElementById('cancelModal').style.display = 'flex';
+    }
+    function closeCancelModal() {
+        document.getElementById('cancelModal').style.display = 'none';
+    }
+</script>
 
 <%@ include file="/components/footer.jsp" %>
 

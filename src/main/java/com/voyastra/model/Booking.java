@@ -29,6 +29,11 @@ public class Booking {
     private String specialRequests;
     private String bookingCode;
 
+    // Payment integration fields
+    private String paymentId;
+    private String transactionId;
+    private String paymentStatus;
+
     public Booking() {}
 
     public int getId() { return id; }
@@ -93,4 +98,13 @@ public class Booking {
 
     public String getBookingCode() { return bookingCode; }
     public void setBookingCode(String bookingCode) { this.bookingCode = bookingCode; }
+
+    public String getPaymentId() { return paymentId; }
+    public void setPaymentId(String paymentId) { this.paymentId = paymentId; }
+
+    public String getTransactionId() { return transactionId; }
+    public void setTransactionId(String transactionId) { this.transactionId = transactionId; }
+
+    public String getPaymentStatus() { return paymentStatus; }
+    public void setPaymentStatus(String paymentStatus) { this.paymentStatus = paymentStatus; }
 }

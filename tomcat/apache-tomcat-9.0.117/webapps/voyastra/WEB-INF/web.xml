@@ -169,14 +169,7 @@
         <url-pattern>/admin/profile</url-pattern>
     </servlet-mapping>
 
-    <servlet>
-        <servlet-name>BookingDetails</servlet-name>
-        <jsp-file>/pages/booking-details.jsp</jsp-file>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>BookingDetails</servlet-name>
-        <url-pattern>/booking-details</url-pattern>
-    </servlet-mapping>
+
 
     <servlet>
         <servlet-name>Settings</servlet-name>

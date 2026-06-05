@@ -13,10 +13,11 @@ set CP=%LIB%\HikariCP-5.0.1.jar;%LIB%\slf4j-api-1.7.36.jar;%LIB%\gson-2.10.1.jar
 
 echo Compiling all classes...
 javac -encoding UTF-8 -cp "%CP%" -d "%OUTDIR%" ^
-  %SRCROOT%\com\voyastra\util\DBConnection.java ^
+  %SRCROOT%\com\voyastra\util\*.java ^
   %SRCROOT%\com\voyastra\model\*.java ^
   %SRCROOT%\com\voyastra\dao\*.java ^
   %SRCROOT%\com\voyastra\servlet\*.java ^
+  %SRCROOT%\com\voyastra\servlet\booking\*.java ^
   %SRCROOT%\com\voyastra\filter\*.java ^
   %SRCROOT%\com\voyastra\api\*.java
 
@@ -32,6 +33,7 @@ if %ERRORLEVEL% == 0 (
     xcopy /S /Y src\main\webapp\admin\*.jsp "%WEBAPP_DIR%\admin\"
     xcopy /S /Y src\main\webapp\admin\css\*.css "%WEBAPP_DIR%\admin\css\"
     xcopy /S /Y src\main\webapp\admin\js\*.js "%WEBAPP_DIR%\admin\js\"
+    xcopy /S /Y src\main\webapp\pages\booking\*.jsp "%WEBAPP_DIR%\pages\booking\"
     echo Done! Visit http://localhost:8080/voyastra/ to see the live site.
 ) else (
     echo FAILURE: Compilation failed. See errors above.

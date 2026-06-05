@@ -23,6 +23,12 @@
     <script src="${pageContext.request.contextPath}/js/auth-guard.js"></script>
     <script src="${pageContext.request.contextPath}/js/toast.js"></script>
     <script src="${pageContext.request.contextPath}/js/validate.js"></script>
+    <!-- Google Auth Script -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script>
+        // Fix for Tomcat dropping JSESSIONID when Google's g_state cookie contains invalid JSON characters
+        document.cookie = 'g_state=; Max-Age=-99999999; path=/;';
+    </script>
     <script>
         window.CONTEXT_PATH = "${pageContext.request.contextPath}";
         (function(){

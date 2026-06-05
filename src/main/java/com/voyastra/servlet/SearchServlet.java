@@ -1,5 +1,7 @@
 package com.voyastra.servlet;
 
+import com.voyastra.api.TravelpayoutsService;
+import com.voyastra.model.FlightResult;
 import com.voyastra.model.Transport;
 import com.voyastra.model.Stay;
 
@@ -13,15 +15,12 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 @WebServlet("/search")
 public class SearchServlet extends HttpServlet {
 
     private com.voyastra.api.ApiService apiService = new com.voyastra.api.ApiService();
+    private com.voyastra.api.TravelpayoutsService travelpayoutsService = new com.voyastra.api.TravelpayoutsService();
 
     // ==================== MAIN DISPATCHER ====================
     @Override
@@ -38,7 +37,9 @@ public class SearchServlet extends HttpServlet {
         String drop       = request.getParameter("drop");
         String query      = request.getParameter("query");
         String seatClass  = request.getParameter("seatClass");
-        String passengers = request.getParameter("passengers");
+        String adultCount = request.getParameter("adultCount");
+        String childCount = request.getParameter("childCount");
+        String infantCount= request.getParameter("infantCount");
         String carCat     = request.getParameter("carCategory");
         String carType    = request.getParameter("carType");
         String tourType   = request.getParameter("tourType");
@@ -54,9 +55,18 @@ public class SearchServlet extends HttpServlet {
                 + " seatClass=" + seatClass + " airline=" + filterAirline
                 + " maxPrice=" + filterMaxPrice + " stops=" + filterStops + " sort=" + sortBy);
 
+        int adults = adultCount != null ? Integer.parseInt(adultCount) : 1;
+        int children = childCount != null ? Integer.parseInt(childCount) : 0;
+        int infants = infantCount != null ? Integer.parseInt(infantCount) : 0;
+        int totalPassengers = adults + children + infants;
+
         // ---- Echo all params back to JSP ----
         request.setAttribute("searchSeatClass",   getSeatClassLabel(seatClass));
-        request.setAttribute("searchPassengers",  passengers != null ? passengers : "1");
+        request.setAttribute("searchPassengers",  String.valueOf(totalPassengers));
+        request.setAttribute("searchAdultCount",  String.valueOf(adults));
+        request.setAttribute("searchChildCount",  String.valueOf(children));
+        request.setAttribute("searchInfantCount", String.valueOf(infants));
+        request.setAttribute("searchSeatClassRaw", seatClass != null ? seatClass : "economy");
         request.setAttribute("searchCarCategory", carCat);
         request.setAttribute("searchCarType",     carType);
         request.setAttribute("searchTourType",    tourType);
@@ -69,7 +79,7 @@ public class SearchServlet extends HttpServlet {
 
         if ("flight".equalsIgnoreCase(type)) {
             handleFlightSearch(request, response, from, to, date, seatClass,
-                    filterAirline, filterMaxPrice, filterStops, sortBy);
+                    filterAirline, filterMaxPrice, filterStops, sortBy, adults, children, infants);
         } else if ("hotel".equalsIgnoreCase(type)) {
             handleHotelSearch(request, response, city != null ? city : to, date);
         } else if ("car".equalsIgnoreCase(type)) {
@@ -86,22 +96,18 @@ public class SearchServlet extends HttpServlet {
     private void handleFlightSearch(HttpServletRequest request, HttpServletResponse response,
                                     String from, String to, String date, String seatClass,
                                     String filterAirline, String filterMaxPrice,
-                                    String filterStops, String sortBy)
+                                    String filterStops, String sortBy, int adults, int children, int infants)
             throws ServletException, IOException {
 
-        double multiplier = getPriceMultiplier(seatClass);
-
-        // 1. Get flight list (API + fallback is handled inside ApiService)
-        List<Transport> results = apiService.getFlights(
+        // 1. Call Travelpayouts API → parse JSON → List<FlightResult>
+        List<FlightResult> apiFlights = travelpayoutsService.searchAndParseFlights(
                 from != null ? from : "DEL",
                 to   != null ? to   : "BOM",
-                date != null ? date : "2026-06-01",
-                seatClass);
-        
-        // Ensure flights list is never null
-        if (results == null) {
-            results = new ArrayList<>();
-        }
+                date != null ? date : "2026-07-01",
+                adults, children, infants, seatClass);
+
+        // 2. Convert FlightResult → Transport (for booking.jsp compatibility)
+        List<Transport> results = convertToTransports(apiFlights, seatClass);
 
         // 3. Apply filters
         results = applyFlightFilters(results, filterAirline, filterMaxPrice, filterStops);
@@ -109,9 +115,10 @@ public class SearchServlet extends HttpServlet {
         // 4. Apply sorting
         results = applySort(results, sortBy);
 
-        // 5. Hotels (cross-sell on flight tab)
+        // 5. Hotels cross-sell on flight tab (hotel logic unchanged)
         List<Stay> hotels = apiService.getHotelList(to != null ? to : "Mumbai");
 
+        // 6. Set attributes and forward to booking.jsp
         request.setAttribute("flights",           results);
         request.setAttribute("hotels",            hotels);
         request.setAttribute("transport",         getMockCarServices(from, to));
@@ -122,6 +129,58 @@ public class SearchServlet extends HttpServlet {
         request.setAttribute("date",              date);
         request.setAttribute("seatClass",         seatClass);
         forward(request, response);
+    }
+
+    /**
+     * Converts parsed FlightResult objects from TravelpayoutsService into
+     * Transport objects that booking.jsp already knows how to render.
+     * Price multiplier is applied here based on selected seat class.
+     */
+    private List<Transport> convertToTransports(List<FlightResult> flights, String seatClass) {
+        if (flights == null || flights.isEmpty()) return new ArrayList<>();
+        double multiplier = getPriceMultiplier(seatClass);
+        List<Transport> list = new ArrayList<>();
+        int id = 1;
+        for (FlightResult f : flights) {
+            Transport t = new Transport();
+            t.setId(id++);
+            t.setType("flight");
+            t.setCompanyLogo(f.getAirline());                       // IATA code (e.g. "6E")
+            t.setCompanyName(resolveAirlineName(f.getAirline()));   // Full name (e.g. "IndiGo")
+            t.setTransportNumber(f.getFlightNumber());              // e.g. "6E-101"
+            t.setOriginCode(f.getOrigin());
+            t.setDestinationCode(f.getDestination());
+            t.setDepartureTime(f.getDepartureTime());
+            t.setArrivalTime(f.getArrivalTime());
+            t.setDuration(f.getDuration());
+            t.setPrice(Math.round(f.getPrice() * multiplier));
+            t.setStops(f.getStops());
+            t.setBadge(f.getBadge());
+            list.add(t);
+        }
+        return list;
+    }
+
+    /** Resolve IATA carrier code to full airline name for display. */
+    private String resolveAirlineName(String iata) {
+        if (iata == null) return "Unknown Airline";
+        switch (iata.toUpperCase()) {
+            case "AI":  return "Air India";
+            case "6E":  return "IndiGo";
+            case "SG":  return "SpiceJet";
+            case "UK":  return "Vistara";
+            case "G8":  return "Go First";
+            case "IX":  return "Air India Express";
+            case "QP":  return "Akasa Air";
+            case "EK":  return "Emirates";
+            case "LH":  return "Lufthansa";
+            case "BA":  return "British Airways";
+            case "QR":  return "Qatar Airways";
+            case "SQ":  return "Singapore Airlines";
+            case "EY":  return "Etihad Airways";
+            case "TK":  return "Turkish Airlines";
+            default:    return iata + " Airlines";
+        }
     }
 
     // ==================== FILTER ENGINE ====================

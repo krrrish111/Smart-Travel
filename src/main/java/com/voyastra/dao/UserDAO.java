@@ -27,6 +27,11 @@ public class UserDAO {
             user.setProfileImage(rs.getString("profile_image"));
             user.setLocation(rs.getString("location"));
             user.setBio(rs.getString("bio"));
+            
+            // New MakeMyTrip level fields
+            try { user.setWalletBalance(rs.getDouble("wallet_balance")); } catch(SQLException e) {}
+            try { user.setLoyaltyPoints(rs.getInt("loyalty_points")); } catch(SQLException e) {}
+            
         } catch (SQLException e) {
             // Optional columns
         }
@@ -139,6 +144,20 @@ public class UserDAO {
             stmt.setString(4, user.getBio());
             stmt.setString(5, user.getProfileImage());
             stmt.setInt(6, user.getId());
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updateWalletAndLoyalty(int userId, double walletBalance, int loyaltyPoints) {
+        String sql = "UPDATE users SET wallet_balance = ?, loyalty_points = ? WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setDouble(1, walletBalance);
+            stmt.setInt(2, loyaltyPoints);
+            stmt.setInt(3, userId);
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();

@@ -461,7 +461,7 @@
         fetch(window.CONTEXT_PATH + '/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: email, password: password, redirect: redirect }),
+            body: JSON.stringify({ email: email, password: password, redirect: redirect || '' }),
             credentials: 'same-origin'
         })
         .then(function(res) { return res.json(); })

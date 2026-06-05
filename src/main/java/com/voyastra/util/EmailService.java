@@ -84,4 +84,56 @@ public class EmailService {
                 "</body></html>";
         sendEmail(to, "Reset your Voyastra Password", html);
     }
+
+    public static void sendTicketEmail(String to, java.io.InputStream pdfData, String fileName) {
+        new Thread(() -> {
+            try {
+                Session session = Session.getInstance(props, new Authenticator() {
+                    @Override
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(SMTP_USER, SMTP_PASS);
+                    }
+                });
+
+                Message message = new MimeMessage(session);
+                message.setFrom(new InternetAddress(FROM_EMAIL, FROM_NAME));
+                message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
+                message.setSubject("Voyastra Flight Ticket");
+
+                jakarta.mail.internet.MimeBodyPart textPart = new jakarta.mail.internet.MimeBodyPart();
+                textPart.setText("Thank you for booking with Voyastra Airlines!\n\nPlease find your e-ticket attached to this email. You can present this boarding pass at the counter.\n\nSafe travels,\nThe Voyastra Team");
+
+                jakarta.mail.internet.MimeBodyPart attachmentPart = new jakarta.mail.internet.MimeBodyPart();
+                
+                // Write InputStream to a temporary file because raw byte[] content might throw UnsupportedDataTypeException without jakarta.activation DataHandler
+                java.io.File tempFile = java.io.File.createTempFile("ticket_", ".pdf");
+                tempFile.deleteOnExit();
+                try (java.io.FileOutputStream out = new java.io.FileOutputStream(tempFile)) {
+                    byte[] buffer = new byte[1024];
+                    int bytesRead;
+                    while ((bytesRead = pdfData.read(buffer)) != -1) {
+                        out.write(buffer, 0, bytesRead);
+                    }
+                }
+                attachmentPart.attachFile(tempFile);
+                attachmentPart.setFileName(fileName);
+
+                Multipart multipart = new jakarta.mail.internet.MimeMultipart();
+                multipart.addBodyPart(textPart);
+                multipart.addBodyPart(attachmentPart);
+
+                message.setContent(multipart);
+                
+                // If using dummy credentials, skip Transport.send to avoid exception spam
+                if (!"your-app-password".equals(SMTP_PASS)) {
+                    Transport.send(message);
+                    System.out.println("[EMAIL] Ticket sent successfully to: " + to);
+                } else {
+                    System.out.println("[EMAIL MOCK] Ticket email 'sent' (using dummy credentials). Attachment length: " + tempFile.length() + " bytes.");
+                }
+            } catch (Exception e) {
+                System.err.println("[EMAIL ERROR] Failed to send ticket to " + to + ": " + e.getMessage());
+            }
+        }).start();
+    }
 }

@@ -59,9 +59,12 @@ public class LoginServlet extends HttpServlet {
             JsonObject jsonRequest = gson.fromJson(sb.toString(), JsonObject.class);
             if (jsonRequest == null) throw new IllegalArgumentException("Invalid JSON");
 
-            String email    = jsonRequest.get("email")    != null ? jsonRequest.get("email").getAsString() : "";
-            String password = jsonRequest.get("password") != null ? jsonRequest.get("password").getAsString() : "";
-            String target   = jsonRequest.get("redirect") != null ? jsonRequest.get("redirect").getAsString() : "";
+            com.google.gson.JsonElement eEl = jsonRequest.get("email");
+            com.google.gson.JsonElement pEl = jsonRequest.get("password");
+            com.google.gson.JsonElement rEl = jsonRequest.get("redirect");
+            String email    = (eEl != null && !eEl.isJsonNull()) ? eEl.getAsString() : "";
+            String password = (pEl != null && !pEl.isJsonNull()) ? pEl.getAsString() : "";
+            String target   = (rEl != null && !rEl.isJsonNull()) ? rEl.getAsString() : "";
 
             if (email.trim().isEmpty() || password.trim().isEmpty()) {
                 result.put("success", false);

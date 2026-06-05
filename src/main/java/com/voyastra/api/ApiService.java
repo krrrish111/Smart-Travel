@@ -8,6 +8,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import com.voyastra.util.OAuthConfig;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -26,55 +28,12 @@ import java.util.stream.Collectors;
 public class ApiService {
 
     // ====== RapidAPI Credentials ======
-    private static final String RAPIDAPI_KEY         = "9437f20ea0msh37e03007794db5ap127b0ejsn9161f8468650";
-    private static final String FLIGHT_API_HOST      = "skyscanner44.p.rapidapi.com";
+    private static final String RAPIDAPI_KEY         = OAuthConfig.getRapidApiKey();
     private static final String HOTEL_API_HOST       = "booking-com.p.rapidapi.com";
 
     // Timeouts — keep short so failures fall back fast
     private static final int CONNECT_TIMEOUT_MS = 4000;
     private static final int READ_TIMEOUT_MS    = 6000;
-
-    // ==================== PUBLIC FLIGHT METHOD ====================
-    /**
-     * Fetch flights from RapidAPI (Skyscanner).
-     * Falls back to realistic mock data if API call fails.
-     *
-     * @param from      IATA origin code or city name (e.g. "DEL")
-     * @param to        IATA destination code (e.g. "BOM")
-     * @param date      Departure date in YYYY-MM-DD format
-     * @param seatClass "economy" | "premium" | "business" | "first"
-     * @return List of Transport objects ready for the JSP
-     */
-    public List<Transport> getFlights(String from, String to, String date, String seatClass) {
-        double multiplier = getPriceMultiplier(seatClass);
-
-        try {
-            String urlStr = "https://" + FLIGHT_API_HOST
-                    + "/search-flights"
-                    + "?adults=1&origin=" + encode(from) + "&destination=" + encode(to)
-                    + "&departureDate=" + encode(date) + "&currency=INR&cabinClass=" + cabinClassParam(seatClass);
-
-            String raw = callApi(urlStr, FLIGHT_API_HOST);
-            if (raw != null) {
-                List<Transport> parsed = parseFlightJson(raw, from, to, multiplier);
-                if (!parsed.isEmpty()) {
-                    System.out.println("[ApiService] Flights from API: " + parsed.size() + " results");
-                    return parsed;
-                }
-            }
-        } catch (Exception e) {
-            System.err.println("[ApiService] Flight API call failed: " + e.getMessage());
-        }
-
-        System.out.println("[ApiService] Using flight fallback data");
-        return getMockFlights(from, to, multiplier);
-    }
-
-    // Backward-compatible overload (no seatClass)
-    public String getFlights(String from, String to, String date) {
-        // Legacy JSON string path — kept for backward compat; returns mock JSON
-        return buildMockFlightJson(from, to, 1.0);
-    }
 
     // ==================== PUBLIC HOTEL METHOD ====================
     /**
@@ -146,53 +105,6 @@ public class ApiService {
     }
 
     // ==================== JSON PARSERS ====================
-    private List<Transport> parseFlightJson(String json, String from, String to, double multiplier) {
-        List<Transport> list = new ArrayList<>();
-        try {
-            JsonObject root = JsonParser.parseString(json).getAsJsonObject();
-
-            // Try common Skyscanner RapidAPI response schemas
-            JsonArray data = null;
-            if (root.has("data"))    data = root.getAsJsonArray("data");
-            else if (root.has("itineraries")) data = root.getAsJsonArray("itineraries");
-            else if (root.has("flights"))     data = root.getAsJsonArray("flights");
-
-            if (data == null) return list;
-
-            for (JsonElement el : data) {
-                try {
-                    JsonObject f = el.getAsJsonObject();
-
-                    // Extract fields — try multiple key names for resilience
-                    String airline   = getStr(f, "airline", "airlineName", "carrier");
-                    String flightNo  = getStr(f, "flightNumber", "flight_number", "id");
-                    String dep       = getStr(f, "departure", "departureTime", "dep_time");
-                    String arr       = getStr(f, "arrival",   "arrivalTime",   "arr_time");
-                    String dur       = getStr(f, "duration",  "flightDuration");
-                    double rawPrice  = getDbl(f, "price", "amount", "totalPrice");
-
-                    Transport t = new Transport();
-                    t.setCompanyName(airline   != null ? airline  : "Airline");
-                    t.setTransportNumber(flightNo != null ? flightNo : "XX-000");
-                    t.setOriginCode(from != null ? from.toUpperCase() : "DEL");
-                    t.setDestinationCode(to != null ? to.toUpperCase() : "BOM");
-                    t.setDepartureTime(dep != null ? dep : "08:00");
-                    t.setArrivalTime(arr   != null ? arr : "11:00");
-                    t.setDuration(dur      != null ? dur : "3h 00m");
-                    t.setPrice(Math.round(rawPrice > 0 ? rawPrice * multiplier : 5000 * multiplier));
-                    t.setType("flight");
-                    t.setCompanyLogo(airline != null && airline.contains("India") ? "✈️" : "🛫");
-                    list.add(t);
-                } catch (Exception inner) {
-                    System.err.println("[ApiService] Skip flight element: " + inner.getMessage());
-                }
-            }
-        } catch (Exception e) {
-            System.err.println("[ApiService] parseFlightJson error: " + e.getMessage());
-        }
-        return list;
-    }
-
     private List<Stay> parseHotelJson(String json, String city) {
         List<Stay> list = new ArrayList<>();
         try {
@@ -240,19 +152,6 @@ public class ApiService {
     }
 
     // ==================== MOCK DATA ====================
-    private List<Transport> getMockFlights(String from, String to, double multiplier) {
-        String f = from != null ? from.toUpperCase() : "DEL";
-        String t = to   != null ? to.toUpperCase()   : "BOM";
-        List<Transport> list = new ArrayList<>();
-        list.add(flight("Air India",   "AI-101", f, t, "06:00", "09:05", 4800, "3h 05m", "Fastest",    multiplier));
-        list.add(flight("IndiGo",      "6E-532", f, t, "08:30", "11:45", 3950, "3h 15m", "Cheapest",   multiplier));
-        list.add(flight("Vistara",     "UK-991", f, t, "11:00", "14:30", 6200, "3h 30m", "Best Value", multiplier));
-        list.add(flight("SpiceJet",    "SG-211", f, t, "14:15", "17:20", 4100, "3h 05m", null,         multiplier));
-        list.add(flight("Air India",   "AI-307", f, t, "17:45", "21:10", 5300, "3h 25m", null,         multiplier));
-        list.add(flight("GoFirst",     "G8-453", f, t, "20:30", "23:50", 3750, "3h 20m", "Late Deal",  multiplier));
-        return list;
-    }
-
     private List<Stay> getMockHotels(String city) {
         String loc = city != null ? city : "Destination";
         List<Stay> list = new ArrayList<>();
@@ -267,15 +166,6 @@ public class ApiService {
         return list;
     }
 
-    // Backward-compat mock JSON strings
-    private String buildMockFlightJson(String from, String to, double multiplier) {
-        return "{\"status\":\"mock\",\"data\":["
-                + "{\"airline\":\"Air India\",\"flightNumber\":\"AI-101\",\"price\":" + Math.round(4800 * multiplier) + ",\"departure\":\"06:00\"},"
-                + "{\"airline\":\"IndiGo\",\"flightNumber\":\"6E-532\",\"price\":"   + Math.round(3950 * multiplier) + ",\"departure\":\"08:30\"},"
-                + "{\"airline\":\"Vistara\",\"flightNumber\":\"UK-991\",\"price\":"  + Math.round(6200 * multiplier) + ",\"departure\":\"11:00\"}"
-                + "]}";
-    }
-
     private String buildMockHotelJson(String city) {
         return "{\"status\":\"mock\",\"data\":["
                 + "{\"name\":\"The Grand Palace\",\"rating\":4.8,\"price\":4500.0,\"location\":\"" + city + "\"},"
@@ -286,24 +176,6 @@ public class ApiService {
     }
 
     // ==================== BUILDER HELPERS ====================
-    private Transport flight(String company, String number, String from, String to,
-                             String dep, String arr, double basePrice,
-                             String duration, String badge, double multiplier) {
-        Transport t = new Transport();
-        t.setCompanyName(company);
-        t.setTransportNumber(number);
-        t.setOriginCode(from);
-        t.setDestinationCode(to);
-        t.setDepartureTime(dep);
-        t.setArrivalTime(arr);
-        t.setDuration(duration);
-        t.setPrice(Math.round(basePrice * multiplier));
-        t.setBadge(badge);
-        t.setType("flight");
-        t.setCompanyLogo(company.contains("India") ? "✈️" : "🛫");
-        return t;
-    }
-
     private Stay hotel(String name, String city, double price, String badge, String imageUrl) {
         Stay s = new Stay();
         s.setName(name);
@@ -319,26 +191,6 @@ public class ApiService {
     }
 
     // ==================== UTILITY ====================
-    private double getPriceMultiplier(String seatClass) {
-        if (seatClass == null) return 1.0;
-        switch (seatClass.toLowerCase()) {
-            case "premium":  return 1.6;
-            case "business": return 2.8;
-            case "first":    return 4.5;
-            default:         return 1.0;
-        }
-    }
-
-    private String cabinClassParam(String seatClass) {
-        if (seatClass == null) return "economy";
-        switch (seatClass.toLowerCase()) {
-            case "premium":  return "premium_economy";
-            case "business": return "business";
-            case "first":    return "first";
-            default:         return "economy";
-        }
-    }
-
     /** Try multiple JSON keys and return the first non-null String value */
     private String getStr(JsonObject obj, String... keys) {
         for (String key : keys) {

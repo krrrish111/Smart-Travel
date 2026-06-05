@@ -21,7 +21,7 @@ public class SecurityFilter implements Filter {
         "/", "/index", "/home", "/explore", "/login", "/register",
         "/community", "/destination", "/destinations", "/error", 
         "/route", "/logout", "/google-auth", "/google-login",
-        "/getPlans", "/review", "/search", "/trending", "/activities", "/weather"
+        "/getPlans", "/review", "/search", "/trending", "/activities", "/weather", "/test-travelpayouts"
     );
 
     // Admin-only paths
@@ -61,6 +61,7 @@ public class SecurityFilter implements Filter {
             // ── 2. Allow public paths unconditionally ───────────────────────────
             boolean isPublic = PUBLIC_PATHS.stream()
                     .anyMatch(p -> path.equals(p) || path.startsWith(p + "?") || path.startsWith(p + "/"));
+            System.out.println("[SecurityFilter] path=" + path + " isPublic=" + isPublic);
             if (isPublic) {
                 addSecurityHeaders(resp);
                 chain.doFilter(request, response);

@@ -21,7 +21,7 @@
 
                                 <!-- MASTER BOOKING WIDGET -->
                                 <div class="booking-widget-wrapper"
-                                    style="background: var(--color-surface); backdrop-filter: blur(20px); border-radius: 12px; box-shadow: 0 4px 32px rgba(0,0,0,0.28); overflow: hidden; margin-bottom: 32px;">
+                                    style="background: var(--color-surface); backdrop-filter: blur(20px); border-radius: 12px; box-shadow: 0 4px 32px rgba(0,0,0,0.28); margin-bottom: 32px;">
 
                                     <!-- Tab Bar (MMT Style - horizontal, tight) -->
                                     <div class="booking-tab-bar"
@@ -51,8 +51,10 @@
                                         <div id="form-flights" class="booking-form active">
                                             <form action="${pageContext.request.contextPath}/search" method="get" id="flightSearchForm">
                                                 <input type="hidden" name="type" value="flight">
-                                                <input type="hidden" name="seatClass" id="seatClassHidden" value="economy">
-                                                <input type="hidden" name="passengers" id="passengersHidden" value="1">
+                                                <input type="hidden" name="seatClass" id="seatClassHidden" value="${not empty searchSeatClassRaw ? searchSeatClassRaw : 'economy'}">
+                                                <input type="hidden" name="adultCount" id="adultCountHidden" value="${not empty searchAdultCount ? searchAdultCount : '1'}">
+                                                <input type="hidden" name="childCount" id="childCountHidden" value="${not empty searchChildCount ? searchChildCount : '0'}">
+                                                <input type="hidden" name="infantCount" id="infantCountHidden" value="${not empty searchInfantCount ? searchInfantCount : '0'}">
                                                 <div class="trip-type-row" style="display: flex; gap: 20px; margin-bottom: 14px; flex-wrap: wrap; align-items: center;">
                                                     <label class="radio-label"><input type="radio" name="tripType" value="one-way" checked> One Way</label>
                                                     <label class="radio-label"><input type="radio" name="tripType" value="round-trip"> Round Trip</label>
@@ -79,6 +81,7 @@
                                                         <div class="field-label">Travellers</div>
                                                         <div class="font-bold text-lg text-white" id="travellersDisplay">1 Adult</div>
                                                         <div class="field-sub" id="classDisplay">Economy</div>
+                                                        <span onclick="toggleTravellersPanel(event)" style="position:absolute;top:50%;right:10px;transform:translateY(-50%);color:var(--color-muted);font-size:0.75rem;cursor:pointer;">▼</span>
                                                         <!-- Travellers Dropdown Panel -->
                                                         <div id="travellersPanel" style="display:none; position:absolute; top:100%; left:0; z-index:999; background:#1e1e2e; border:1px solid rgba(255,255,255,0.12); border-radius:12px; padding:20px; min-width:300px; box-shadow:0 8px 32px rgba(0,0,0,0.5);" onclick="event.stopPropagation()">
                                                             <!-- Adults -->
@@ -103,6 +106,18 @@
                                                                     <button type="button" onclick="changePax('children',-1)" style="width:30px;height:30px;border-radius:50%;border:1px solid rgba(255,255,255,0.2);background:transparent;color:white;font-size:1.2rem;cursor:pointer;line-height:1;">−</button>
                                                                     <span id="childrenCount" class="text-white font-bold">0</span>
                                                                     <button type="button" onclick="changePax('children',1)" style="width:30px;height:30px;border-radius:50%;border:1px solid rgba(255,255,255,0.2);background:transparent;color:white;font-size:1.2rem;cursor:pointer;line-height:1;">+</button>
+                                                                </div>
+                                                            </div>
+                                                            <!-- Infants -->
+                                                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                                                                <div>
+                                                                    <div class="text-white font-bold">Infants</div>
+                                                                    <div style="color:rgba(255,255,255,0.4); font-size:0.78rem;">Under 2 years</div>
+                                                                </div>
+                                                                <div style="display:flex; align-items:center; gap:12px;">
+                                                                    <button type="button" onclick="changePax('infants',-1)" style="width:30px;height:30px;border-radius:50%;border:1px solid rgba(255,255,255,0.2);background:transparent;color:white;font-size:1.2rem;cursor:pointer;line-height:1;">−</button>
+                                                                    <span id="infantsCount" class="text-white font-bold">0</span>
+                                                                    <button type="button" onclick="changePax('infants',1)" style="width:30px;height:30px;border-radius:50%;border:1px solid rgba(255,255,255,0.2);background:transparent;color:white;font-size:1.2rem;cursor:pointer;line-height:1;">+</button>
                                                                 </div>
                                                             </div>
                                                             <!-- Seat Class -->
@@ -383,8 +398,9 @@
                                                                 <c:out value="${not empty searchSeatClass ? searchSeatClass : 'Economy'}"/> • per adult
                                                             </div>
                                                         </div>
+                                                        <c:set var="bookUrl" value="${pageContext.request.contextPath}/flight-details?type=flight&amp;id=${t.transportNumber}&amp;price=${t.price}&amp;name=${t.companyName}&amp;class=${not empty searchSeatClass ? searchSeatClass : 'economy'}&amp;from=${t.originCode}&amp;to=${t.destinationCode}&amp;date=${not empty date ? date : fn:substring(t.departureTime, 0, 10)}&amp;passengers=${not empty searchPassengers ? searchPassengers : 1}&amp;logo=${t.companyLogo}&amp;deptTime=${t.departureTime}&amp;arrTime=${t.arrivalTime}&amp;duration=${t.duration}&amp;stops=${t.stops}" />
                                                         <button class="btn-select" style="padding: 10px 24px; font-weight: 800; width: 100%; border-radius: 8px;"
-                                                                onclick="location.href='${pageContext.request.contextPath}/book?type=flight&id=${t.transportNumber}&price=${t.price}&name=${t.companyName}&class=${not empty searchSeatClass ? searchSeatClass : 'economy'}'">
+                                                                onclick="location.href='${bookUrl}'">
                                                             Select →
                                                         </button>
                                                     </div>
@@ -1272,23 +1288,82 @@
 
                         // Swap from/to fields (Flights)
                         function swapFields() {
-                            const fromVal = document.querySelector('#form-flights .search-field:first-child .field-value');
-                            const toVal   = document.querySelector('#form-flights .search-field:nth-child(3) .field-value');
-                            if (fromVal && toVal) {
-                                const tmp = fromVal.textContent;
-                                fromVal.textContent = toVal.textContent;
-                                toVal.textContent = tmp;
+                            const fromInput = document.querySelector('#form-flights input[name="from"]');
+                            const toInput   = document.querySelector('#form-flights input[name="to"]');
+                            if (fromInput && toInput) {
+                                const tmp      = fromInput.value;
+                                fromInput.value = toInput.value;
+                                toInput.value   = tmp;
                             }
                         }
 
 
                         // ===== TRAVELLERS PANEL LOGIC =====
-                        let adults = 1, children = 0, selectedClass = 'economy', selectedClassLabel = 'Economy';
+
+                        // Class value → display label mapping
+                        const CLASS_LABELS = {
+                            'economy':  'Economy',
+                            'premium':  'Premium Economy',
+                            'business': 'Business',
+                            'first':    'First Class'
+                        };
+
+                        // Initialize state from hidden fields (restores values after search/page reload)
+                        let adults        = parseInt(document.getElementById('adultCountHidden').value)  || 1;
+                        let children      = parseInt(document.getElementById('childCountHidden').value)   || 0;
+                        let infants       = parseInt(document.getElementById('infantCountHidden').value)  || 0;
+                        let selectedClass = document.getElementById('seatClassHidden').value || 'economy';
+                        let selectedClassLabel = CLASS_LABELS[selectedClass] || 'Economy';
+
+                        // Sync counter display elements with state
+                        function syncCounterDisplays() {
+                            document.getElementById('adultsCount').textContent   = adults;
+                            document.getElementById('childrenCount').textContent = children;
+                            document.getElementById('infantsCount').textContent  = infants;
+                        }
+
+                        // Restore the active class button highlight
+                        function restoreClassButton() {
+                            document.querySelectorAll('.class-btn').forEach(btn => {
+                                btn.style.border     = '1px solid rgba(255,255,255,0.15)';
+                                btn.style.background = 'transparent';
+                                btn.style.color      = 'rgba(255,255,255,0.7)';
+                            });
+                            const active = document.getElementById('class-' + selectedClass);
+                            if (active) {
+                                active.style.border     = '1px solid var(--color-primary)';
+                                active.style.background = 'rgba(212,165,116,0.15)';
+                                active.style.color      = 'var(--color-primary)';
+                            }
+                        }
+
+                        // Rebuild the travellers display text from current state
+                        function refreshTravellersDisplay() {
+                            let parts = [];
+                            parts.push(adults + ' Adult' + (adults > 1 ? 's' : ''));
+                            if (children > 0) parts.push(children + ' Child' + (children > 1 ? 'ren' : ''));
+                            if (infants  > 0) parts.push(infants  + ' Infant' + (infants  > 1 ? 's'   : ''));
+                            document.getElementById('travellersDisplay').textContent = parts.join(', ');
+                            document.getElementById('classDisplay').textContent      = selectedClassLabel;
+                        }
+
+                        // Run on page load to restore state
+                        document.addEventListener('DOMContentLoaded', function() {
+                            syncCounterDisplays();
+                            restoreClassButton();
+                            refreshTravellersDisplay();
+                        });
 
                         function toggleTravellersPanel(e) {
                             e.stopPropagation();
                             const panel = document.getElementById('travellersPanel');
-                            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+                            const isOpen = panel.style.display === 'block';
+                            panel.style.display = isOpen ? 'none' : 'block';
+                            // Sync counter visuals every time panel opens
+                            if (!isOpen) {
+                                syncCounterDisplays();
+                                restoreClassButton();
+                            }
                         }
 
                         // Close panel when clicking outside
@@ -1297,42 +1372,41 @@
                             if (panel) panel.style.display = 'none';
                         });
 
+                        // Sync hidden fields with current state
+                        function syncHiddenFields() {
+                            document.getElementById('adultCountHidden').value  = adults;
+                            document.getElementById('childCountHidden').value  = children;
+                            document.getElementById('infantCountHidden').value = infants;
+                            document.getElementById('seatClassHidden').value   = selectedClass;
+                        }
+
                         function changePax(type, delta) {
                             if (type === 'adults') {
-                                adults = Math.max(1, Math.min(9, adults + delta));
+                                adults = Math.max(1, adults + delta);
                                 document.getElementById('adultsCount').textContent = adults;
-                            } else {
-                                children = Math.max(0, Math.min(6, children + delta));
+                            } else if (type === 'children') {
+                                children = Math.max(0, children + delta);
                                 document.getElementById('childrenCount').textContent = children;
+                            } else if (type === 'infants') {
+                                infants = Math.max(0, infants + delta);
+                                document.getElementById('infantsCount').textContent = infants;
                             }
+                            // Update display and hidden fields immediately (no Apply needed)
+                            refreshTravellersDisplay();
+                            syncHiddenFields();
                         }
 
                         function selectClass(value, label) {
-                            selectedClass = value;
+                            selectedClass      = value;
                             selectedClassLabel = label;
-                            // Reset all buttons
-                            document.querySelectorAll('.class-btn').forEach(btn => {
-                                btn.style.border = '1px solid rgba(255,255,255,0.15)';
-                                btn.style.background = 'transparent';
-                                btn.style.color = 'rgba(255,255,255,0.7)';
-                            });
-                            // Highlight selected
-                            const active = document.getElementById('class-' + value);
-                            if (active) {
-                                active.style.border = '1px solid var(--color-primary)';
-                                active.style.background = 'rgba(212,165,116,0.15)';
-                                active.style.color = 'var(--color-primary)';
-                            }
+                            restoreClassButton();
+                            // Update display and hidden fields immediately
+                            refreshTravellersDisplay();
+                            syncHiddenFields();
                         }
 
+                        // Apply just closes the panel (display is already live)
                         function applyTravellers() {
-                            const total = adults + children;
-                            const label = adults + ' Adult' + (adults > 1 ? 's' : '') +
-                                          (children > 0 ? ', ' + children + ' Child' + (children > 1 ? 'ren' : '') : '');
-                            document.getElementById('travellersDisplay').textContent = label;
-                            document.getElementById('classDisplay').textContent = selectedClassLabel;
-                            document.getElementById('seatClassHidden').value = selectedClass;
-                            document.getElementById('passengersHidden').value = total;
                             document.getElementById('travellersPanel').style.display = 'none';
                         }
                     </script>

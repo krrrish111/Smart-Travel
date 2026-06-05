@@ -20,8 +20,8 @@
                     <span class="text-white font-bold text-right ml-4">${not empty sessionScope.currentBooking.details ? sessionScope.currentBooking.details : 'Custom Selection'}</span>
                 </div>
                 <div class="flex justify-between items-center">
-                    <span class="text-white opacity-50 text-sm">Booking ID</span>
-                    <span class="text-white font-mono font-bold">#${param.id}</span>
+                    <span class="text-white opacity-50 text-sm">Booking Reference</span>
+                    <span class="text-white font-mono font-bold">${sessionScope.currentBooking.bookingCode}</span>
                 </div>
                 <div class="flex justify-between items-center">
                     <span class="text-white opacity-50 text-sm">Traveler</span>

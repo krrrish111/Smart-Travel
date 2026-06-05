@@ -75,6 +75,20 @@ public class HotelBookingDAO {
         return list;
     }
 
+    public boolean updateBookingStatus(int bookingId, String status) {
+        String query = "UPDATE hotel_bookings SET status = ? WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, status);
+            stmt.setInt(2, bookingId);
+            int rows = stmt.executeUpdate();
+            return rows > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     private HotelBooking extractBooking(ResultSet rs) throws SQLException {
         HotelBooking b = new HotelBooking();
         b.setId(rs.getInt("id"));

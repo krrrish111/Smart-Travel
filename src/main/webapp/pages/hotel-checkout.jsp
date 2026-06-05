@@ -55,8 +55,15 @@
                 </div>
                 <div class="step-line"></div>
             </div>
+            <div class="step-item">
+                <div class="step-col">
+                    <div class="step-circle pending">4</div>
+                    <div class="step-label">Review</div>
+                </div>
+                <div class="step-line"></div>
+            </div>
             <div class="step-col">
-                <div class="step-circle pending">4</div>
+                <div class="step-circle pending">5</div>
                 <div class="step-label">Confirm</div>
             </div>
         </div>

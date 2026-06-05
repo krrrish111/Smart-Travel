@@ -157,6 +157,8 @@ public class ProfileServlet extends HttpServlet {
             handleChangePassword(request, response, userId);
         } else if ("cancelBooking".equals(action)) {
             handleCancelBooking(request, response, userId);
+        } else if ("cancelHotelBooking".equals(action)) {
+            handleCancelHotelBooking(request, response, userId);
         } else {
             doGet(request, response);
         }
@@ -196,6 +198,49 @@ public class ProfileServlet extends HttpServlet {
                     refundDAO.createRefund(refund);
                     
                     response.sendRedirect(request.getContextPath() + "/profile?tab=bookings&success=cancelled");
+                    return;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        response.sendRedirect(request.getContextPath() + "/profile?tab=bookings&error=cancel_failed");
+    }
+
+    private void handleCancelHotelBooking(HttpServletRequest request, HttpServletResponse response, int userId) throws IOException {
+        String bookingIdStr = request.getParameter("bookingId");
+        String refundMethod = request.getParameter("refundMethod"); // "WALLET" or "ORIGINAL"
+        
+        if (bookingIdStr != null) {
+            try {
+                int bookingId = Integer.parseInt(bookingIdStr);
+                HotelBooking hb = hotelBookingDAO.getBookingById(bookingId);
+                
+                // Ensure the booking belongs to the user and is not already cancelled
+                if (hb != null && hb.getUserId() == userId && !"CANCELLED".equalsIgnoreCase(hb.getStatus())) {
+                    
+                    // 1. Update Booking Status
+                    hotelBookingDAO.updateBookingStatus(bookingId, "CANCELLED");
+                    
+                    // 2. Create Refund Record
+                    com.voyastra.model.Refund refund = new com.voyastra.model.Refund();
+                    refund.setBookingId(bookingId);
+                    refund.setAmount(hb.getTotalPrice());
+                    refund.setRefundMethod(refundMethod != null ? refundMethod : "ORIGINAL");
+                    
+                    if ("WALLET".equals(refundMethod)) {
+                        refund.setStatus("COMPLETED");
+                        // Credit Wallet instantly
+                        User u = userDAO.getUserById(userId);
+                        userDAO.updateWalletAndLoyalty(userId, u.getWalletBalance() + hb.getTotalPrice(), u.getLoyaltyPoints());
+                    } else {
+                        refund.setStatus("PENDING"); // Manual processing later
+                    }
+                    
+                    com.voyastra.dao.RefundDAO refundDAO = new com.voyastra.dao.RefundDAO();
+                    refundDAO.createRefund(refund);
+                    
+                    response.sendRedirect(request.getContextPath() + "/profile?tab=bookings&success=hotel_cancelled");
                     return;
                 }
             } catch (Exception e) {

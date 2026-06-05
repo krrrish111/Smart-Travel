@@ -87,26 +87,26 @@ public class HotelReviewServlet extends HttpServlet {
             double grandTotal = Math.round((pending.getTotalPrice() + tax) * 100.0) / 100.0;
             pending.setTotalPrice(grandTotal);
 
-            int bookingId = bookingDAO.createBooking(pending);
-            if (bookingId > 0) {
-                // Send confirmation email
-                String hotelName = pending.getHotel() != null ? pending.getHotel().getName() : "Your Hotel";
-                EmailUtil.sendBookingConfirmation(
-                    pending.getGuestEmail(),
-                    pending.getGuestName(),
-                    hotelName,
-                    pending.getBookingCode()
-                );
+            // Create a generic Booking object for the payment.jsp generic UI
+            com.voyastra.model.Booking genericBooking = new com.voyastra.model.Booking();
+            genericBooking.setId(0); // not saved yet
+            genericBooking.setType("hotel");
+            genericBooking.setBookingCode(pending.getBookingCode());
+            genericBooking.setTotalPrice(grandTotal);
+            genericBooking.setCustomerName(pending.getGuestName());
+            genericBooking.setTravelDate(pending.getCheckIn() + " to " + pending.getCheckOut());
+            genericBooking.setDetails(pending.getHotel() != null ? pending.getHotel().getName() : "Premium Hotel");
+            genericBooking.setPlanTitle(pending.getRoom() != null ? pending.getRoom().getType() : "Standard Room");
+            genericBooking.setPlanImage(pending.getHotel() != null ? pending.getHotel().getImageUrl() : "");
 
-                // Clean up session
-                session.removeAttribute("pendingHotelBooking");
-                session.removeAttribute("pendingAddons");
+            // Store in session for payment.jsp to render
+            session.setAttribute("currentBooking", genericBooking);
+            session.setAttribute("paymentAction", "process-hotel-payment"); // Instruct payment.jsp where to POST
+            
+            // Note: pendingHotelBooking remains in session to be accessed by HotelPaymentServlet
 
-                response.sendRedirect(request.getContextPath() + "/hotel-confirmation?id=" + bookingId);
-            } else {
-                request.setAttribute("error", "Failed to confirm booking. Please try again.");
-                doGet(request, response);
-            }
+            response.sendRedirect(request.getContextPath() + "/pages/payment.jsp");
+
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", "An unexpected error occurred. Please try again.");

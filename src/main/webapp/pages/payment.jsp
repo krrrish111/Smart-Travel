@@ -115,16 +115,30 @@
                                 <div style="width: 10px; height: 10px; background: var(--color-primary); border-radius: 50%; display: none;"></div>
                             </div>
                         </div>
+
+                        <!-- Wallet -->
+                        <div class="vx-pay-card" id="card-WALLET" onclick="selectMethod(this,'WALLET')"
+                             style="padding: 18px 20px; border-radius: 14px; border: 1px solid var(--color-border); background: rgba(255,255,255,0.03); display: flex; align-items: center; gap: 16px; cursor: pointer; transition: all 0.25s;">
+                            <div style="font-size: 2rem;">💼</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 700; color: var(--color-main);">Digital Wallets</div>
+                                <div style="font-size: 0.75rem; color: var(--color-muted); margin-top: 2px;">Amazon Pay, Freecharge, MobiKwik</div>
+                            </div>
+                            <div class="vx-radio" id="radio-WALLET" style="width: 22px; height: 22px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center;">
+                                <div style="width: 10px; height: 10px; background: var(--color-primary); border-radius: 50%; display: none;"></div>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Pay Button -->
-                    <form action="${pageContext.request.contextPath}/process-payment" method="post" id="paymentForm" style="margin-top: 28px;">
+                    <form action="${pageContext.request.contextPath}/${not empty paymentAction ? paymentAction : 'process-payment'}" method="post" id="paymentForm" style="margin-top: 28px;">
                         <input type="hidden" name="bookingId" value="<%= cb.getId() %>">
                         <input type="hidden" name="method"    id="selectedMethodInput" value="UPI">
 
-                        <button type="button" onclick="simulatePayment()" id="payBtn"
+                        <!-- Mock Razorpay / Pay Button -->
+                        <button type="button" onclick="startRazorpayPayment()" id="payBtn"
                                 style="width: 100%; padding: 18px 32px; background: linear-gradient(135deg, var(--color-primary), #c49050); color: #000; font-size: 1.1rem; font-weight: 800; border: none; border-radius: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px; transition: all 0.3s; box-shadow: 0 8px 32px rgba(212,165,116,0.3);">
-                            <span id="btnText">🔐 Pay ₹<fmt:formatNumber value="<%= cb.getTotalPrice() %>" groupingUsed="true"/></span>
+                            <span id="btnText">🔐 Pay via Razorpay (Mock) ₹<fmt:formatNumber value="<%= cb.getTotalPrice() %>" groupingUsed="true"/></span>
                             <div id="payLoader" style="display:none; width: 20px; height: 20px; border: 3px solid rgba(0,0,0,0.2); border-top-color: #000; border-radius: 50; animation: spin 0.8s linear infinite;"></div>
                         </button>
                     </form>
@@ -219,7 +233,7 @@ function selectMethod(el, method) {
     document.getElementById('selectedMethodInput').value = method;
 }
 
-function simulatePayment() {
+function startRazorpayPayment() {
     const btn    = document.getElementById('payBtn');
     const loader = document.getElementById('payLoader');
     const form   = document.getElementById('paymentForm');
@@ -227,10 +241,17 @@ function simulatePayment() {
     btn.disabled = true;
     btn.style.opacity = '0.8';
     loader.style.display = 'block';
-    document.getElementById('btnText').innerText = 'Securing Transaction...';
+    document.getElementById('btnText').innerText = 'Opening Razorpay...';
 
-    // Simulate gateway delay then submit
-    setTimeout(() => { form.submit(); }, 2400);
+    // Simulate Razorpay Gateway Opening
+    setTimeout(() => {
+        // Here we simulate the razorpay payment modal and success callback
+        document.getElementById('btnText').innerText = 'Processing Payment...';
+        setTimeout(() => {
+            // Success! Save payment record and submit to process-payment
+            form.submit();
+        }, 1500);
+    }, 1000);
 }
 </script>
 

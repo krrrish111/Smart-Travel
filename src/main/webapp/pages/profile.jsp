@@ -559,7 +559,9 @@
                                 <div style="text-align: right; display:flex; flex-direction:column; gap:8px;">
                                     <div><span class="status-pill status-${hb.status.toLowerCase()}">${hb.status}</span> <span style="font-weight: 700;">$${hb.totalPrice}</span></div>
                                     <div style="display:flex; gap:5px; justify-content: flex-end;">
-                                        <a href="${pageContext.request.contextPath}/hotel-voucher?id=${hb.id}" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Download PDF Voucher</a>
+                                        <a href="${pageContext.request.contextPath}/hotel-confirmation?id=${hb.id}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem; border-color:#888; color:#888;">View Voucher</a>
+                                        <a href="${pageContext.request.contextPath}/hotel-voucher?id=${hb.id}" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Download Voucher</a>
+                                        <button type="button" class="btn btn-danger" style="padding: 6px 12px; font-size: 0.8rem;" onclick="openCancelModal('${hb.id}', '${hb.totalPrice}', 'hotel')">Cancel Booking</button>
                                     </div>
                                 </div>
                             </div>
@@ -610,7 +612,9 @@
                                 <div style="text-align: right; display:flex; flex-direction:column; gap:8px;">
                                     <div><span class="status-pill status-completed">COMPLETED</span> <span style="font-weight: 700;">$${hb.totalPrice}</span></div>
                                     <div style="display:flex; gap:5px; justify-content: flex-end;">
-                                        <a href="${pageContext.request.contextPath}/hotel-voucher?id=${hb.id}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem; border-color:#888; color:#888;">View Voucher</a>
+                                        <a href="${pageContext.request.contextPath}/hotel-confirmation?id=${hb.id}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem; border-color:#888; color:#888;">View Voucher</a>
+                                        <a href="${pageContext.request.contextPath}/hotel-voucher?id=${hb.id}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem; border-color:#888; color:#888;">Download Voucher</a>
+                                        <a href="${pageContext.request.contextPath}/hotels" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Rebook</a>
                                     </div>
                                 </div>
                             </div>
@@ -655,6 +659,9 @@
                                 </div>
                                 <div style="text-align: right; display:flex; flex-direction:column; gap:8px;">
                                     <div><span class="status-pill" style="background: rgba(255, 59, 48, 0.1); color: #ff3b30;">CANCELLED</span> <span style="font-weight: 700;">$${hb.totalPrice}</span></div>
+                                    <div style="display:flex; gap:5px; justify-content: flex-end;">
+                                        <a href="${pageContext.request.contextPath}/hotels" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Rebook</a>
+                                    </div>
                                 </div>
                             </div>
                         </c:forEach>
@@ -785,9 +792,17 @@
 </div>
 
 <script>
-    function openCancelModal(bookingId, amount) {
+    function openCancelModal(bookingId, amount, type='flight') {
         document.getElementById('cancelBookingId').value = bookingId;
         document.getElementById('cancelAmountDisplay').innerText = '$' + amount;
+        
+        let actionInput = document.querySelector('#cancelForm input[name="action"]');
+        if (type === 'hotel') {
+            actionInput.value = 'cancelHotelBooking';
+        } else {
+            actionInput.value = 'cancelBooking';
+        }
+        
         document.getElementById('cancelModal').style.display = 'flex';
     }
     function closeCancelModal() {

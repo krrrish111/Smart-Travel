@@ -1,9 +1,13 @@
 package com.voyastra.servlet;
 
+import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.BarcodeQRCode;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.voyastra.dao.HotelBookingDAO;
 import com.voyastra.model.HotelBooking;
@@ -48,67 +52,10 @@ public class HotelVoucherServlet extends HttpServlet {
             response.setContentType("application/pdf");
             response.setHeader("Content-Disposition", "attachment; filename=\"Hotel_Voucher_" + booking.getBookingCode() + ".pdf\"");
 
-            Document document = new Document();
-            PdfWriter.getInstance(document, response.getOutputStream());
+            byte[] pdfBytes = com.voyastra.util.PdfGeneratorUtil.generateHotelVoucherPdf(booking);
+            response.getOutputStream().write(pdfBytes);
 
-            document.open();
-
-            Font titleFont = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD);
-            Font headerFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
-            Font normalFont = new Font(Font.FontFamily.HELVETICA, 12, Font.NORMAL);
-
-            document.add(new Paragraph("Voyastra Hotel Booking Voucher", titleFont));
-            document.add(new Paragraph(" "));
-            
-            document.add(new Paragraph("Booking Reference: " + booking.getBookingCode(), headerFont));
-            document.add(new Paragraph("Status: " + booking.getStatus(), normalFont));
-            document.add(new Paragraph("Date Booked: " + booking.getCreatedAt(), normalFont));
-            document.add(new Paragraph(" "));
-            
-            document.add(new Paragraph("Hotel Details", headerFont));
-            if (booking.getHotel() != null) {
-                document.add(new Paragraph("Hotel Name: " + booking.getHotel().getName(), normalFont));
-                document.add(new Paragraph("Location: " + booking.getHotel().getCity(), normalFont));
-            }
-            if (booking.getRoom() != null) {
-                document.add(new Paragraph("Room Type: " + booking.getRoom().getType(), normalFont));
-            }
-            document.add(new Paragraph(" "));
-
-            document.add(new Paragraph("Guest Details", headerFont));
-            document.add(new Paragraph("Name: " + booking.getGuestName(), normalFont));
-            document.add(new Paragraph("Email: " + booking.getGuestEmail(), normalFont));
-            document.add(new Paragraph("Phone: " + booking.getGuestPhone(), normalFont));
-            document.add(new Paragraph("Guests: " + booking.getGuests(), normalFont));
-            document.add(new Paragraph(" "));
-
-            document.add(new Paragraph("Stay Details", headerFont));
-            document.add(new Paragraph("Check-in: " + booking.getCheckIn(), normalFont));
-            document.add(new Paragraph("Check-out: " + booking.getCheckOut(), normalFont));
-            document.add(new Paragraph("Total Price: $" + booking.getTotalPrice(), headerFont));
-            document.add(new Paragraph(" "));
-
-            // Add-ons & Special Requests
-            if (booking.getSpecialRequests() != null && !booking.getSpecialRequests().isEmpty()) {
-                document.add(new Paragraph("Add-ons & Special Requests", headerFont));
-                String[] parts = booking.getSpecialRequests().split("\\|");
-                for (String part : parts) {
-                    String trimmed = part.trim();
-                    if (!trimmed.isEmpty()) {
-                        document.add(new Paragraph("  " + trimmed, normalFont));
-                    }
-                }
-                document.add(new Paragraph(" "));
-            }
-
-            document.add(new Paragraph("--------------------------------------------------", normalFont));
-            document.add(new Paragraph("Thank you for choosing Voyastra!", headerFont));
-            document.add(new Paragraph("For support: support@voyastra.com", normalFont));
-            document.add(new Paragraph("This is your official booking voucher. Please present it at check-in.", normalFont));
-            
-            document.close();
-            
-        } catch (NumberFormatException | DocumentException e) {
+        } catch (NumberFormatException | com.itextpdf.text.DocumentException e) {
             e.printStackTrace();
             response.sendRedirect("profile?tab=bookings");
         }

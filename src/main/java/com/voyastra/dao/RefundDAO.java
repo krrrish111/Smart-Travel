@@ -22,4 +22,27 @@ public class RefundDAO {
         }
         return false;
     }
+
+    public Refund getRefundByBookingId(int bookingId) {
+        String sql = "SELECT * FROM refunds WHERE booking_id = ? ORDER BY created_at DESC LIMIT 1";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, bookingId);
+            try (java.sql.ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Refund r = new Refund();
+                    r.setId(rs.getInt("id"));
+                    r.setBookingId(rs.getInt("booking_id"));
+                    r.setAmount(rs.getDouble("amount"));
+                    r.setStatus(rs.getString("status"));
+                    r.setRefundMethod(rs.getString("refund_method"));
+                    r.setCreatedAt(rs.getTimestamp("created_at"));
+                    return r;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

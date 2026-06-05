@@ -225,6 +225,7 @@ public class ProfileServlet extends HttpServlet {
                     // 2. Create Refund Record
                     com.voyastra.model.Refund refund = new com.voyastra.model.Refund();
                     refund.setBookingId(bookingId);
+                    refund.setBookingType("HOTEL");
                     refund.setAmount(hb.getTotalPrice());
                     refund.setRefundMethod(refundMethod != null ? refundMethod : "ORIGINAL");
                     

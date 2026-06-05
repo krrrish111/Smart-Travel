@@ -660,6 +660,10 @@
                                 <div style="text-align: right; display:flex; flex-direction:column; gap:8px;">
                                     <div><span class="status-pill" style="background: rgba(255, 59, 48, 0.1); color: #ff3b30;">CANCELLED</span> <span style="font-weight: 700;">$${hb.totalPrice}</span></div>
                                     <div style="display:flex; gap:5px; justify-content: flex-end;">
+                                        <a href="${pageContext.request.contextPath}/refund-status?id=${hb.id}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem; border-color: rgba(255,184,0,0.5); color: #ffb800;">
+                                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                            Track Refund
+                                        </a>
                                         <a href="${pageContext.request.contextPath}/hotels" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Rebook</a>
                                     </div>
                                 </div>
@@ -854,10 +858,15 @@
     window.onload = () => {
         const urlParams = new URLSearchParams(window.location.search);
         if(urlParams.has('success')) {
-            showToast('Success: ' + urlParams.get('success').replace('_', ' '), 'success');
+            const s = urlParams.get('success');
+            if (s === 'hotel_cancelled') {
+                showToast('Booking cancelled. Refund has been initiated.', 'info');
+            } else {
+                showToast('Success: ' + s.replace(/_/g, ' '), 'success');
+            }
         }
         if(urlParams.has('error')) {
-            showToast('Error: ' + urlParams.get('error').replace('_', ' '), 'error');
+            showToast('Error: ' + urlParams.get('error').replace(/_/g, ' '), 'error');
         }
     };
 </script>

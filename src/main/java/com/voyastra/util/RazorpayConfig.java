@@ -6,17 +6,19 @@ import java.util.Base64;
 
 public class RazorpayConfig {
     
-    // Replace these with actual Razorpay API keys if available.
-    // For test mode, these mock strings will be used if real keys aren't provided.
-    // NOTE: In production, store these securely in environment variables or properties.
-    public static final String KEY_ID = "rzp_test_YourTestKeyId123";
-    public static final String KEY_SECRET = "YourTestSecretKey123";
+    public static String getKeyId() {
+        return OAuthConfig.getRazorpayKeyId();
+    }
+    
+    public static String getKeySecret() {
+        return OAuthConfig.getRazorpayKeySecret();
+    }
     
     /**
      * Helper to get Basic Auth string for Razorpay API calls.
      */
     public static String getBasicAuthHeader() {
-        String auth = KEY_ID + ":" + KEY_SECRET;
+        String auth = getKeyId() + ":" + getKeySecret();
         return "Basic " + Base64.getEncoder().encodeToString(auth.getBytes());
     }
 
@@ -53,7 +55,7 @@ public class RazorpayConfig {
     public static boolean verifySignature(String orderId, String paymentId, String razorpaySignature) {
         if (orderId == null || paymentId == null || razorpaySignature == null) return false;
         
-        String generatedSignature = calculateRFC2104HMAC(orderId + "|" + paymentId, KEY_SECRET);
+        String generatedSignature = calculateRFC2104HMAC(orderId + "|" + paymentId, getKeySecret());
         return razorpaySignature.equals(generatedSignature);
     }
 }

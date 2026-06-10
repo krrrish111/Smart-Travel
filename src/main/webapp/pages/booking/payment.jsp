@@ -190,7 +190,7 @@
         const amountPaise = parseInt('${sessionScope.grandTotal}') * 100; 
 
         var options = {
-            "key": "rzp_test_SxfOmTuJ3rh43O", // Test Key (dummy)
+            "key": "<%= com.voyastra.util.RazorpayConfig.getKeyId() %>", // Dynamic key from properties
             "amount": amountPaise,
             "currency": "INR",
             "name": "Voyastra Airlines",

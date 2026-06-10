@@ -2,16 +2,23 @@
     <%@ include file="/components/header.jsp" %>
         <%@ include file="/components/global_ui.jsp" %>
 
-            <% // Guard: must be logged in and have a currentBooking in session com.voyastra.model.Booking
-                cb=(com.voyastra.model.Booking) session.getAttribute("currentBooking"); if
-                (session.getAttribute("user")==null || cb==null) { response.sendRedirect(request.getContextPath()
-                + "/login" ); return; } double baseFare=cb.getTotalPrice() - 250; String typeLabel="Service" ; String
-                typeIcon="🎫" ; if ("flight".equalsIgnoreCase(cb.getType())) { typeLabel="Flight" ; typeIcon="✈️" ; }
-                else if ("hotel".equalsIgnoreCase(cb.getType())) { typeLabel="Hotel" ; typeIcon="🏨" ; } else if
-                ("tour".equalsIgnoreCase(cb.getType())) { typeLabel="Tour" ; typeIcon="🎟️" ; } else if
-                ("taxi".equalsIgnoreCase(cb.getType()) || "car" .equalsIgnoreCase(cb.getType())) { typeLabel="Transport"
-                ; typeIcon="🚖" ; } else if ("bus".equalsIgnoreCase(cb.getType())) { typeLabel="Bus" ; typeIcon="🚌" ; }
-                else if ("train".equalsIgnoreCase(cb.getType())) { typeLabel="Train" ; typeIcon="🚆" ; } %>
+            <% 
+                // Guard: must be logged in and have a currentBooking in session 
+                com.voyastra.model.Booking cb = (com.voyastra.model.Booking) session.getAttribute("currentBooking"); 
+                if (session.getAttribute("user") == null || cb == null) { 
+                    response.sendRedirect(request.getContextPath() + "/login"); 
+                    return; 
+                } 
+                double baseFare = cb.getTotalPrice() - 250; 
+                String typeLabel = "Service"; 
+                String typeIcon = "🎫"; 
+                if ("flight".equalsIgnoreCase(cb.getType())) { typeLabel = "Flight"; typeIcon = "✈️"; }
+                else if ("hotel".equalsIgnoreCase(cb.getType())) { typeLabel = "Hotel"; typeIcon = "🏨"; } 
+                else if ("tour".equalsIgnoreCase(cb.getType())) { typeLabel = "Tour"; typeIcon = "🎟️"; } 
+                else if ("taxi".equalsIgnoreCase(cb.getType()) || "car".equalsIgnoreCase(cb.getType())) { typeLabel = "Transport"; typeIcon = "🚖"; } 
+                else if ("bus".equalsIgnoreCase(cb.getType())) { typeLabel = "Bus"; typeIcon = "🚌"; }
+                else if ("train".equalsIgnoreCase(cb.getType())) { typeLabel = "Train"; typeIcon = "🚆"; } 
+            %>
 
                 <main style="padding-top: 120px; padding-bottom: 80px;">
                     <div class="container">
@@ -222,8 +229,7 @@
                                     <!-- Service image -->
                                     <div
                                         style="width: 100%; height: 120px; border-radius: 12px; overflow: hidden; margin-bottom: 16px;">
-                                        <img src="<%= cb.getPlanImage() != null ? cb.getPlanImage() : "
-                                            https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=600&q=80" %>"
+                                        <img src="<%= cb.getPlanImage() != null ? cb.getPlanImage() : "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=600&q=80" %>"
                                         alt="booking" style="width: 100%; height: 100%; object-fit: cover;">
                                     </div>
 
@@ -339,7 +345,7 @@
                             }
 
                             const options = {
-                                "key": "<%= com.voyastra.util.RazorpayConfig.KEY_ID %>",
+                                "key": "<%= com.voyastra.util.RazorpayConfig.getKeyId() %>",
                                 "amount": result.amount,
                                 "currency": result.currency,
                                 "name": "Voyastra Booking",

@@ -39,6 +39,7 @@ public class OAuthConfig {
         // Only logs the length of the value — never logs the actual secret.
         logCredential("TRAVELPAYOUTS_TOKEN",  getTravelpayoutsToken());
         logCredential("TRAVELPAYOUTS_MARKER", getTravelpayoutsMarker());
+        logCredential("RAZORPAY_KEY_ID", getRazorpayKeyId());
     }
 
     /**
@@ -101,5 +102,21 @@ public class OAuthConfig {
         val = System.getenv("RAPIDAPI_KEY");
         if (val != null && !val.isEmpty()) return val.trim();
         return "YOUR_RAPIDAPI_KEY";
+    }
+
+    public static String getRazorpayKeyId() {
+        String val = props.getProperty("RAZORPAY_KEY_ID");
+        if (val != null && !val.isEmpty()) return val.trim();
+        val = System.getenv("RAZORPAY_KEY_ID");
+        if (val != null && !val.isEmpty()) return val.trim();
+        return "rzp_test_YourTestKeyId123";
+    }
+
+    public static String getRazorpayKeySecret() {
+        String val = props.getProperty("RAZORPAY_KEY_SECRET");
+        if (val != null && !val.isEmpty()) return val.trim();
+        val = System.getenv("RAZORPAY_KEY_SECRET");
+        if (val != null && !val.isEmpty()) return val.trim();
+        return "YourTestSecretKey123";
     }
 }

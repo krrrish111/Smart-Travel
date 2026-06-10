@@ -45,55 +45,21 @@ public class RazorpayOrderServlet extends HttpServlet {
             int amountInPaise = (int) (pending.getTotalPrice() * 100);
             String receipt = "rcpt_" + UUID.randomUUID().toString().substring(0, 8);
 
-            // Construct JSON payload manually to avoid extra dependencies
-            String jsonPayload = String.format(
-                "{\"amount\": %d, \"currency\": \"INR\", \"receipt\": \"%s\"}",
-                amountInPaise, receipt
-            );
+            // Call the Razorpay API service
+            String jsonResponse = com.voyastra.api.RazorpayService.createOrder(amountInPaise, receipt);
 
-            // Setup HTTP Connection
-            URL url = new URL("https://api.razorpay.com/v1/orders");
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Authorization", RazorpayConfig.getBasicAuthHeader());
-            conn.setRequestProperty("Content-Type", "application/json");
-            conn.setDoOutput(true);
-
-            // Send payload
-            try (OutputStream os = conn.getOutputStream()) {
-                byte[] input = jsonPayload.getBytes(StandardCharsets.UTF_8);
-                os.write(input, 0, input.length);
-            }
-
-            int responseCode = conn.getResponseCode();
-            
-            // Read response
-            BufferedReader br;
-            if (responseCode >= 200 && responseCode < 300) {
-                br = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
-            } else {
-                br = new BufferedReader(new InputStreamReader(conn.getErrorStream(), StandardCharsets.UTF_8));
-            }
-
-            StringBuilder responseBody = new StringBuilder();
-            String line;
-            while ((line = br.readLine()) != null) {
-                responseBody.append(line.trim());
-            }
-
-            if (responseCode >= 200 && responseCode < 300) {
-                // Forward successful response to the frontend
-                response.getWriter().write(responseBody.toString());
-            } else {
-                System.err.println("Razorpay Error: " + responseBody.toString());
-                response.setStatus(500);
-                response.getWriter().write("{\"error\": \"Payment gateway failed to create order\"}");
-            }
+            // Forward successful response to the frontend
+            response.getWriter().write(jsonResponse);
 
         } catch (Exception e) {
+            System.err.println("[RazorpayOrderServlet] Order Creation Exception:");
             e.printStackTrace();
+            
             response.setStatus(500);
-            response.getWriter().write("{\"error\": \"Internal server error generating order\"}");
+            
+            // Escape double quotes in the error message for JSON safety
+            String safeErrorMessage = e.getMessage().replace("\"", "\\\"");
+            response.getWriter().write("{\"error\": \"" + safeErrorMessage + "\"}");
         }
     }
 }

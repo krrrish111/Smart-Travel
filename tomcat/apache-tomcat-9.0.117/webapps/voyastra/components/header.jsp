@@ -49,6 +49,15 @@
         };
     </script>
 <%@include file="config.jsp"%>
+    <!-- Tailwind CSS (No Preflight to prevent breaking vanilla CSS) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        corePlugins: {
+          preflight: false,
+        }
+      }
+    </script>
 </head>
 <body>
     <nav class="navbar">

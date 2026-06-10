@@ -16,6 +16,14 @@ public class Hotel {
     private String cancellationPolicy;
     private double distanceFromCenter;
     private int availableRooms;
+    
+    // Additional Module Upgrades
+    private double latitude;
+    private double longitude;
+    private boolean bestSeller;
+    private boolean recommended;
+    private boolean limitedRoomsLeft;
+    private boolean freeCancellation;
 
     // Getters and Setters
     public int getId() { return id; }
@@ -50,4 +58,17 @@ public class Hotel {
     public void setDistanceFromCenter(double distanceFromCenter) { this.distanceFromCenter = distanceFromCenter; }
     public int getAvailableRooms() { return availableRooms; }
     public void setAvailableRooms(int availableRooms) { this.availableRooms = availableRooms; }
+    
+    public double getLatitude() { return latitude; }
+    public void setLatitude(double latitude) { this.latitude = latitude; }
+    public double getLongitude() { return longitude; }
+    public void setLongitude(double longitude) { this.longitude = longitude; }
+    public boolean isBestSeller() { return bestSeller; }
+    public void setBestSeller(boolean bestSeller) { this.bestSeller = bestSeller; }
+    public boolean isRecommended() { return recommended; }
+    public void setRecommended(boolean recommended) { this.recommended = recommended; }
+    public boolean isLimitedRoomsLeft() { return limitedRoomsLeft; }
+    public void setLimitedRoomsLeft(boolean limitedRoomsLeft) { this.limitedRoomsLeft = limitedRoomsLeft; }
+    public boolean isFreeCancellation() { return freeCancellation; }
+    public void setFreeCancellation(boolean freeCancellation) { this.freeCancellation = freeCancellation; }
 }

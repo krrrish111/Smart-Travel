@@ -131,6 +131,14 @@ public class ProfileServlet extends HttpServlet {
             if ("overview".equals(tab) || "saved-plans".equals(tab)) {
                 request.setAttribute("savedPlans", userPlans);
             }
+            
+            // Add Wishlist and Recently Viewed
+            com.voyastra.dao.HotelDAO hotelDAO = new com.voyastra.dao.HotelDAO();
+            List<com.voyastra.model.Hotel> wishlistHotels = hotelDAO.getWishlist(userId);
+            List<com.voyastra.model.Hotel> recentlyViewedHotels = hotelDAO.getRecentlyViewed(userId);
+            request.setAttribute("wishlistHotels", wishlistHotels);
+            request.setAttribute("recentlyViewedHotels", recentlyViewedHotels);
+            
         } catch (Exception e) {
             System.err.println("[ProfileServlet] Error fetching data: " + e.getMessage());
         }

@@ -141,38 +141,7 @@
 
                                         <!-- HOTELS FORM -->
                                         <div id="form-hotels" class="booking-form">
-                                            <form action="${pageContext.request.contextPath}/search" method="get">
-                                                <input type="hidden" name="type" value="hotel">
-                                                <div class="trip-type-row" style="display: flex; gap: 20px; margin-bottom: 14px; flex-wrap: wrap;">
-                                                    <label class="radio-label"><input type="radio" name="hotelType" value="rooms" checked> Upto 4 Rooms</label>
-                                                    <label class="radio-label"><input type="radio" name="hotelType" value="group"> Group Booking</label>
-                                                </div>
-                                                <div class="search-fields-row">
-                                                    <div class="search-field" style="flex: 2;">
-                                                        <div class="field-label">City or Location</div>
-                                                        <input type="text" name="city" value="${city != null ? city : 'Jaipur'}" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="Destination City">
-                                                        <div class="field-sub">Hotel, area or landmark</div>
-                                                    </div>
-                                                    <div class="search-field">
-                                                        <div class="field-label">Check-In</div>
-                                                        <input type="date" name="checkin" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" style="color-scheme: dark;">
-                                                    </div>
-                                                    <div class="search-field">
-                                                        <div class="field-label">Check-Out</div>
-                                                        <input type="date" name="checkout" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" style="color-scheme: dark;">
-                                                    </div>
-                                                    <div class="search-field" style="border-right: none; min-width: 120px;">
-                                                        <div class="field-label">Rooms &amp; Guests</div>
-                                                        <select name="rooms" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" style="color-scheme: dark; background: transparent;">
-                                                            <option value="1" style="color:black;">1 Room, 2 Guests</option>
-                                                            <option value="2" style="color:black;">2 Rooms, 4 Guests</option>
-                                                            <option value="3" style="color:black;">3 Rooms, 6 Guests</option>
-                                                            <option value="4" style="color:black;">4 Rooms, 8 Guests</option>
-                                                        </select>
-                                                    </div>
-                                                    <button type="submit" class="search-cta-btn">SEARCH</button>
-                                                </div>
-                                            </form>
+                                            <jsp:include page="/components/hotel-search.jsp"/>
                                         </div>
 
                                         <!-- CARS FORM -->
@@ -475,7 +444,7 @@
                                                         <div style="font-size: 0.75rem; color: var(--color-muted); margin-top: 4px; margin-bottom: 12px;">per night</div>
                                                         
                                                         <button class="btn-select" style="padding: 10px 24px; font-weight: 800; width: 100%; border-radius: 8px;"
-                                                                onclick="location.href='${pageContext.request.contextPath}/book?type=hotel&id=${s.id}&price=${s.discountedPrice}&name=${s.name}'">
+                                                                onclick="location.href='${pageContext.request.contextPath}/hotel-details?id=${s.id}'">
                                                             Book →
                                                         </button>
                                                     </div>

@@ -1,8 +1,11 @@
 package com.voyastra.servlet;
 
 import com.voyastra.dao.HotelBookingDAO;
+import com.voyastra.dao.PaymentDAO;
 import com.voyastra.model.HotelBooking;
+import com.voyastra.model.Payment;
 import com.voyastra.util.EmailUtil;
+import com.voyastra.util.RazorpayConfig;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,6 +18,7 @@ import java.io.IOException;
 @WebServlet("/process-hotel-payment")
 public class HotelPaymentServlet extends HttpServlet {
     private HotelBookingDAO bookingDAO = new HotelBookingDAO();
+    private PaymentDAO paymentDAO = new PaymentDAO();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -30,15 +34,38 @@ public class HotelPaymentServlet extends HttpServlet {
             return;
         }
 
-        try {
-            // Save the booking to the database
-            int bookingId = bookingDAO.createBooking(pending);
-            if (bookingId > 0) {
-                // Send confirmation email with PDF voucher attached
-                EmailUtil.sendHotelBookingConfirmationWithVoucher(pending);
+        String razorpayPaymentId = request.getParameter("razorpay_payment_id");
+        String razorpayOrderId = request.getParameter("razorpay_order_id");
+        String razorpaySignature = request.getParameter("razorpay_signature");
 
-                // Send Twilio SMS Confirmation
-                com.voyastra.util.SMSUtil.sendHotelBookingSMS(pending);
+        if (!RazorpayConfig.verifySignature(razorpayOrderId, razorpayPaymentId, razorpaySignature)) {
+            System.err.println("Razorpay signature verification failed!");
+            response.sendRedirect(request.getContextPath() + "/pages/payment.jsp?error=SignatureFailed");
+            return;
+        }
+
+        try {
+            // Update booking status to Confirmed
+            boolean statusUpdated = bookingDAO.updateBookingStatus(pending.getId(), "Confirmed");
+            
+            if (statusUpdated) {
+                // Insert a payment transaction
+                Payment p = new Payment();
+                p.setBookingId(pending.getId());
+                p.setUserId(pending.getUserId());
+                p.setAmount(pending.getTotalPrice());
+                p.setMethod("Razorpay");
+                p.setStatus("Success");
+                p.setTransactionId(razorpayPaymentId);
+                paymentDAO.addPayment(p);
+
+                // Try to send email and SMS, but don't fail booking if it throws an exception
+                try {
+                    EmailUtil.sendHotelBookingConfirmationWithVoucher(pending);
+                    com.voyastra.util.SMSUtil.sendHotelBookingSMS(pending);
+                } catch (Throwable notificationEx) {
+                    System.err.println("Failed to send confirmation email/SMS: " + notificationEx.getMessage());
+                }
 
                 // Clean up all hotel booking session attributes
                 session.removeAttribute("pendingHotelBooking");
@@ -46,7 +73,7 @@ public class HotelPaymentServlet extends HttpServlet {
                 session.removeAttribute("currentBooking");
                 session.removeAttribute("paymentAction");
 
-                response.sendRedirect(request.getContextPath() + "/hotel-confirmation?id=" + bookingId);
+                response.sendRedirect(request.getContextPath() + "/hotel-confirmation?id=" + pending.getId());
             } else {
                 request.setAttribute("error", "Failed to confirm booking after payment.");
                 response.sendRedirect(request.getContextPath() + "/pages/payment.jsp?error=PaymentFailed");

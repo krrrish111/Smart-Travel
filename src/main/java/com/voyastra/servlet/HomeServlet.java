@@ -2,6 +2,7 @@ package com.voyastra.servlet;
 
 import com.voyastra.dao.DestinationDAO;
 import com.voyastra.model.Destination;
+import com.voyastra.dao.HotelDAO;
 
 import com.voyastra.dao.PlanDAO;
 import com.voyastra.model.Plan;
@@ -53,9 +54,20 @@ public class HomeServlet extends HttpServlet {
         // Fetch premium trip packages from trip_plans table
         List<PremiumTrip> premiumTrips = tripDAO.getAllTrips();
 
+        HotelDAO hotelDAO = new HotelDAO();
+        List<com.voyastra.model.Hotel> recommendedHotels = hotelDAO.getRecommendedHotels();
+        List<com.voyastra.model.Hotel> recentlyViewedHotels = new java.util.ArrayList<>();
+        javax.servlet.http.HttpSession session = request.getSession(false);
+        if (session != null && session.getAttribute("user") != null) {
+            com.voyastra.model.User user = (com.voyastra.model.User) session.getAttribute("user");
+            recentlyViewedHotels = hotelDAO.getRecentlyViewed(user.getId());
+        }
+
         request.setAttribute("featuredDestinations", featuredDest);
         request.setAttribute("featuredPlans", featuredPlans);
         request.setAttribute("premiumTrips", premiumTrips);
+        request.setAttribute("recommendedHotels", recommendedHotels);
+        request.setAttribute("recentlyViewedHotels", recentlyViewedHotels);
         
         // Forward to the renamed JSP file (home.jsp) to avoid recursion
         request.getRequestDispatcher("/pages/home.jsp").forward(request, response);

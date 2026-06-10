@@ -945,6 +945,68 @@
         </div>
 
 
+        <!-- ====== RECOMMENDED HOTELS ====== -->
+        <c:if test="${not empty recommendedHotels}">
+            <section class="section scroll-fade relative" style="padding-top: 80px;">
+                <div class="container mb-5">
+                    <h2 class="editorial text-main mb-1" style="font-size: 2.5rem;">Recommended Stays</h2>
+                    <p class="text-muted" style="font-size: 1.1rem;">Handpicked personalized suggestions based on your search history.</p>
+                </div>
+                <div class="container">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                        <c:forEach var="hotel" items="${recommendedHotels}" end="3">
+                            <a href="${pageContext.request.contextPath}/hotel-details?id=${hotel.id}" class="plan-card" style="max-width: none; flex: unset;">
+                                <div class="plan-card-img-wrap" style="height: 160px;">
+                                    <img src="${hotel.imageUrl}" alt="${hotel.name}" loading="lazy">
+                                    <div class="plan-card-category" style="background:rgba(139,92,246,0.85);">Recommended</div>
+                                </div>
+                                <div class="plan-card-body p-4">
+                                    <div class="plan-card-title text-lg font-bold truncate">${hotel.name}</div>
+                                    <div class="text-sm text-gray-500 mb-2"><i class="fas fa-map-marker-alt text-primary"></i> ${hotel.city}</div>
+                                    <div class="flex items-center gap-1 mb-2">
+                                        <i class="fas fa-star text-accent text-xs"></i><span class="text-sm font-bold">${hotel.rating}</span>
+                                    </div>
+                                    <div class="plan-card-footer mt-auto pt-3 border-t border-gray-100 dark:border-gray-800">
+                                        <div class="plan-price text-lg font-bold">₹<fmt:formatNumber value="${hotel.startingPrice}" type="number" maxFractionDigits="0" /></div>
+                                        <div class="plan-duration text-xs text-gray-500">per night</div>
+                                    </div>
+                                </div>
+                            </a>
+                        </c:forEach>
+                    </div>
+                </div>
+            </section>
+        </c:if>
+
+        <!-- ====== RECENTLY VIEWED HOTELS ====== -->
+        <c:if test="${not empty recentlyViewedHotels}">
+            <section class="section scroll-fade relative" style="padding-top: 80px;">
+                <div class="container mb-5">
+                    <h2 class="editorial text-main mb-1" style="font-size: 2.5rem;">Recently Viewed</h2>
+                    <p class="text-muted" style="font-size: 1.1rem;">Pick up where you left off.</p>
+                </div>
+                <div class="container">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                        <c:forEach var="hotel" items="${recentlyViewedHotels}" end="3">
+                            <a href="${pageContext.request.contextPath}/hotel-details?id=${hotel.id}" class="plan-card" style="max-width: none; flex: unset;">
+                                <div class="plan-card-img-wrap" style="height: 160px;">
+                                    <img src="${hotel.imageUrl}" alt="${hotel.name}" loading="lazy">
+                                </div>
+                                <div class="plan-card-body p-4">
+                                    <div class="plan-card-title text-lg font-bold truncate">${hotel.name}</div>
+                                    <div class="text-sm text-gray-500 mb-2"><i class="fas fa-map-marker-alt text-primary"></i> ${hotel.city}</div>
+                                    <div class="plan-card-footer mt-auto pt-3 border-t border-gray-100 dark:border-gray-800">
+                                        <div class="plan-price text-lg font-bold">₹<fmt:formatNumber value="${hotel.startingPrice}" type="number" maxFractionDigits="0" /></div>
+                                        <div class="plan-duration text-xs text-gray-500">per night</div>
+                                    </div>
+                                </div>
+                            </a>
+                        </c:forEach>
+                    </div>
+                </div>
+            </section>
+        </c:if>
+
         <!-- ====== TRAVEL PARTNERS MARQUEE ====== -->
         <section class="scroll-fade" style="padding: 60px 0; overflow: hidden;">
             <div class="container text-center mb-4">

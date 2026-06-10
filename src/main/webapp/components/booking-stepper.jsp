@@ -8,8 +8,19 @@
 <%
     int step = 1;
     try { step = Integer.parseInt(request.getParameter("step")); } catch(Exception e){}
-    String[] labels = {"Flight", "Travellers", "Seats", "Extras", "Review", "Payment"};
-    String[] icons  = {"✈️",     "👤",          "💺",     "🎁",     "📋",     "💳"};
+    String type = request.getParameter("type");
+    if(type == null) type = "flight";
+    
+    String[] labels;
+    String[] icons;
+    if ("hotel".equalsIgnoreCase(type)) {
+        labels = new String[]{"Room", "Guest", "Review", "Payment"};
+        icons  = new String[]{"🛏️",     "👤",     "📋",     "💳"};
+    } else {
+        labels = new String[]{"Flight", "Travellers", "Seats", "Extras", "Review", "Payment"};
+        icons  = new String[]{"✈️",     "👤",          "💺",     "🎁",     "📋",     "💳"};
+    }
+    int totalSteps = labels.length;
 %>
 <div style="
     background: rgba(255,255,255,0.02);
@@ -19,7 +30,7 @@
 ">
     <div class="container" style="max-width:1100px; margin:0 auto; padding:0 20px;">
         <div style="display:flex; align-items:center; justify-content:center; gap:0;">
-            <% for(int i=1; i<=6; i++) {
+            <% for(int i=1; i<=totalSteps; i++) {
                 boolean done    = i < step;
                 boolean current = i == step;
                 String circleStyle = done    ? "background:var(--color-primary);color:#000;border-color:var(--color-primary);"
@@ -42,7 +53,7 @@
                     </span>
                 </div>
                 <!-- Connector line (except after last) -->
-                <% if(i<6){ %>
+                <% if(i<totalSteps){ %>
                 <div style="flex:1;height:2px;margin-bottom:22px;
                     background:<%=done?"var(--color-primary)":"rgba(255,255,255,0.08)"%>;
                     max-width:60px;transition:background .3s;">

@@ -74,6 +74,17 @@ public class HotelSearchServlet extends HttpServlet {
         List<Hotel> allHotels = new ArrayList<>();
         allHotels.addAll(localHotels);
         allHotels.addAll(apiHotels);
+        
+        List<Integer> wishlistedIds = new ArrayList<>();
+        HttpSession session = request.getSession(false);
+        if (session != null && session.getAttribute("user") != null) {
+            User user = (User) session.getAttribute("user");
+            List<Hotel> wishlistHotels = hotelDAO.getWishlist(user.getId());
+            for (Hotel h : wishlistHotels) {
+                wishlistedIds.add(h.getId());
+            }
+        }
+        request.setAttribute("wishlistedIds", wishlistedIds);
 
         request.setAttribute("hotels", allHotels);
         request.setAttribute("searchQuery", city);

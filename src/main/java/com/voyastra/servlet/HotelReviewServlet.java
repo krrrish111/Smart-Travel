@@ -28,8 +28,8 @@ public class HotelReviewServlet extends HttpServlet {
 
         HotelBooking pending = (HotelBooking) session.getAttribute("pendingHotelBooking");
         if (pending == null) {
-            // Nothing to review — go back to search
-            response.sendRedirect("hotels");
+            // Nothing to review — go back to home
+            response.sendRedirect(request.getContextPath() + "/");
             return;
         }
 
@@ -69,7 +69,7 @@ public class HotelReviewServlet extends HttpServlet {
 
         HotelBooking pending = (HotelBooking) session.getAttribute("pendingHotelBooking");
         if (pending == null) {
-            response.sendRedirect("hotels");
+            response.sendRedirect(request.getContextPath() + "/");
             return;
         }
 

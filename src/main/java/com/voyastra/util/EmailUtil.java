@@ -3,7 +3,7 @@ package com.voyastra.util;
 import com.voyastra.model.HotelBooking;
 import jakarta.mail.*;
 import jakarta.mail.internet.*;
-import jakarta.activation.DataHandler;
+// import jakarta.activation.DataHandler;
 import jakarta.mail.util.ByteArrayDataSource;
 import java.util.Properties;
 
@@ -68,7 +68,7 @@ public class EmailUtil {
                 byte[] pdfBytes = PdfGeneratorUtil.generateHotelVoucherPdf(booking);
                 MimeBodyPart attachmentPart = new MimeBodyPart();
                 ByteArrayDataSource bds = new ByteArrayDataSource(pdfBytes, "application/pdf");
-                attachmentPart.setDataHandler(new DataHandler(bds));
+                // attachmentPart.setDataHandler(new DataHandler(bds));
                 attachmentPart.setFileName("Voyastra_Voucher_" + bookingCode + ".pdf");
                 multipart.addBodyPart(attachmentPart);
             } catch (Exception e) {

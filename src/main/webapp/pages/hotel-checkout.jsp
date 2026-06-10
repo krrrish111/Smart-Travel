@@ -4,23 +4,6 @@
 <%@ include file="/components/global_ui.jsp" %>
 
 <style>
-    .step-bar { display: flex; align-items: center; gap: 0; margin-bottom: 32px; }
-    .step-item { display: flex; align-items: center; flex: 1; }
-    .step-circle {
-        width: 36px; height: 36px; border-radius: 50%;
-        display: flex; align-items: center; justify-content: center;
-        font-weight: 700; font-size: 0.85rem; flex-shrink: 0;
-        transition: all 0.3s;
-    }
-    .step-circle.done  { background: var(--color-primary, #f97316); color: white; }
-    .step-circle.active { background: white; color: #111; box-shadow: 0 0 0 3px var(--color-primary,#f97316); }
-    .step-circle.pending { background: rgba(255,255,255,0.08); color: #666; border: 2px solid rgba(255,255,255,0.1); }
-    .step-line { flex: 1; height: 2px; background: rgba(255,255,255,0.1); margin: 0 6px; }
-    .step-line.done { background: var(--color-primary, #f97316); }
-    .step-label { font-size: 0.7rem; font-weight: 600; margin-top: 4px; color: #888; }
-    .step-label.active { color: var(--color-primary, #f97316); }
-    .step-label.done  { color: #ccc; }
-    .step-col { display: flex; flex-direction: column; align-items: center; }
     .hotel-strip {
         background: rgba(255,255,255,0.03);
         border: 1px solid rgba(255,255,255,0.07);
@@ -33,39 +16,11 @@
     <div class="container mx-auto max-w-5xl px-4">
 
         <!-- Step Progress Bar -->
-        <div class="step-bar mb-8">
-            <div class="step-item">
-                <div class="step-col">
-                    <div class="step-circle done"><i class="fas fa-check"></i></div>
-                    <div class="step-label done">Search</div>
-                </div>
-                <div class="step-line done"></div>
-            </div>
-            <div class="step-item">
-                <div class="step-col">
-                    <div class="step-circle done"><i class="fas fa-check"></i></div>
-                    <div class="step-label done">Room</div>
-                </div>
-                <div class="step-line done"></div>
-            </div>
-            <div class="step-item">
-                <div class="step-col">
-                    <div class="step-circle active">3</div>
-                    <div class="step-label active">Details</div>
-                </div>
-                <div class="step-line"></div>
-            </div>
-            <div class="step-item">
-                <div class="step-col">
-                    <div class="step-circle pending">4</div>
-                    <div class="step-label">Review</div>
-                </div>
-                <div class="step-line"></div>
-            </div>
-            <div class="step-col">
-                <div class="step-circle pending">5</div>
-                <div class="step-label">Confirm</div>
-            </div>
+        <div class="mb-8">
+            <jsp:include page="/components/booking-stepper.jsp">
+                <jsp:param name="step" value="2"/>
+                <jsp:param name="type" value="hotel"/>
+            </jsp:include>
         </div>
 
         <!-- Hotel / Room Selected Strip -->

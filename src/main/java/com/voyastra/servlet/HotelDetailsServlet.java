@@ -4,13 +4,20 @@ import com.voyastra.dao.HotelDAO;
 import com.voyastra.model.Hotel;
 import com.voyastra.model.HotelRoom;
 
+import com.voyastra.model.HotelPhoto;
+import com.voyastra.model.HotelReview;
+import com.voyastra.model.NearbyPlace;
+import com.voyastra.model.User;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
+import java.util.ArrayList;
 
 @WebServlet("/hotel-details")
 public class HotelDetailsServlet extends HttpServlet {
@@ -20,7 +27,7 @@ public class HotelDetailsServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String idStr = request.getParameter("id");
         if (idStr == null || idStr.isEmpty()) {
-            response.sendRedirect("hotels");
+            response.sendRedirect(request.getContextPath() + "/");
             return;
         }
 
@@ -65,22 +72,56 @@ public class HotelDetailsServlet extends HttpServlet {
             } else {
                 hotel = hotelDAO.getHotelById(hotelId);
                 if (hotel == null) {
-                    response.sendRedirect("hotels");
+                    response.sendRedirect(request.getContextPath() + "/");
                     return;
                 }
                 rooms = hotelDAO.getHotelRooms(hotelId);
             }
             
-            // Re-pass search params if any
-            request.setAttribute("checkIn", request.getParameter("checkIn"));
-            request.setAttribute("checkOut", request.getParameter("checkOut"));
-            request.setAttribute("guests", request.getParameter("guests"));
+            List<HotelPhoto> photos = new ArrayList<>();
+            List<HotelReview> reviews = new ArrayList<>();
+            List<NearbyPlace> nearbyPlaces = new ArrayList<>();
+            boolean isWishlisted = false;
+
+            if (hotelId < 100) {
+                photos = hotelDAO.getPhotos(hotelId);
+                reviews = hotelDAO.getReviews(hotelId);
+                nearbyPlaces = hotelDAO.getNearbyPlaces(hotelId);
+                
+                HttpSession session = request.getSession(false);
+                if (session != null && session.getAttribute("user") != null) {
+                    User user = (User) session.getAttribute("user");
+                    hotelDAO.addRecentlyViewed(user.getId(), hotelId);
+                    isWishlisted = hotelDAO.isWishlisted(user.getId(), hotelId);
+                }
+            }
+
+            // Re-pass search params if any, with fallbacks
+            String checkIn = request.getParameter("checkIn");
+            String checkOut = request.getParameter("checkOut");
+            String guests = request.getParameter("guests");
+            if (checkIn == null || checkIn.isEmpty()) checkIn = java.time.LocalDate.now().toString();
+            if (checkOut == null || checkOut.isEmpty()) checkOut = java.time.LocalDate.now().plusDays(1).toString();
+            if (guests == null || guests.isEmpty()) guests = "2";
+
+            request.setAttribute("checkIn", checkIn);
+            request.setAttribute("checkOut", checkOut);
+            request.setAttribute("guests", guests);
+
+            HttpSession httpSession = request.getSession(false);
+            if (httpSession != null) {
+                httpSession.setAttribute("currentHotel", hotel);
+            }
 
             request.setAttribute("hotel", hotel);
             request.setAttribute("rooms", rooms);
+            request.setAttribute("photos", photos);
+            request.setAttribute("reviews", reviews);
+            request.setAttribute("nearbyPlaces", nearbyPlaces);
+            request.setAttribute("isWishlisted", isWishlisted);
             request.getRequestDispatcher("/pages/hotel-details.jsp").forward(request, response);
         } catch (NumberFormatException e) {
-            response.sendRedirect("hotels");
+            response.sendRedirect(request.getContextPath() + "/");
         }
     }
 }

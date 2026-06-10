@@ -7,7 +7,7 @@
     <div class="container mx-auto max-w-7xl px-4 py-6">
         
         <!-- Breadcrumbs -->
-        <div class="mb-6 flex items-center text-sm text-gray-500 dark:text-gray-400">
+        <div class="mb-4 flex items-center text-sm text-gray-500 dark:text-gray-400">
             <a href="${pageContext.request.contextPath}/hotels" class="hover:text-primary transition-colors"><i class="fas fa-home mr-1"></i> Home</a>
             <i class="fas fa-chevron-right mx-2 text-xs"></i>
             <a href="${pageContext.request.contextPath}/hotel-search" class="hover:text-primary transition-colors">Search Results</a>
@@ -15,9 +15,20 @@
             <span class="text-gray-900 dark:text-white font-medium truncate">${hotel.name}</span>
         </div>
 
+        <div class="mb-6">
+            <jsp:include page="/components/booking-stepper.jsp">
+                <jsp:param name="step" value="1"/>
+                <jsp:param name="type" value="hotel"/>
+            </jsp:include>
+        </div>
+
         <!-- Hotel Header -->
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-6">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-6 relative">
             <div>
+                <div class="flex flex-wrap gap-2 mb-2">
+                    <c:if test="${hotel.bestSeller}"><span class="bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-1 rounded">Best Seller</span></c:if>
+                    <c:if test="${hotel.recommended}"><span class="bg-purple-500 text-white text-xs font-bold px-2 py-1 rounded">Recommended</span></c:if>
+                </div>
                 <div class="flex items-center gap-3 mb-2">
                     <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white editorial">${hotel.name}</h1>
                     <div class="flex text-accent text-sm">
@@ -25,6 +36,9 @@
                             <i class="fas fa-star"></i>
                         </c:forEach>
                     </div>
+                    <button id="wishlistBtn" class="ml-4 text-2xl ${isWishlisted ? 'text-red-500' : 'text-gray-300'} hover:text-red-500 transition-colors" onclick="toggleWishlist(${hotel.id})">
+                        <i class="fa-heart ${isWishlisted ? 'fas' : 'far'}"></i>
+                    </button>
                 </div>
                 <p class="text-gray-600 dark:text-gray-400 flex items-center gap-2">
                     <i class="fas fa-map-marker-alt text-primary"></i> ${hotel.address}, ${hotel.city}
@@ -48,25 +62,35 @@
         <div class="grid grid-cols-1 md:grid-cols-4 gap-2 md:gap-4 mb-12 h-[500px] rounded-2xl overflow-hidden group">
             <!-- Main Image -->
             <div class="md:col-span-2 h-full relative overflow-hidden">
-                <img src="${hotel.imageUrl}" alt="${hotel.name}" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105 cursor-pointer">
+                <img src="${not empty photos ? photos[0].url : hotel.imageUrl}" alt="Main view" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105 cursor-pointer">
             </div>
             <!-- Sub Images Grid -->
             <div class="hidden md:grid md:col-span-2 grid-cols-2 grid-rows-2 gap-4 h-full">
-                <div class="relative overflow-hidden rounded-xl">
-                    <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Room" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105 cursor-pointer">
-                </div>
-                <div class="relative overflow-hidden rounded-xl">
-                    <img src="https://images.unsplash.com/photo-1582719478250-c89400bb3305?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Lobby" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105 cursor-pointer">
-                </div>
-                <div class="relative overflow-hidden rounded-xl">
-                    <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Pool" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105 cursor-pointer">
-                </div>
-                <div class="relative overflow-hidden rounded-xl bg-gray-900 group cursor-pointer">
-                    <img src="https://images.unsplash.com/photo-1514933651103-005eec06c04b?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Dining" class="w-full h-full object-cover opacity-60 transition-transform duration-700 hover:scale-105">
-                    <div class="absolute inset-0 flex items-center justify-center">
-                        <span class="text-white font-bold text-lg border-2 border-white px-4 py-2 rounded-lg backdrop-blur-sm">View All 42 Photos</span>
+                <c:forEach var="photo" items="${photos}" begin="1" end="3" varStatus="loop">
+                    <div class="relative overflow-hidden rounded-xl">
+                        <img src="${photo.url}" alt="${photo.caption}" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105 cursor-pointer">
                     </div>
-                </div>
+                </c:forEach>
+                <!-- Fill remaining with placeholders if not enough photos -->
+                <c:if test="${empty photos or photos.size() < 4}">
+                    <div class="relative overflow-hidden rounded-xl">
+                        <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Room" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105 cursor-pointer">
+                    </div>
+                    <div class="relative overflow-hidden rounded-xl bg-gray-900 group cursor-pointer">
+                        <img src="https://images.unsplash.com/photo-1514933651103-005eec06c04b?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Dining" class="w-full h-full object-cover opacity-60 transition-transform duration-700 hover:scale-105">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <span class="text-white font-bold text-lg border-2 border-white px-4 py-2 rounded-lg backdrop-blur-sm">View All Photos</span>
+                        </div>
+                    </div>
+                </c:if>
+                <c:if test="${not empty photos and photos.size() >= 4}">
+                    <div class="relative overflow-hidden rounded-xl bg-gray-900 group cursor-pointer">
+                        <img src="${photos[3].url}" alt="${photos[3].caption}" class="w-full h-full object-cover opacity-60 transition-transform duration-700 hover:scale-105">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <span class="text-white font-bold text-lg border-2 border-white px-4 py-2 rounded-lg backdrop-blur-sm">View All ${photos.size() + 1} Photos</span>
+                        </div>
+                    </div>
+                </c:if>
             </div>
         </div>
 
@@ -203,38 +227,65 @@
 
                 <!-- Reviews Section -->
                 <section class="surface-panel rounded-2xl p-6 md:p-8 shadow-sm mb-8">
-                    <div class="flex items-center justify-between mb-6">
+                    <div class="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
                         <h2 class="text-2xl font-bold editorial">Guest Reviews</h2>
-                        <button class="btn-outline px-4 py-2 text-sm rounded-lg">Write a Review</button>
+                        <c:if test="${not empty sessionScope.user}">
+                            <button onclick="document.getElementById('reviewForm').classList.toggle('hidden')" class="btn-outline px-4 py-2 text-sm rounded-lg whitespace-nowrap">Write a Review</button>
+                        </c:if>
                     </div>
                     
+                    <c:if test="${not empty sessionScope.user}">
+                        <div id="reviewForm" class="hidden mb-8 bg-gray-50 dark:bg-gray-800 p-6 rounded-xl">
+                            <form action="${pageContext.request.contextPath}/add-hotel-review" method="POST">
+                                <input type="hidden" name="hotelId" value="${hotel.id}">
+                                <div class="mb-4">
+                                    <label class="block text-sm font-medium mb-2">Rating</label>
+                                    <select name="rating" class="form-input w-full md:w-1/3">
+                                        <option value="5">5 - Excellent</option>
+                                        <option value="4">4 - Very Good</option>
+                                        <option value="3">3 - Average</option>
+                                        <option value="2">2 - Poor</option>
+                                        <option value="1">1 - Terrible</option>
+                                    </select>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="block text-sm font-medium mb-2">Review</label>
+                                    <textarea name="reviewText" rows="4" class="form-input w-full" required></textarea>
+                                </div>
+                                <button type="submit" class="btn-primary px-6 py-2 rounded-lg">Submit Review</button>
+                            </form>
+                        </div>
+                    </c:if>
+
+                    <c:if test="${empty reviews}">
+                        <p class="text-gray-500">No reviews yet. Be the first to review!</p>
+                    </c:if>
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                        <div class="bg-gray-50 dark:bg-gray-800/50 p-6 rounded-xl border border-gray-100 dark:border-gray-800">
-                            <div class="flex items-center gap-4 mb-4">
-                                <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold text-xl">S</div>
-                                <div>
-                                    <div class="font-bold">Sarah Jenkins</div>
-                                    <div class="text-xs text-gray-500">United Kingdom &bull; 2 days ago</div>
+                        <c:forEach var="review" items="${reviews}" end="3">
+                            <div class="bg-gray-50 dark:bg-gray-800/50 p-6 rounded-xl border border-gray-100 dark:border-gray-800">
+                                <div class="flex items-center gap-4 mb-4">
+                                    <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold text-xl">${review.userName.substring(0,1)}</div>
+                                    <div>
+                                        <div class="font-bold">${review.userName}</div>
+                                        <div class="text-xs text-gray-500">${review.createdAt}</div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="flex text-accent text-sm mb-2"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                            <h4 class="font-bold mb-1">Exceptional Stay!</h4>
-                            <p class="text-sm text-gray-600 dark:text-gray-400">"The rooms were incredibly spacious and clean. The staff went above and beyond to make our anniversary special. Highly recommend!"</p>
-                        </div>
-                        <div class="bg-gray-50 dark:bg-gray-800/50 p-6 rounded-xl border border-gray-100 dark:border-gray-800">
-                            <div class="flex items-center gap-4 mb-4">
-                                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-xl">M</div>
-                                <div>
-                                    <div class="font-bold">Michael Chen</div>
-                                    <div class="text-xs text-gray-500">Canada &bull; 1 week ago</div>
+                                <div class="flex text-accent text-sm mb-2">
+                                    <c:forEach var="i" begin="1" end="${review.rating}">
+                                        <i class="fas fa-star"></i>
+                                    </c:forEach>
+                                    <c:forEach var="i" begin="${review.rating + 1}" end="5">
+                                        <i class="far fa-star"></i>
+                                    </c:forEach>
                                 </div>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">"${review.reviewText}"</p>
                             </div>
-                            <div class="flex text-accent text-sm mb-2"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i></div>
-                            <h4 class="font-bold mb-1">Great location, good breakfast</h4>
-                            <p class="text-sm text-gray-600 dark:text-gray-400">"Perfect location right in the center. The standard room was a bit small, but comfortable. The breakfast spread was fantastic."</p>
-                        </div>
+                        </c:forEach>
                     </div>
-                    <button class="text-primary font-bold text-sm hover:underline">Read all 1,204 reviews <i class="fas fa-arrow-right ml-1"></i></button>
+                    <c:if test="${not empty reviews}">
+                        <button class="text-primary font-bold text-sm hover:underline">Read all ${reviews.size()} reviews <i class="fas fa-arrow-right ml-1"></i></button>
+                    </c:if>
                 </section>
 
             </div>
@@ -266,6 +317,24 @@
                             </p>
                         </div>
                     </div>
+                    
+                    <!-- Nearby Places Widget -->
+                    <c:if test="${not empty nearbyPlaces}">
+                        <div class="surface-panel rounded-2xl shadow-sm p-6">
+                            <h3 class="font-bold text-lg mb-4 border-b border-gray-100 dark:border-gray-800 pb-2">Nearby Places</h3>
+                            <div class="flex flex-col gap-4">
+                                <c:forEach var="place" items="${nearbyPlaces}">
+                                    <div class="flex justify-between items-center">
+                                        <div class="flex items-center gap-3">
+                                            <i class="${place.placeType == 'Attraction' ? 'fas fa-camera text-blue-500' : 'fas fa-utensils text-orange-500'}"></i>
+                                            <span class="text-sm font-medium">${place.name}</span>
+                                        </div>
+                                        <span class="text-xs text-gray-500">${place.distanceKm} km</span>
+                                    </div>
+                                </c:forEach>
+                            </div>
+                        </div>
+                    </c:if>
 
                     <!-- Policies Widget -->
                     <div class="surface-panel rounded-2xl shadow-sm p-6">
@@ -316,5 +385,41 @@
         </div>
     </div>
 </main>
+
+<script>
+    function toggleWishlist(hotelId) {
+        fetch('${pageContext.request.contextPath}/toggle-wishlist', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'hotelId=' + hotelId
+        })
+        .then(response => {
+            if (response.status === 401) {
+                window.location.href = '${pageContext.request.contextPath}/login.jsp';
+                return;
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data && data.status === 'success') {
+                const btn = document.getElementById('wishlistBtn');
+                const icon = btn.querySelector('i');
+                if (data.isWishlisted) {
+                    btn.classList.remove('text-gray-300');
+                    btn.classList.add('text-red-500');
+                    icon.classList.remove('far');
+                    icon.classList.add('fas');
+                } else {
+                    btn.classList.add('text-gray-300');
+                    btn.classList.remove('text-red-500');
+                    icon.classList.add('far');
+                    icon.classList.remove('fas');
+                }
+            }
+        });
+    }
+</script>
 
 <%@ include file="/components/footer.jsp" %>

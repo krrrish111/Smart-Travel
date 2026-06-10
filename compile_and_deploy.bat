@@ -9,7 +9,7 @@ set WEBAPP_DIR=tomcat\apache-tomcat-9.0.117\webapps\voyastra
 
 if not exist "%OUTDIR%" mkdir "%OUTDIR%"
 
-set CP=%LIB%\HikariCP-5.0.1.jar;%LIB%\slf4j-api-1.7.36.jar;%LIB%\gson-2.10.1.jar;%LIB%\mysql-connector-j-8.0.33.jar;%LIB%\jstl-1.2.jar;%LIB%\jbcrypt-0.4.jar;%LIB%\jakarta.mail-2.0.1.jar;%SERVLET%;%SRCROOT%
+set CP=%LIB%\*;%SERVLET%;%SRCROOT%
 
 echo Compiling all classes...
 javac -encoding UTF-8 -cp "%CP%" -d "%OUTDIR%" ^

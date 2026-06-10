@@ -78,7 +78,7 @@ public class HotelCheckoutServlet extends HttpServlet {
                 hotel = hotelDAO.getHotelById(hotelId);
                 room  = hotelDAO.getRoomById(roomId);
                 if (hotel == null || room == null) {
-                    response.sendRedirect("hotels");
+                    response.sendRedirect(request.getContextPath() + "/");
                     return;
                 }
             }
@@ -100,7 +100,11 @@ public class HotelCheckoutServlet extends HttpServlet {
             request.getRequestDispatcher("/pages/hotel-checkout.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect("hotels");
+            if (hotelIdStr != null && !hotelIdStr.isEmpty()) {
+                response.sendRedirect(request.getContextPath() + "/hotel-details?id=" + hotelIdStr);
+            } else {
+                response.sendRedirect(request.getContextPath() + "/");
+            }
         }
     }
 
@@ -188,6 +192,10 @@ public class HotelCheckoutServlet extends HttpServlet {
             pending.setHotel(hotel);
             pending.setRoom(room);
 
+            pending.setStatus("Draft");
+            int draftId = bookingDAO.createBooking(pending);
+            pending.setId(draftId);
+
             // Save pending booking to session and carry over addons for display
             session.setAttribute("pendingHotelBooking", pending);
             session.setAttribute("pendingAddons", addons);
@@ -196,7 +204,12 @@ public class HotelCheckoutServlet extends HttpServlet {
 
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect("hotels");
+            String hotelIdStr = request.getParameter("hotelId");
+            if (hotelIdStr != null && !hotelIdStr.isEmpty()) {
+                response.sendRedirect(request.getContextPath() + "/hotel-details?id=" + hotelIdStr);
+            } else {
+                response.sendRedirect(request.getContextPath() + "/");
+            }
         }
     }
 }

@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS hotels (
 CREATE TABLE IF NOT EXISTS hotel_rooms (
     id INT AUTO_INCREMENT PRIMARY KEY,
     hotel_id INT NOT NULL,
-    type VARCHAR(100) NOT NULL, -- Standard, Deluxe, Suite
+    type VARCHAR(100) NOT NULL,
     capacity INT DEFAULT 2,
     price_per_night DOUBLE NOT NULL,
     amenities VARCHAR(500),

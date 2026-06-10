@@ -24,7 +24,7 @@ public class HotelBookingDAO {
             stmt.setDate(6, booking.getCheckOut());
             stmt.setInt(7, booking.getGuests());
             stmt.setDouble(8, booking.getTotalPrice());
-            stmt.setString(9, "Confirmed");
+            stmt.setString(9, booking.getStatus() != null ? booking.getStatus() : "Confirmed");
             stmt.setString(10, booking.getGuestName());
             stmt.setString(11, booking.getGuestEmail());
             stmt.setString(12, booking.getGuestPhone());

@@ -365,6 +365,10 @@
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
             Saved Plans
         </div>
+        <div class="nav-item ${activeTab == 'wishlist' ? 'active' : ''}" onclick="switchSection('wishlist')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            Wishlist & History
+        </div>
         <div class="nav-item ${activeTab == 'security' ? 'active' : ''}" onclick="switchSection('security')">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
             Security
@@ -707,6 +711,46 @@
                         <a href="${pageContext.request.contextPath}/itinerary?id=${plan.id}" class="btn btn-outline btn-sm">View Itinerary</a>
                     </div>
                 </c:forEach>
+                <c:if test="${empty savedPlans}">
+                    <p style="color: var(--text-secondary); grid-column: span 2;">No saved itineraries.</p>
+                </c:if>
+            </div>
+        </section>
+
+        <!-- Wishlist & History Section -->
+        <section id="wishlist" class="content-section ${activeTab == 'wishlist' ? 'active' : ''}">
+            <h2 class="section-title">My Wishlist</h2>
+            <div class="stats-grid" style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;">
+                <c:forEach var="hotel" items="${wishlistHotels}">
+                    <div class="stat-card" style="padding:0; overflow:hidden; border-radius: 16px; text-align: left;">
+                        <img src="${hotel.imageUrl}" alt="${hotel.name}" style="width: 100%; height: 120px; object-fit: cover;">
+                        <div style="padding: 15px;">
+                            <h3 style="font-size: 1.1rem; margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${hotel.name}</h3>
+                            <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 10px;">${hotel.city}</p>
+                            <a href="${pageContext.request.contextPath}/hotel-details?id=${hotel.id}" class="btn btn-primary" style="width: 100%; padding: 8px;">View Hotel</a>
+                        </div>
+                    </div>
+                </c:forEach>
+                <c:if test="${empty wishlistHotels}">
+                    <p style="color: var(--text-secondary); grid-column: span 3;">Your wishlist is empty.</p>
+                </c:if>
+            </div>
+            
+            <h2 class="section-title" style="margin-top: 40px;">Recently Viewed</h2>
+            <div class="stats-grid" style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;">
+                <c:forEach var="hotel" items="${recentlyViewedHotels}">
+                    <div class="stat-card" style="padding:0; overflow:hidden; border-radius: 16px; text-align: left; opacity: 0.8;">
+                        <img src="${hotel.imageUrl}" alt="${hotel.name}" style="width: 100%; height: 120px; object-fit: cover; filter: grayscale(20%);">
+                        <div style="padding: 15px;">
+                            <h3 style="font-size: 1.1rem; margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${hotel.name}</h3>
+                            <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 10px;">${hotel.city}</p>
+                            <a href="${pageContext.request.contextPath}/hotel-details?id=${hotel.id}" class="btn btn-outline" style="width: 100%; padding: 8px;">View Again</a>
+                        </div>
+                    </div>
+                </c:forEach>
+                <c:if test="${empty recentlyViewedHotels}">
+                    <p style="color: var(--text-secondary); grid-column: span 3;">No recently viewed hotels.</p>
+                </c:if>
             </div>
         </section>
 

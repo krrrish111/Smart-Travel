@@ -5,35 +5,9 @@
 
 <main style="padding-top: 100px; padding-bottom: 80px; background: #f8f9fa;" class="dark:bg-[#0a0a0a]">
     
-    <!-- Top Search Summary Bar -->
-    <div class="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 shadow-sm sticky top-[72px] z-20">
-        <div class="container mx-auto max-w-7xl px-4 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
-            <div>
-                <h1 class="text-2xl font-bold editorial text-gray-900 dark:text-white">
-                    <c:choose>
-                        <c:when test="${not empty searchQuery}">${searchQuery}</c:when>
-                        <c:otherwise>All Destinations</c:otherwise>
-                    </c:choose>
-                </h1>
-                <p class="text-sm text-gray-500">
-                    ${not empty checkIn ? checkIn : 'Any Date'} &bull; ${not empty checkOut ? checkOut : 'Any Date'} &bull; ${guests != null ? guests : (adults + children)} Guest(s)
-                </p>
-            </div>
-            <div class="flex gap-3 items-center">
-                <a href="${pageContext.request.contextPath}/hotels" class="btn-outline px-4 py-2 text-sm rounded-lg flex items-center gap-2">
-                    <i class="fas fa-search"></i> Modify Search
-                </a>
-                <div class="relative">
-                    <select class="input-field appearance-none pl-4 pr-10 py-2 text-sm bg-gray-50 dark:bg-gray-800 border-none rounded-lg cursor-pointer">
-                        <option value="recommended">Recommended</option>
-                        <option value="cheapest">Price (Lowest First)</option>
-                        <option value="highest_rated">Highest Rated</option>
-                        <option value="most_popular">Most Popular</option>
-                    </select>
-                    <i class="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-xs"></i>
-                </div>
-            </div>
-        </div>
+    <!-- Integrated Hotel Search Form -->
+    <div class="container relative z-10" style="margin-top: 20px;">
+        <jsp:include page="/components/hotel-search.jsp"/>
     </div>
 
     <div class="container mx-auto max-w-7xl px-4 py-8">
@@ -122,11 +96,16 @@
                             <!-- Image Section -->
                             <div class="sm:w-1/3 relative overflow-hidden">
                                 <img src="<c:choose><c:when test="${not empty hotel.imageUrl}">${hotel.imageUrl}</c:when><c:otherwise>https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80</c:otherwise></c:choose>" alt="${hotel.name}" class="w-full h-48 sm:h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                                <div class="absolute top-3 left-3 bg-white/90 dark:bg-black/90 backdrop-blur-sm text-xs font-bold px-3 py-1.5 rounded-lg shadow-sm flex items-center gap-1">
-                                    <i class="fas fa-star text-accent"></i> ${hotel.rating} <span class="text-gray-500 font-normal ml-1">(${hotel.reviewCount} reviews)</span>
+                                <div class="absolute top-3 left-3 flex flex-col gap-2">
+                                    <div class="bg-white/90 dark:bg-black/90 backdrop-blur-sm text-xs font-bold px-3 py-1.5 rounded-lg shadow-sm flex items-center gap-1 w-max">
+                                        <i class="fas fa-star text-accent"></i> ${hotel.rating} <span class="text-gray-500 font-normal ml-1">(${hotel.reviewCount} reviews)</span>
+                                    </div>
+                                    <c:if test="${hotel.bestSeller}"><div class="bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-1 rounded w-max">Best Seller</div></c:if>
+                                    <c:if test="${hotel.recommended}"><div class="bg-purple-500 text-white text-xs font-bold px-2 py-1 rounded w-max">Recommended</div></c:if>
                                 </div>
-                                <button class="absolute top-3 right-3 w-8 h-8 bg-white/50 dark:bg-black/50 backdrop-blur-md rounded-full flex items-center justify-center text-gray-800 dark:text-white hover:text-red-500 hover:bg-white transition-colors">
-                                    <i class="far fa-heart"></i>
+                                <c:set var="isWishlisted" value="${wishlistedIds != null && wishlistedIds.contains(hotel.id)}" />
+                                <button onclick="toggleWishlist(${hotel.id}, this)" class="absolute top-3 right-3 w-8 h-8 bg-white/50 dark:bg-black/50 backdrop-blur-md rounded-full flex items-center justify-center transition-colors ${isWishlisted ? 'text-red-500 bg-white' : 'text-gray-800 dark:text-white hover:text-red-500 hover:bg-white'}">
+                                    <i class="fa-heart ${isWishlisted ? 'fas' : 'far'}"></i>
                                 </button>
                             </div>
 
@@ -198,5 +177,40 @@
         </div>
     </div>
 </main>
+
+<script>
+    function toggleWishlist(hotelId, btn) {
+        fetch('${pageContext.request.contextPath}/toggle-wishlist', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'hotelId=' + hotelId
+        })
+        .then(response => {
+            if (response.status === 401) {
+                window.location.href = '${pageContext.request.contextPath}/login.jsp';
+                return;
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data && data.status === 'success') {
+                const icon = btn.querySelector('i');
+                if (data.isWishlisted) {
+                    btn.classList.add('text-red-500', 'bg-white');
+                    btn.classList.remove('text-gray-800', 'dark:text-white', 'hover:text-red-500', 'hover:bg-white');
+                    icon.classList.remove('far');
+                    icon.classList.add('fas');
+                } else {
+                    btn.classList.remove('text-red-500', 'bg-white');
+                    btn.classList.add('text-gray-800', 'dark:text-white', 'hover:text-red-500', 'hover:bg-white');
+                    icon.classList.add('far');
+                    icon.classList.remove('fas');
+                }
+            }
+        });
+    }
+</script>
 
 <%@ include file="/components/footer.jsp" %>

@@ -43,12 +43,18 @@ public class TrainBookingDAO {
                 }
                 ps.executeBatch();
             }
+
+            System.out.println("TRAIN BOOKING SAVED");
+            System.out.println("BOOKING ID = " + booking.getId());
+            System.out.println("USER ID = " + booking.getUserId());
             return true;
         } catch (Exception e) {
+            System.err.println("[TrainBookingDAO] saveDraft FAILED: " + e.getMessage());
             e.printStackTrace();
             return false;
         }
     }
+
 
     public java.util.List<TrainBooking> getBookingsByUserId(int userId) {
         java.util.List<TrainBooking> list = new java.util.ArrayList<>();
@@ -77,4 +83,48 @@ public class TrainBookingDAO {
         }
         return list;
     }
+
+    public TrainBooking getBookingById(String id) {
+        TrainBooking booking = null;
+        String sql = "SELECT * FROM train_bookings WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    booking = new TrainBooking();
+                    booking.setId(rs.getString("id"));
+                    booking.setUserId(rs.getInt("user_id"));
+                    booking.setTrainNumber(rs.getString("train_number"));
+                    booking.setTrainName(rs.getString("train_name"));
+                    booking.setFromStation(rs.getString("from_station"));
+                    booking.setToStation(rs.getString("to_station"));
+                    booking.setJourneyDate(rs.getString("journey_date"));
+                    booking.setTrainClass(rs.getString("train_class"));
+                    booking.setStatus(rs.getString("status"));
+                    booking.setPassengers(new java.util.ArrayList<>());
+                }
+            }
+            if (booking != null) {
+                String passSql = "SELECT * FROM train_passengers WHERE booking_id = ?";
+                try (PreparedStatement ps2 = conn.prepareStatement(passSql)) {
+                    ps2.setString(1, id);
+                    try (ResultSet rs2 = ps2.executeQuery()) {
+                        while (rs2.next()) {
+                            TrainPassenger p = new TrainPassenger();
+                            p.setName(rs2.getString("name"));
+                            p.setAge(rs2.getInt("age"));
+                            p.setGender(rs2.getString("gender"));
+                            p.setBerthPreference(rs2.getString("berth_preference"));
+                            booking.getPassengers().add(p);
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return booking;
+    }
+
 }

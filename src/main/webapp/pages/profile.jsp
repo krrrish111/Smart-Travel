@@ -664,7 +664,7 @@
                                             </div>
                                             <div style="display:flex; gap:5px; justify-content: flex-end; margin-top:10px;">
                                                 <a href="${pageContext.request.contextPath}/transport/train/confirmation?bookingRef=${t.pnr}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">View Details</a>
-                                                <a href="${pageContext.request.contextPath}/transport/train-ticket?bookingRef=${t.pnr}" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Print Ticket</a>
+                                                <a href="${pageContext.request.contextPath}/transport/train/confirmation?print=true&bookingRef=${t.pnr}" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Print Ticket</a>
                                             </div>
                                         </div>
                                     </div>
@@ -705,7 +705,7 @@
                                             </div>
                                             <div style="display:flex; gap:5px; justify-content: flex-end; margin-top:10px;">
                                                 <a href="${pageContext.request.contextPath}/transport/bus/confirmation?bookingRef=${b.pnr}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">View Details</a>
-                                                <a href="${pageContext.request.contextPath}/transport/bus-ticket?bookingRef=${b.pnr}" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Print Ticket</a>
+                                                <a href="${pageContext.request.contextPath}/transport/bus/confirmation?print=true&bookingRef=${b.pnr}" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Print Ticket</a>
                                             </div>
                                         </div>
                                     </div>
@@ -746,7 +746,7 @@
                                             </div>
                                             <div style="display:flex; gap:5px; justify-content: flex-end; margin-top:10px;">
                                                 <a href="${pageContext.request.contextPath}/transport/cab/confirmation?bookingRef=${c.bookingRef}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">View Details</a>
-                                                <a href="${pageContext.request.contextPath}/transport/cab-ticket?bookingRef=${c.bookingRef}" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Print Voucher</a>
+                                                <a href="${pageContext.request.contextPath}/transport/cab/confirmation?print=true&bookingRef=${c.bookingRef}" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Print Voucher</a>
                                             </div>
                                         </div>
                                     </div>
@@ -787,7 +787,7 @@
                                             </div>
                                             <div style="display:flex; gap:5px; justify-content: flex-end; margin-top:10px;">
                                                 <a href="${pageContext.request.contextPath}/transport/car/confirmation?bookingRef=${car.bookingRef}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">View Details</a>
-                                                <a href="${pageContext.request.contextPath}/transport/car-ticket?bookingRef=${car.bookingRef}" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Print Voucher</a>
+                                                <a href="${pageContext.request.contextPath}/transport/car/confirmation?print=true&bookingRef=${car.bookingRef}" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Print Voucher</a>
                                             </div>
                                         </div>
                                     </div>
@@ -828,7 +828,7 @@
                                             </div>
                                             <div style="display:flex; gap:5px; justify-content: flex-end; margin-top:10px;">
                                                 <a href="${pageContext.request.contextPath}/transport/cruise/confirmation?bookingRef=${cr.bookingRef}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">View Details</a>
-                                                <a href="${pageContext.request.contextPath}/transport/cruise-ticket?bookingRef=${cr.bookingRef}" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Print Voucher</a>
+                                                <a href="${pageContext.request.contextPath}/transport/cruise/confirmation?print=true&bookingRef=${cr.bookingRef}" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Print Voucher</a>
                                             </div>
                                         </div>
                                     </div>
@@ -869,7 +869,7 @@
                                             </div>
                                             <div style="display:flex; gap:5px; justify-content: flex-end; margin-top:10px;">
                                                 <a href="${pageContext.request.contextPath}/transport/helicopter/confirmation?bookingRef=${h.bookingRef}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">View Details</a>
-                                                <a href="${pageContext.request.contextPath}/transport/helicopter-ticket?bookingRef=${h.bookingRef}" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Print Voucher</a>
+                                                <a href="${pageContext.request.contextPath}/transport/helicopter/confirmation?print=true&bookingRef=${h.bookingRef}" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Print Voucher</a>
                                             </div>
                                         </div>
                                     </div>

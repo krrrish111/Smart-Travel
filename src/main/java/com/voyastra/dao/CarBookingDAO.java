@@ -72,5 +72,31 @@ public class CarBookingDAO {
         }
         return list;
     }
-}
 
+    public CarBooking getBookingById(String id) {
+        CarBooking booking = null;
+        String sql = "SELECT * FROM car_bookings WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    booking = new CarBooking();
+                    booking.setId(rs.getString("id"));
+                    booking.setUserId(rs.getInt("user_id"));
+                    booking.setCarModel(rs.getString("car_model"));
+                    booking.setVehicleType(rs.getString("vehicle_type"));
+                    booking.setPickupCity(rs.getString("pickup_city"));
+                    booking.setPickupDate(rs.getString("pickup_date"));
+                    booking.setReturnDate(rs.getString("return_date"));
+                    booking.setAmount(rs.getDouble("amount"));
+                    booking.setStatus(rs.getString("status"));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return booking;
+    }
+
+}

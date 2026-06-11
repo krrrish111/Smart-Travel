@@ -37,7 +37,7 @@
             </div>
 
             <div class="flex justify-center gap-4 mt-8">
-                <a href="${pageContext.request.contextPath}/pages/transport/cruise-ticket.jsp" target="_blank" class="px-6 py-3 text-gray-900 rounded-lg font-bold flex items-center gap-2 transition" style="background-color: #06b6d4;">
+                <a href="${pageContext.request.contextPath}/transport/cruise/confirmation?print=true&bookingRef=${booking.id}" target="_blank" class="px-6 py-3 text-gray-900 rounded-lg font-bold flex items-center gap-2 transition" style="background-color: #06b6d4;">
                     <span>🎫</span> Download Boarding Pass
                 </a>
                 <a href="${pageContext.request.contextPath}/profile" class="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-bold transition">

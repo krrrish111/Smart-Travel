@@ -79,5 +79,50 @@ public class CruiseBookingDAO {
         }
         return list;
     }
-}
 
+    public CruiseBooking getBookingById(String id) {
+        CruiseBooking booking = null;
+        String sql = "SELECT * FROM cruise_bookings WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    booking = new CruiseBooking();
+                    booking.setId(rs.getString("id"));
+                    booking.setUserId(rs.getInt("user_id"));
+                    booking.setDeparturePort(rs.getString("departure_port"));
+                    booking.setDestination(rs.getString("destination"));
+                    booking.setCruiseDate(rs.getString("cruise_date"));
+                    booking.setCabinType(rs.getString("cabin_type"));
+                    booking.setAmount(rs.getDouble("total_price"));
+                    booking.setStatus(rs.getString("status"));
+                    booking.setCruiseLine(rs.getString("cruise_line"));
+                    booking.setShipName(rs.getString("ship_name"));
+                    try { booking.setDurationDays(Integer.parseInt(rs.getString("duration").split(" ")[0])); } catch(Exception e) { booking.setDurationDays(0); }
+                    booking.setPassengers(new java.util.ArrayList<>());
+                }
+            }
+            if (booking != null) {
+                String passSql = "SELECT * FROM cruise_passengers WHERE booking_id = ?";
+                try (PreparedStatement ps2 = conn.prepareStatement(passSql)) {
+                    ps2.setString(1, id);
+                    try (ResultSet rs2 = ps2.executeQuery()) {
+                        while (rs2.next()) {
+                            CruisePassenger p = new CruisePassenger();
+                            p.setName(rs2.getString("name"));
+                            p.setAge(rs2.getInt("age"));
+                            p.setGender(rs2.getString("gender"));
+                            p.setPassportNumber(rs2.getString("passport_number"));
+                            booking.getPassengers().add(p);
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return booking;
+    }
+
+}

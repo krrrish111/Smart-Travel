@@ -72,5 +72,48 @@ public class CabBookingDAO {
         }
         return list;
     }
-}
 
+    public CabBooking getBookingById(String id) {
+        CabBooking booking = null;
+        String sql = "SELECT * FROM cab_bookings WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    booking = new CabBooking();
+                    booking.setId(rs.getString("id"));
+                    booking.setUserId(rs.getInt("user_id"));
+                    booking.setPickup(rs.getString("pickup_location"));
+                    booking.setDropoff(rs.getString("drop_location"));
+                    booking.setDate(rs.getString("pickup_date"));
+                    booking.setTime(rs.getString("pickup_time"));
+                    booking.setBookingType(rs.getString("cab_type"));
+                    booking.setVehicleType(rs.getString("vehicle_type"));
+                    booking.setAmount(rs.getDouble("total_price"));
+                    booking.setStatus(rs.getString("status"));
+                    
+                }
+            }
+            if (booking != null) {
+                String passSql = "SELECT * FROM cab_passengers WHERE booking_id = ?";
+                try (PreparedStatement ps2 = conn.prepareStatement(passSql)) {
+                    ps2.setString(1, id);
+                    try (ResultSet rs2 = ps2.executeQuery()) {
+                        while (rs2.next()) {
+                            CabPassenger p = new CabPassenger();
+                            p.setName(rs2.getString("name"));
+                            p.setPhone(rs2.getString("phone"));
+                            p.setEmail(rs2.getString("email"));
+                            // booking.getPassengers().add(p);
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return booking;
+    }
+
+}

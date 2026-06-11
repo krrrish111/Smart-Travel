@@ -40,7 +40,7 @@
             </div>
 
             <div class="flex justify-center gap-4">
-                <a href="${pageContext.request.contextPath}/pages/transport/bus-ticket.jsp" target="_blank" class="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-bold flex items-center gap-2 transition">
+                <a href="${pageContext.request.contextPath}/transport/bus/confirmation?print=true&bookingRef=${booking.id}" target="_blank" class="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-bold flex items-center gap-2 transition">
                     <span>📄</span> Download Ticket (PDF)
                 </a>
                 <a href="${pageContext.request.contextPath}/profile" class="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-bold transition">

@@ -79,8 +79,8 @@ public class TrainBookingServlet extends HttpServlet {
         draft.setFare(fare);
         draft.setStatus("DRAFT");
         // Using a mock user id for now since auth might not be fully linked in this context
-        Integer userId = (Integer) request.getSession().getAttribute("userId");
-        draft.setUserId(userId != null ? userId : 1);
+        com.voyastra.model.User user = (com.voyastra.model.User) request.getSession().getAttribute("user");
+        draft.setUserId(user != null ? user.getId() : 1);
 
         if (names != null) {
             for (int i = 0; i < names.length; i++) {

@@ -37,7 +37,7 @@
             </div>
 
             <div class="flex justify-center gap-4 mt-8">
-                <a href="${pageContext.request.contextPath}/pages/transport/helicopter-ticket.jsp" target="_blank" class="px-6 py-3 text-gray-900 rounded-lg font-bold flex items-center gap-2 transition" style="background-color: #f59e0b;">
+                <a href="${pageContext.request.contextPath}/transport/helicopter/confirmation?print=true&bookingRef=${booking.id}" target="_blank" class="px-6 py-3 text-gray-900 rounded-lg font-bold flex items-center gap-2 transition" style="background-color: #f59e0b;">
                     <span>🎫</span> Download Flight Voucher
                 </a>
                 <a href="${pageContext.request.contextPath}/profile" class="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-bold transition">

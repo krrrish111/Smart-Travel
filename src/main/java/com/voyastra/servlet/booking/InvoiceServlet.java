@@ -1,7 +1,9 @@
 package com.voyastra.servlet.booking;
 
 import com.voyastra.dao.BookingDAO;
+import com.voyastra.dao.FlightBookingDAO;
 import com.voyastra.model.Booking;
+import com.voyastra.model.FlightBooking;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,6 +17,7 @@ import java.io.IOException;
 public class InvoiceServlet extends HttpServlet {
 
     private BookingDAO bookingDAO = new BookingDAO();
+    private FlightBookingDAO flightBookingDAO = new FlightBookingDAO();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -34,23 +37,76 @@ public class InvoiceServlet extends HttpServlet {
             return;
         }
 
-        Booking booking = bookingDAO.getBookingByCode(code);
+        // Step 1: Try to load from flight_bookings (new detailed table)
+        FlightBooking flightBooking = flightBookingDAO.getByBookingCode(code);
         
-        if (booking == null || booking.getUserId() != userId) {
+        // Step 2: Fallback - load from old bookings table and parse details string
+        if (flightBooking == null) {
+            System.out.println("[InvoiceServlet] flight_bookings record not found for: " + code + " - trying bookings table fallback");
+            flightBooking = flightBookingDAO.getFromBookingsTableByCode(code);
+        }
+
+        // Step 3: If still null, load generic booking and show partial ticket
+        if (flightBooking == null) {
+            Booking generic = bookingDAO.getBookingByCode(code);
+            if (generic != null && generic.getType() != null && generic.getType().equals("flight")) {
+                // Wrap in FlightBooking
+                flightBooking = new FlightBooking();
+                flightBooking.setId(generic.getId());
+                flightBooking.setUserId(generic.getUserId());
+                flightBooking.setBookingCode(generic.getBookingCode());
+                flightBooking.setTotalPrice(generic.getTotalPrice());
+                flightBooking.setStatus(generic.getStatus());
+                flightBooking.setCreatedAt(generic.getCreatedAt());
+                flightBooking.setCustomerName(generic.getCustomerName());
+                flightBooking.setCustomerEmail(generic.getCustomerEmail());
+                flightBooking.setDetails(generic.getDetails());
+                flightBooking.parseDetails();
+            }
+        }
+
+        if (flightBooking == null || flightBooking.getUserId() != userId) {
             response.sendRedirect(request.getContextPath() + "/profile?tab=bookings&error=not_found");
             return;
         }
 
-        // GST Calculation (Assuming 18% IGST on the total price for simplicity, or reverse calculating)
-        // Reverse calculation: Total = Base + 18% GST => Base = Total / 1.18
-        double total = booking.getTotalPrice();
+        // Debug logs as requested
+        String bookingId = flightBooking.getBookingCode();
+        String pnr = flightBooking.getPnr();
+        String flightNumber = flightBooking.getFlightNumber();
+        String origin = flightBooking.getDepartureCity();
+        String destination = flightBooking.getArrivalCity();
+
+        System.out.println("Booking ID = " + bookingId);
+        System.out.println("PNR = " + pnr);
+        System.out.println("Flight = " + flightNumber);
+        System.out.println("Origin = " + origin);
+        System.out.println("Destination = " + destination);
+
+        // Verify data completeness
+        if (origin == null || origin.isEmpty()) {
+            System.out.println("[InvoiceServlet] WARNING: Origin is null/empty for booking: " + bookingId);
+        }
+        if (destination == null || destination.isEmpty()) {
+            System.out.println("[InvoiceServlet] WARNING: Destination is null/empty for booking: " + bookingId);
+        }
+        if (flightNumber == null || flightNumber.isEmpty()) {
+            System.out.println("[InvoiceServlet] WARNING: Flight number is null/empty for booking: " + bookingId);
+        }
+
+        // Calculate fare breakdown
+        double total = flightBooking.getTotalPrice();
         double baseAmount = total / 1.18;
-        double gstAmount = total - baseAmount;
+        double taxAmount = total - baseAmount;
+        double convFee = 350.0;
 
-        request.setAttribute("booking", booking);
-        request.setAttribute("baseAmount", String.format("%.2f", baseAmount));
-        request.setAttribute("gstAmount", String.format("%.2f", gstAmount));
+        request.setAttribute("flightBooking", flightBooking);
+        request.setAttribute("booking", flightBooking);   // kept for legacy template
+        request.setAttribute("baseAmount", String.format("%.2f", baseAmount - convFee));
+        request.setAttribute("gstAmount", String.format("%.2f", taxAmount));
+        request.setAttribute("convFee", String.format("%.2f", convFee));
+        request.setAttribute("bookingType", "FLIGHT");
 
-        request.getRequestDispatcher("/pages/booking/invoice.jsp").forward(request, response);
+        request.getRequestDispatcher("/pages/common/FlightTicket.jsp").forward(request, response);
     }
 }

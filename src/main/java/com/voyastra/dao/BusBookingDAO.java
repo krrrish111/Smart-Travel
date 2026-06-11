@@ -79,5 +79,49 @@ public class BusBookingDAO {
         }
         return list;
     }
-}
 
+    public BusBooking getBookingById(String id) {
+        BusBooking booking = null;
+        String sql = "SELECT * FROM bus_bookings WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    booking = new BusBooking();
+                    booking.setId(rs.getString("id"));
+                    booking.setUserId(rs.getInt("user_id"));
+                    booking.setBusName(rs.getString("operator_name"));
+                    
+                    booking.setBusType(rs.getString("bus_type"));
+                    booking.setFromCity(rs.getString("from_city"));
+                    booking.setToCity(rs.getString("to_city"));
+                    booking.setJourneyDate(rs.getString("journey_date"));
+                    booking.setSeatNumbers(rs.getString("seat_numbers"));
+                    booking.setStatus(rs.getString("status"));
+                    booking.setPassengers(new java.util.ArrayList<>());
+                }
+            }
+            if (booking != null) {
+                String passSql = "SELECT * FROM bus_passengers WHERE booking_id = ?";
+                try (PreparedStatement ps2 = conn.prepareStatement(passSql)) {
+                    ps2.setString(1, id);
+                    try (ResultSet rs2 = ps2.executeQuery()) {
+                        while (rs2.next()) {
+                            BusPassenger p = new BusPassenger();
+                            p.setName(rs2.getString("name"));
+                            p.setAge(rs2.getInt("age"));
+                            p.setGender(rs2.getString("gender"));
+                            p.setSeatPreference(rs2.getString("seat_preference"));
+                            booking.getPassengers().add(p);
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return booking;
+    }
+
+}

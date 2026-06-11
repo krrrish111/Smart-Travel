@@ -12,7 +12,7 @@ import java.util.List;
 public class CruiseBookingDAO {
     
     public boolean saveBooking(CruiseBooking booking) {
-        String insertBooking = "INSERT INTO cruise_bookings (id, user_id, ship_name, cruise_line, cabin_type, departure_port, destination, cruise_date, duration_days, amount, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String insertBooking = "INSERT INTO cruise_bookings (id, user_id, ship_name, cruise_line, cabin_type, departure_port, destination, cruise_date, duration, total_price, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         String insertPassenger = "INSERT INTO cruise_passengers (booking_id, name, age, gender, passport_number) VALUES (?, ?, ?, ?, ?)";
         
         try (Connection conn = DBConnection.getConnection()) {
@@ -27,7 +27,7 @@ public class CruiseBookingDAO {
                 ps.setString(6, booking.getDeparturePort());
                 ps.setString(7, booking.getDestination());
                 ps.setString(8, booking.getCruiseDate());
-                ps.setInt(9, booking.getDurationDays());
+                ps.setString(9, booking.getDurationDays() + " Nights");
                 ps.setDouble(10, booking.getAmount());
                 ps.setString(11, booking.getStatus());
                 ps.executeUpdate();
@@ -64,7 +64,11 @@ public class CruiseBookingDAO {
                     b.setUserId(rs.getInt("user_id"));
                     b.setShipName(rs.getString("ship_name"));
                     b.setCruiseLine(rs.getString("cruise_line"));
-                    b.setAmount(rs.getDouble("amount"));
+                    b.setCabinType(rs.getString("cabin_type"));
+                    b.setDeparturePort(rs.getString("departure_port"));
+                    b.setDestination(rs.getString("destination"));
+                    b.setCruiseDate(rs.getString("cruise_date"));
+                    b.setAmount(rs.getDouble("total_price"));
                     b.setStatus(rs.getString("status"));
                     list.add(b);
                 }
@@ -75,3 +79,4 @@ public class CruiseBookingDAO {
         return list;
     }
 }
+

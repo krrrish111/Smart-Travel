@@ -48,7 +48,7 @@ public class CarBookingDAO {
 
     public List<CarBooking> getBookingsByUserId(int userId) {
         List<CarBooking> list = new ArrayList<>();
-        String sql = "SELECT * FROM car_bookings WHERE user_id = ? ORDER BY id DESC";
+        String sql = "SELECT * FROM car_bookings WHERE user_id = ? ORDER BY created_at DESC";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, userId);
@@ -59,6 +59,9 @@ public class CarBookingDAO {
                     b.setUserId(rs.getInt("user_id"));
                     b.setCarModel(rs.getString("car_model"));
                     b.setVehicleType(rs.getString("vehicle_type"));
+                    b.setPickupCity(rs.getString("pickup_city"));
+                    b.setPickupDate(rs.getString("pickup_date"));
+                    b.setReturnDate(rs.getString("return_date"));
                     b.setAmount(rs.getDouble("amount"));
                     b.setStatus(rs.getString("status"));
                     list.add(b);
@@ -70,3 +73,4 @@ public class CarBookingDAO {
         return list;
     }
 }
+

@@ -49,7 +49,7 @@ public class BusBookingDAO {
 
     public List<BusBooking> getBookingsByUserId(int userId) {
         List<BusBooking> list = new ArrayList<>();
-        String sql = "SELECT * FROM bus_bookings WHERE user_id = ? ORDER BY id DESC";
+        String sql = "SELECT * FROM bus_bookings WHERE user_id = ? ORDER BY booking_date DESC";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, userId);
@@ -58,8 +58,13 @@ public class BusBookingDAO {
                     BusBooking b = new BusBooking();
                     b.setId(rs.getString("id"));
                     b.setUserId(rs.getInt("user_id"));
-                    b.setBusName(rs.getString("bus_name"));
-                    b.setFare(rs.getDouble("amount"));
+                    b.setOperatorName(rs.getString("operator_name"));
+                    b.setBusType(rs.getString("bus_type"));
+                    b.setFromCity(rs.getString("from_city"));
+                    b.setToCity(rs.getString("to_city"));
+                    b.setJourneyDate(rs.getString("journey_date"));
+                    b.setSeatNumbers(rs.getString("seat_numbers"));
+                    b.setTotalPrice(rs.getDouble("total_price"));
                     b.setStatus(rs.getString("status"));
                     list.add(b);
                 }
@@ -70,3 +75,4 @@ public class BusBookingDAO {
         return list;
     }
 }
+

@@ -20,7 +20,12 @@
         display: grid;
         grid-template-columns: var(--profile-sidebar-width) 1fr;
         gap: 30px;
+        position: relative;
+        z-index: 1;
     }
+
+    /* Disable the fixed scroll-line on profile to prevent click blocking */
+    .scroll-line-container { display: none !important; }
 
     /* Sidebar Navigation */
     .profile-sidebar {
@@ -519,8 +524,9 @@
             <h2 class="section-title">My Bookings</h2>
             
             <!-- Primary Filter: Status -->
-            <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-                <button class="btn btn-outline" onclick="showBookingStatus('upcoming')" id="tab-status-upcoming" style="border-color:var(--color-primary); color:white;">Upcoming</button>
+            <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
+                <button class="btn btn-outline" onclick="showBookingStatus('all')" id="tab-status-all" style="border-color:var(--color-primary); color:white;">All</button>
+                <button class="btn btn-outline" onclick="showBookingStatus('upcoming')" id="tab-status-upcoming">Upcoming</button>
                 <button class="btn btn-outline" onclick="showBookingStatus('past')" id="tab-status-past">Past</button>
                 <button class="btn btn-outline" onclick="showBookingStatus('cancelled')" id="tab-status-cancelled">Cancelled</button>
             </div>
@@ -882,14 +888,14 @@
 
             <script>
                 // State variables
-                let currentStatusFilter = 'upcoming'; // 'upcoming', 'past', 'cancelled'
-                let currentTypeFilter = 'all'; // 'all', 'flights', 'hotels', 'trains', 'buses', 'cabs', 'cars', 'cruises', 'helicopters'
+                let currentStatusFilter = 'all'; // Show all bookings by default
+                let currentTypeFilter = 'all';
 
                 function showBookingStatus(status) {
                     currentStatusFilter = status;
                     
                     // Update Status Tabs UI
-                    ['upcoming', 'past', 'cancelled'].forEach(s => {
+                    ['all', 'upcoming', 'past', 'cancelled'].forEach(s => {
                         let btn = document.getElementById('tab-status-' + s);
                         if(btn) {
                             btn.style.borderColor = (s === status) ? 'var(--color-primary)' : 'var(--color-border)';
@@ -928,26 +934,28 @@
                 }
 
                 function applyFilters() {
-                    // Go through every booking card and show/hide based on currentStatusFilter
                     let cards = document.querySelectorAll('.booking-card-status');
                     cards.forEach(card => {
-                        let cardStatus = card.getAttribute('data-status'); // e.g. "confirmed", "cancelled", "completed"
-                        
+                        let cardStatus = card.getAttribute('data-status');
                         let showCard = false;
-                        if (currentStatusFilter === 'cancelled' && cardStatus === 'cancelled') {
+                        if (currentStatusFilter === 'all') {
+                            showCard = true;
+                        } else if (currentStatusFilter === 'cancelled' && cardStatus === 'cancelled') {
                             showCard = true;
                         } else if (currentStatusFilter === 'upcoming' && (cardStatus === 'confirmed' || cardStatus === 'pending')) {
                             showCard = true;
                         } else if (currentStatusFilter === 'past' && cardStatus === 'completed') {
                             showCard = true;
                         }
-                        
                         card.style.display = showCard ? 'flex' : 'none';
                     });
                 }
-                // Initialize default view
+                // Initialize: show all bookings on load
                 document.addEventListener('DOMContentLoaded', function() {
                     applyFilters();
+                    // Init status button UI to match default
+                    document.getElementById('tab-status-upcoming').style.borderColor = 'var(--color-border)';
+                    document.getElementById('tab-status-upcoming').style.color = 'var(--text-secondary)';
                 });
             </script>
         </section>

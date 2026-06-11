@@ -23,7 +23,7 @@ public class AdminTransportDAO {
             case "bus": tableName = "bus_bookings"; titleCol = "bus_name"; amountCol = "fare"; break;
             case "cab": tableName = "cab_bookings"; titleCol = "vehicle_type"; amountCol = "amount"; break;
             case "car": tableName = "car_bookings"; titleCol = "car_model"; amountCol = "price"; break;
-            case "cruise": tableName = "cruise_bookings"; titleCol = "ship_name"; amountCol = "price"; break;
+            case "cruise": tableName = "cruise_bookings"; titleCol = "ship_name"; amountCol = "total_price"; break;
             case "helicopter": tableName = "helicopter_bookings"; titleCol = "flight_type"; amountCol = "price"; break;
             default: return list;
         }
@@ -107,7 +107,7 @@ public class AdminTransportDAO {
             {"bus_bookings", "fare"}, 
             {"cab_bookings", "amount"}, 
             {"car_bookings", "price"}, 
-            {"cruise_bookings", "price"}, 
+            {"cruise_bookings", "total_price"}, 
             {"helicopter_bookings", "price"}
         };
         try (Connection conn = DBConnection.getConnection()) {

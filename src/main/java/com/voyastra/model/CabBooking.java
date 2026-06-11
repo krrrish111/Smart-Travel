@@ -36,6 +36,13 @@ public class CabBooking {
     public void setAmount(double amount) { this.amount = amount; }
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+    // Aliases for JSP profile.jsp compatibility
+    public String getVehicleModel() { return vehicleType; }
+    public String getBookingRef() { return id; }
+    public String getPickupDate() { return date; }
+    public String getPickupTime() { return time; }
+    public double getTotalFare() { return amount; }
+    public double getTotalPrice() { return amount; }
     public CabPassenger getPassenger() { return passenger; }
     public void setPassenger(CabPassenger passenger) { this.passenger = passenger; }
 }

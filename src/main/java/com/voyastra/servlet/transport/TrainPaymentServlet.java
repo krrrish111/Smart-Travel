@@ -2,7 +2,7 @@ package com.voyastra.servlet.transport;
 
 import com.voyastra.dao.TrainBookingDAO;
 import com.voyastra.model.TrainBooking;
-import com.voyastra.util.RazorpayConfig;
+import com.voyastra.service.PaymentService;
 import com.voyastra.util.NotificationManager;
 
 import javax.servlet.ServletException;
@@ -27,28 +27,50 @@ public class TrainPaymentServlet extends HttpServlet {
         String razorpayOrderId = request.getParameter("razorpay_order_id");
         String razorpaySignature = request.getParameter("razorpay_signature");
 
-        if (!RazorpayConfig.verifySignature(razorpayOrderId, razorpayPaymentId, razorpaySignature)) {
-            System.err.println("Razorpay signature verification failed!");
-            response.sendRedirect(request.getContextPath() + "/pages/error.jsp?msg=Payment%20Verification%20Failed");
+        if (!PaymentService.verifyPayment(razorpayOrderId, razorpayPaymentId, razorpaySignature)) {
+            System.err.println("[TrainPayment] Razorpay signature verification failed!");
+            response.sendRedirect(request.getContextPath() + "/pages/transport/payment-failed.jsp?type=train");
             return;
         }
 
         TrainBooking draft = (TrainBooking) request.getSession().getAttribute("currentTrainBooking");
         if (draft != null) {
+            // Generate Booking ID / Reference dynamically using PaymentService
+            String bookingRef = PaymentService.generateBookingReference("train");
+            draft.setId(bookingRef);
             draft.setStatus("CONFIRMED");
-            // Save to database only after successful payment
+            
+            // Save to database only after successful payment verification
             boolean saved = bookingDAO.saveDraft(draft);
             if (saved) {
-                NotificationManager.sendTransportBookingSuccess(draft, draft.getUserId());
-            }
-            if (saved) {
-                // Payment and DB save successful
+                // Save payment record
+                double totalAmount = (draft.getFare() * draft.getPassengers().size()) + 150;
+                PaymentService.savePayment(
+                    draft.getUserId(),
+                    "train",
+                    bookingRef,
+                    razorpayOrderId,
+                    razorpayPaymentId,
+                    totalAmount,
+                    "INR",
+                    "Success"
+                );
+
+                // Try to send email and SMS
+                try {
+                    NotificationManager.sendTransportBookingSuccess(draft, draft.getUserId());
+                } catch (Exception e) {
+                    System.err.println("Failed to send notification: " + e.getMessage());
+                }
+
+                // Redirect to confirmation page
+                request.getSession().setAttribute("currentTrainBooking", draft);
                 response.sendRedirect(request.getContextPath() + "/transport/train/confirmation");
             } else {
-                response.sendRedirect(request.getContextPath() + "/pages/error.jsp?msg=Failed%20to%20save%20booking");
+                response.sendRedirect(request.getContextPath() + "/pages/transport/payment-failed.jsp?type=train");
             }
         } else {
-            response.sendRedirect(request.getContextPath() + "/pages/error.jsp?msg=Session%20Expired");
+            response.sendRedirect(request.getContextPath() + "/pages/transport/payment-failed.jsp?type=train");
         }
     }
 }

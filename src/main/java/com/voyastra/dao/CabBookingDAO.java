@@ -49,7 +49,7 @@ public class CabBookingDAO {
 
     public List<CabBooking> getBookingsByUserId(int userId) {
         List<CabBooking> list = new ArrayList<>();
-        String sql = "SELECT * FROM cab_bookings WHERE user_id = ? ORDER BY id DESC";
+        String sql = "SELECT * FROM cab_bookings WHERE user_id = ? ORDER BY booking_date DESC";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, userId);
@@ -58,10 +58,12 @@ public class CabBookingDAO {
                     CabBooking b = new CabBooking();
                     b.setId(rs.getString("id"));
                     b.setUserId(rs.getInt("user_id"));
-                    b.setProvider(rs.getString("provider"));
                     b.setVehicleType(rs.getString("vehicle_type"));
-                    b.setBookingType(rs.getString("booking_type"));
-                    b.setAmount(rs.getDouble("amount"));
+                    b.setPickup(rs.getString("pickup_location"));
+                    b.setDropoff(rs.getString("drop_location"));
+                    b.setDate(rs.getString("pickup_date"));
+                    b.setTime(rs.getString("pickup_time"));
+                    b.setAmount(rs.getDouble("total_price"));
                     b.setStatus(rs.getString("status"));
                     list.add(b);
                 }
@@ -72,3 +74,4 @@ public class CabBookingDAO {
         return list;
     }
 }
+

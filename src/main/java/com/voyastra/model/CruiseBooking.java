@@ -44,4 +44,10 @@ public class CruiseBooking {
     public void setStatus(String status) { this.status = status; }
     public List<CruisePassenger> getPassengers() { return passengers; }
     public void setPassengers(List<CruisePassenger> passengers) { this.passengers = passengers; }
+    public void addPassenger(CruisePassenger p) { this.passengers.add(p); }
+    // JSP profile.jsp aliases
+    public String getBookingRef() { return id; }
+    public double getTotalFare() { return amount; }
+    public double getTotalPrice() { return amount; }
+    public void setTotalPrice(double p) { this.amount = p; }
 }

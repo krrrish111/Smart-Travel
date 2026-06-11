@@ -50,7 +50,7 @@ public class HelicopterBookingDAO {
 
     public List<HelicopterBooking> getBookingsByUserId(int userId) {
         List<HelicopterBooking> list = new ArrayList<>();
-        String sql = "SELECT * FROM helicopter_bookings WHERE user_id = ? ORDER BY id DESC";
+        String sql = "SELECT * FROM helicopter_bookings WHERE user_id = ? ORDER BY booking_date DESC";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, userId);
@@ -60,10 +60,11 @@ public class HelicopterBookingDAO {
                     b.setId(rs.getString("id"));
                     b.setUserId(rs.getInt("user_id"));
                     b.setOperator(rs.getString("operator"));
-                    b.setFlightType(rs.getString("flight_type"));
+                    b.setFlightType(rs.getString("heli_class"));
                     b.setOrigin(rs.getString("origin"));
                     b.setDestination(rs.getString("destination"));
-                    b.setAmount(rs.getDouble("amount"));
+                    b.setTravelDate(rs.getString("journey_date"));
+                    b.setAmount(rs.getDouble("total_price"));
                     b.setStatus(rs.getString("status"));
                     list.add(b);
                 }
@@ -74,3 +75,4 @@ public class HelicopterBookingDAO {
         return list;
     }
 }
+

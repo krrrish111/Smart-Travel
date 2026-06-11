@@ -2,7 +2,7 @@ package com.voyastra.servlet.transport;
 
 import com.voyastra.dao.HelicopterBookingDAO;
 import com.voyastra.model.HelicopterBooking;
-import com.voyastra.util.RazorpayConfig;
+import com.voyastra.service.PaymentService;
 import com.voyastra.util.NotificationManager;
 
 import javax.servlet.ServletException;
@@ -27,21 +27,49 @@ public class HelicopterPaymentServlet extends HttpServlet {
         String razorpayOrderId = request.getParameter("razorpay_order_id");
         String razorpaySignature = request.getParameter("razorpay_signature");
 
-        if (!RazorpayConfig.verifySignature(razorpayOrderId, razorpayPaymentId, razorpaySignature)) {
-            response.sendRedirect(request.getContextPath() + "/pages/error.jsp?msg=Payment%20Verification%20Failed");
+        if (!PaymentService.verifyPayment(razorpayOrderId, razorpayPaymentId, razorpaySignature)) {
+            System.err.println("[HelicopterPayment] Razorpay signature verification failed!");
+            response.sendRedirect(request.getContextPath() + "/pages/transport/payment-failed.jsp?type=helicopter");
             return;
         }
 
         HelicopterBooking draft = (HelicopterBooking) request.getSession().getAttribute("currentHeliBooking");
         if (draft != null) {
+            // Generate Booking ID / Reference dynamically using PaymentService
+            String bookingRef = PaymentService.generateBookingReference("helicopter");
+            draft.setId(bookingRef);
             draft.setStatus("CONFIRMED");
-            if (bookingDAO.saveBooking(draft)) {
+
+            // Save to database only after successful payment verification
+            boolean saved = bookingDAO.saveBooking(draft);
+            if (saved) {
+                // Save payment record
+                PaymentService.savePayment(
+                    draft.getUserId(),
+                    "helicopter",
+                    bookingRef,
+                    razorpayOrderId,
+                    razorpayPaymentId,
+                    draft.getAmount(),
+                    "INR",
+                    "Success"
+                );
+
+                // Try to send email and SMS
+                try {
+                    NotificationManager.sendTransportBookingSuccess(draft, draft.getUserId());
+                } catch (Exception e) {
+                    System.err.println("Failed to send notification: " + e.getMessage());
+                }
+
+                // Redirect to confirmation page
+                request.getSession().setAttribute("currentHeliBooking", draft);
                 response.sendRedirect(request.getContextPath() + "/transport/helicopter/confirmation");
             } else {
-                response.sendRedirect(request.getContextPath() + "/pages/error.jsp?msg=Failed%20to%20save%20booking");
+                response.sendRedirect(request.getContextPath() + "/pages/transport/payment-failed.jsp?type=helicopter");
             }
         } else {
-            response.sendRedirect(request.getContextPath() + "/pages/error.jsp?msg=Session%20Expired");
+            response.sendRedirect(request.getContextPath() + "/pages/transport/payment-failed.jsp?type=helicopter");
         }
     }
 }

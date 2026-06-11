@@ -33,18 +33,34 @@ public class RazorpayOrderServlet extends HttpServlet {
             return;
         }
 
-        HotelBooking pending = (HotelBooking) session.getAttribute("pendingHotelBooking");
-        if (pending == null) {
-            response.setStatus(400);
-            response.getWriter().write("{\"error\": \"No pending booking found\"}");
-            return;
+        String amountStr = request.getParameter("amount");
+        String receipt = request.getParameter("receipt");
+        int amountInPaise = 0;
+
+        if (amountStr != null && !amountStr.trim().isEmpty()) {
+            try {
+                double amount = Double.parseDouble(amountStr);
+                amountInPaise = (int) Math.round(amount * 100.0);
+                if (receipt == null || receipt.trim().isEmpty()) {
+                    receipt = "rcpt_" + UUID.randomUUID().toString().substring(0, 8);
+                }
+            } catch (NumberFormatException e) {
+                response.setStatus(400);
+                response.getWriter().write("{\"error\": \"Invalid amount format\"}");
+                return;
+            }
+        } else {
+            HotelBooking pending = (HotelBooking) session.getAttribute("pendingHotelBooking");
+            if (pending == null) {
+                response.setStatus(400);
+                response.getWriter().write("{\"error\": \"No pending booking found or amount specified\"}");
+                return;
+            }
+            amountInPaise = (int) (pending.getTotalPrice() * 100);
+            receipt = "rcpt_" + UUID.randomUUID().toString().substring(0, 8);
         }
 
         try {
-            // Razorpay amount is in paise (multiply by 100)
-            int amountInPaise = (int) (pending.getTotalPrice() * 100);
-            String receipt = "rcpt_" + UUID.randomUUID().toString().substring(0, 8);
-
             // Call the Razorpay API service
             String jsonResponse = com.voyastra.api.RazorpayService.createOrder(amountInPaise, receipt);
 

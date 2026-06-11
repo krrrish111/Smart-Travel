@@ -32,4 +32,9 @@ public class CarBooking {
     public void setStatus(String status) { this.status = status; }
     public CarCustomer getCustomer() { return customer; }
     public void setCustomer(CarCustomer customer) { this.customer = customer; }
+    // JSP profile.jsp aliases
+    public String getVehicleModel() { return carModel; }
+    public String getBookingRef() { return id; }
+    public double getTotalFare() { return amount; }
+    public double getTotalPrice() { return amount; }
 }

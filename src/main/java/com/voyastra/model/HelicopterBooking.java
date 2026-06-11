@@ -39,6 +39,11 @@ public class HelicopterBooking {
     public void setAmount(double amount) { this.amount = amount; }
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+    // JSP profile.jsp aliases
+    public double getTotalFare() { return amount; }
+    public double getTotalPrice() { return amount; }
+    public String getBookingRef() { return id; }
+    public String getFlightClass() { return flightType; } // alias
     public List<HelicopterPassenger> getPassengers() { return passengers; }
     public void setPassengers(List<HelicopterPassenger> passengers) { this.passengers = passengers; }
 }

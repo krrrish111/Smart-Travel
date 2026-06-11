@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ include file="/components/header.jsp" %>
 <%@ include file="/components/global_ui.jsp" %>
@@ -36,7 +36,7 @@
         .then(response => response.json())
         .then(orderData => {
             var options = {
-                "key": "rzp_test_YourKeyIdHere", 
+                "key": "<%= com.voyastra.util.RazorpayConfig.getKeyId() %>", 
                 "amount": orderData.amount,
                 "currency": "INR",
                 "name": "Voyastra",

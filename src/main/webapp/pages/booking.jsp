@@ -250,8 +250,7 @@
 
                                         <!-- CARS FORM -->
                                         <div id="form-cars" class="booking-form">
-                                            <form action="${pageContext.request.contextPath}/search" method="get">
-                                                <input type="hidden" name="type" value="car">
+                                            <form action="${pageContext.request.contextPath}/transport/car/search" method="post">
                                                 <div class="trip-type-row" style="display: flex; gap: 20px; margin-bottom: 14px; flex-wrap: wrap;">
                                                     <label class="radio-label"><input type="radio" name="carType" value="outstation" checked> Outstation</label>
                                                     <label class="radio-label"><input type="radio" name="carType" value="local"> Local</label>
@@ -260,26 +259,26 @@
                                                 <div class="search-fields-row">
                                                     <div class="search-field" style="flex: 2;">
                                                         <div class="field-label">Pickup City</div>
-                                                        <input type="text" name="pickup" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="Enter Pickup City">
-                                                        <div class="field-sub">City, airport or address</div>
-                                                    </div>
-                                                    <div class="search-field" style="flex: 2;">
-                                                        <div class="field-label">Drop City</div>
-                                                        <input type="text" name="drop" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="Enter Drop City">
+                                                        <input type="text" name="pickupCity" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="Enter Pickup City">
                                                         <div class="field-sub">City, airport or address</div>
                                                     </div>
                                                     <div class="search-field">
                                                         <div class="field-label">Pickup Date</div>
-                                                        <input type="date" name="date" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" style="color-scheme: dark;">
+                                                        <input type="date" name="pickupDate" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" style="color-scheme: dark;">
+                                                    </div>
+                                                    <div class="search-field">
+                                                        <div class="field-label">Return Date</div>
+                                                        <input type="date" name="returnDate" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" style="color-scheme: dark;">
                                                     </div>
                                                     <div class="search-field" style="border-right: none; min-width: 120px;">
                                                         <div class="field-label">Car Type</div>
-                                                        <select name="carCategory" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" style="color-scheme: dark; background: transparent;">
+                                                        <select name="vehicleType" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" style="color-scheme: dark; background: transparent;">
                                                             <option value="any" style="color:black;">Any</option>
-                                                            <option value="hatchback" style="color:black;">Hatchback</option>
-                                                            <option value="sedan" style="color:black;">Sedan</option>
-                                                            <option value="suv" style="color:black;">SUV</option>
-                                                            <option value="luxury" style="color:black;">Luxury</option>
+                                                            <option value="Hatchback" style="color:black;">Hatchback</option>
+                                                            <option value="Sedan" style="color:black;">Sedan</option>
+                                                            <option value="SUV" style="color:black;">SUV</option>
+                                                            <option value="Luxury" style="color:black;">Luxury</option>
+                                                            <option value="Electric" style="color:black;">Electric</option>
                                                         </select>
                                                     </div>
                                                     <button type="submit" class="search-cta-btn">SEARCH</button>
@@ -324,24 +323,23 @@
 
                                         <!-- TRAINS FORM -->
                                         <div id="form-trains" class="booking-form">
-                                            <form action="${pageContext.request.contextPath}/search" method="get">
-                                                <input type="hidden" name="type" value="train">
+                                            <form action="${pageContext.request.contextPath}/trains" method="get">
                                                 <div class="search-fields-row">
                                                     <div class="search-field" style="flex: 2;">
                                                         <div class="field-label">From Station</div>
-                                                        <input type="text" name="from" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="Delhi (NDLS)">
+                                                        <input type="text" name="fromStation" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="Delhi (NDLS)">
                                                     </div>
                                                     <div class="search-field" style="flex: 2;">
                                                         <div class="field-label">To Station</div>
-                                                        <input type="text" name="to" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="Mumbai (BCT)">
+                                                        <input type="text" name="toStation" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="Mumbai (BCT)">
                                                     </div>
                                                     <div class="search-field">
                                                         <div class="field-label">Journey Date</div>
-                                                        <input type="date" name="date" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" style="color-scheme: dark;">
+                                                        <input type="date" name="journeyDate" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" style="color-scheme: dark;">
                                                     </div>
                                                     <div class="search-field" style="border-right: none; min-width: 140px;">
                                                         <div class="field-label">Class</div>
-                                                        <select name="seatClass" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" style="color-scheme: dark; background: transparent;">
+                                                        <select name="trainClass" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" style="color-scheme: dark; background: transparent;">
                                                             <option value="any" style="color:black;">Any</option>
                                                             <option value="1AC" style="color:black;">1A (First AC)</option>
                                                             <option value="2AC" style="color:black;">2A (Second AC)</option>
@@ -356,8 +354,7 @@
 
                                         <!-- BUSES FORM -->
                                         <div id="form-buses" class="booking-form">
-                                            <form action="${pageContext.request.contextPath}/search" method="get">
-                                                <input type="hidden" name="type" value="bus">
+                                            <form action="${pageContext.request.contextPath}/transport/bus/search" method="post">
                                                 <div class="search-fields-row">
                                                     <div class="search-field" style="flex: 2;">
                                                         <div class="field-label">From City</div>
@@ -373,7 +370,7 @@
                                                     </div>
                                                     <div class="search-field" style="border-right: none; min-width: 140px;">
                                                         <div class="field-label">Bus Type</div>
-                                                        <select name="seatClass" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" style="color-scheme: dark; background: transparent;">
+                                                        <select name="type" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" style="color-scheme: dark; background: transparent;">
                                                             <option value="any" style="color:black;">Any</option>
                                                             <option value="ac" style="color:black;">AC Sleeper</option>
                                                             <option value="nonac" style="color:black;">Non-AC</option>
@@ -387,8 +384,8 @@
 
                                         <!-- CABS FORM -->
                                         <div id="form-cabs" class="booking-form">
-                                            <form action="${pageContext.request.contextPath}/search" method="get">
-                                                <input type="hidden" name="type" value="cab">
+                                            <form action="${pageContext.request.contextPath}/transport/cab/search" method="post">
+                                                <input type="hidden" name="tripType" value="outstation">
                                                 <div class="search-fields-row">
                                                     <div class="search-field" style="flex: 2;">
                                                         <div class="field-label">Pickup Location</div>
@@ -404,7 +401,7 @@
                                                     </div>
                                                     <div class="search-field" style="border-right: none; min-width: 140px;">
                                                         <div class="field-label">Cab Type</div>
-                                                        <select name="carType" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" style="color-scheme: dark; background: transparent;">
+                                                        <select name="vehicleType" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" style="color-scheme: dark; background: transparent;">
                                                             <option value="any" style="color:black;">Any</option>
                                                             <option value="hatchback" style="color:black;">Hatchback</option>
                                                             <option value="sedan" style="color:black;">Sedan</option>
@@ -418,24 +415,24 @@
 
                                         <!-- CRUISES FORM -->
                                         <div id="form-cruises" class="booking-form">
-                                            <form action="${pageContext.request.contextPath}/search" method="get">
-                                                <input type="hidden" name="type" value="cruise">
+                                            <form action="${pageContext.request.contextPath}/transport/cruise/search" method="post">
+                                                <input type="hidden" name="paxCount" value="1">
                                                 <div class="search-fields-row">
                                                     <div class="search-field" style="flex: 2;">
                                                         <div class="field-label">Departure Port</div>
-                                                        <input type="text" name="from" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="Mumbai / Kochi">
+                                                        <input type="text" name="departurePort" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="Mumbai / Kochi">
                                                     </div>
                                                     <div class="search-field" style="flex: 2;">
                                                         <div class="field-label">Destination</div>
-                                                        <input type="text" name="to" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="Lakshadweep, Goa...">
+                                                        <input type="text" name="destination" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="Lakshadweep, Goa...">
                                                     </div>
                                                     <div class="search-field">
                                                         <div class="field-label">Date</div>
-                                                        <input type="date" name="date" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" style="color-scheme: dark;">
+                                                        <input type="date" name="cruiseDate" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" style="color-scheme: dark;">
                                                     </div>
                                                     <div class="search-field" style="border-right: none; min-width: 140px;">
                                                         <div class="field-label">Cabin</div>
-                                                        <select name="seatClass" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" style="color-scheme: dark; background: transparent;">
+                                                        <select name="cabinType" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" style="color-scheme: dark; background: transparent;">
                                                             <option value="interior" style="color:black;">Interior</option>
                                                             <option value="oceanview" style="color:black;">Ocean View</option>
                                                             <option value="balcony" style="color:black;">Balcony</option>
@@ -449,24 +446,24 @@
 
                                         <!-- HELICOPTER FORM -->
                                         <div id="form-helicopter" class="booking-form">
-                                            <form action="${pageContext.request.contextPath}/search" method="get">
-                                                <input type="hidden" name="type" value="helicopter">
+                                            <form action="${pageContext.request.contextPath}/transport/helicopter/search" method="post">
+                                                <input type="hidden" name="flightType" value="shared">
                                                 <div class="search-fields-row">
                                                     <div class="search-field" style="flex: 2;">
                                                         <div class="field-label">Origin</div>
-                                                        <input type="text" name="from" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="Phata / Mumbai">
+                                                        <input type="text" name="origin" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="Phata / Mumbai">
                                                     </div>
                                                     <div class="search-field" style="flex: 2;">
                                                         <div class="field-label">Destination</div>
-                                                        <input type="text" name="to" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="Kedarnath / Pune">
+                                                        <input type="text" name="destination" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="Kedarnath / Pune">
                                                     </div>
                                                     <div class="search-field">
                                                         <div class="field-label">Date</div>
-                                                        <input type="date" name="date" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" style="color-scheme: dark;">
+                                                        <input type="date" name="travelDate" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" style="color-scheme: dark;">
                                                     </div>
                                                     <div class="search-field" style="border-right: none; min-width: 140px;">
                                                         <div class="field-label">Passengers</div>
-                                                        <select name="seatClass" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" style="color-scheme: dark; background: transparent;">
+                                                        <select name="paxCount" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" style="color-scheme: dark; background: transparent;">
                                                             <option value="1" style="color:black;">1 Person</option>
                                                             <option value="2" style="color:black;">2 People</option>
                                                             <option value="3" style="color:black;">3 People</option>

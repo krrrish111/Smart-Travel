@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ include file="/components/header.jsp" %>
 <%@ include file="/components/global_ui.jsp" %>
 <main style="padding-top: 100px; padding-bottom: 60px; min-height: 80vh; background: var(--color-background);">
@@ -35,7 +35,7 @@
         .then(response => response.json())
         .then(orderData => {
             var options = {
-                "key": "rzp_test_YourKeyIdHere", 
+                "key": "<%= com.voyastra.util.RazorpayConfig.getKeyId() %>", 
                 "amount": orderData.amount,
                 "currency": "INR",
                 "name": "Voyastra",

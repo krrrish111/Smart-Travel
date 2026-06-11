@@ -62,10 +62,39 @@ public class ProfileServlet extends HttpServlet {
             List<Itinerary> userPlans = itineraryDAO.getSavedPlans(userId);
             List<HotelBooking> hotelBookings = hotelBookingDAO.getBookingsByUserId(userId);
             
+            // New DAOs for separated bookings
+            com.voyastra.dao.FlightBookingDAO flightDAO = new com.voyastra.dao.FlightBookingDAO();
+            com.voyastra.dao.CarBookingDAO carDAO = new com.voyastra.dao.CarBookingDAO();
+            com.voyastra.dao.TourBookingDAO tourDAO = new com.voyastra.dao.TourBookingDAO();
+            com.voyastra.dao.TrainBookingDAO trainDAO = new com.voyastra.dao.TrainBookingDAO();
+            com.voyastra.dao.BusBookingDAO busDAO = new com.voyastra.dao.BusBookingDAO();
+            com.voyastra.dao.CabBookingDAO cabDAO = new com.voyastra.dao.CabBookingDAO();
+            com.voyastra.dao.CruiseBookingDAO cruiseDAO = new com.voyastra.dao.CruiseBookingDAO();
+            com.voyastra.dao.HelicopterBookingDAO heliDAO = new com.voyastra.dao.HelicopterBookingDAO();
+            
+            List<com.voyastra.model.FlightBooking> flightBookings = flightDAO.getBookingsByUserId(userId);
+            List<com.voyastra.model.CarBooking> carBookings = carDAO.getBookingsByUserId(userId);
+            List<com.voyastra.model.TourBooking> tourBookings = tourDAO.getBookingsByUserId(userId);
+            List<com.voyastra.model.TrainBooking> trainBookings = trainDAO.getBookingsByUserId(userId);
+            List<com.voyastra.model.BusBooking> busBookings = busDAO.getBookingsByUserId(userId);
+            List<com.voyastra.model.CabBooking> cabBookings = cabDAO.getBookingsByUserId(userId);
+            List<com.voyastra.model.CruiseBooking> cruiseBookings = cruiseDAO.getBookingsByUserId(userId);
+            List<com.voyastra.model.HelicopterBooking> heliBookings = heliDAO.getBookingsByUserId(userId);
+            
             request.setAttribute("totalTrips", userBookings.size());
             request.setAttribute("savedCount", userPlans.size());
 
-            // Classify Bookings
+            // Add new categorized lists to request
+            request.setAttribute("flightBookings", flightBookings);
+            request.setAttribute("carBookings", carBookings);
+            request.setAttribute("tourBookings", tourBookings);
+            request.setAttribute("trainBookings", trainBookings);
+            request.setAttribute("busBookings", busBookings);
+            request.setAttribute("cabBookings", cabBookings);
+            request.setAttribute("cruiseBookings", cruiseBookings);
+            request.setAttribute("heliBookings", heliBookings);
+            
+            // Classify unified bookings for backwards compatibility
             List<Booking> upcomingBookings = new java.util.ArrayList<>();
             List<Booking> pastBookings = new java.util.ArrayList<>();
             List<Booking> cancelledBookings = new java.util.ArrayList<>();
@@ -123,6 +152,8 @@ public class ProfileServlet extends HttpServlet {
             request.setAttribute("upcomingHotelBookings", upcomingHotelBookings);
             request.setAttribute("pastHotelBookings", pastHotelBookings);
             request.setAttribute("cancelledHotelBookings", cancelledHotelBookings);
+            // Also pass the full list for category 'Hotels'
+            request.setAttribute("hotelBookings", hotelBookings);
 
             if ("overview".equals(tab) || "bookings".equals(tab)) {
                 request.setAttribute("bookings", userBookings); // Fallback for overview

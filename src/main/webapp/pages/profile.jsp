@@ -518,187 +518,224 @@
         <section id="bookings" class="content-section ${activeTab == 'bookings' ? 'active' : ''}">
             <h2 class="section-title">My Bookings</h2>
             
+            <!-- Primary Filter: Status -->
             <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-                <button class="btn btn-outline" onclick="showBookingTab('upcoming')" id="tab-upcoming" style="border-color:var(--color-primary); color:white;">Upcoming</button>
-                <button class="btn btn-outline" onclick="showBookingTab('past')" id="tab-past">Past</button>
-                <button class="btn btn-outline" onclick="showBookingTab('cancelled')" id="tab-cancelled">Cancelled</button>
+                <button class="btn btn-outline" onclick="showBookingStatus('upcoming')" id="tab-status-upcoming" style="border-color:var(--color-primary); color:white;">Upcoming</button>
+                <button class="btn btn-outline" onclick="showBookingStatus('past')" id="tab-status-past">Past</button>
+                <button class="btn btn-outline" onclick="showBookingStatus('cancelled')" id="tab-status-cancelled">Cancelled</button>
             </div>
 
-            <!-- Upcoming Bookings -->
-            <div id="booking-list-upcoming" class="booking-list">
-                <c:choose>
-                    <c:when test="${not empty upcomingBookings or not empty upcomingHotelBookings}">
-                        <c:forEach var="b" items="${upcomingBookings}">
-                            <div class="booking-item">
-                                <div class="booking-main">
-                                    <div class="booking-icon">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                                    </div>
-                                    <div>
-                                        <div style="font-weight: 600;">Booking #${b.id}</div>
-                                        <div style="color: var(--text-secondary); font-size: 0.85rem;">${b.details}</div>
-                                    </div>
-                                </div>
-                                <div style="text-align: right; display:flex; flex-direction:column; gap:8px;">
-                                    <div><span class="status-pill status-${b.status.toLowerCase()}">${b.status}</span> <span style="font-weight: 700;">$${b.totalPrice}</span></div>
-                                    <div style="display:flex; gap:5px; justify-content: flex-end;">
-                                        <a href="${pageContext.request.contextPath}/booking-details?code=${b.bookingCode}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">Timeline</a>
-                                        <a href="${pageContext.request.contextPath}/ticket?code=${b.bookingCode}" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">View Ticket</a>
-                                        <button type="button" class="btn btn-danger" style="padding: 6px 12px; font-size: 0.8rem;" onclick="openCancelModal('${b.id}', '${b.totalPrice}')">Cancel</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </c:forEach>
-                        <c:forEach var="hb" items="${upcomingHotelBookings}">
-                            <div class="booking-item">
-                                <div class="booking-main">
-                                    <div class="booking-icon" style="background: rgba(255, 107, 0, 0.1); color: var(--color-primary);">
-                                        <i class="fas fa-hotel" style="font-size: 1.2rem;"></i>
-                                    </div>
-                                    <div>
-                                        <div style="font-weight: 600;">Hotel Booking #${hb.id}</div>
-                                        <div style="color: var(--text-secondary); font-size: 0.85rem;">${hb.hotel.name} - ${hb.room.type}</div>
-                                    </div>
-                                </div>
-                                <div style="text-align: right; display:flex; flex-direction:column; gap:8px;">
-                                    <div><span class="status-pill status-${hb.status.toLowerCase()}">${hb.status}</span> <span style="font-weight: 700;">$${hb.totalPrice}</span></div>
-                                    <div style="display:flex; gap:5px; justify-content: flex-end;">
-                                        <a href="${pageContext.request.contextPath}/hotel-confirmation?id=${hb.id}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem; border-color:#888; color:#888;">View Voucher</a>
-                                        <a href="${pageContext.request.contextPath}/hotel-voucher?id=${hb.id}" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Download Voucher</a>
-                                        <button type="button" class="btn btn-danger" style="padding: 6px 12px; font-size: 0.8rem;" onclick="openCancelModal('${hb.id}', '${hb.totalPrice}', 'hotel')">Cancel Booking</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </c:forEach>
-                    </c:when>
-                    <c:otherwise>
-                        <p style="color: var(--text-secondary); text-align: center; padding: 20px;">No upcoming trips or hotels.</p>
-                    </c:otherwise>
-                </c:choose>
+            <!-- Secondary Filter: Type -->
+            <div style="display: flex; gap: 15px; margin-bottom: 30px; border-bottom: 1px solid var(--color-border); padding-bottom: 15px;">
+                <button class="type-tab active" onclick="showBookingType('all')" id="tab-type-all" style="background:none; border:none; color:var(--color-primary); font-weight:bold; font-size:1.1rem; cursor:pointer;">All Bookings</button>
+                <button class="type-tab" onclick="showBookingType('flights')" id="tab-type-flights" style="background:none; border:none; color:var(--text-secondary); font-weight:600; font-size:1rem; cursor:pointer;">Flights</button>
+                <button class="type-tab" onclick="showBookingType('hotels')" id="tab-type-hotels" style="background:none; border:none; color:var(--text-secondary); font-weight:600; font-size:1rem; cursor:pointer;">Hotels</button>
+                <button class="type-tab" onclick="showBookingType('cars')" id="tab-type-cars" style="background:none; border:none; color:var(--text-secondary); font-weight:600; font-size:1rem; cursor:pointer;">Cars</button>
+                <button class="type-tab" onclick="showBookingType('tours')" id="tab-type-tours" style="background:none; border:none; color:var(--text-secondary); font-weight:600; font-size:1rem; cursor:pointer;">Tours</button>
             </div>
 
-            <!-- Past Bookings -->
-            <div id="booking-list-past" class="booking-list" style="display:none;">
-                <c:choose>
-                    <c:when test="${not empty pastBookings or not empty pastHotelBookings}">
-                        <c:forEach var="b" items="${pastBookings}">
-                            <div class="booking-item" style="opacity: 0.7;">
-                                <div class="booking-main">
-                                    <div class="booking-icon" style="background:#333; color:#888;">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <div id="all-bookings-container">
+                <!-- FLIGHTS -->
+                <div class="booking-category" id="cat-flights">
+                    <h3 style="margin-bottom: 15px; color: var(--text-primary);">✈ Flights</h3>
+                    <div class="booking-list">
+                        <c:choose>
+                            <c:when test="${not empty flightBookings}">
+                                <c:forEach var="f" items="${flightBookings}">
+                                    <div class="booking-item booking-card-status" data-status="${f.status.toLowerCase()}">
+                                        <div class="booking-main" style="flex:1;">
+                                            <div class="booking-icon" style="background: white; overflow: hidden; padding: 5px;">
+                                                <img src="${f.airlineLogo}" alt="${f.airlineName}" style="width: 100%; height: 100%; object-fit: contain;">
+                                            </div>
+                                            <div style="flex:1;">
+                                                <div style="font-weight: 700; font-size: 1.1rem;">${f.airlineName} <span style="color:var(--text-secondary); font-weight: normal;">| ${f.flightNumber}</span></div>
+                                                <div style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 5px;">
+                                                    <strong>PNR:</strong> ${f.pnr} &nbsp;|&nbsp; <strong>Date:</strong> ${f.travelDate} &nbsp;|&nbsp; <strong>Travellers:</strong> ${f.travellerCount} &nbsp;|&nbsp; <strong>Class:</strong> ${f.seatClass}
+                                                </div>
+                                                <div style="font-weight: 600; margin-top: 5px;">
+                                                    ${f.departureCity} <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg> ${f.arrivalCity}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div style="text-align: right; display:flex; flex-direction:column; gap:8px;">
+                                            <div>
+                                                <span class="status-pill status-${f.status.toLowerCase() == 'confirmed' ? 'completed' : f.status.toLowerCase()}" style="margin-right:10px;">${f.status}</span>
+                                                <span style="font-weight: 800; font-size: 1.2rem; color:var(--color-primary);">₹${f.totalPrice}</span>
+                                            </div>
+                                            <div style="display:flex; gap:5px; justify-content: flex-end; margin-top:10px;">
+                                                <a href="${pageContext.request.contextPath}/ticket?pnr=${f.pnr}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">View Ticket</a>
+                                                <a href="${pageContext.request.contextPath}/ticket-download?pnr=${f.pnr}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">Download Ticket</a>
+                                                <button class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;" onclick="window.print()">Print Ticket</button>
+                                                <c:if test="${f.status != 'CANCELLED' && f.status != 'COMPLETED'}">
+                                                    <button type="button" class="btn btn-danger" style="padding: 6px 12px; font-size: 0.8rem;" onclick="openCancelModal('${f.id}', '${f.totalPrice}', 'flight')">Cancel Booking</button>
+                                                </c:if>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <div style="font-weight: 600;">Booking #${b.id}</div>
-                                        <div style="color: var(--text-secondary); font-size: 0.85rem;">${b.details}</div>
-                                    </div>
+                                </c:forEach>
+                            </c:when>
+                            <c:otherwise>
+                                <div class="empty-state" style="padding: 30px; text-align: center; border: 1px dashed var(--color-border); border-radius: 12px;">
+                                    <p style="color: var(--text-secondary); font-size: 1.1rem;">✈ No flight bookings found</p>
                                 </div>
-                                <div style="text-align: right; display:flex; flex-direction:column; gap:8px;">
-                                    <div><span class="status-pill status-completed">COMPLETED</span> <span style="font-weight: 700;">$${b.totalPrice}</span></div>
-                                    <div style="display:flex; gap:5px; justify-content: flex-end;">
-                                        <a href="${pageContext.request.contextPath}/invoice?code=${b.bookingCode}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem; border-color:#888; color:#888;">Invoice</a>
-                                        <a href="${pageContext.request.contextPath}/ticket?code=${b.bookingCode}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">View Receipt</a>
-                                        <a href="${pageContext.request.contextPath}/search?type=flight" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Rebook</a>
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
+                </div>
+
+                <!-- HOTELS -->
+                <div class="booking-category" id="cat-hotels" style="margin-top: 40px;">
+                    <h3 style="margin-bottom: 15px; color: var(--text-primary);">🏨 Hotels</h3>
+                    <div class="booking-list">
+                        <c:choose>
+                            <c:when test="${not empty hotelBookings}">
+                                <c:forEach var="h" items="${hotelBookings}">
+                                    <div class="booking-item booking-card-status" data-status="${h.status.toLowerCase()}">
+                                        <div class="booking-main" style="flex:1;">
+                                            <div class="booking-icon" style="width: 80px; height: 80px; border-radius: 12px; overflow: hidden; padding:0;">
+                                                <img src="${not empty h.hotel.imageUrl ? h.hotel.imageUrl : 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=200&q=80'}" alt="${h.hotel.name}" style="width: 100%; height: 100%; object-fit: cover;">
+                                            </div>
+                                            <div style="flex:1;">
+                                                <div style="font-weight: 700; font-size: 1.1rem;">${h.hotel.name}</div>
+                                                <div style="color: var(--color-primary); font-size: 0.95rem; margin-top: 2px;">${h.room.type}</div>
+                                                <div style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 5px;">
+                                                    <strong>Check-In:</strong> ${h.checkIn} &nbsp;|&nbsp; <strong>Check-Out:</strong> ${h.checkOut} &nbsp;|&nbsp; <strong>Guests:</strong> ${h.guests}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div style="text-align: right; display:flex; flex-direction:column; gap:8px;">
+                                            <div>
+                                                <span class="status-pill status-${h.status.toLowerCase() == 'confirmed' ? 'completed' : h.status.toLowerCase()}" style="margin-right:10px;">${h.status}</span>
+                                                <span style="font-weight: 800; font-size: 1.2rem; color:var(--color-primary);">₹${h.totalPrice}</span>
+                                            </div>
+                                            <div style="display:flex; gap:5px; justify-content: flex-end; margin-top:10px;">
+                                                <a href="${pageContext.request.contextPath}/hotel-confirmation?id=${h.id}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">View Voucher</a>
+                                                <a href="${pageContext.request.contextPath}/hotel-voucher?id=${h.id}" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Download Voucher</a>
+                                                <c:if test="${h.status != 'CANCELLED' && h.status != 'COMPLETED'}">
+                                                    <button type="button" class="btn btn-danger" style="padding: 6px 12px; font-size: 0.8rem;" onclick="openCancelModal('${h.id}', '${h.totalPrice}', 'hotel')">Cancel Booking</button>
+                                                </c:if>
+                                            </div>
+                                        </div>
                                     </div>
+                                </c:forEach>
+                            </c:when>
+                            <c:otherwise>
+                                <div class="empty-state" style="padding: 30px; text-align: center; border: 1px dashed var(--color-border); border-radius: 12px;">
+                                    <p style="color: var(--text-secondary); font-size: 1.1rem;">🏨 No hotel bookings found</p>
                                 </div>
-                            </div>
-                        </c:forEach>
-                        <c:forEach var="hb" items="${pastHotelBookings}">
-                            <div class="booking-item" style="opacity: 0.7;">
-                                <div class="booking-main">
-                                    <div class="booking-icon" style="background:#333; color:#888;">
-                                        <i class="fas fa-hotel" style="font-size: 1.2rem;"></i>
-                                    </div>
-                                    <div>
-                                        <div style="font-weight: 600;">Hotel Booking #${hb.id}</div>
-                                        <div style="color: var(--text-secondary); font-size: 0.85rem;">${hb.hotel.name} - ${hb.room.type}</div>
-                                    </div>
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
+                </div>
+
+                <!-- CARS -->
+                <div class="booking-category" id="cat-cars" style="margin-top: 40px;">
+                    <h3 style="margin-bottom: 15px; color: var(--text-primary);">🚖 Cars</h3>
+                    <div class="booking-list">
+                        <c:choose>
+                            <c:when test="${not empty carBookings}">
+                                <!-- Render Car Bookings here -->
+                            </c:when>
+                            <c:otherwise>
+                                <div class="empty-state" style="padding: 30px; text-align: center; border: 1px dashed var(--color-border); border-radius: 12px;">
+                                    <p style="color: var(--text-secondary); font-size: 1.1rem;">🚖 No car bookings found</p>
                                 </div>
-                                <div style="text-align: right; display:flex; flex-direction:column; gap:8px;">
-                                    <div><span class="status-pill status-completed">COMPLETED</span> <span style="font-weight: 700;">$${hb.totalPrice}</span></div>
-                                    <div style="display:flex; gap:5px; justify-content: flex-end;">
-                                        <a href="${pageContext.request.contextPath}/hotel-confirmation?id=${hb.id}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem; border-color:#888; color:#888;">View Voucher</a>
-                                        <a href="${pageContext.request.contextPath}/hotel-voucher?id=${hb.id}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem; border-color:#888; color:#888;">Download Voucher</a>
-                                        <a href="${pageContext.request.contextPath}/hotels" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Rebook</a>
-                                    </div>
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
+                </div>
+
+                <!-- TOURS -->
+                <div class="booking-category" id="cat-tours" style="margin-top: 40px;">
+                    <h3 style="margin-bottom: 15px; color: var(--text-primary);">🎟️ Tours</h3>
+                    <div class="booking-list">
+                        <c:choose>
+                            <c:when test="${not empty tourBookings}">
+                                <!-- Render Tour Bookings here -->
+                            </c:when>
+                            <c:otherwise>
+                                <div class="empty-state" style="padding: 30px; text-align: center; border: 1px dashed var(--color-border); border-radius: 12px;">
+                                    <p style="color: var(--text-secondary); font-size: 1.1rem;">🎟️ No tour bookings found</p>
                                 </div>
-                            </div>
-                        </c:forEach>
-                    </c:when>
-                    <c:otherwise>
-                        <p style="color: var(--text-secondary); text-align: center; padding: 20px;">No past trips or hotels.</p>
-                    </c:otherwise>
-                </c:choose>
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
+                </div>
             </div>
 
-            <!-- Cancelled Bookings -->
-            <div id="booking-list-cancelled" class="booking-list" style="display:none;">
-                <c:choose>
-                    <c:when test="${not empty cancelledBookings or not empty cancelledHotelBookings}">
-                        <c:forEach var="b" items="${cancelledBookings}">
-                            <div class="booking-item" style="border-color: rgba(255, 59, 48, 0.3);">
-                                <div class="booking-main">
-                                    <div class="booking-icon" style="background: rgba(255, 59, 48, 0.1); color: #ff3b30;">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
-                                    </div>
-                                    <div>
-                                        <div style="font-weight: 600; text-decoration: line-through;">Booking #${b.id}</div>
-                                        <div style="color: var(--text-secondary); font-size: 0.85rem;">${b.details}</div>
-                                    </div>
-                                </div>
-                                <div style="text-align: right; display:flex; flex-direction:column; gap:8px;">
-                                    <div><span class="status-pill" style="background: rgba(255, 59, 48, 0.1); color: #ff3b30;">CANCELLED</span> <span style="font-weight: 700;">$${b.totalPrice}</span></div>
-                                </div>
-                            </div>
-                        </c:forEach>
-                        <c:forEach var="hb" items="${cancelledHotelBookings}">
-                            <div class="booking-item" style="border-color: rgba(255, 59, 48, 0.3);">
-                                <div class="booking-main">
-                                    <div class="booking-icon" style="background: rgba(255, 59, 48, 0.1); color: #ff3b30;">
-                                        <i class="fas fa-hotel" style="font-size: 1.2rem;"></i>
-                                    </div>
-                                    <div>
-                                        <div style="font-weight: 600; text-decoration: line-through;">Hotel Booking #${hb.id}</div>
-                                        <div style="color: var(--text-secondary); font-size: 0.85rem;">${hb.hotel.name} - ${hb.room.type}</div>
-                                    </div>
-                                </div>
-                                <div style="text-align: right; display:flex; flex-direction:column; gap:8px;">
-                                    <div><span class="status-pill" style="background: rgba(255, 59, 48, 0.1); color: #ff3b30;">CANCELLED</span> <span style="font-weight: 700;">$${hb.totalPrice}</span></div>
-                                    <div style="display:flex; gap:5px; justify-content: flex-end;">
-                                        <a href="${pageContext.request.contextPath}/refund-status?id=${hb.id}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem; border-color: rgba(255,184,0,0.5); color: #ffb800;">
-                                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                                            Track Refund
-                                        </a>
-                                        <a href="${pageContext.request.contextPath}/hotels" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Rebook</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </c:forEach>
-                    </c:when>
-                    <c:otherwise>
-                        <p style="color: var(--text-secondary); text-align: center; padding: 20px;">No cancelled trips or hotels.</p>
-                    </c:otherwise>
-                </c:choose>
-            </div>
-            
             <script>
-                function showBookingTab(tab) {
-                    document.getElementById('booking-list-upcoming').style.display = 'none';
-                    document.getElementById('booking-list-past').style.display = 'none';
-                    document.getElementById('booking-list-cancelled').style.display = 'none';
+                // State variables
+                let currentStatusFilter = 'upcoming'; // 'upcoming', 'past', 'cancelled'
+                let currentTypeFilter = 'all'; // 'all', 'flights', 'hotels', 'cars', 'tours'
+
+                function showBookingStatus(status) {
+                    currentStatusFilter = status;
                     
-                    document.getElementById('tab-upcoming').style.borderColor = 'var(--color-border)';
-                    document.getElementById('tab-upcoming').style.color = 'var(--text-secondary)';
-                    document.getElementById('tab-past').style.borderColor = 'var(--color-border)';
-                    document.getElementById('tab-past').style.color = 'var(--text-secondary)';
-                    document.getElementById('tab-cancelled').style.borderColor = 'var(--color-border)';
-                    document.getElementById('tab-cancelled').style.color = 'var(--text-secondary)';
-                    
-                    document.getElementById('booking-list-' + tab).style.display = 'flex';
-                    document.getElementById('tab-' + tab).style.borderColor = 'var(--color-primary)';
-                    document.getElementById('tab-' + tab).style.color = 'white';
+                    // Update Status Tabs UI
+                    ['upcoming', 'past', 'cancelled'].forEach(s => {
+                        let btn = document.getElementById('tab-status-' + s);
+                        if(btn) {
+                            btn.style.borderColor = (s === status) ? 'var(--color-primary)' : 'var(--color-border)';
+                            btn.style.color = (s === status) ? 'white' : 'var(--text-secondary)';
+                        }
+                    });
+
+                    applyFilters();
                 }
+
+                function showBookingType(type) {
+                    currentTypeFilter = type;
+                    
+                    // Update Type Tabs UI
+                    ['all', 'flights', 'hotels', 'cars', 'tours'].forEach(t => {
+                        let btn = document.getElementById('tab-type-' + t);
+                        if(btn) {
+                            btn.style.color = (t === type) ? 'var(--color-primary)' : 'var(--text-secondary)';
+                            btn.style.fontWeight = (t === type) ? 'bold' : '600';
+                        }
+                    });
+
+                    // Show/Hide Categories based on Type Filter
+                    ['flights', 'hotels', 'cars', 'tours'].forEach(cat => {
+                        let el = document.getElementById('cat-' + cat);
+                        if(el) {
+                            if (type === 'all' || type === cat) {
+                                el.style.display = 'block';
+                            } else {
+                                el.style.display = 'none';
+                            }
+                        }
+                    });
+
+                    applyFilters();
+                }
+
+                function applyFilters() {
+                    // Go through every booking card and show/hide based on currentStatusFilter
+                    let cards = document.querySelectorAll('.booking-card-status');
+                    cards.forEach(card => {
+                        let cardStatus = card.getAttribute('data-status'); // e.g. "confirmed", "cancelled", "completed"
+                        
+                        let showCard = false;
+                        if (currentStatusFilter === 'cancelled' && cardStatus === 'cancelled') {
+                            showCard = true;
+                        } else if (currentStatusFilter === 'upcoming' && (cardStatus === 'confirmed' || cardStatus === 'pending')) {
+                            showCard = true;
+                        } else if (currentStatusFilter === 'past' && cardStatus === 'completed') {
+                            showCard = true;
+                        }
+                        
+                        card.style.display = showCard ? 'flex' : 'none';
+                    });
+                }
+                
+                // Initialize default view
+                document.addEventListener('DOMContentLoaded', function() {
+                    applyFilters();
+                });
             </script>
         </section>
+
 
         <!-- Saved Plans Section -->
         <section id="saved-plans" class="content-section ${activeTab == 'saved-plans' ? 'active' : ''}">

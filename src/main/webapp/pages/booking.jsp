@@ -26,21 +26,35 @@
                                     <!-- Tab Bar (MMT Style - horizontal, tight) -->
                                     <div class="booking-tab-bar"
                                         style="display: flex; align-items: center; overflow-x: auto; border-bottom: 2px solid var(--color-border); padding: 0 8px; background: rgba(255,255,255,0.03);">
-                                        <button class="booking-tab active" data-form="form-flights"
-                                            onclick="switchTab(this, 'form-flights')">
+                                        <button class="booking-tab active" data-form="form-flights" onclick="switchTab(this, 'form-flights')">
                                             <span class="tab-icon">✈️</span><span class="tab-label">Flights</span>
                                         </button>
-                                        <button class="booking-tab" data-form="form-hotels"
-                                            onclick="switchTab(this, 'form-hotels')">
+                                        <button class="booking-tab" data-form="form-hotels" onclick="switchTab(this, 'form-hotels')">
                                             <span class="tab-icon">🏨</span><span class="tab-label">Hotels</span>
                                         </button>
-                                        <button class="booking-tab" data-form="form-cars"
-                                            onclick="switchTab(this, 'form-cars')">
-                                            <span class="tab-icon">🚖</span><span class="tab-label">Cars</span>
+                                        <button class="booking-tab" data-form="form-trains" onclick="switchTab(this, 'form-trains')">
+                                            <span class="tab-icon">🚆</span><span class="tab-label">Trains</span>
                                         </button>
-                                        <button class="booking-tab" data-form="form-tours"
-                                            onclick="switchTab(this, 'form-tours')">
-                                            <span class="tab-icon">🎟️</span><span class="tab-label">Tours</span>
+                                        <button class="booking-tab" data-form="form-buses" onclick="switchTab(this, 'form-buses')">
+                                            <span class="tab-icon">🚌</span><span class="tab-label">Buses</span>
+                                        </button>
+                                        <button class="booking-tab" data-form="form-cabs" onclick="switchTab(this, 'form-cabs')">
+                                            <span class="tab-icon">🚕</span><span class="tab-label">Cabs</span>
+                                        </button>
+                                        <button class="booking-tab" data-form="form-cars" onclick="switchTab(this, 'form-cars')">
+                                            <span class="tab-icon">🚗</span><span class="tab-label">Self Drive</span>
+                                        </button>
+                                        <button class="booking-tab" data-form="form-cruises" onclick="switchTab(this, 'form-cruises')">
+                                            <span class="tab-icon">🚢</span><span class="tab-label">Cruises</span>
+                                        </button>
+                                        <button class="booking-tab" data-form="form-helicopter" onclick="switchTab(this, 'form-helicopter')">
+                                            <span class="tab-icon">🚁</span><span class="tab-label">Helicopter</span>
+                                        </button>
+                                        <button class="booking-tab" data-form="form-tours" onclick="switchTab(this, 'form-tours')">
+                                            <span class="tab-icon">🎫</span><span class="tab-label">Tours</span>
+                                        </button>
+                                        <button class="booking-tab" data-form="form-packages" onclick="switchTab(this, 'form-packages')">
+                                            <span class="tab-icon">📦</span><span class="tab-label">Packages</span>
                                         </button>
                                     </div>
 
@@ -49,39 +63,47 @@
 
                                         <!-- FLIGHTS FORM -->
                                         <div id="form-flights" class="booking-form active">
-                                            <form action="${pageContext.request.contextPath}/search" method="get" id="flightSearchForm">
+                                            <form action="${pageContext.request.contextPath}/search" method="get" id="flightSearchForm" class="flex flex-col gap-4">
                                                 <input type="hidden" name="type" value="flight">
                                                 <input type="hidden" name="seatClass" id="seatClassHidden" value="${not empty searchSeatClassRaw ? searchSeatClassRaw : 'economy'}">
                                                 <input type="hidden" name="adultCount" id="adultCountHidden" value="${not empty searchAdultCount ? searchAdultCount : '1'}">
                                                 <input type="hidden" name="childCount" id="childCountHidden" value="${not empty searchChildCount ? searchChildCount : '0'}">
                                                 <input type="hidden" name="infantCount" id="infantCountHidden" value="${not empty searchInfantCount ? searchInfantCount : '0'}">
-                                                <div class="trip-type-row" style="display: flex; gap: 20px; margin-bottom: 14px; flex-wrap: wrap; align-items: center;">
-                                                    <label class="radio-label"><input type="radio" name="tripType" value="one-way" checked> One Way</label>
-                                                    <label class="radio-label"><input type="radio" name="tripType" value="round-trip"> Round Trip</label>
-                                                    <label class="radio-label"><input type="radio" name="tripType" value="multi-city"> Multi-City</label>
+                                                
+                                                <!-- ROW 1: From, To, Date -->
+                                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 relative">
+                                                    <div style="position: relative;">
+                                                        <label class="block text-sm font-medium mb-1 text-white">From City</label>
+                                                        <input type="text" name="from" id="flightFrom" value="${from != null ? from : 'Delhi'}" class="input-field w-full text-black placeholder-gray-500" placeholder="Origin">
+                                                        <button type="button" onclick="swapFlightCities()" style="position: absolute; right: -25px; top: 32px; z-index: 10; background: var(--color-surface); color: var(--color-primary); border-radius: 50%; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 1px solid var(--color-border); cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">⇄</button>
+                                                    </div>
+                                                    <div>
+                                                        <label class="block text-sm font-medium mb-1 text-white" style="padding-left: 10px;">To City</label>
+                                                        <input type="text" name="to" id="flightTo" value="${to != null ? to : 'Mumbai'}" class="input-field w-full text-black placeholder-gray-500" placeholder="Destination" style="margin-left: 10px;">
+                                                    </div>
+                                                    <div>
+                                                        <label class="block text-sm font-medium mb-1 text-white">Departure Date</label>
+                                                        <input type="date" name="date" class="input-field w-full text-black" value="${date}" required>
+                                                    </div>
                                                 </div>
-                                                <div class="search-fields-row">
-                                                    <div class="search-field">
-                                                        <div class="field-label">From</div>
-                                                        <input type="text" name="from" value="${from != null ? from : 'Delhi'}" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="Origin">
-                                                        <div class="field-sub">DEL, Indira Gandhi Intl</div>
+
+                                                <!-- ROW 2: Trip Type, Travellers, Seat Class -->
+                                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                                    <div>
+                                                        <label class="block text-sm font-medium mb-1 text-white">Trip Type</label>
+                                                        <select name="tripType" id="flightTripType" class="input-field w-full text-black" onchange="toggleReturnDate()">
+                                                            <option value="one-way">One Way</option>
+                                                            <option value="round-trip">Round Trip</option>
+                                                            <option value="multi-city">Multi City</option>
+                                                        </select>
                                                     </div>
-                                                    <div class="swap-btn" title="Swap" onclick="swapFields()">⇄</div>
-                                                    <div class="search-field">
-                                                        <div class="field-label">To</div>
-                                                        <input type="text" name="to" value="${to != null ? to : 'Mumbai'}" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="Destination">
-                                                        <div class="field-sub">BOM, Chhatrapati Shivaji Intl</div>
-                                                    </div>
-                                                    <div class="search-field">
-                                                        <div class="field-label">Departure Date</div>
-                                                        <input type="date" name="date" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" style="color-scheme: dark;">
-                                                    </div>
-                                                    <!-- Travellers Popup Field -->
-                                                    <div class="search-field" style="position: relative; cursor: pointer;" onclick="toggleTravellersPanel(event)">
-                                                        <div class="field-label">Travellers</div>
-                                                        <div class="font-bold text-lg text-white" id="travellersDisplay">1 Adult</div>
-                                                        <div class="field-sub" id="classDisplay">Economy</div>
-                                                        <span onclick="toggleTravellersPanel(event)" style="position:absolute;top:50%;right:10px;transform:translateY(-50%);color:var(--color-muted);font-size:0.75rem;cursor:pointer;">▼</span>
+                                                    
+                                                    <div style="position: relative;">
+                                                        <label class="block text-sm font-medium mb-1 text-white">Travellers</label>
+                                                        <div class="input-field w-full text-black bg-white flex items-center justify-between cursor-pointer" onclick="toggleTravellersPanel(event)" style="min-height: 48px;">
+                                                            <span id="travellersDisplay">1 Adult, 0 Children, 0 Infants</span>
+                                                            <span style="color:var(--color-muted);font-size:0.75rem;">▼</span>
+                                                        </div>
                                                         <!-- Travellers Dropdown Panel -->
                                                         <div id="travellersPanel" style="display:none; position:absolute; top:100%; left:0; z-index:999; background:#1e1e2e; border:1px solid rgba(255,255,255,0.12); border-radius:12px; padding:20px; min-width:300px; box-shadow:0 8px 32px rgba(0,0,0,0.5);" onclick="event.stopPropagation()">
                                                             <!-- Adults -->
@@ -120,22 +142,104 @@
                                                                     <button type="button" onclick="changePax('infants',1)" style="width:30px;height:30px;border-radius:50%;border:1px solid rgba(255,255,255,0.2);background:transparent;color:white;font-size:1.2rem;cursor:pointer;line-height:1;">+</button>
                                                                 </div>
                                                             </div>
-                                                            <!-- Seat Class -->
-                                                            <div style="border-top:1px solid rgba(255,255,255,0.08); padding-top:16px; margin-top:4px;">
-                                                                <div class="text-white font-bold mb-2" style="margin-bottom:10px;">Cabin Class</div>
-                                                                <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
-                                                                    <button type="button" onclick="selectClass('economy','Economy')" id="class-economy" class="class-btn active-class" style="padding:8px 12px;border-radius:8px;border:1px solid var(--color-primary);background:rgba(212,165,116,0.15);color:var(--color-primary);font-size:0.85rem;cursor:pointer;font-weight:600;">✈ Economy</button>
-                                                                    <button type="button" onclick="selectClass('premium','Premium Economy')" id="class-premium" class="class-btn" style="padding:8px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:transparent;color:rgba(255,255,255,0.7);font-size:0.85rem;cursor:pointer;font-weight:600;">💺 Premium Eco</button>
-                                                                    <button type="button" onclick="selectClass('business','Business')" id="class-business" class="class-btn" style="padding:8px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:transparent;color:rgba(255,255,255,0.7);font-size:0.85rem;cursor:pointer;font-weight:600;">🥂 Business</button>
-                                                                    <button type="button" onclick="selectClass('first','First Class')" id="class-first" class="class-btn" style="padding:8px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:transparent;color:rgba(255,255,255,0.7);font-size:0.85rem;cursor:pointer;font-weight:600;">👑 First Class</button>
-                                                                </div>
-                                                            </div>
                                                             <button type="button" onclick="applyTravellers()" style="width:100%;margin-top:16px;padding:10px;border-radius:8px;background:var(--color-primary);color:black;font-weight:bold;border:none;cursor:pointer;font-size:0.95rem;">Apply</button>
                                                         </div>
                                                     </div>
-                                                    <button type="submit" class="search-cta-btn">SEARCH</button>
+                                                    
+                                                    <div>
+                                                        <label class="block text-sm font-medium mb-1 text-white">Seat Class</label>
+                                                        <select name="seatClassDropdown" class="input-field w-full text-black" onchange="document.getElementById('seatClassHidden').value = this.value">
+                                                            <option value="economy">Economy</option>
+                                                            <option value="premium">Premium Economy</option>
+                                                            <option value="business">Business</option>
+                                                            <option value="first">First Class</option>
+                                                        </select>
+                                                    </div>
+                                                    
+                                                    <!-- Optional Return Date Field (Shown if Round Trip) -->
+                                                    <div id="returnDateContainer" style="display:none; grid-column: span 3;">
+                                                        <label class="block text-sm font-medium mb-1 text-white">Return Date</label>
+                                                        <input type="date" name="returnDate" class="input-field w-full md:w-1/3 text-black">
+                                                    </div>
+                                                </div>
+
+                                                <!-- ROW 3: Airline, Stops, Flexible -->
+                                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                                    <div>
+                                                        <label class="block text-sm font-medium mb-1 text-white">Airline Preference</label>
+                                                        <select name="airlinePref" class="input-field w-full text-black">
+                                                            <option value="">Any Airline</option>
+                                                            <option value="Air India">Air India</option>
+                                                            <option value="IndiGo">IndiGo</option>
+                                                            <option value="Vistara">Vistara</option>
+                                                            <option value="SpiceJet">SpiceJet</option>
+                                                        </select>
+                                                    </div>
+                                                    <div>
+                                                        <label class="block text-sm font-medium mb-1 text-white">Stops Preference</label>
+                                                        <select name="stopsPref" class="input-field w-full text-black">
+                                                            <option value="any">Any Stops</option>
+                                                            <option value="nonstop">Non-stop</option>
+                                                            <option value="1stop">1 Stop</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="flex items-center">
+                                                        <label class="flex items-center gap-2 cursor-pointer text-white text-sm font-medium mt-4">
+                                                            <input type="checkbox" name="flexibleDates" value="true" class="w-4 h-4">
+                                                            My dates are flexible (+/- 3 days)
+                                                        </label>
+                                                    </div>
+                                                </div>
+
+                                                <!-- ROW 4: Special Fare Options -->
+                                                <div class="mt-2">
+                                                    <label class="block text-sm font-medium mb-2 text-white">Special Fare Options</label>
+                                                    <div class="flex flex-wrap gap-4 text-white text-sm mt-2">
+                                                        <label class="flex items-center gap-1 cursor-pointer"><input type="radio" name="fareType" value="regular" checked> Regular</label>
+                                                        <label class="flex items-center gap-1 cursor-pointer"><input type="radio" name="fareType" value="student"> Student</label>
+                                                        <label class="flex items-center gap-1 cursor-pointer"><input type="radio" name="fareType" value="senior"> Senior Citizen</label>
+                                                        <label class="flex items-center gap-1 cursor-pointer"><input type="radio" name="fareType" value="armed_forces"> Armed Forces</label>
+                                                        <label class="flex items-center gap-1 cursor-pointer"><input type="radio" name="fareType" value="doctor_nurse"> Doctor & Nurses</label>
+                                                    </div>
+                                                </div>
+
+                                                <!-- POPULAR ROUTES -->
+                                                <div class="mt-4 border-t border-gray-600 border-opacity-30 pt-4 flex items-center flex-wrap gap-2">
+                                                    <span class="text-sm text-gray-400 font-medium mr-2">Popular Routes:</span>
+                                                    <button type="button" class="text-xs bg-white bg-opacity-10 hover:bg-opacity-20 text-white py-1.5 px-3 rounded-full transition" onclick="fillRoute('Delhi', 'Mumbai')">Delhi → Mumbai</button>
+                                                    <button type="button" class="text-xs bg-white bg-opacity-10 hover:bg-opacity-20 text-white py-1.5 px-3 rounded-full transition" onclick="fillRoute('Delhi', 'Bangalore')">Delhi → Bangalore</button>
+                                                    <button type="button" class="text-xs bg-white bg-opacity-10 hover:bg-opacity-20 text-white py-1.5 px-3 rounded-full transition" onclick="fillRoute('Mumbai', 'Goa')">Mumbai → Goa</button>
+                                                    <button type="button" class="text-xs bg-white bg-opacity-10 hover:bg-opacity-20 text-white py-1.5 px-3 rounded-full transition" onclick="fillRoute('Delhi', 'Dubai')">Delhi → Dubai</button>
+                                                </div>
+
+                                                <!-- ROW 5: Search Button -->
+                                                <div class="mt-2">
+                                                    <button type="submit" class="btn-primary w-full py-3 px-6 rounded-lg text-lg font-bold">Search Flights</button>
                                                 </div>
                                             </form>
+                                            
+                                            <script>
+                                                function swapFlightCities() {
+                                                    const from = document.getElementById('flightFrom');
+                                                    const to = document.getElementById('flightTo');
+                                                    const temp = from.value;
+                                                    from.value = to.value;
+                                                    to.value = temp;
+                                                }
+                                                function toggleReturnDate() {
+                                                    const tripType = document.getElementById('flightTripType').value;
+                                                    const returnDateContainer = document.getElementById('returnDateContainer');
+                                                    if (tripType === 'round-trip') {
+                                                        returnDateContainer.style.display = 'block';
+                                                    } else {
+                                                        returnDateContainer.style.display = 'none';
+                                                    }
+                                                }
+                                                function fillRoute(fromCity, toCity) {
+                                                    document.getElementById('flightFrom').value = fromCity;
+                                                    document.getElementById('flightTo').value = toCity;
+                                                }
+                                            </script>
                                         </div>
 
 
@@ -218,6 +322,189 @@
                                             </form>
                                         </div>
 
+                                        <!-- TRAINS FORM -->
+                                        <div id="form-trains" class="booking-form">
+                                            <form action="${pageContext.request.contextPath}/search" method="get">
+                                                <input type="hidden" name="type" value="train">
+                                                <div class="search-fields-row">
+                                                    <div class="search-field" style="flex: 2;">
+                                                        <div class="field-label">From Station</div>
+                                                        <input type="text" name="from" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="Delhi (NDLS)">
+                                                    </div>
+                                                    <div class="search-field" style="flex: 2;">
+                                                        <div class="field-label">To Station</div>
+                                                        <input type="text" name="to" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="Mumbai (BCT)">
+                                                    </div>
+                                                    <div class="search-field">
+                                                        <div class="field-label">Journey Date</div>
+                                                        <input type="date" name="date" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" style="color-scheme: dark;">
+                                                    </div>
+                                                    <div class="search-field" style="border-right: none; min-width: 140px;">
+                                                        <div class="field-label">Class</div>
+                                                        <select name="seatClass" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" style="color-scheme: dark; background: transparent;">
+                                                            <option value="any" style="color:black;">Any</option>
+                                                            <option value="1AC" style="color:black;">1A (First AC)</option>
+                                                            <option value="2AC" style="color:black;">2A (Second AC)</option>
+                                                            <option value="3AC" style="color:black;">3A (Third AC)</option>
+                                                            <option value="SL" style="color:black;">SL (Sleeper)</option>
+                                                        </select>
+                                                    </div>
+                                                    <button type="submit" class="search-cta-btn">SEARCH</button>
+                                                </div>
+                                            </form>
+                                        </div>
+
+                                        <!-- BUSES FORM -->
+                                        <div id="form-buses" class="booking-form">
+                                            <form action="${pageContext.request.contextPath}/search" method="get">
+                                                <input type="hidden" name="type" value="bus">
+                                                <div class="search-fields-row">
+                                                    <div class="search-field" style="flex: 2;">
+                                                        <div class="field-label">From City</div>
+                                                        <input type="text" name="from" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="Delhi">
+                                                    </div>
+                                                    <div class="search-field" style="flex: 2;">
+                                                        <div class="field-label">To City</div>
+                                                        <input type="text" name="to" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="Manali">
+                                                    </div>
+                                                    <div class="search-field">
+                                                        <div class="field-label">Travel Date</div>
+                                                        <input type="date" name="date" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" style="color-scheme: dark;">
+                                                    </div>
+                                                    <div class="search-field" style="border-right: none; min-width: 140px;">
+                                                        <div class="field-label">Bus Type</div>
+                                                        <select name="seatClass" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" style="color-scheme: dark; background: transparent;">
+                                                            <option value="any" style="color:black;">Any</option>
+                                                            <option value="ac" style="color:black;">AC Sleeper</option>
+                                                            <option value="nonac" style="color:black;">Non-AC</option>
+                                                            <option value="seater" style="color:black;">Seater</option>
+                                                        </select>
+                                                    </div>
+                                                    <button type="submit" class="search-cta-btn">SEARCH</button>
+                                                </div>
+                                            </form>
+                                        </div>
+
+                                        <!-- CABS FORM -->
+                                        <div id="form-cabs" class="booking-form">
+                                            <form action="${pageContext.request.contextPath}/search" method="get">
+                                                <input type="hidden" name="type" value="cab">
+                                                <div class="search-fields-row">
+                                                    <div class="search-field" style="flex: 2;">
+                                                        <div class="field-label">Pickup Location</div>
+                                                        <input type="text" name="pickup" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="City or Airport">
+                                                    </div>
+                                                    <div class="search-field" style="flex: 2;">
+                                                        <div class="field-label">Drop Location</div>
+                                                        <input type="text" name="drop" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="Destination">
+                                                    </div>
+                                                    <div class="search-field">
+                                                        <div class="field-label">Pickup Date</div>
+                                                        <input type="date" name="date" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" style="color-scheme: dark;">
+                                                    </div>
+                                                    <div class="search-field" style="border-right: none; min-width: 140px;">
+                                                        <div class="field-label">Cab Type</div>
+                                                        <select name="carType" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" style="color-scheme: dark; background: transparent;">
+                                                            <option value="any" style="color:black;">Any</option>
+                                                            <option value="hatchback" style="color:black;">Hatchback</option>
+                                                            <option value="sedan" style="color:black;">Sedan</option>
+                                                            <option value="suv" style="color:black;">SUV</option>
+                                                        </select>
+                                                    </div>
+                                                    <button type="submit" class="search-cta-btn">SEARCH</button>
+                                                </div>
+                                            </form>
+                                        </div>
+
+                                        <!-- CRUISES FORM -->
+                                        <div id="form-cruises" class="booking-form">
+                                            <form action="${pageContext.request.contextPath}/search" method="get">
+                                                <input type="hidden" name="type" value="cruise">
+                                                <div class="search-fields-row">
+                                                    <div class="search-field" style="flex: 2;">
+                                                        <div class="field-label">Departure Port</div>
+                                                        <input type="text" name="from" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="Mumbai / Kochi">
+                                                    </div>
+                                                    <div class="search-field" style="flex: 2;">
+                                                        <div class="field-label">Destination</div>
+                                                        <input type="text" name="to" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="Lakshadweep, Goa...">
+                                                    </div>
+                                                    <div class="search-field">
+                                                        <div class="field-label">Date</div>
+                                                        <input type="date" name="date" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" style="color-scheme: dark;">
+                                                    </div>
+                                                    <div class="search-field" style="border-right: none; min-width: 140px;">
+                                                        <div class="field-label">Cabin</div>
+                                                        <select name="seatClass" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" style="color-scheme: dark; background: transparent;">
+                                                            <option value="interior" style="color:black;">Interior</option>
+                                                            <option value="oceanview" style="color:black;">Ocean View</option>
+                                                            <option value="balcony" style="color:black;">Balcony</option>
+                                                            <option value="suite" style="color:black;">Suite</option>
+                                                        </select>
+                                                    </div>
+                                                    <button type="submit" class="search-cta-btn">SEARCH</button>
+                                                </div>
+                                            </form>
+                                        </div>
+
+                                        <!-- HELICOPTER FORM -->
+                                        <div id="form-helicopter" class="booking-form">
+                                            <form action="${pageContext.request.contextPath}/search" method="get">
+                                                <input type="hidden" name="type" value="helicopter">
+                                                <div class="search-fields-row">
+                                                    <div class="search-field" style="flex: 2;">
+                                                        <div class="field-label">Origin</div>
+                                                        <input type="text" name="from" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="Phata / Mumbai">
+                                                    </div>
+                                                    <div class="search-field" style="flex: 2;">
+                                                        <div class="field-label">Destination</div>
+                                                        <input type="text" name="to" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="Kedarnath / Pune">
+                                                    </div>
+                                                    <div class="search-field">
+                                                        <div class="field-label">Date</div>
+                                                        <input type="date" name="date" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" style="color-scheme: dark;">
+                                                    </div>
+                                                    <div class="search-field" style="border-right: none; min-width: 140px;">
+                                                        <div class="field-label">Passengers</div>
+                                                        <select name="seatClass" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" style="color-scheme: dark; background: transparent;">
+                                                            <option value="1" style="color:black;">1 Person</option>
+                                                            <option value="2" style="color:black;">2 People</option>
+                                                            <option value="3" style="color:black;">3 People</option>
+                                                            <option value="4" style="color:black;">4 People</option>
+                                                        </select>
+                                                    </div>
+                                                    <button type="submit" class="search-cta-btn">SEARCH</button>
+                                                </div>
+                                            </form>
+                                        </div>
+
+                                        <!-- PACKAGES FORM -->
+                                        <div id="form-packages" class="booking-form">
+                                            <form action="${pageContext.request.contextPath}/search" method="get">
+                                                <input type="hidden" name="type" value="package">
+                                                <div class="search-fields-row">
+                                                    <div class="search-field" style="flex: 3;">
+                                                        <div class="field-label">Destination City / Country</div>
+                                                        <input type="text" name="city" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="Bali, Maldives, Kerala...">
+                                                    </div>
+                                                    <div class="search-field">
+                                                        <div class="field-label">Travel Date</div>
+                                                        <input type="date" name="date" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" style="color-scheme: dark;">
+                                                    </div>
+                                                    <div class="search-field" style="border-right: none; min-width: 140px;">
+                                                        <div class="field-label">Type</div>
+                                                        <select name="tourType" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" style="color-scheme: dark; background: transparent;">
+                                                            <option value="honeymoon" style="color:black;">Honeymoon</option>
+                                                            <option value="family" style="color:black;">Family</option>
+                                                            <option value="adventure" style="color:black;">Adventure</option>
+                                                            <option value="luxury" style="color:black;">Luxury</option>
+                                                        </select>
+                                                    </div>
+                                                    <button type="submit" class="search-cta-btn">SEARCH</button>
+                                                </div>
+                                            </form>
+                                        </div>
+
                                     </div><!-- /Search Forms Area -->
                                 </div><!-- /booking-widget-wrapper -->
                             </div><!-- /container -->
@@ -234,8 +521,14 @@
                                     <c:choose>
                                         <c:when test="${searchType == 'flight'}">✈️ Flights: <c:out value="${searchOrigin}"/> → <c:out value="${searchDestination}"/></c:when>
                                         <c:when test="${searchType == 'hotel'}">🏨 Hotels in <c:out value="${searchLocation}"/></c:when>
-                                        <c:when test="${searchType == 'car'}">🚖 Cars: <c:out value="${searchOrigin}"/> → <c:out value="${searchDestination}"/></c:when>
-                                        <c:when test="${searchType == 'tour'}">🎟️ Tours: <c:out value="${searchQuery}"/></c:when>
+                                        <c:when test="${searchType == 'car'}">🚗 Self Drive: <c:out value="${searchOrigin}"/> → <c:out value="${searchDestination}"/></c:when>
+                                        <c:when test="${searchType == 'tour'}">🎫 Tours: <c:out value="${searchQuery}"/></c:when>
+                                        <c:when test="${searchType == 'train'}">🚆 Trains: <c:out value="${searchOrigin}"/> → <c:out value="${searchDestination}"/></c:when>
+                                        <c:when test="${searchType == 'bus'}">🚌 Buses: <c:out value="${searchOrigin}"/> → <c:out value="${searchDestination}"/></c:when>
+                                        <c:when test="${searchType == 'cab'}">🚕 Cabs: <c:out value="${searchOrigin}"/> → <c:out value="${searchDestination}"/></c:when>
+                                        <c:when test="${searchType == 'cruise'}">🚢 Cruises: <c:out value="${searchOrigin}"/> → <c:out value="${searchDestination}"/></c:when>
+                                        <c:when test="${searchType == 'helicopter'}">🚁 Helicopter: <c:out value="${searchOrigin}"/> → <c:out value="${searchDestination}"/></c:when>
+                                        <c:when test="${searchType == 'package'}">📦 Packages in <c:out value="${searchLocation}"/></c:when>
                                     </c:choose>
                                 </span>
                                 <c:if test="${not empty date}"><span style="color: var(--color-muted); font-size: 0.85rem;">📅 <c:out value="${date}"/></span></c:if>
@@ -464,10 +757,21 @@
                                 </div>
                             </div>
 
-                            <!-- ===== 3. TRANSPORT / CARS ===== -->
+                            <!-- ===== 3. TRANSPORT / CARS / TRAINS / BUSES / CRUISES / HELICOPTER ===== -->
+                            <c:if test="${searchType == 'car' or searchType == 'train' or searchType == 'bus' or searchType == 'cab' or searchType == 'cruise' or searchType == 'helicopter' or searchType == 'flight'}">
                             <div class="results-section section-transport" style="margin-top: 40px;">
                                 <div class="results-header" style="margin-bottom: 16px;">
-                                    <h2 class="results-title">🚖 Local Transport & Transfers</h2>
+                                    <h2 class="results-title">
+                                        <c:choose>
+                                            <c:when test="${searchType == 'car'}">🚖 Local Transport & Transfers</c:when>
+                                            <c:when test="${searchType == 'train'}">🚆 Trains</c:when>
+                                            <c:when test="${searchType == 'bus'}">🚌 Buses</c:when>
+                                            <c:when test="${searchType == 'cab'}">🚕 Cabs</c:when>
+                                            <c:when test="${searchType == 'cruise'}">🚢 Cruises</c:when>
+                                            <c:when test="${searchType == 'helicopter'}">🚁 Helicopter Transfers</c:when>
+                                            <c:otherwise>🚖 Transport Options</c:otherwise>
+                                        </c:choose>
+                                    </h2>
                                     <span style="color: var(--color-muted); font-size: 0.85rem;">${fn:length(transportServices)} option(s)</span>
                                 </div>
                                 <div class="results-grid results-grid-3">
@@ -528,6 +832,7 @@
                                     </c:choose>
                                 </div>
                             </div>
+                            </c:if>
 
                             </div><!-- /flex col gap -->
                         </div><!-- /container -->

@@ -82,10 +82,22 @@ public class SearchServlet extends HttpServlet {
                     filterAirline, filterMaxPrice, filterStops, sortBy, adults, children, infants);
         } else if ("hotel".equalsIgnoreCase(type)) {
             handleHotelSearch(request, response, city != null ? city : to, date);
-        } else if ("car".equalsIgnoreCase(type)) {
-            handleCarSearch(request, response, pickup, drop, date, carCat, carType);
+        } else if ("car".equalsIgnoreCase(type) || "selfdrive".equalsIgnoreCase(type)) {
+            handleCarSearch(request, response, pickup != null ? pickup : city, drop, date, carCat, carType);
         } else if ("tour".equalsIgnoreCase(type)) {
-            handleTourSearch(request, response, query, date, tourType, people);
+            handleTourSearch(request, response, query != null ? query : city, date, tourType, people);
+        } else if ("train".equalsIgnoreCase(type)) {
+            handleTrainSearch(request, response, from, to, date, seatClass);
+        } else if ("bus".equalsIgnoreCase(type)) {
+            handleBusSearch(request, response, from, to, date, seatClass);
+        } else if ("cab".equalsIgnoreCase(type)) {
+            handleCabSearch(request, response, pickup, drop, date, carType);
+        } else if ("cruise".equalsIgnoreCase(type)) {
+            handleCruiseSearch(request, response, from, to, date, seatClass);
+        } else if ("helicopter".equalsIgnoreCase(type)) {
+            handleHelicopterSearch(request, response, from, to, date, seatClass);
+        } else if ("package".equalsIgnoreCase(type)) {
+            handlePackageSearch(request, response, city != null ? city : to, date, tourType);
         } else {
             request.setAttribute("searchError", "Please select a valid search type.");
             forward(request, response);
@@ -303,11 +315,75 @@ public class SearchServlet extends HttpServlet {
         List<Stay> tours = getMockTours(tourType);
         request.setAttribute("flights",           new ArrayList<>());
         request.setAttribute("hotels",            tours);
-        request.setAttribute("transport",         getMockCarServices(null, null));
-        request.setAttribute("transportServices", getMockCarServices(null, null));
+        request.setAttribute("transport",         new ArrayList<>());
+        request.setAttribute("transportServices", new ArrayList<>());
         request.setAttribute("searchType",        "tour");
         request.setAttribute("searchQuery",       query);
         request.setAttribute("date",              date);
+        forward(request, response);
+    }
+
+    private void handleTrainSearch(HttpServletRequest request, HttpServletResponse response, String from, String to, String date, String seatClass) throws ServletException, IOException {
+        List<Transport> trains = getMockTrains(from, to, seatClass);
+        request.setAttribute("transport", trains);
+        request.setAttribute("transportServices", trains);
+        request.setAttribute("searchType", "train");
+        request.setAttribute("searchOrigin", from);
+        request.setAttribute("searchDestination", to);
+        request.setAttribute("date", date);
+        forward(request, response);
+    }
+
+    private void handleBusSearch(HttpServletRequest request, HttpServletResponse response, String from, String to, String date, String type) throws ServletException, IOException {
+        List<Transport> buses = getMockBuses(from, to, type);
+        request.setAttribute("transport", buses);
+        request.setAttribute("transportServices", buses);
+        request.setAttribute("searchType", "bus");
+        request.setAttribute("searchOrigin", from);
+        request.setAttribute("searchDestination", to);
+        request.setAttribute("date", date);
+        forward(request, response);
+    }
+
+    private void handleCabSearch(HttpServletRequest request, HttpServletResponse response, String pickup, String drop, String date, String type) throws ServletException, IOException {
+        List<Transport> cabs = getMockCabs(pickup, drop, type);
+        request.setAttribute("transport", cabs);
+        request.setAttribute("transportServices", cabs);
+        request.setAttribute("searchType", "cab");
+        request.setAttribute("searchOrigin", pickup);
+        request.setAttribute("searchDestination", drop);
+        request.setAttribute("date", date);
+        forward(request, response);
+    }
+
+    private void handleCruiseSearch(HttpServletRequest request, HttpServletResponse response, String from, String to, String date, String type) throws ServletException, IOException {
+        List<Transport> cruises = getMockCruises(from, to, type);
+        request.setAttribute("transport", cruises);
+        request.setAttribute("transportServices", cruises);
+        request.setAttribute("searchType", "cruise");
+        request.setAttribute("searchOrigin", from);
+        request.setAttribute("searchDestination", to);
+        request.setAttribute("date", date);
+        forward(request, response);
+    }
+
+    private void handleHelicopterSearch(HttpServletRequest request, HttpServletResponse response, String from, String to, String date, String type) throws ServletException, IOException {
+        List<Transport> helis = getMockHelicopters(from, to, type);
+        request.setAttribute("transport", helis);
+        request.setAttribute("transportServices", helis);
+        request.setAttribute("searchType", "helicopter");
+        request.setAttribute("searchOrigin", from);
+        request.setAttribute("searchDestination", to);
+        request.setAttribute("date", date);
+        forward(request, response);
+    }
+
+    private void handlePackageSearch(HttpServletRequest request, HttpServletResponse response, String city, String date, String type) throws ServletException, IOException {
+        List<Stay> packages = getMockPackages(city, type);
+        request.setAttribute("hotels", packages); // Reusing hotels display format for packages
+        request.setAttribute("searchType", "package");
+        request.setAttribute("searchLocation", city);
+        request.setAttribute("date", date);
         forward(request, response);
     }
 
@@ -415,6 +491,56 @@ public class SearchServlet extends HttpServlet {
         train.setPrice(2450.0); train.setCompanyLogo("🚆"); train.setBadge("Superfast");
         list.add(train);
 
+        return list;
+    }
+
+    private List<Transport> getMockTrains(String from, String to, String seatClass) {
+        List<Transport> list = new ArrayList<>();
+        list.add(buildFlight("Vande Bharat", "22436", from, to, "06:00 AM", "02:00 PM", 1500.0, "8h 00m", 0, "Fastest"));
+        list.add(buildFlight("Rajdhani Express", "12951", from, to, "04:30 PM", "08:30 AM", 2500.0, "16h 00m", 2, "Premium"));
+        list.add(buildFlight("Shatabdi Exp", "12001", from, to, "06:00 AM", "11:45 AM", 1200.0, "5h 45m", 1, "Best Value"));
+        for(Transport t : list) { t.setType("train"); t.setCompanyLogo("🚆"); }
+        return list;
+    }
+
+    private List<Transport> getMockBuses(String from, String to, String type) {
+        List<Transport> list = new ArrayList<>();
+        list.add(buildFlight("Volvo AC Sleeper", "BUS-01", from, to, "09:00 PM", "07:00 AM", 1200.0, "10h 00m", 0, "Luxury"));
+        list.add(buildFlight("Scania Semi-Sleeper", "BUS-02", from, to, "10:30 PM", "06:30 AM", 950.0, "8h 00m", 1, "Comfort"));
+        list.add(buildFlight("Non-AC Seater", "BUS-03", from, to, "08:00 AM", "06:00 PM", 500.0, "10h 00m", 3, "Cheapest"));
+        for(Transport t : list) { t.setType("bus"); t.setCompanyLogo("🚌"); }
+        return list;
+    }
+
+    private List<Transport> getMockCabs(String pickup, String drop, String type) {
+        List<Transport> list = new ArrayList<>();
+        list.add(buildFlight("Uber Sedan", "Sedan", pickup, drop, "On Demand", "N/A", 1200.0, "Route Dependent", 0, "Popular"));
+        list.add(buildFlight("Ola SUV", "SUV", pickup, drop, "On Demand", "N/A", 1800.0, "Route Dependent", 0, "Spacious"));
+        for(Transport t : list) { t.setType("cab"); t.setCompanyLogo("🚕"); }
+        return list;
+    }
+
+    private List<Transport> getMockCruises(String from, String to, String type) {
+        List<Transport> list = new ArrayList<>();
+        list.add(buildFlight("Cordelia Cruises", "Empress", from, to, "05:00 PM", "08:00 AM", 15000.0, "3 Days", 0, "Luxury"));
+        list.add(buildFlight("Costa Cruises", "Serena", from, to, "04:00 PM", "10:00 AM", 18000.0, "4 Days", 1, "Premium"));
+        for(Transport t : list) { t.setType("cruise"); t.setCompanyLogo("🚢"); }
+        return list;
+    }
+
+    private List<Transport> getMockHelicopters(String from, String to, String type) {
+        List<Transport> list = new ArrayList<>();
+        list.add(buildFlight("Pawan Hans", "H-1", from, to, "08:00 AM", "08:45 AM", 8500.0, "45m", 0, "Scenic"));
+        list.add(buildFlight("Blade India", "H-2", from, to, "10:00 AM", "10:30 AM", 12000.0, "30m", 0, "Fastest"));
+        for(Transport t : list) { t.setType("helicopter"); t.setCompanyLogo("🚁"); }
+        return list;
+    }
+
+    private List<Stay> getMockPackages(String city, String type) {
+        List<Stay> list = new ArrayList<>();
+        list.add(buildHotel("Complete " + (city != null ? city : "Destination") + " Package", city, 25000.0, "All Inclusive"));
+        list.add(buildHotel("Luxury " + (city != null ? city : "Destination") + " Getaway", city, 45000.0, "Premium"));
+        list.add(buildHotel("Budget " + (city != null ? city : "Destination") + " Tour", city, 12000.0, "Budget"));
         return list;
     }
 

@@ -1,35 +1,55 @@
 package com.voyastra.dao;
 
 import com.voyastra.model.CabBooking;
+import com.voyastra.model.CabPassenger;
 import com.voyastra.util.DBConnection;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CabBookingDAO {
-    public boolean saveBooking(CabBooking booking) {
-        // Basic save logic
-        String sql = "INSERT INTO cab_bookings (id, user_id, total_price, status) VALUES (?, ?, ?, ?)";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, booking.getId());
-            ps.setInt(2, booking.getUserId());
-            ps.setDouble(3, booking.getTotalPrice());
-            ps.setString(4, booking.getStatus());
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
     
-    public CabBooking getBookingById(String id) {
-        return null;
+    public boolean saveBooking(CabBooking booking) {
+        String insertBooking = "INSERT INTO cab_bookings (id, user_id, provider, vehicle_type, booking_type, pickup, dropoff, journey_date, journey_time, amount, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String insertPassenger = "INSERT INTO cab_passengers (booking_id, name, phone, email) VALUES (?, ?, ?, ?)";
+        
+        try (Connection conn = DBConnection.getConnection()) {
+            if (conn == null) return false;
+            
+            try (PreparedStatement ps = conn.prepareStatement(insertBooking)) {
+                ps.setString(1, booking.getId());
+                ps.setInt(2, booking.getUserId());
+                ps.setString(3, booking.getProvider());
+                ps.setString(4, booking.getVehicleType());
+                ps.setString(5, booking.getBookingType());
+                ps.setString(6, booking.getPickup());
+                ps.setString(7, booking.getDropoff());
+                ps.setString(8, booking.getDate());
+                ps.setString(9, booking.getTime());
+                ps.setDouble(10, booking.getAmount());
+                ps.setString(11, booking.getStatus());
+                ps.executeUpdate();
+            }
+
+            try (PreparedStatement ps = conn.prepareStatement(insertPassenger)) {
+                ps.setString(1, booking.getId());
+                ps.setString(2, booking.getPassenger().getName());
+                ps.setString(3, booking.getPassenger().getPhone());
+                ps.setString(4, booking.getPassenger().getEmail());
+                ps.executeUpdate();
+            }
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public List<CabBooking> getBookingsByUserId(int userId) {
         List<CabBooking> list = new ArrayList<>();
-        String sql = "SELECT * FROM cab_bookings WHERE user_id = ? ORDER BY booking_date DESC";
+        String sql = "SELECT * FROM cab_bookings WHERE user_id = ? ORDER BY id DESC";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, userId);
@@ -38,12 +58,15 @@ public class CabBookingDAO {
                     CabBooking b = new CabBooking();
                     b.setId(rs.getString("id"));
                     b.setUserId(rs.getInt("user_id"));
-                    b.setTotalPrice(rs.getDouble("total_price"));
+                    b.setProvider(rs.getString("provider"));
+                    b.setVehicleType(rs.getString("vehicle_type"));
+                    b.setBookingType(rs.getString("booking_type"));
+                    b.setAmount(rs.getDouble("amount"));
                     b.setStatus(rs.getString("status"));
                     list.add(b);
                 }
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return list;

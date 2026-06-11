@@ -15,7 +15,7 @@
             </div>
 
             <div style="padding: 30px;">
-                <form action="<%=request.getContextPath()%>/transport/train/booking" method="post" id="trainSearchForm" class="flex flex-col gap-6" onsubmit="return validateTrainSearch()">
+                <form action="<%=request.getContextPath()%>/trains" method="get" id="trainSearchForm" class="flex flex-col gap-6" onsubmit="return validateTrainSearch()">
                     
                     <!-- ROW 1: From, To, Date -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 relative">

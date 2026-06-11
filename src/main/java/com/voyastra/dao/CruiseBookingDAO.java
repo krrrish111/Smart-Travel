@@ -12,7 +12,7 @@ import java.util.List;
 public class CruiseBookingDAO {
     
     public boolean saveBooking(CruiseBooking booking) {
-        String insertBooking = "INSERT INTO cruise_bookings (id, user_id, ship_name, cruise_line, cabin_type, departure_port, destination, cruise_date, duration, total_price, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String insertBooking = "INSERT INTO cruise_bookings (id, user_id, departure_port, destination, cruise_date, passengers, cabin_type, total_price, status, cruise_line, ship_name, duration) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         String insertPassenger = "INSERT INTO cruise_passengers (booking_id, name, age, gender, passport_number) VALUES (?, ?, ?, ?, ?)";
         
         try (Connection conn = DBConnection.getConnection()) {
@@ -21,15 +21,16 @@ public class CruiseBookingDAO {
             try (PreparedStatement ps = conn.prepareStatement(insertBooking)) {
                 ps.setString(1, booking.getId());
                 ps.setInt(2, booking.getUserId());
-                ps.setString(3, booking.getShipName());
-                ps.setString(4, booking.getCruiseLine());
-                ps.setString(5, booking.getCabinType());
-                ps.setString(6, booking.getDeparturePort());
-                ps.setString(7, booking.getDestination());
-                ps.setString(8, booking.getCruiseDate());
-                ps.setString(9, booking.getDurationDays() + " Nights");
-                ps.setDouble(10, booking.getAmount());
-                ps.setString(11, booking.getStatus());
+                ps.setString(3, booking.getDeparturePort());
+                ps.setString(4, booking.getDestination());
+                ps.setString(5, booking.getCruiseDate());
+                ps.setInt(6, booking.getPassengers().size());
+                ps.setString(7, booking.getCabinType());
+                ps.setDouble(8, booking.getAmount());
+                ps.setString(9, booking.getStatus());
+                ps.setString(10, booking.getCruiseLine());
+                ps.setString(11, booking.getShipName());
+                ps.setString(12, booking.getDurationDays() + " Nights");
                 ps.executeUpdate();
             }
 

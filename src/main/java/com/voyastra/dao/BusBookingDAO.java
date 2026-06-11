@@ -12,7 +12,7 @@ import java.util.List;
 public class BusBookingDAO {
     
     public boolean saveBooking(BusBooking booking) {
-        String insertBookingSql = "INSERT INTO bus_bookings (id, user_id, bus_name, amount, status) VALUES (?, ?, ?, ?, ?)";
+        String insertBookingSql = "INSERT INTO bus_bookings (id, user_id, operator_name, bus_type, from_city, to_city, journey_date, seat_numbers, total_price, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         String insertPassengerSql = "INSERT INTO bus_passengers (booking_id, name, age, gender, seat_preference) VALUES (?, ?, ?, ?, ?)";
         
         try (Connection conn = DBConnection.getConnection()) {
@@ -22,9 +22,14 @@ public class BusBookingDAO {
             try (PreparedStatement ps = conn.prepareStatement(insertBookingSql)) {
                 ps.setString(1, booking.getId());
                 ps.setInt(2, booking.getUserId());
-                ps.setString(3, booking.getBusName());
-                ps.setDouble(4, booking.getFare() * booking.getPassengers().size());
-                ps.setString(5, booking.getStatus());
+                ps.setString(3, booking.getOperator() != null ? booking.getOperator() : booking.getBusName());
+                ps.setString(4, booking.getBusType());
+                ps.setString(5, booking.getFromCity());
+                ps.setString(6, booking.getToCity());
+                ps.setString(7, booking.getJourneyDate());
+                ps.setString(8, booking.getSeatNumbers());
+                ps.setDouble(9, booking.getFare() * booking.getPassengers().size());
+                ps.setString(10, booking.getStatus());
                 ps.executeUpdate();
             }
 

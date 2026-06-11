@@ -13,7 +13,7 @@ public class CarDAO {
         list.add(new CarResult("CAR-04", "BMW 3 Series", "Luxury", "Automatic", 5, 8000.0));
         list.add(new CarResult("CAR-05", "Tata Nexon EV", "Electric", "Automatic", 5, 2500.0));
 
-        if (vehicleTypeReq != null && !vehicleTypeReq.isEmpty() && !vehicleTypeReq.equalsIgnoreCase("All")) {
+        if (vehicleTypeReq != null && !vehicleTypeReq.isEmpty() && !vehicleTypeReq.equalsIgnoreCase("All") && !vehicleTypeReq.equalsIgnoreCase("any")) {
             List<CarResult> filtered = new ArrayList<>();
             for (CarResult c : list) {
                 if (c.getVehicleType().equalsIgnoreCase(vehicleTypeReq)) {

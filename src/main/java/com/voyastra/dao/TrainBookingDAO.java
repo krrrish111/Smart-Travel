@@ -10,7 +10,7 @@ import java.sql.ResultSet;
 public class TrainBookingDAO {
     
     public boolean saveDraft(TrainBooking booking) {
-        String insertBookingSql = "INSERT INTO train_bookings (id, user_id, train_number, total_price, status) VALUES (?, ?, ?, ?, ?)";
+        String insertBookingSql = "INSERT INTO train_bookings (id, user_id, from_station, to_station, journey_date, train_class, total_price, status, train_name, train_number) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         String insertPassengerSql = "INSERT INTO train_passengers (booking_id, name, age, gender, berth_preference) VALUES (?, ?, ?, ?, ?)";
         
         try (Connection conn = DBConnection.getConnection()) {
@@ -20,9 +20,14 @@ public class TrainBookingDAO {
             try (PreparedStatement ps = conn.prepareStatement(insertBookingSql)) {
                 ps.setString(1, booking.getId());
                 ps.setInt(2, booking.getUserId());
-                ps.setString(3, booking.getTrainNumber());
-                ps.setDouble(4, booking.getFare() * booking.getPassengers().size()); // Total amount
-                ps.setString(5, booking.getStatus());
+                ps.setString(3, booking.getFromStation());
+                ps.setString(4, booking.getToStation());
+                ps.setString(5, booking.getJourneyDate());
+                ps.setString(6, booking.getTrainClass());
+                ps.setDouble(7, booking.getFare() * booking.getPassengers().size()); // Total amount
+                ps.setString(8, booking.getStatus());
+                ps.setString(9, booking.getTrainName());
+                ps.setString(10, booking.getTrainNumber());
                 ps.executeUpdate();
             }
 

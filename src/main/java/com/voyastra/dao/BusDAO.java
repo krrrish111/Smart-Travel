@@ -12,7 +12,7 @@ public class BusDAO {
         list.add(new BusResult("B103", "Orange Travels", "Non AC Sleeper", "19:00", "05:00", "10h 00m", 25, 800.0));
         list.add(new BusResult("B104", "VRL Travels", "AC Luxury", "23:00", "08:00", "9h 00m", 5, 1500.0));
 
-        if (type != null && !type.isEmpty() && !type.equalsIgnoreCase("All")) {
+        if (type != null && !type.isEmpty() && !type.equalsIgnoreCase("All") && !type.equalsIgnoreCase("any")) {
             List<BusResult> filtered = new ArrayList<>();
             for (BusResult b : list) {
                 if (b.getBusType().toLowerCase().contains(type.toLowerCase())) {

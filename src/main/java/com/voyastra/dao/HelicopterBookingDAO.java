@@ -12,7 +12,7 @@ import java.util.List;
 public class HelicopterBookingDAO {
     
     public boolean saveBooking(HelicopterBooking booking) {
-        String insertBooking = "INSERT INTO helicopter_bookings (id, user_id, operator, flight_type, origin, destination, travel_date, travel_time, amount, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String insertBooking = "INSERT INTO helicopter_bookings (id, user_id, origin, destination, journey_date, passengers, heli_class, total_price, status, operator, departure_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         String insertPassenger = "INSERT INTO helicopter_passengers (booking_id, name, weight_kg) VALUES (?, ?, ?)";
         
         try (Connection conn = DBConnection.getConnection()) {
@@ -21,14 +21,15 @@ public class HelicopterBookingDAO {
             try (PreparedStatement ps = conn.prepareStatement(insertBooking)) {
                 ps.setString(1, booking.getId());
                 ps.setInt(2, booking.getUserId());
-                ps.setString(3, booking.getOperator());
-                ps.setString(4, booking.getFlightType());
-                ps.setString(5, booking.getOrigin());
-                ps.setString(6, booking.getDestination());
-                ps.setString(7, booking.getTravelDate());
-                ps.setString(8, booking.getTravelTime());
-                ps.setDouble(9, booking.getAmount());
-                ps.setString(10, booking.getStatus());
+                ps.setString(3, booking.getOrigin());
+                ps.setString(4, booking.getDestination());
+                ps.setString(5, booking.getTravelDate());
+                ps.setInt(6, booking.getPassengers().size());
+                ps.setString(7, booking.getFlightType());
+                ps.setDouble(8, booking.getAmount());
+                ps.setString(9, booking.getStatus());
+                ps.setString(10, booking.getOperator());
+                ps.setString(11, booking.getTravelTime());
                 ps.executeUpdate();
             }
 

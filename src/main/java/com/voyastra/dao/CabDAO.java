@@ -12,7 +12,7 @@ public class CabDAO {
         list.add(new CabResult("CAB-03", "Savaari", "SUV", 6, "15 mins", 850.0));
         list.add(new CabResult("CAB-04", "Uber Black", "Luxury", 4, "20 mins", 2500.0));
 
-        if (vehicleTypeReq != null && !vehicleTypeReq.isEmpty() && !vehicleTypeReq.equalsIgnoreCase("All")) {
+        if (vehicleTypeReq != null && !vehicleTypeReq.isEmpty() && !vehicleTypeReq.equalsIgnoreCase("All") && !vehicleTypeReq.equalsIgnoreCase("any")) {
             List<CabResult> filtered = new ArrayList<>();
             for (CabResult c : list) {
                 if (c.getVehicleType().equalsIgnoreCase(vehicleTypeReq)) {

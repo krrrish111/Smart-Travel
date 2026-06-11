@@ -25,9 +25,23 @@ public class BusServlet extends HttpServlet {
         String from = request.getParameter("from");
         String to = request.getParameter("to");
         String date = request.getParameter("date");
-        String type = request.getParameter("type"); // AC, Non AC, etc.
+        String type = request.getParameter("type");
+
+        System.out.println("=== BUS SEARCH ===");
+        System.out.println("Source = " + from);
+        System.out.println("Destination = " + to);
+        System.out.println("Date = " + date);
+        System.out.println("Type = " + type);
 
         List<BusResult> results = busDAO.searchBuses(from, to, date, type);
+        
+        System.out.println("Results Count = " + (results != null ? results.size() : "null"));
+
+        if (results == null || results.isEmpty()) {
+            // Mock data fallback if API fails
+            results = busDAO.searchBuses(from, to, date, "All");
+        }
+
         request.setAttribute("busResults", results);
         request.setAttribute("from", from);
         request.setAttribute("to", to);

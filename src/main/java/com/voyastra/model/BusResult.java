@@ -10,6 +10,8 @@ public class BusResult {
     private int availableSeats;
     private double fare;
 
+    public BusResult() {}
+
     public BusResult(String id, String operatorName, String busType, String departureTime, String arrivalTime, String duration, int availableSeats, double fare) {
         this.id = id;
         this.operatorName = operatorName;

@@ -12,7 +12,7 @@ import java.util.List;
 public class CabBookingDAO {
     
     public boolean saveBooking(CabBooking booking) {
-        String insertBooking = "INSERT INTO cab_bookings (id, user_id, provider, vehicle_type, booking_type, pickup, dropoff, journey_date, journey_time, amount, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String insertBooking = "INSERT INTO cab_bookings (id, user_id, pickup_location, drop_location, pickup_date, pickup_time, cab_type, vehicle_type, total_price, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         String insertPassenger = "INSERT INTO cab_passengers (booking_id, name, phone, email) VALUES (?, ?, ?, ?)";
         
         try (Connection conn = DBConnection.getConnection()) {
@@ -21,15 +21,14 @@ public class CabBookingDAO {
             try (PreparedStatement ps = conn.prepareStatement(insertBooking)) {
                 ps.setString(1, booking.getId());
                 ps.setInt(2, booking.getUserId());
-                ps.setString(3, booking.getProvider());
-                ps.setString(4, booking.getVehicleType());
-                ps.setString(5, booking.getBookingType());
-                ps.setString(6, booking.getPickup());
-                ps.setString(7, booking.getDropoff());
-                ps.setString(8, booking.getDate());
-                ps.setString(9, booking.getTime());
-                ps.setDouble(10, booking.getAmount());
-                ps.setString(11, booking.getStatus());
+                ps.setString(3, booking.getPickup());
+                ps.setString(4, booking.getDropoff());
+                ps.setString(5, booking.getDate());
+                ps.setString(6, booking.getTime());
+                ps.setString(7, booking.getBookingType()); // e.g. Airport, Outstation
+                ps.setString(8, booking.getVehicleType()); // e.g. SUV, Sedan
+                ps.setDouble(9, booking.getAmount());
+                ps.setString(10, booking.getStatus());
                 ps.executeUpdate();
             }
 

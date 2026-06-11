@@ -9,6 +9,8 @@ public class TrainResult {
     private int availableSeats;
     private double fare;
 
+    public TrainResult() {}
+
     public TrainResult(String trainNumber, String trainName, String departureTime, String arrivalTime, String duration, int availableSeats, double fare) {
         this.trainNumber = trainNumber;
         this.trainName = trainName;

@@ -2,6 +2,7 @@ package com.voyastra.servlet;
 
 import com.google.gson.Gson;
 import com.voyastra.dao.BookingDAO;
+import com.voyastra.dao.AdminTransportDAO;
 import com.voyastra.model.Booking;
 
 import javax.servlet.ServletException;
@@ -21,11 +22,13 @@ import java.util.stream.Collectors;
 public class AdminBookingServlet extends HttpServlet {
     
     private BookingDAO bookingDAO;
+    private AdminTransportDAO adminTransportDAO;
     private Gson gson;
 
     @Override
     public void init() throws ServletException {
         bookingDAO = new BookingDAO();
+        adminTransportDAO = new AdminTransportDAO();
         gson = new Gson();
     }
 
@@ -44,7 +47,13 @@ public class AdminBookingServlet extends HttpServlet {
         }
 
         String query = request.getParameter("q");
-        List<Booking> bookings = bookingDAO.getAllBookings();
+        String type = request.getParameter("type");
+        List<Booking> bookings;
+        if (type != null && !type.isEmpty() && !type.equals("packages")) {
+            bookings = adminTransportDAO.getAllTransportBookings(type);
+        } else {
+            bookings = bookingDAO.getAllBookings();
+        }
         
         if (query != null && !query.trim().isEmpty()) {
             String lowerQ = query.toLowerCase();
@@ -73,28 +82,39 @@ public class AdminBookingServlet extends HttpServlet {
         }
 
         String action = request.getParameter("action");
+        String type = request.getParameter("type");
+        String bookingIdStr = request.getParameter("bookingId");
+        
+        boolean success = false;
         try {
-            int bookingId = Integer.parseInt(request.getParameter("bookingId"));
-            boolean success = false;
-            
-            if ("delete".equals(action)) {
-                success = bookingDAO.deleteBooking(bookingId);
-            } else if ("updateStatus".equals(action)) {
-                String newStatus = request.getParameter("status");
-                Booking b = bookingDAO.getBookingById(bookingId);
-                if (b != null && newStatus != null) {
-                    b.setStatus(newStatus);
-                    success = bookingDAO.updateBooking(b);
+            if (type != null && !type.isEmpty() && !type.equals("packages")) {
+                if ("delete".equals(action)) {
+                    success = adminTransportDAO.deleteTransportBooking(type, bookingIdStr);
+                } else if ("updateStatus".equals(action)) {
+                    String newStatus = request.getParameter("status");
+                    success = adminTransportDAO.updateTransportStatus(type, bookingIdStr, newStatus);
+                }
+            } else {
+                int bookingId = Integer.parseInt(bookingIdStr);
+                if ("delete".equals(action)) {
+                    success = bookingDAO.deleteBooking(bookingId);
+                } else if ("updateStatus".equals(action)) {
+                    String newStatus = request.getParameter("status");
+                    Booking b = bookingDAO.getBookingById(bookingId);
+                    if (b != null && newStatus != null) {
+                        b.setStatus(newStatus);
+                        success = bookingDAO.updateBooking(b);
+                    }
                 }
             }
-
+            
             Map<String, Object> result = new HashMap<>();
             result.put("success", success);
             out.print(gson.toJson(result));
-            
-        } catch (NumberFormatException e) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            out.print("{\"error\":\"Invalid booking ID\"}");
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            out.print("{\"error\":\"Server Error\"}");
         }
         out.flush();
     }

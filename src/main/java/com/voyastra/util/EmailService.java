@@ -136,4 +136,68 @@ public class EmailService {
             }
         }).start();
     }
+
+    public static class EmailAttachment {
+        public String fileName;
+        public java.io.InputStream dataStream;
+        public EmailAttachment(String fileName, java.io.InputStream dataStream) {
+            this.fileName = fileName;
+            this.dataStream = dataStream;
+        }
+    }
+
+    public static void sendEmailWithAttachments(String to, String subject, String htmlContent, java.util.List<EmailAttachment> attachments) {
+        new Thread(() -> {
+            try {
+                Session session = Session.getInstance(props, new Authenticator() {
+                    @Override
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(SMTP_USER, SMTP_PASS);
+                    }
+                });
+
+                Message message = new MimeMessage(session);
+                message.setFrom(new InternetAddress(FROM_EMAIL, FROM_NAME));
+                message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
+                message.setSubject(subject);
+
+                Multipart multipart = new jakarta.mail.internet.MimeMultipart();
+
+                // Body part
+                jakarta.mail.internet.MimeBodyPart textPart = new jakarta.mail.internet.MimeBodyPart();
+                textPart.setContent(htmlContent, "text/html; charset=utf-8");
+                multipart.addBodyPart(textPart);
+
+                // Attachments
+                long totalAttachmentSize = 0;
+                for (EmailAttachment attachment : attachments) {
+                    jakarta.mail.internet.MimeBodyPart attachmentPart = new jakarta.mail.internet.MimeBodyPart();
+                    java.io.File tempFile = java.io.File.createTempFile("attach_", ".pdf");
+                    tempFile.deleteOnExit();
+                    try (java.io.FileOutputStream out = new java.io.FileOutputStream(tempFile)) {
+                        byte[] buffer = new byte[1024];
+                        int bytesRead;
+                        while ((bytesRead = attachment.dataStream.read(buffer)) != -1) {
+                            out.write(buffer, 0, bytesRead);
+                        }
+                    }
+                    totalAttachmentSize += tempFile.length();
+                    attachmentPart.attachFile(tempFile);
+                    attachmentPart.setFileName(attachment.fileName);
+                    multipart.addBodyPart(attachmentPart);
+                }
+
+                message.setContent(multipart);
+
+                if (!"your-app-password".equals(SMTP_PASS)) {
+                    Transport.send(message);
+                    System.out.println("[EMAIL] Sent successfully with attachments to: " + to);
+                } else {
+                    System.out.println("[EMAIL MOCK] Email with " + attachments.size() + " attachments sent (Total size: " + totalAttachmentSize + " bytes).");
+                }
+            } catch (Exception e) {
+                System.err.println("[EMAIL ERROR] Failed to send email with attachments to " + to + ": " + e.getMessage());
+            }
+        }).start();
+    }
 }

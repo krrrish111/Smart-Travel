@@ -3,6 +3,7 @@ package com.voyastra.servlet.transport;
 import com.voyastra.dao.TrainBookingDAO;
 import com.voyastra.model.TrainBooking;
 import com.voyastra.util.RazorpayConfig;
+import com.voyastra.util.NotificationManager;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -37,6 +38,9 @@ public class TrainPaymentServlet extends HttpServlet {
             draft.setStatus("CONFIRMED");
             // Save to database only after successful payment
             boolean saved = bookingDAO.saveDraft(draft);
+            if (saved) {
+                NotificationManager.sendTransportBookingSuccess(draft, draft.getUserId());
+            }
             if (saved) {
                 // Payment and DB save successful
                 response.sendRedirect(request.getContextPath() + "/transport/train/confirmation");

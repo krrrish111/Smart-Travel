@@ -2,6 +2,7 @@ package com.voyastra.servlet;
 
 import com.google.gson.JsonObject;
 import com.voyastra.dao.BookingDAO;
+import com.voyastra.dao.AdminTransportDAO;
 import com.voyastra.dao.DestinationDAO;
 import com.voyastra.dao.PlanDAO;
 import com.voyastra.dao.UserDAO;
@@ -24,6 +25,7 @@ public class AdminAnalyticsServlet extends HttpServlet {
     private BookingDAO bookingDAO;
     private PlanDAO planDAO;
     private DestinationDAO destinationDAO;
+    private AdminTransportDAO adminTransportDAO;
 
     @Override
     public void init() throws ServletException {
@@ -31,6 +33,7 @@ public class AdminAnalyticsServlet extends HttpServlet {
         bookingDAO = new BookingDAO();
         planDAO = new PlanDAO();
         destinationDAO = new DestinationDAO();
+        adminTransportDAO = new AdminTransportDAO();
     }
 
     @Override
@@ -42,8 +45,8 @@ public class AdminAnalyticsServlet extends HttpServlet {
 
         try {
             int totalUsers = userDAO.getTotalUserCount();
-            int totalBookings = bookingDAO.getTotalBookingCount();
-            double totalRevenue = bookingDAO.getTotalRevenue();
+            int totalBookings = bookingDAO.getTotalBookingCount() + adminTransportDAO.getTransportBookingCount();
+            double totalRevenue = bookingDAO.getTotalRevenue() + adminTransportDAO.getTransportRevenue();
             int totalPlans = planDAO.getTotalPlanCount();
             int totalDestinations = destinationDAO.getTotalDestinationCount();
 

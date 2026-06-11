@@ -1,4 +1,45 @@
-/* =========================================================
+import os
+
+# Update bookings.jsp
+jsp_path = 'src/main/webapp/admin/bookings.jsp'
+with open(jsp_path, 'r', encoding='utf-8') as f:
+    jsp_content = f.read()
+
+tabs_html = """
+    <div class="admin-tabs" style="display: flex; gap: 10px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 10px;">
+        <button class="btn btn-outline active-tab" onclick="changeBookingType('packages', this)" style="white-space: nowrap;">Packages</button>
+        <button class="btn btn-outline" onclick="changeBookingType('train', this)" style="white-space: nowrap;">Trains</button>
+        <button class="btn btn-outline" onclick="changeBookingType('bus', this)" style="white-space: nowrap;">Buses</button>
+        <button class="btn btn-outline" onclick="changeBookingType('cab', this)" style="white-space: nowrap;">Cabs</button>
+        <button class="btn btn-outline" onclick="changeBookingType('car', this)" style="white-space: nowrap;">Cars</button>
+        <button class="btn btn-outline" onclick="changeBookingType('cruise', this)" style="white-space: nowrap;">Cruises</button>
+        <button class="btn btn-outline" onclick="changeBookingType('helicopter', this)" style="white-space: nowrap;">Helicopters</button>
+    </div>
+"""
+
+if "changeBookingType" not in jsp_content:
+    jsp_content = jsp_content.replace('<div class="admin-toolbar">', tabs_html + '\n    <div class="admin-toolbar">')
+    
+    style_addition = """
+<style>
+    .active-tab {
+        background-color: var(--primary);
+        color: white;
+        border-color: var(--primary);
+    }
+</style>
+"""
+    jsp_content = jsp_content.replace('<!-- Manage Bookings Section -->', style_addition + '\n<!-- Manage Bookings Section -->')
+    with open(jsp_path, 'w', encoding='utf-8') as f:
+        f.write(jsp_content)
+
+# Update bookings.js
+js_path = 'src/main/webapp/admin/js/bookings.js'
+with open(js_path, 'r', encoding='utf-8') as f:
+    js_content = f.read()
+
+if "let activeBookingType" not in js_content:
+    js_new = """/* =========================================================
    BOOKINGS MANAGEMENT LOGIC (Servlet-backed)
 ========================================================= */
 let activeBookings = [];
@@ -108,3 +149,8 @@ function deleteBooking(id) {
     })
     .catch(err => console.error('Error deleting booking:', err));
 }
+"""
+    with open(js_path, 'w', encoding='utf-8') as f:
+        f.write(js_new)
+
+print("Frontend files updated successfully.")

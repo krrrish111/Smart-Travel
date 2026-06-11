@@ -64,7 +64,7 @@ public class ApiService {
         }
 
         System.out.println("[ApiService] Using hotel fallback data for: " + city);
-        return getMockHotels(city);
+        return parseHotelJson(buildMockHotelJson(city), city);
     }
 
     // Backward-compatible overload (returns raw JSON string for old callers)
@@ -167,12 +167,13 @@ public class ApiService {
     }
 
     private String buildMockHotelJson(String city) {
-        return "{\"status\":\"mock\",\"data\":["
-                + "{\"name\":\"The Grand Palace\",\"rating\":4.8,\"price\":4500.0,\"location\":\"" + city + "\"},"
-                + "{\"name\":\"Ocean View Resort\",\"rating\":4.5,\"price\":3200.0,\"location\":\"" + city + "\"},"
-                + "{\"name\":\"Voyastra Luxury Suites\",\"rating\":4.9,\"price\":8500.0,\"location\":\"" + city + "\"},"
-                + "{\"name\":\"Heritage Haveli\",\"rating\":4.3,\"price\":2800.0,\"location\":\"" + city + "\"}"
-                + "]}";
+        String loc = city != null ? city : "Destination";
+        return "{\"result\":[" +
+               "{\"hotel_name\":\"The Grand Palace\",\"review_score\":4.8,\"min_total_price\":4500.0,\"city\":\"" + loc + "\",\"main_photo_url\":\"https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=400&q=80\"}," +
+               "{\"hotel_name\":\"Ocean View Resort\",\"review_score\":4.5,\"min_total_price\":3200.0,\"city\":\"" + loc + "\",\"main_photo_url\":\"https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=400&q=80\"}," +
+               "{\"hotel_name\":\"Voyastra Luxury Suites\",\"review_score\":4.9,\"min_total_price\":8500.0,\"city\":\"" + loc + "\",\"main_photo_url\":\"https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=400&q=80\"}," +
+               "{\"hotel_name\":\"Heritage Haveli\",\"review_score\":4.3,\"min_total_price\":2800.0,\"city\":\"" + loc + "\",\"main_photo_url\":\"https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=400&q=80\"}" +
+               "]}";
     }
 
     // ==================== BUILDER HELPERS ====================

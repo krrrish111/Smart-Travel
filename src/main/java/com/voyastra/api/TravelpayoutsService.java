@@ -96,13 +96,13 @@ public class TravelpayoutsService {
                                                     int adults, int children, int infants, String seatClass) {
         String rawJson = searchFlights(origin, destination, departureDate, adults, children, infants, seatClass);
         if (rawJson == null || rawJson.isEmpty()) {
-            System.err.println("[TravelpayoutsService] No JSON to parse. Using fallback flights.");
-            return getFallbackFlights(origin, destination, departureDate, adults, seatClass);
+            System.err.println("[TravelpayoutsService] No JSON to parse. Parsing simulated JSON payload.");
+            return parseFlights(getSimulatedJson(origin, destination, departureDate));
         }
         List<FlightResult> parsed = parseFlights(rawJson);
         if (parsed == null || parsed.isEmpty()) {
-            System.err.println("[TravelpayoutsService] Parsed empty results. Using fallback flights.");
-            return getFallbackFlights(origin, destination, departureDate, adults, seatClass);
+            System.err.println("[TravelpayoutsService] Parsed empty results. Parsing simulated JSON payload.");
+            return parseFlights(getSimulatedJson(origin, destination, departureDate));
         }
         return parsed;
     }
@@ -562,5 +562,17 @@ public class TravelpayoutsService {
         } catch (Exception e) {
             return s;
         }
+    }
+
+    private String getSimulatedJson(String origin, String destination, String date) {
+        String orig = origin != null ? origin : "DEL";
+        String dest = destination != null ? destination : "BOM";
+        String dDate = (date != null && !date.isEmpty()) ? date : "2026-07-01";
+        
+        return "{\"success\":true,\"data\":[" +
+               "{\"origin\":\"" + orig + "\",\"destination\":\"" + dest + "\",\"airline\":\"6E\",\"flight_number\":101,\"departure_at\":\"" + dDate + "T06:30:00\",\"duration\":135,\"price\":4500,\"transfers\":0}," +
+               "{\"origin\":\"" + orig + "\",\"destination\":\"" + dest + "\",\"airline\":\"AI\",\"flight_number\":202,\"departure_at\":\"" + dDate + "T10:00:00\",\"duration\":150,\"price\":5200,\"transfers\":0}," +
+               "{\"origin\":\"" + orig + "\",\"destination\":\"" + dest + "\",\"airline\":\"UK\",\"flight_number\":303,\"departure_at\":\"" + dDate + "T18:45:00\",\"duration\":140,\"price\":6100,\"transfers\":0}" +
+               "]}";
     }
 }

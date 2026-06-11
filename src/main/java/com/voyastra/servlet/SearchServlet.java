@@ -1,6 +1,9 @@
 package com.voyastra.servlet;
 
 import com.voyastra.api.TravelpayoutsService;
+import com.voyastra.api.TrainApiService;
+import com.voyastra.api.BusApiService;
+import com.voyastra.api.CabApiService;
 import com.voyastra.model.FlightResult;
 import com.voyastra.model.Transport;
 import com.voyastra.model.Stay;
@@ -21,6 +24,9 @@ public class SearchServlet extends HttpServlet {
 
     private com.voyastra.api.ApiService apiService = new com.voyastra.api.ApiService();
     private com.voyastra.api.TravelpayoutsService travelpayoutsService = new com.voyastra.api.TravelpayoutsService();
+    private TrainApiService trainApiService = new TrainApiService();
+    private BusApiService busApiService = new BusApiService();
+    private CabApiService cabApiService = new CabApiService();
 
     // ==================== MAIN DISPATCHER ====================
     @Override
@@ -324,7 +330,7 @@ public class SearchServlet extends HttpServlet {
     }
 
     private void handleTrainSearch(HttpServletRequest request, HttpServletResponse response, String from, String to, String date, String seatClass) throws ServletException, IOException {
-        List<Transport> trains = getMockTrains(from, to, seatClass);
+        List<Transport> trains = trainApiService.searchTrains(from, to, date, seatClass);
         request.setAttribute("transport", trains);
         request.setAttribute("transportServices", trains);
         request.setAttribute("searchType", "train");
@@ -335,7 +341,7 @@ public class SearchServlet extends HttpServlet {
     }
 
     private void handleBusSearch(HttpServletRequest request, HttpServletResponse response, String from, String to, String date, String type) throws ServletException, IOException {
-        List<Transport> buses = getMockBuses(from, to, type);
+        List<Transport> buses = busApiService.searchBuses(from, to, date, type);
         request.setAttribute("transport", buses);
         request.setAttribute("transportServices", buses);
         request.setAttribute("searchType", "bus");
@@ -346,7 +352,7 @@ public class SearchServlet extends HttpServlet {
     }
 
     private void handleCabSearch(HttpServletRequest request, HttpServletResponse response, String pickup, String drop, String date, String type) throws ServletException, IOException {
-        List<Transport> cabs = getMockCabs(pickup, drop, type);
+        List<Transport> cabs = cabApiService.searchCabs(pickup, drop, date, type);
         request.setAttribute("transport", cabs);
         request.setAttribute("transportServices", cabs);
         request.setAttribute("searchType", "cab");
@@ -494,31 +500,11 @@ public class SearchServlet extends HttpServlet {
         return list;
     }
 
-    private List<Transport> getMockTrains(String from, String to, String seatClass) {
-        List<Transport> list = new ArrayList<>();
-        list.add(buildFlight("Vande Bharat", "22436", from, to, "06:00 AM", "02:00 PM", 1500.0, "8h 00m", 0, "Fastest"));
-        list.add(buildFlight("Rajdhani Express", "12951", from, to, "04:30 PM", "08:30 AM", 2500.0, "16h 00m", 2, "Premium"));
-        list.add(buildFlight("Shatabdi Exp", "12001", from, to, "06:00 AM", "11:45 AM", 1200.0, "5h 45m", 1, "Best Value"));
-        for(Transport t : list) { t.setType("train"); t.setCompanyLogo("🚆"); }
-        return list;
-    }
+    
 
-    private List<Transport> getMockBuses(String from, String to, String type) {
-        List<Transport> list = new ArrayList<>();
-        list.add(buildFlight("Volvo AC Sleeper", "BUS-01", from, to, "09:00 PM", "07:00 AM", 1200.0, "10h 00m", 0, "Luxury"));
-        list.add(buildFlight("Scania Semi-Sleeper", "BUS-02", from, to, "10:30 PM", "06:30 AM", 950.0, "8h 00m", 1, "Comfort"));
-        list.add(buildFlight("Non-AC Seater", "BUS-03", from, to, "08:00 AM", "06:00 PM", 500.0, "10h 00m", 3, "Cheapest"));
-        for(Transport t : list) { t.setType("bus"); t.setCompanyLogo("🚌"); }
-        return list;
-    }
+    
 
-    private List<Transport> getMockCabs(String pickup, String drop, String type) {
-        List<Transport> list = new ArrayList<>();
-        list.add(buildFlight("Uber Sedan", "Sedan", pickup, drop, "On Demand", "N/A", 1200.0, "Route Dependent", 0, "Popular"));
-        list.add(buildFlight("Ola SUV", "SUV", pickup, drop, "On Demand", "N/A", 1800.0, "Route Dependent", 0, "Spacious"));
-        for(Transport t : list) { t.setType("cab"); t.setCompanyLogo("🚕"); }
-        return list;
-    }
+    
 
     private List<Transport> getMockCruises(String from, String to, String type) {
         List<Transport> list = new ArrayList<>();

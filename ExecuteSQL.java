@@ -8,10 +8,10 @@ public class ExecuteSQL {
     public static void main(String[] args) {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/voyastra", "root", "root");
+            try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/voyastra", "root", "Home@123");
                  Statement stmt = conn.createStatement()) {
                 
-                String sqlFile = "c:\\Users\\Dell\\Desktop\\antigravity\\sql\\super_app_tables.sql";
+                String sqlFile = args.length > 0 ? args[0] : "c:\\Users\\Dell\\Desktop\\antigravity\\sql\\super_app_tables.sql";
                 String content = new String(Files.readAllBytes(Paths.get(sqlFile)));
                 String[] queries = content.split(";");
                 

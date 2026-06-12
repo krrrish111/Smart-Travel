@@ -119,8 +119,6 @@ public class BookingDAO {
                     booking.setStatus(rs.getString("status"));
                     booking.setCreatedAt(rs.getTimestamp("created_at"));
                     booking.setBookingCode(rs.getString("booking_code"));
-                    booking.setType(rs.getString("type"));
-                    booking.setDetails(rs.getString("details"));
                     booking.setTravelDate(rs.getString("travel_date"));
                     booking.setNumAdults(rs.getInt("num_adults"));
                     booking.setNumChildren(rs.getInt("num_children"));
@@ -130,9 +128,6 @@ public class BookingDAO {
                     booking.setCustomerEmail(rs.getString("customer_email"));
                     booking.setCustomerPhone(rs.getString("customer_phone"));
                     booking.setSpecialRequests(rs.getString("special_requests"));
-                    booking.setPaymentId(rs.getString("payment_id"));
-                    booking.setTransactionId(rs.getString("transaction_id"));
-                    booking.setPaymentStatus(rs.getString("payment_status"));
                 }
             }
         } catch (SQLException e) {

@@ -50,4 +50,9 @@ public class CruiseBooking {
     public double getTotalFare() { return amount; }
     public double getTotalPrice() { return amount; }
     public void setTotalPrice(double p) { this.amount = p; }
+
+    public String getReference() { return id != null ? id : ""; }
+    public String getOrigin() { return departurePort != null ? departurePort : ""; }
+    public String getCustomerNameAlias() { return passengers != null && !passengers.isEmpty() ? passengers.get(0).getName() : ""; }
+    public String getTravelDateAlias() { return cruiseDate != null ? cruiseDate : ""; }
 }

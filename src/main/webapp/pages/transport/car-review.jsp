@@ -12,17 +12,17 @@
                     <div class="p-5 bg-gray-800 rounded-lg border border-gray-700">
                         <h2 class="text-xl font-bold text-white mb-4">Rental Information</h2>
                         <div class="space-y-2">
-                            <p class="text-gray-300"><span class="text-gray-500 w-24 inline-block">Vehicle:</span> <strong class="text-white">${currentCarBooking.carModel} (${currentCarBooking.vehicleType})</strong></p>
-                            <p class="text-gray-300"><span class="text-gray-500 w-24 inline-block">Pickup City:</span> <strong class="text-white">${currentCarBooking.pickupCity}</strong></p>
-                            <p class="text-gray-300"><span class="text-gray-500 w-24 inline-block">Dates:</span> <strong class="text-white">${currentCarBooking.pickupDate} to ${currentCarBooking.returnDate}</strong></p>
+                            <p class="text-gray-300"><span class="text-gray-500 w-24 inline-block">Vehicle:</span> <strong class="text-white">${booking.carModel} (${booking.vehicleType})</strong></p>
+                            <p class="text-gray-300"><span class="text-gray-500 w-24 inline-block">Pickup City:</span> <strong class="text-white">${booking.pickupCity}</strong></p>
+                            <p class="text-gray-300"><span class="text-gray-500 w-24 inline-block">Dates:</span> <strong class="text-white">${booking.pickupDate} to ${booking.returnDate}</strong></p>
                         </div>
                     </div>
 
                     <div class="p-5 bg-gray-800 rounded-lg border border-gray-700 flex justify-between items-center">
                         <div>
                             <h2 class="text-lg font-bold text-white mb-1">Driver Details</h2>
-                            <p class="text-gray-400 text-sm">${currentCarBooking.customer.name}</p>
-                            <p class="text-gray-400 text-sm">${currentCarBooking.customer.phone} | ${currentCarBooking.customer.email}</p>
+                            <p class="text-gray-400 text-sm">${booking.customer.name}</p>
+                            <p class="text-gray-400 text-sm">${booking.customer.phone} | ${booking.customer.email}</p>
                         </div>
                         <div class="text-right">
                             <span class="bg-purple-900 bg-opacity-50 px-3 py-1 rounded text-sm text-purple-400 font-bold border border-purple-500">
@@ -38,7 +38,7 @@
                         <h2 class="text-xl font-bold text-white mb-4">Fare Breakdown</h2>
                         <div class="flex justify-between text-gray-300 mb-2">
                             <span>Rental Charges</span>
-                            <span>₹${currentCarBooking.amount}</span>
+                            <span>₹${booking.amount}</span>
                         </div>
                         <div class="flex justify-between text-gray-300 mb-2">
                             <span>Refundable Deposit</span>
@@ -51,7 +51,7 @@
                         <hr class="border-gray-600 mb-4">
                         <div class="flex justify-between text-white font-bold text-lg mb-6">
                             <span>Total Amount</span>
-                            <span class="text-green-400">₹${currentCarBooking.amount + 5500}</span>
+                            <span class="text-green-400">₹${booking.amount + 5500}</span>
                         </div>
                         
                         <form action="${pageContext.request.contextPath}/transport/car/booking" method="post">

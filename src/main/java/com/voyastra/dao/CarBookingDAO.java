@@ -93,9 +93,27 @@ public class CarBookingDAO {
                     booking.setStatus(rs.getString("status"));
                 }
             }
+        if (booking != null) {
+                String custSql = "SELECT * FROM car_customers WHERE booking_id = ?";
+                try (PreparedStatement ps2 = conn.prepareStatement(custSql)) {
+                    ps2.setString(1, id);
+                    try (ResultSet rs2 = ps2.executeQuery()) {
+                        if (rs2.next()) {
+                            CarCustomer c = new CarCustomer();
+                            c.setName(rs2.getString("name"));
+                            c.setPhone(rs2.getString("phone"));
+                            c.setEmail(rs2.getString("email"));
+                            c.setDlPath(rs2.getString("dl_path"));
+                            booking.setCustomer(c);
+                        }
+                    }
+                }
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         return booking;
     }
 

@@ -47,4 +47,11 @@ public class BusBooking {
     public void setStatus(String status) { this.status = status; }
     public List<BusPassenger> getPassengers() { return passengers; }
     public void setPassengers(List<BusPassenger> passengers) { this.passengers = passengers; }
+
+    public String getReference() { return id != null ? id : ""; }
+    public String getOrigin() { return fromCity != null ? fromCity : ""; }
+    public String getDestination() { return toCity != null ? toCity : ""; }
+    public String getCustomerNameAlias() { return passengers != null && !passengers.isEmpty() ? passengers.get(0).getName() : ""; }
+    public double getAmount() { return fare * (passengers != null ? passengers.size() : 1); }
+    public String getTravelDateAlias() { return journeyDate != null ? journeyDate : ""; }
 }

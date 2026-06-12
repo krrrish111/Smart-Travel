@@ -573,9 +573,10 @@
                                                 <span style="font-weight: 800; font-size: 1.2rem; color:var(--color-primary);">₹${f.totalPrice}</span>
                                             </div>
                                             <div style="display:flex; gap:5px; justify-content: flex-end; margin-top:10px;">
-                                                <a href="${pageContext.request.contextPath}/ticket?pnr=${f.pnr}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">View Ticket</a>
-                                                <a href="${pageContext.request.contextPath}/ticket-download?pnr=${f.pnr}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">Download Ticket</a>
-                                                <button class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;" onclick="window.print()">Print Ticket</button>
+                                                <a href="${pageContext.request.contextPath}/flight/details?id=${f.id}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">View Details</a>
+                                                <a href="${pageContext.request.contextPath}/flight/ticket?id=${f.id}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">View Ticket</a>
+                                                <a href="${pageContext.request.contextPath}/flight/ticket?id=${f.id}&print=true" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">Print Ticket</a>
+                                                <a href="${pageContext.request.contextPath}/flight/download-ticket?id=${f.id}" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Download Ticket</a>
                                                 <c:if test="${f.status != 'CANCELLED' && f.status != 'COMPLETED'}">
                                                     <button type="button" class="btn btn-danger" style="padding: 6px 12px; font-size: 0.8rem;" onclick="openCancelModal('${f.id}', '${f.totalPrice}', 'flight')">Cancel</button>
                                                 </c:if>
@@ -592,6 +593,7 @@
                         </c:choose>
                     </div>
                 </div>
+
 
                 <!-- HOTELS -->
                 <div class="booking-category" id="cat-hotels" style="margin-top: 40px;">
@@ -619,8 +621,10 @@
                                                 <span style="font-weight: 800; font-size: 1.2rem; color:var(--color-primary);">₹${h.totalPrice}</span>
                                             </div>
                                             <div style="display:flex; gap:5px; justify-content: flex-end; margin-top:10px;">
-                                                <a href="${pageContext.request.contextPath}/hotel-confirmation?id=${h.id}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">View Voucher</a>
-                                                <a href="${pageContext.request.contextPath}/hotel-voucher?id=${h.id}" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Download Voucher</a>
+                                                <a href="${pageContext.request.contextPath}/hotel/details?id=${h.id}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">View Details</a>
+                                                <a href="${pageContext.request.contextPath}/hotel/ticket?id=${h.id}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">View Ticket</a>
+                                                <a href="${pageContext.request.contextPath}/hotel/ticket?id=${h.id}&print=true" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">Print Ticket</a>
+                                                <a href="${pageContext.request.contextPath}/hotel/download-ticket?id=${h.id}" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Download Ticket</a>
                                                 <c:if test="${h.status != 'CANCELLED' && h.status != 'COMPLETED'}">
                                                     <button type="button" class="btn btn-danger" style="padding: 6px 12px; font-size: 0.8rem;" onclick="openCancelModal('${h.id}', '${h.totalPrice}', 'hotel')">Cancel</button>
                                                 </c:if>
@@ -662,9 +666,11 @@
                                                 <span class="status-pill status-${t.status.toLowerCase() == 'confirmed' ? 'completed' : t.status.toLowerCase()}" style="margin-right:10px;">${t.status}</span>
                                                 <span style="font-weight: 800; font-size: 1.2rem; color:var(--color-primary);">₹${t.totalFare}</span>
                                             </div>
-                                            <div style="display:flex; gap:5px; justify-content: flex-end; margin-top:10px;">
-                                                <a href="${pageContext.request.contextPath}/transport/train/confirmation?bookingRef=${t.pnr}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">View Details</a>
-                                                <a href="${pageContext.request.contextPath}/transport/train/confirmation?print=true&bookingRef=${t.pnr}" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Print Ticket</a>
+                                                                                        <div style="display:flex; gap:5px; justify-content: flex-end; margin-top:10px;">
+                                                <a href="${pageContext.request.contextPath}/train/details?id=${t.id}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">View Details</a>
+                                                <a href="${pageContext.request.contextPath}/train/ticket?id=${t.id}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">View Ticket</a>
+                                                <a href="${pageContext.request.contextPath}/train/ticket?id=${t.id}&print=true" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">Print Ticket</a>
+                                                <a href="${pageContext.request.contextPath}/train/download-ticket?id=${t.id}" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Download Ticket</a>
                                             </div>
                                         </div>
                                     </div>
@@ -703,9 +709,11 @@
                                                 <span class="status-pill status-${b.status.toLowerCase() == 'confirmed' ? 'completed' : b.status.toLowerCase()}" style="margin-right:10px;">${b.status}</span>
                                                 <span style="font-weight: 800; font-size: 1.2rem; color:var(--color-primary);">₹${b.totalFare}</span>
                                             </div>
-                                            <div style="display:flex; gap:5px; justify-content: flex-end; margin-top:10px;">
-                                                <a href="${pageContext.request.contextPath}/transport/bus/confirmation?bookingRef=${b.pnr}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">View Details</a>
-                                                <a href="${pageContext.request.contextPath}/transport/bus/confirmation?print=true&bookingRef=${b.pnr}" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Print Ticket</a>
+                                                                                        <div style="display:flex; gap:5px; justify-content: flex-end; margin-top:10px;">
+                                                <a href="${pageContext.request.contextPath}/bus/details?id=${b.id}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">View Details</a>
+                                                <a href="${pageContext.request.contextPath}/bus/ticket?id=${b.id}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">View Ticket</a>
+                                                <a href="${pageContext.request.contextPath}/bus/ticket?id=${b.id}&print=true" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">Print Ticket</a>
+                                                <a href="${pageContext.request.contextPath}/bus/download-ticket?id=${b.id}" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Download Ticket</a>
                                             </div>
                                         </div>
                                     </div>
@@ -744,9 +752,11 @@
                                                 <span class="status-pill status-${c.status.toLowerCase() == 'confirmed' ? 'completed' : c.status.toLowerCase()}" style="margin-right:10px;">${c.status}</span>
                                                 <span style="font-weight: 800; font-size: 1.2rem; color:var(--color-primary);">₹${c.totalFare}</span>
                                             </div>
-                                            <div style="display:flex; gap:5px; justify-content: flex-end; margin-top:10px;">
-                                                <a href="${pageContext.request.contextPath}/transport/cab/confirmation?bookingRef=${c.bookingRef}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">View Details</a>
-                                                <a href="${pageContext.request.contextPath}/transport/cab/confirmation?print=true&bookingRef=${c.bookingRef}" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Print Voucher</a>
+                                                                                        <div style="display:flex; gap:5px; justify-content: flex-end; margin-top:10px;">
+                                                <a href="${pageContext.request.contextPath}/cab/details?id=${c.id}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">View Details</a>
+                                                <a href="${pageContext.request.contextPath}/cab/ticket?id=${c.id}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">View Ticket</a>
+                                                <a href="${pageContext.request.contextPath}/cab/ticket?id=${c.id}&print=true" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">Print Ticket</a>
+                                                <a href="${pageContext.request.contextPath}/cab/download-ticket?id=${c.id}" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Download Ticket</a>
                                             </div>
                                         </div>
                                     </div>
@@ -785,9 +795,11 @@
                                                 <span class="status-pill status-${car.status.toLowerCase() == 'confirmed' ? 'completed' : car.status.toLowerCase()}" style="margin-right:10px;">${car.status}</span>
                                                 <span style="font-weight: 800; font-size: 1.2rem; color:var(--color-primary);">₹${car.totalFare}</span>
                                             </div>
-                                            <div style="display:flex; gap:5px; justify-content: flex-end; margin-top:10px;">
-                                                <a href="${pageContext.request.contextPath}/transport/car/confirmation?bookingRef=${car.bookingRef}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">View Details</a>
-                                                <a href="${pageContext.request.contextPath}/transport/car/confirmation?print=true&bookingRef=${car.bookingRef}" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Print Voucher</a>
+                                                                                        <div style="display:flex; gap:5px; justify-content: flex-end; margin-top:10px;">
+                                                <a href="${pageContext.request.contextPath}/car/details?id=${car.id}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">View Details</a>
+                                                <a href="${pageContext.request.contextPath}/car/ticket?id=${car.id}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">View Ticket</a>
+                                                <a href="${pageContext.request.contextPath}/car/ticket?id=${car.id}&print=true" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">Print Ticket</a>
+                                                <a href="${pageContext.request.contextPath}/car/download-ticket?id=${car.id}" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Download Ticket</a>
                                             </div>
                                         </div>
                                     </div>
@@ -826,9 +838,11 @@
                                                 <span class="status-pill status-${cr.status.toLowerCase() == 'confirmed' ? 'completed' : cr.status.toLowerCase()}" style="margin-right:10px;">${cr.status}</span>
                                                 <span style="font-weight: 800; font-size: 1.2rem; color:var(--color-primary);">₹${cr.totalFare}</span>
                                             </div>
-                                            <div style="display:flex; gap:5px; justify-content: flex-end; margin-top:10px;">
-                                                <a href="${pageContext.request.contextPath}/transport/cruise/confirmation?bookingRef=${cr.bookingRef}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">View Details</a>
-                                                <a href="${pageContext.request.contextPath}/transport/cruise/confirmation?print=true&bookingRef=${cr.bookingRef}" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Print Voucher</a>
+                                                                                        <div style="display:flex; gap:5px; justify-content: flex-end; margin-top:10px;">
+                                                <a href="${pageContext.request.contextPath}/cruise/details?id=${cr.id}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">View Details</a>
+                                                <a href="${pageContext.request.contextPath}/cruise/ticket?id=${cr.id}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">View Ticket</a>
+                                                <a href="${pageContext.request.contextPath}/cruise/ticket?id=${cr.id}&print=true" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">Print Ticket</a>
+                                                <a href="${pageContext.request.contextPath}/cruise/download-ticket?id=${cr.id}" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Download Ticket</a>
                                             </div>
                                         </div>
                                     </div>
@@ -867,9 +881,11 @@
                                                 <span class="status-pill status-${h.status.toLowerCase() == 'confirmed' ? 'completed' : h.status.toLowerCase()}" style="margin-right:10px;">${h.status}</span>
                                                 <span style="font-weight: 800; font-size: 1.2rem; color:var(--color-primary);">₹${h.totalFare}</span>
                                             </div>
-                                            <div style="display:flex; gap:5px; justify-content: flex-end; margin-top:10px;">
-                                                <a href="${pageContext.request.contextPath}/transport/helicopter/confirmation?bookingRef=${h.bookingRef}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">View Details</a>
-                                                <a href="${pageContext.request.contextPath}/transport/helicopter/confirmation?print=true&bookingRef=${h.bookingRef}" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Print Voucher</a>
+                                                                                        <div style="display:flex; gap:5px; justify-content: flex-end; margin-top:10px;">
+                                                <a href="${pageContext.request.contextPath}/helicopter/details?id=${h.id}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">View Details</a>
+                                                <a href="${pageContext.request.contextPath}/helicopter/ticket?id=${h.id}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">View Ticket</a>
+                                                <a href="${pageContext.request.contextPath}/helicopter/ticket?id=${h.id}&print=true" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">Print Ticket</a>
+                                                <a href="${pageContext.request.contextPath}/helicopter/download-ticket?id=${h.id}" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Download Ticket</a>
                                             </div>
                                         </div>
                                     </div>

@@ -9,7 +9,7 @@
             
             <div class="bg-gray-800 p-6 rounded-lg mb-8 border border-gray-700">
                 <h2 class="text-lg text-white mb-2">Total Amount Payable</h2>
-                <p class="text-4xl font-bold text-green-400">₹${currentCarBooking.amount + 5500}</p>
+                <p class="text-4xl font-bold text-green-400">₹${booking.amount + 5500}</p>
             </div>
 
             <button id="rzp-button1" class="w-full py-4 rounded-lg font-bold text-xl tracking-wider text-white transition" style="background-color: #8b5cf6;">Pay Now</button>
@@ -30,7 +30,7 @@
         fetch('${pageContext.request.contextPath}/api/razorpay/create-order', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: 'amount=' + ${currentCarBooking.amount + 5500} + '&receipt=${currentCarBooking.id}'
+            body: 'amount=' + ${booking.amount + 5500} + '&receipt=${booking.id}'
         })
         .then(response => response.json())
         .then(orderData => {
@@ -48,9 +48,9 @@
                     document.getElementById('razorpayForm').submit();
                 },
                 "prefill": {
-                    "name": "${currentCarBooking.customer.name}",
-                    "email": "${currentCarBooking.customer.email}",
-                    "contact": "${currentCarBooking.customer.phone}"
+                    "name": "${booking.customer.name}",
+                    "email": "${booking.customer.email}",
+                    "contact": "${booking.customer.phone}"
                 },
                 "theme": { "color": "#8b5cf6" } // Purple accent for self drive cars
             };

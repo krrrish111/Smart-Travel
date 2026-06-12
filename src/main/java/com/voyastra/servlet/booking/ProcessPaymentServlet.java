@@ -79,10 +79,7 @@ public class ProcessPaymentServlet extends HttpServlet {
         
         userDAO.updateWalletAndLoyalty(userId, user.getWalletBalance(), user.getLoyaltyPoints());
 
-        // Generate PNR
-        String pnr = bookingCode.substring(4, 10).toUpperCase() + (paymentId != null && paymentId.length() >= 6 ? paymentId.substring(paymentId.length() - 4).toUpperCase() : "XXXX");
-        
-        // Persist to bookings table with full details string
+        // Persist to bookings table
         Booking booking = new Booking();
         booking.setUserId(userId);
         booking.setType("flight");
@@ -91,12 +88,7 @@ public class ProcessPaymentServlet extends HttpServlet {
                 + " | Class: " + currentFlight.get("class")
                 + " | Passengers: " + currentFlight.get("passengers")
                 + " | Seats: " + selectedSeats
-                + " | Date: " + currentFlight.get("date")
-                + " | Departs: " + currentFlight.getOrDefault("deptTime", "")
-                + " | Arrives: " + currentFlight.getOrDefault("arrTime", "")
-                + " | Duration: " + currentFlight.getOrDefault("duration", "")
-                + " | Stops: " + currentFlight.getOrDefault("stops", "0")
-                + " | PNR: " + pnr);
+                + " | Date: " + currentFlight.get("date"));
         booking.setTotalPrice(grandTotal);
         booking.setStatus("CONFIRMED");
         booking.setBookingCode(bookingCode);
@@ -114,36 +106,6 @@ public class ProcessPaymentServlet extends HttpServlet {
             System.err.println("[ProcessPaymentServlet] Booking save failed: " + e.getMessage());
         }
 
-        // Also insert into flight_bookings table for the E-Ticket system
-        try {
-            com.voyastra.dao.FlightBookingDAO flightBookingDAO = new com.voyastra.dao.FlightBookingDAO();
-            flightBookingDAO.saveFlightBooking(
-                userId, bookingCode, pnr,
-                currentFlight.get("id"),              // flightNumber
-                currentFlight.get("name"),             // airline
-                currentFlight.get("from"),             // origin
-                currentFlight.get("to"),               // destination
-                currentFlight.get("date"),             // departureDate
-                currentFlight.getOrDefault("deptTime", ""),   // departureTime
-                currentFlight.getOrDefault("arrTime", ""),    // arrivalTime
-                currentFlight.getOrDefault("duration", ""),   // duration
-                currentFlight.getOrDefault("stops", "0"),     // stops
-                currentFlight.get("class"),            // seatClass
-                selectedSeats,                         // seatNumbers
-                grandTotal,
-                userName, userEmail,
-                paymentId, paymentStatus
-            );
-            System.out.println("[FlightBooking] SAVED TO flight_bookings: " + bookingCode);
-            System.out.println("Booking ID = " + bookingCode);
-            System.out.println("PNR = " + pnr);
-            System.out.println("Flight = " + currentFlight.get("id"));
-            System.out.println("Origin = " + currentFlight.get("from"));
-            System.out.println("Destination = " + currentFlight.get("to"));
-        } catch (Exception e) {
-            System.err.println("[ProcessPaymentServlet] flight_bookings insert failed: " + e.getMessage());
-        }
-
         // Store confirmation data in session
         session.setAttribute("confirmedBookingCode", bookingCode);
         session.setAttribute("confirmedBookingId", bookingId);
@@ -158,7 +120,8 @@ public class ProcessPaymentServlet extends HttpServlet {
         com.voyastra.model.BookingDraft draft = draftDAO.getDraftById(draftId);
         String phone = (draft != null) ? draft.getContactPhone() : "";
 
-        // Send SMS via Twilio (pnr already calculated above)
+        // Send SMS via Twilio
+        String pnr = bookingCode.substring(4, 10) + (paymentId != null && paymentId.length() >= 6 ? paymentId.substring(4, 6) : "XX");
         com.voyastra.util.SMSService.sendBookingConfirmationSMS(
                 phone,
                 pnr,

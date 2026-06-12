@@ -99,6 +99,8 @@ public class BusBookingDAO {
                     booking.setJourneyDate(rs.getString("journey_date"));
                     booking.setSeatNumbers(rs.getString("seat_numbers"));
                     booking.setStatus(rs.getString("status"));
+                      
+                      booking.setFare(rs.getDouble("total_fare"));
                     booking.setPassengers(new java.util.ArrayList<>());
                 }
             }

@@ -99,7 +99,7 @@
                         <span>Total Fare</span>
                         <span id="totalFare" class="text-green-400">₹0</span>
                     </div>
-                    <p class="text-xs text-gray-500 mt-1">₹${currentBusBooking.fare} per seat + Taxes</p>
+                    <p class="text-xs text-gray-500 mt-1">₹${booking.fare} per seat + Taxes</p>
                 </div>
 
                 <form action="${pageContext.request.contextPath}/transport/bus/booking" method="post" id="seatForm">
@@ -115,7 +115,7 @@
 <script>
     const ROWS = 10;
     const COLS = 5; // 2x2 layout with 1 aisle in the middle (indices: 0,1 [left], 2 [aisle], 3,4 [right])
-    const baseFare = ${currentBusBooking.fare};
+    const baseFare = ${booking.fare};
     
     // Mock data for booked and female seats
     const bookedSeats = ['1C', '1D', '4A', '4B', '7C', '10A', '10B'];

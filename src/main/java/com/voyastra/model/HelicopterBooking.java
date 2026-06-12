@@ -46,4 +46,8 @@ public class HelicopterBooking {
     public String getFlightClass() { return flightType; } // alias
     public List<HelicopterPassenger> getPassengers() { return passengers; }
     public void setPassengers(List<HelicopterPassenger> passengers) { this.passengers = passengers; }
+
+    public String getReference() { return id != null ? id : ""; }
+    public String getCustomerNameAlias() { return passengers != null && !passengers.isEmpty() ? passengers.get(0).getName() : ""; }
+    public String getTravelDateAlias() { return travelDate != null ? travelDate : ""; }
 }

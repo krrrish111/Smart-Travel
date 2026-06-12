@@ -13,18 +13,18 @@
                     <div class="p-5 bg-gray-800 rounded-lg border border-gray-700">
                         <h2 class="text-xl font-bold text-white mb-4">Sailing Details</h2>
                         <div class="space-y-2">
-                            <p class="text-gray-300"><span class="text-gray-500 w-24 inline-block">Vessel:</span> <strong class="text-white">${currentCruiseBooking.shipName}</strong></p>
-                            <p class="text-gray-300"><span class="text-gray-500 w-24 inline-block">Route:</span> <strong class="text-white">${currentCruiseBooking.departurePort} to ${currentCruiseBooking.destination}</strong></p>
-                            <p class="text-gray-300"><span class="text-gray-500 w-24 inline-block">Departure:</span> <strong class="text-white">${currentCruiseBooking.cruiseDate}</strong></p>
-                            <p class="text-gray-300"><span class="text-gray-500 w-24 inline-block">Duration:</span> <strong class="text-white">${currentCruiseBooking.durationDays} Nights</strong></p>
-                            <p class="text-gray-300"><span class="text-gray-500 w-24 inline-block">Cabin:</span> <strong class="text-white">${currentCruiseBooking.cabinType}</strong></p>
+                            <p class="text-gray-300"><span class="text-gray-500 w-24 inline-block">Vessel:</span> <strong class="text-white">${booking.shipName}</strong></p>
+                            <p class="text-gray-300"><span class="text-gray-500 w-24 inline-block">Route:</span> <strong class="text-white">${booking.departurePort} to ${booking.destination}</strong></p>
+                            <p class="text-gray-300"><span class="text-gray-500 w-24 inline-block">Departure:</span> <strong class="text-white">${booking.cruiseDate}</strong></p>
+                            <p class="text-gray-300"><span class="text-gray-500 w-24 inline-block">Duration:</span> <strong class="text-white">${booking.durationDays} Nights</strong></p>
+                            <p class="text-gray-300"><span class="text-gray-500 w-24 inline-block">Cabin:</span> <strong class="text-white">${booking.cabinType}</strong></p>
                         </div>
                     </div>
 
                     <div class="p-5 bg-gray-800 rounded-lg border border-gray-700">
-                        <h2 class="text-lg font-bold text-white mb-4">Guest Manifest (${currentCruiseBooking.paxCount} Pax)</h2>
+                        <h2 class="text-lg font-bold text-white mb-4">Guest Manifest (${booking.paxCount} Pax)</h2>
                         <ul class="space-y-3">
-                            <c:forEach var="p" items="${currentCruiseBooking.passengers}" varStatus="status">
+                            <c:forEach var="p" items="${booking.passengers}" varStatus="status">
                                 <li class="flex justify-between border-b border-gray-700 pb-2">
                                     <span class="text-gray-300">${status.index + 1}. ${p.name} (${p.age} yrs, ${p.gender})</span>
                                     <span class="text-gray-500 text-sm">Passport: ${p.passportNumber}</span>
@@ -40,11 +40,11 @@
                         <h2 class="text-xl font-bold text-white mb-4">Fare Breakdown</h2>
                         <div class="flex justify-between text-gray-300 mb-2">
                             <span>Cabin Fare</span>
-                            <span>₹${currentCruiseBooking.amount}</span>
+                            <span>₹${booking.amount}</span>
                         </div>
                         <div class="flex justify-between text-gray-300 mb-2">
                             <span>Port Taxes</span>
-                            <span>₹${currentCruiseBooking.paxCount * 2500}</span>
+                            <span>₹${booking.paxCount * 2500}</span>
                         </div>
                         <div class="flex justify-between text-gray-300 mb-4">
                             <span>Gratuities</span>
@@ -53,7 +53,7 @@
                         <hr class="border-gray-600 mb-4">
                         <div class="flex justify-between text-white font-bold text-lg mb-6">
                             <span>Total Amount</span>
-                            <span class="text-green-400">₹${currentCruiseBooking.amount + (currentCruiseBooking.paxCount * 2500)}</span>
+                            <span class="text-green-400">₹${booking.amount + (booking.paxCount * 2500)}</span>
                         </div>
                         
                         <form action="${pageContext.request.contextPath}/transport/cruise/booking" method="post">

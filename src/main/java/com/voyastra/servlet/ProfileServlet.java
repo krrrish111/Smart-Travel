@@ -56,19 +56,50 @@ public class ProfileServlet extends HttpServlet {
         if (tab == null || tab.isEmpty()) tab = "overview";
         request.setAttribute("activeTab", tab);
 
-        // 3. Fetch generic bookings, plans, hotels
+        // 3. Fetch Data based on active tab / Statistics
         try {
             List<Booking> userBookings = bookingDAO.getUserBookings(userId);
             List<Itinerary> userPlans = itineraryDAO.getSavedPlans(userId);
-
+            List<HotelBooking> hotelBookings = hotelBookingDAO.getBookingsByUserId(userId);
+            
+            // New DAOs for separated bookings
+            com.voyastra.dao.FlightBookingDAO flightDAO = new com.voyastra.dao.FlightBookingDAO();
+            com.voyastra.dao.CarBookingDAO carDAO = new com.voyastra.dao.CarBookingDAO();
+            com.voyastra.dao.TourBookingDAO tourDAO = new com.voyastra.dao.TourBookingDAO();
+            com.voyastra.dao.TrainBookingDAO trainDAO = new com.voyastra.dao.TrainBookingDAO();
+            com.voyastra.dao.BusBookingDAO busDAO = new com.voyastra.dao.BusBookingDAO();
+            com.voyastra.dao.CabBookingDAO cabDAO = new com.voyastra.dao.CabBookingDAO();
+            com.voyastra.dao.CruiseBookingDAO cruiseDAO = new com.voyastra.dao.CruiseBookingDAO();
+            com.voyastra.dao.HelicopterBookingDAO heliDAO = new com.voyastra.dao.HelicopterBookingDAO();
+            
+            List<com.voyastra.model.FlightBooking> flightBookings = flightDAO.getBookingsByUserId(userId);
+            List<com.voyastra.model.CarBooking> carBookings = carDAO.getBookingsByUserId(userId);
+            List<com.voyastra.model.TourBooking> tourBookings = tourDAO.getBookingsByUserId(userId);
+            List<com.voyastra.model.TrainBooking> trainBookings = trainDAO.getBookingsByUserId(userId);
+            List<com.voyastra.model.BusBooking> busBookings = busDAO.getBookingsByUserId(userId);
+            List<com.voyastra.model.CabBooking> cabBookings = cabDAO.getBookingsByUserId(userId);
+            List<com.voyastra.model.CruiseBooking> cruiseBookings = cruiseDAO.getBookingsByUserId(userId);
+            List<com.voyastra.model.HelicopterBooking> heliBookings = heliDAO.getBookingsByUserId(userId);
+            
             request.setAttribute("totalTrips", userBookings.size());
             request.setAttribute("savedCount", userPlans.size());
 
-            // Classify unified bookings
+            // Add new categorized lists to request
+            request.setAttribute("flightBookings", flightBookings);
+            request.setAttribute("carBookings", carBookings);
+            request.setAttribute("tourBookings", tourBookings);
+            request.setAttribute("trainBookings", trainBookings);
+            request.setAttribute("busBookings", busBookings);
+            request.setAttribute("cabBookings", cabBookings);
+            request.setAttribute("cruiseBookings", cruiseBookings);
+            request.setAttribute("heliBookings", heliBookings);
+            
+            // Classify unified bookings for backwards compatibility
             List<Booking> upcomingBookings = new java.util.ArrayList<>();
             List<Booking> pastBookings = new java.util.ArrayList<>();
             List<Booking> cancelledBookings = new java.util.ArrayList<>();
             int completedCount = 0;
+
             java.time.LocalDate today = java.time.LocalDate.now();
             java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
@@ -77,139 +108,70 @@ public class ProfileServlet extends HttpServlet {
                     cancelledBookings.add(b);
                     continue;
                 }
+
+                // Extract date from details (e.g., "Date: 2026-06-15")
                 java.time.LocalDate flightDate = null;
                 if (b.getDetails() != null) {
                     java.util.regex.Matcher m = java.util.regex.Pattern.compile("Date: (\\d{4}-\\d{2}-\\d{2})").matcher(b.getDetails());
                     if (m.find()) {
-                        try { flightDate = java.time.LocalDate.parse(m.group(1), formatter); } catch (Exception ignored) {}
+                        try {
+                            flightDate = java.time.LocalDate.parse(m.group(1), formatter);
+                        } catch (Exception e) {}
                     }
                 }
+                
                 if (flightDate != null && flightDate.isBefore(today)) {
-                    pastBookings.add(b); completedCount++;
+                    pastBookings.add(b);
+                    completedCount++;
                 } else {
                     upcomingBookings.add(b);
                 }
             }
+
             request.setAttribute("upcomingBookings", upcomingBookings);
             request.setAttribute("pastBookings", pastBookings);
             request.setAttribute("cancelledBookings", cancelledBookings);
             request.setAttribute("completedTrips", completedCount);
             request.setAttribute("upcomingTrips", upcomingBookings.size());
-            if ("overview".equals(tab) || "bookings".equals(tab)) request.setAttribute("bookings", userBookings);
-            if ("overview".equals(tab) || "saved-plans".equals(tab)) request.setAttribute("savedPlans", userPlans);
-        } catch (Exception e) {
-            System.err.println("[ProfileServlet] Error fetching generic bookings: " + e.getMessage());
-            request.setAttribute("upcomingBookings", new java.util.ArrayList<>());
-            request.setAttribute("pastBookings", new java.util.ArrayList<>());
-            request.setAttribute("cancelledBookings", new java.util.ArrayList<>());
-        }
-
-        // 4. Hotel Bookings
-        try {
-            List<HotelBooking> hotelBookings = hotelBookingDAO.getBookingsByUserId(userId);
-            java.time.LocalDate today = java.time.LocalDate.now();
+            
+            // Hotel Bookings categorization
             List<HotelBooking> upcomingHotelBookings = new java.util.ArrayList<>();
             List<HotelBooking> pastHotelBookings = new java.util.ArrayList<>();
             List<HotelBooking> cancelledHotelBookings = new java.util.ArrayList<>();
+            
             for (HotelBooking hb : hotelBookings) {
-                if ("CANCELLED".equalsIgnoreCase(hb.getStatus())) cancelledHotelBookings.add(hb);
-                else if (hb.getCheckIn() != null && hb.getCheckIn().toLocalDate().isBefore(today)) pastHotelBookings.add(hb);
-                else upcomingHotelBookings.add(hb);
+                if ("CANCELLED".equalsIgnoreCase(hb.getStatus())) {
+                    cancelledHotelBookings.add(hb);
+                } else if (hb.getCheckIn() != null && hb.getCheckIn().toLocalDate().isBefore(today)) {
+                    pastHotelBookings.add(hb);
+                } else {
+                    upcomingHotelBookings.add(hb);
+                }
             }
-            request.setAttribute("hotelBookings", hotelBookings);
+            
             request.setAttribute("upcomingHotelBookings", upcomingHotelBookings);
             request.setAttribute("pastHotelBookings", pastHotelBookings);
             request.setAttribute("cancelledHotelBookings", cancelledHotelBookings);
-        } catch (Exception e) {
-            System.err.println("[ProfileServlet] Error fetching hotel bookings: " + e.getMessage());
-            request.setAttribute("hotelBookings", new java.util.ArrayList<>());
-        }
+            // Also pass the full list for category 'Hotels'
+            request.setAttribute("hotelBookings", hotelBookings);
 
-        // 5. TRAIN Bookings
-        try {
-            com.voyastra.dao.TrainBookingDAO trainDAO = new com.voyastra.dao.TrainBookingDAO();
-            List<com.voyastra.model.TrainBooking> trainBookings = trainDAO.getBookingsByUserId(userId);
-            System.out.println("[ProfileServlet] TRAIN BOOKINGS for user " + userId + ": " + trainBookings.size());
-            request.setAttribute("trainBookings", trainBookings);
-        } catch (Exception e) {
-            System.err.println("[ProfileServlet] Error fetching train bookings: " + e.getMessage());
-            e.printStackTrace();
-            request.setAttribute("trainBookings", new java.util.ArrayList<>());
-        }
-
-        // 6. BUS Bookings
-        try {
-            com.voyastra.dao.BusBookingDAO busDAO = new com.voyastra.dao.BusBookingDAO();
-            List<com.voyastra.model.BusBooking> busBookings = busDAO.getBookingsByUserId(userId);
-            System.out.println("[ProfileServlet] BUS BOOKINGS for user " + userId + ": " + busBookings.size());
-            request.setAttribute("busBookings", busBookings);
-        } catch (Exception e) {
-            System.err.println("[ProfileServlet] Error fetching bus bookings: " + e.getMessage());
-            request.setAttribute("busBookings", new java.util.ArrayList<>());
-        }
-
-        // 7. CAB Bookings
-        try {
-            com.voyastra.dao.CabBookingDAO cabDAO = new com.voyastra.dao.CabBookingDAO();
-            List<com.voyastra.model.CabBooking> cabBookings = cabDAO.getBookingsByUserId(userId);
-            System.out.println("[ProfileServlet] CAB BOOKINGS for user " + userId + ": " + cabBookings.size());
-            request.setAttribute("cabBookings", cabBookings);
-        } catch (Exception e) {
-            System.err.println("[ProfileServlet] Error fetching cab bookings: " + e.getMessage());
-            request.setAttribute("cabBookings", new java.util.ArrayList<>());
-        }
-
-        // 8. CAR Bookings
-        try {
-            com.voyastra.dao.CarBookingDAO carDAO = new com.voyastra.dao.CarBookingDAO();
-            List<com.voyastra.model.CarBooking> carBookings = carDAO.getBookingsByUserId(userId);
-            System.out.println("[ProfileServlet] CAR BOOKINGS for user " + userId + ": " + carBookings.size());
-            request.setAttribute("carBookings", carBookings);
-        } catch (Exception e) {
-            System.err.println("[ProfileServlet] Error fetching car bookings: " + e.getMessage());
-            request.setAttribute("carBookings", new java.util.ArrayList<>());
-        }
-
-        // 9. CRUISE Bookings
-        try {
-            com.voyastra.dao.CruiseBookingDAO cruiseDAO = new com.voyastra.dao.CruiseBookingDAO();
-            List<com.voyastra.model.CruiseBooking> cruiseBookings = cruiseDAO.getBookingsByUserId(userId);
-            System.out.println("[ProfileServlet] CRUISE BOOKINGS for user " + userId + ": " + cruiseBookings.size());
-            request.setAttribute("cruiseBookings", cruiseBookings);
-        } catch (Exception e) {
-            System.err.println("[ProfileServlet] Error fetching cruise bookings: " + e.getMessage());
-            request.setAttribute("cruiseBookings", new java.util.ArrayList<>());
-        }
-
-        // 10. HELICOPTER Bookings
-        try {
-            com.voyastra.dao.HelicopterBookingDAO heliDAO = new com.voyastra.dao.HelicopterBookingDAO();
-            List<com.voyastra.model.HelicopterBooking> heliBookings = heliDAO.getBookingsByUserId(userId);
-            System.out.println("[ProfileServlet] HELI BOOKINGS for user " + userId + ": " + heliBookings.size());
-            request.setAttribute("heliBookings", heliBookings);
-        } catch (Exception e) {
-            System.err.println("[ProfileServlet] Error fetching helicopter bookings: " + e.getMessage());
-            request.setAttribute("heliBookings", new java.util.ArrayList<>());
-        }
-
-        // 11. FLIGHT Bookings
-        try {
-            com.voyastra.dao.FlightBookingDAO flightDAO = new com.voyastra.dao.FlightBookingDAO();
-            List<com.voyastra.model.FlightBooking> flightBookings = flightDAO.getBookingsByUserId(userId);
-            System.out.println("[ProfileServlet] FLIGHT BOOKINGS for user " + userId + ": " + flightBookings.size());
-            request.setAttribute("flightBookings", flightBookings);
-        } catch (Exception e) {
-            System.err.println("[ProfileServlet] Error fetching flight bookings: " + e.getMessage());
-            request.setAttribute("flightBookings", new java.util.ArrayList<>());
-        }
-
-        // 12. Wishlist and Recently Viewed
-        try {
+            if ("overview".equals(tab) || "bookings".equals(tab)) {
+                request.setAttribute("bookings", userBookings); // Fallback for overview
+            }
+            
+            if ("overview".equals(tab) || "saved-plans".equals(tab)) {
+                request.setAttribute("savedPlans", userPlans);
+            }
+            
+            // Add Wishlist and Recently Viewed
             com.voyastra.dao.HotelDAO hotelDAO = new com.voyastra.dao.HotelDAO();
-            request.setAttribute("wishlistHotels", hotelDAO.getWishlist(userId));
-            request.setAttribute("recentlyViewedHotels", hotelDAO.getRecentlyViewed(userId));
+            List<com.voyastra.model.Hotel> wishlistHotels = hotelDAO.getWishlist(userId);
+            List<com.voyastra.model.Hotel> recentlyViewedHotels = hotelDAO.getRecentlyViewed(userId);
+            request.setAttribute("wishlistHotels", wishlistHotels);
+            request.setAttribute("recentlyViewedHotels", recentlyViewedHotels);
+            
         } catch (Exception e) {
-            System.err.println("[ProfileServlet] Error fetching wishlist: " + e.getMessage());
+            System.err.println("[ProfileServlet] Error fetching data: " + e.getMessage());
         }
 
         request.getRequestDispatcher("/pages/profile.jsp").forward(request, response);

@@ -17,14 +17,14 @@
                     <!-- Train Info -->
                     <div class="p-5 bg-gray-800 rounded-lg border border-gray-700">
                         <h2 class="text-xl font-bold text-white mb-3 flex items-center gap-2">🚆 Train Details</h2>
-                        <p class="text-gray-300">Train Number: <span class="font-mono bg-gray-900 px-2 py-1 rounded">${currentTrainBooking.trainNumber}</span></p>
+                        <p class="text-gray-300">Train Number: <span class="font-mono bg-gray-900 px-2 py-1 rounded">${booking.trainNumber}</span></p>
                     </div>
 
                     <!-- Passengers -->
                     <div class="p-5 bg-gray-800 rounded-lg border border-gray-700">
                         <h2 class="text-xl font-bold text-white mb-3 flex items-center gap-2">👥 Passengers</h2>
                         <div class="flex flex-col gap-3">
-                            <c:forEach var="pax" items="${currentTrainBooking.passengers}" varStatus="status">
+                            <c:forEach var="pax" items="${booking.passengers}" varStatus="status">
                                 <div class="flex justify-between items-center bg-gray-900 p-3 rounded">
                                     <div>
                                         <p class="text-white font-bold">${pax.name}</p>
@@ -45,8 +45,8 @@
                     <div class="p-5 bg-gray-800 rounded-lg border border-gray-700 sticky top-24">
                         <h2 class="text-xl font-bold text-white mb-4">Price Summary</h2>
                         <div class="flex justify-between text-gray-300 mb-2">
-                            <span>Base Fare (x${currentTrainBooking.passengers.size()})</span>
-                            <span>₹${currentTrainBooking.fare * currentTrainBooking.passengers.size()}</span>
+                            <span>Base Fare (x${booking.passengers.size()})</span>
+                            <span>₹${booking.fare * booking.passengers.size()}</span>
                         </div>
                         <div class="flex justify-between text-gray-300 mb-4">
                             <span>Taxes & Fees</span>
@@ -55,7 +55,7 @@
                         <hr class="border-gray-600 mb-4">
                         <div class="flex justify-between text-white font-bold text-lg mb-6">
                             <span>Total Amount</span>
-                            <span class="text-green-400">₹${(currentTrainBooking.fare * currentTrainBooking.passengers.size()) + 150}</span>
+                            <span class="text-green-400">₹${(booking.fare * booking.passengers.size()) + 150}</span>
                         </div>
                         
                         <form action="${pageContext.request.contextPath}/transport/train/booking" method="post">

@@ -45,4 +45,10 @@ public class CabBooking {
     public double getTotalPrice() { return amount; }
     public CabPassenger getPassenger() { return passenger; }
     public void setPassenger(CabPassenger passenger) { this.passenger = passenger; }
+
+    public String getReference() { return id != null ? id : ""; }
+    public String getOrigin() { return pickup != null ? pickup : ""; }
+    public String getDestination() { return dropoff != null ? dropoff : ""; }
+    public String getCustomerNameAlias() { return passenger != null ? passenger.getName() : ""; }
+    public String getTravelDateAlias() { return date != null ? date : ""; }
 }

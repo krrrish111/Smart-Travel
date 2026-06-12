@@ -49,18 +49,13 @@ public class HotelVoucherServlet extends HttpServlet {
                 return;
             }
 
-            double total = booking.getTotalPrice();
-            double baseAmount = total / 1.18;
-            double taxAmount = total - baseAmount;
+            response.setContentType("application/pdf");
+            response.setHeader("Content-Disposition", "attachment; filename=\"Hotel_Voucher_" + booking.getBookingCode() + ".pdf\"");
 
-            request.setAttribute("booking", booking);
-            request.setAttribute("baseAmount", String.format("%.2f", baseAmount));
-            request.setAttribute("taxAmount", String.format("%.2f", taxAmount));
-            request.setAttribute("bookingType", "HOTEL");
+            byte[] pdfBytes = com.voyastra.util.PdfGeneratorUtil.generateHotelVoucherPdf(booking);
+            response.getOutputStream().write(pdfBytes);
 
-            request.getRequestDispatcher("/pages/common/TicketTemplate.jsp").forward(request, response);
-
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException | com.itextpdf.text.DocumentException e) {
             e.printStackTrace();
             response.sendRedirect("profile?tab=bookings");
         }

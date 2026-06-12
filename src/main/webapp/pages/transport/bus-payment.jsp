@@ -10,7 +10,7 @@
             
             <div class="bg-gray-800 p-6 rounded-lg mb-8 border border-gray-700">
                 <h2 class="text-lg text-white mb-2">Total Amount Payable</h2>
-                <p class="text-4xl font-bold text-green-400">₹${(currentBusBooking.fare * currentBusBooking.passengers.size()) + 50}</p>
+                <p class="text-4xl font-bold text-green-400">₹${(booking.fare * booking.passengers.size()) + 50}</p>
             </div>
 
             <button id="rzp-button1" class="btn-primary w-full py-4 rounded-lg font-bold text-xl uppercase tracking-wider">Pay Now</button>
@@ -31,7 +31,7 @@
         fetch('${pageContext.request.contextPath}/api/razorpay/create-order', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: 'amount=' + ${(currentBusBooking.fare * currentBusBooking.passengers.size()) + 50} + '&receipt=${currentBusBooking.id}'
+            body: 'amount=' + ${(booking.fare * booking.passengers.size()) + 50} + '&receipt=${booking.id}'
         })
         .then(response => response.json())
         .then(orderData => {
@@ -49,7 +49,7 @@
                     document.getElementById('razorpayForm').submit();
                 },
                 "prefill": {
-                    "name": "${currentBusBooking.passengers[0].name}",
+                    "name": "${booking.passengers[0].name}",
                     "email": "user@example.com",
                     "contact": "9999999999"
                 },

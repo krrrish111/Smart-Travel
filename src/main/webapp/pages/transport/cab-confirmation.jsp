@@ -1,11 +1,11 @@
-<%@ page contentType="text/html; charset=UTF-8" language="java" %>
+﻿<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ include file="/components/header.jsp" %>
 <%@ include file="/components/global_ui.jsp" %>
 <main style="padding-top: 100px; padding-bottom: 60px; min-height: 80vh; background: var(--color-background);">
     <div class="container mx-auto px-4 max-w-3xl">
         <div class="text-center mb-8">
             <div class="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span class="text-4xl text-white">✓</span>
+                <span class="text-4xl text-white">Γ£ô</span>
             </div>
             <h1 class="text-3xl font-bold text-white mb-2">Cab Booking Confirmed!</h1>
             <p class="text-gray-400">Your ride is scheduled. Driver details will be shared 30 mins before pickup.</p>
@@ -36,8 +36,8 @@
             </div>
 
             <div class="flex justify-center gap-4 mt-8">
-                <a href="${pageContext.request.contextPath}/transport/cab/confirmation?print=true&bookingRef=${booking.id}" target="_blank" class="px-6 py-3 text-gray-900 rounded-lg font-bold flex items-center gap-2 transition" style="background-color: #eab308;">
-                    <span>📄</span> Download Receipt
+                <a href="${pageContext.request.contextPath}/pages/transport/cab-ticket.jsp" target="_blank" class="px-6 py-3 text-gray-900 rounded-lg font-bold flex items-center gap-2 transition" style="background-color: #eab308;">
+                    <span>≡ƒôä</span> Download Receipt
                 </a>
                 <a href="${pageContext.request.contextPath}/profile" class="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-bold transition">
                     View My Bookings

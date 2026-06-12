@@ -64,5 +64,12 @@ public class TrainBooking {
     public List<TrainPassenger> getPassengers() { return passengers; }
     public void setPassengers(List<TrainPassenger> passengers) { this.passengers = passengers; }
     public void addPassenger(TrainPassenger p) { this.passengers.add(p); }
+
+    public String getReference() { return id != null ? id : ""; }
+    public String getOrigin() { return fromStation != null ? fromStation : ""; }
+    public String getDestination() { return toStation != null ? toStation : ""; }
+    public String getCustomerNameAlias() { return passengers != null && !passengers.isEmpty() ? passengers.get(0).getName() : ""; }
+    public double getAmount() { return 0.0; }
+    public String getTravelDateAlias() { return journeyDate != null ? journeyDate : ""; }
 }
 

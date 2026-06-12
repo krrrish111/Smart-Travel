@@ -7,8 +7,8 @@
             <h1 class="text-2xl font-bold text-white mb-6">Rider Details</h1>
             
             <div class="bg-gray-800 p-4 rounded mb-6 border border-gray-700">
-                <p class="text-yellow-400 font-bold">${currentCabBooking.provider} ${currentCabBooking.vehicleType}</p>
-                <p class="text-gray-300 text-sm">${currentCabBooking.date} | ${currentCabBooking.time}</p>
+                <p class="text-yellow-400 font-bold">${booking.provider} ${booking.vehicleType}</p>
+                <p class="text-gray-300 text-sm">${booking.date} | ${booking.time}</p>
             </div>
 
             <form action="${pageContext.request.contextPath}/transport/cab/booking" method="post">

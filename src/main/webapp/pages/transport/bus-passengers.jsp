@@ -7,14 +7,14 @@
         <div style="background: var(--color-surface); border-radius: 12px; padding: 30px; box-shadow: 0 4px 32px rgba(0,0,0,0.28);">
             <div class="flex justify-between items-center mb-6">
                 <h1 class="text-2xl font-bold text-white">Passenger Details</h1>
-                <span class="bg-blue-500 bg-opacity-20 text-blue-400 font-bold px-3 py-1 rounded">Selected Seats: ${currentBusBooking.passengers.size()}</span>
+                <span class="bg-blue-500 bg-opacity-20 text-blue-400 font-bold px-3 py-1 rounded">Selected Seats: ${booking.passengers.size()}</span>
             </div>
 
             <form action="${pageContext.request.contextPath}/transport/bus/booking" method="post" id="passengerForm">
                 <input type="hidden" name="action" value="save_passengers">
                 
                 <div id="passengerContainer">
-                    <c:forEach var="pax" items="${currentBusBooking.passengers}" varStatus="status">
+                    <c:forEach var="pax" items="${booking.passengers}" varStatus="status">
                         <div class="p-5 bg-gray-800 rounded-lg border border-gray-700 mb-4 passenger-block">
                             <div class="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
                                 <h3 class="text-lg text-white font-bold">Passenger ${status.index + 1}</h3>

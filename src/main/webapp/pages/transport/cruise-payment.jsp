@@ -7,7 +7,7 @@
             <h1 class="text-2xl font-bold text-white mb-4">💳 Cruise Payment</h1>
             <p class="text-gray-400 mb-8">Secure your cabin by completing the payment.</p>
             
-            <c:set var="totalAmount" value="${currentCruiseBooking.amount + (currentCruiseBooking.paxCount * 2500)}" />
+            <c:set var="totalAmount" value="${booking.amount + (booking.paxCount * 2500)}" />
 
             <div class="bg-gray-800 p-6 rounded-lg mb-8 border border-gray-700">
                 <h2 class="text-lg text-white mb-2">Total Amount Payable</h2>
@@ -32,7 +32,7 @@
         fetch('${pageContext.request.contextPath}/api/razorpay/create-order', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: 'amount=' + ${totalAmount} + '&receipt=${currentCruiseBooking.id}'
+            body: 'amount=' + ${totalAmount} + '&receipt=${booking.id}'
         })
         .then(response => response.json())
         .then(orderData => {
@@ -50,7 +50,7 @@
                     document.getElementById('razorpayForm').submit();
                 },
                 "prefill": {
-                    "name": "${currentCruiseBooking.passengers[0].name}"
+                    "name": "${booking.passengers[0].name}"
                 },
                 "theme": { "color": "#06b6d4" } // Cyan accent for cruises
             };

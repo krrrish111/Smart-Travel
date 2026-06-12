@@ -60,4 +60,15 @@ public class HotelBooking {
     public void setHotel(Hotel hotel) { this.hotel = hotel; }
     public HotelRoom getRoom() { return room; }
     public void setRoom(HotelRoom room) { this.room = room; }
+
+    public String getReference() { return bookingCode != null ? bookingCode : ""; }
+    public String getOrigin() { return hotel != null ? hotel.getCity() : ""; }
+    public String getDestination() { return ""; }
+    public String getCustomerNameAlias() { return guestName != null ? guestName : ""; }
+    public String getCustomerName() { return guestName != null ? guestName : ""; }
+    public String getCustomerEmail() { return guestEmail != null ? guestEmail : ""; }
+    public String getPaymentStatus() { return "PAID"; }
+    public String getDetails() { return room != null ? room.getType() : "Standard Room"; }
+    public double getAmount() { return totalPrice; }
+    public String getTravelDateAlias() { return checkIn != null ? checkIn.toString() : ""; }
 }

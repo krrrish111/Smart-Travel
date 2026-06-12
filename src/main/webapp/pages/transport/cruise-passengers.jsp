@@ -9,19 +9,19 @@
             
             <div class="bg-gray-800 p-4 rounded mb-6 border border-gray-700 flex justify-between">
                 <div>
-                    <p class="text-cyan-400 font-bold text-lg">${currentCruiseBooking.shipName} (${currentCruiseBooking.cruiseLine})</p>
-                    <p class="text-gray-300 text-sm">Sailing: ${currentCruiseBooking.cruiseDate} | ${currentCruiseBooking.durationDays} Nights</p>
+                    <p class="text-cyan-400 font-bold text-lg">${booking.shipName} (${booking.cruiseLine})</p>
+                    <p class="text-gray-300 text-sm">Sailing: ${booking.cruiseDate} | ${booking.durationDays} Nights</p>
                 </div>
                 <div class="text-right">
                     <p class="text-gray-400 text-sm">Cabin</p>
-                    <p class="text-white font-bold">${currentCruiseBooking.cabinType}</p>
+                    <p class="text-white font-bold">${booking.cabinType}</p>
                 </div>
             </div>
 
             <form action="${pageContext.request.contextPath}/transport/cruise/booking" method="post">
                 <input type="hidden" name="action" value="passengers">
                 
-                <c:forEach var="i" begin="0" end="${currentCruiseBooking.paxCount - 1}">
+                <c:forEach var="i" begin="0" end="${booking.paxCount - 1}">
                     <div class="mb-6 border border-gray-700 rounded-lg p-5 bg-gray-900">
                         <h3 class="text-lg text-white mb-4 border-b border-gray-700 pb-2">Passenger ${i + 1}</h3>
                         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">

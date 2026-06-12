@@ -7,8 +7,8 @@
             <h1 class="text-2xl font-bold text-white mb-6">Customer & License Details</h1>
             
             <div class="bg-gray-800 p-4 rounded mb-6 border border-gray-700">
-                <p class="text-purple-400 font-bold">${currentCarBooking.carModel}</p>
-                <p class="text-gray-300 text-sm">${currentCarBooking.pickupDate} to ${currentCarBooking.returnDate}</p>
+                <p class="text-purple-400 font-bold">${booking.carModel}</p>
+                <p class="text-gray-300 text-sm">${booking.pickupDate} to ${booking.returnDate}</p>
             </div>
 
             <!-- IMPORTANT: enctype multipart/form-data for File Upload -->

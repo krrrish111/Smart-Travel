@@ -344,5 +344,35 @@
 
 <jsp:include page="/components/footer.jsp" />
     <jsp:include page="/components/global_ui.jsp" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var isAutoPrint = '${autoPrint}';
+            var isAutoDownload = '${autoDownload}';
+            
+            if (isAutoPrint === 'true' || isAutoPrint === true) {
+                window.print();
+            }
+            
+            if (isAutoDownload === 'true' || isAutoDownload === true) {
+                // Find the main container to print. If ticket-container exists use it, else use body or main
+                var element = document.querySelector('.ticket-container');
+                if (!element) element = document.getElementById('printableTickets');
+                if (!element) element = document.querySelector('.invoice-container');
+                if (!element) element = document.body;
+                
+                var opt = {
+                  margin:       1,
+                  filename:     'Ticket_${booking.id}.pdf',
+                  image:        { type: 'jpeg', quality: 0.98 },
+                  html2canvas:  { scale: 2 },
+                  jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+                };
+                
+                html2pdf().set(opt).from(element).save();
+            }
+        });
+    </script>
 </body>
 </html>

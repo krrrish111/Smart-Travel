@@ -10,13 +10,13 @@
             
             <div class="bg-gray-800 p-6 rounded-lg mb-8 border border-gray-700">
                 <h2 class="text-lg text-white mb-2">Total Amount Payable</h2>
-                <p class="text-4xl font-bold text-green-400">₹${(currentTrainBooking.fare * currentTrainBooking.passengers.size()) + 150}</p>
+                <p class="text-4xl font-bold text-green-400">₹${(booking.fare * booking.passengers.size()) + 150}</p>
             </div>
 
             <button id="rzp-button1" 
-                    data-amount="${(currentTrainBooking.fare * currentTrainBooking.passengers.size()) + 150}"
-                    data-receipt="${currentTrainBooking.id}"
-                    data-passenger-name="${currentTrainBooking.passengers[0].name}"
+                    data-amount="${(booking.fare * booking.passengers.size()) + 150}"
+                    data-receipt="${booking.id}"
+                    data-passenger-name="${booking.passengers[0].name}"
                     class="btn-primary w-full py-4 rounded-lg font-bold text-xl uppercase tracking-wider">Pay Now</button>
 
             <form id="razorpayForm" action="${pageContext.request.contextPath}/transport/train/payment-callback" method="POST" style="display: none;">

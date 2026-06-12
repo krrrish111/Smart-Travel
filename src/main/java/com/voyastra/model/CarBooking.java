@@ -37,4 +37,10 @@ public class CarBooking {
     public String getBookingRef() { return id; }
     public double getTotalFare() { return amount; }
     public double getTotalPrice() { return amount; }
+
+    public String getReference() { return id != null ? id : ""; }
+    public String getOrigin() { return pickupCity != null ? pickupCity : ""; }
+    public String getDestination() { return ""; }
+    public String getCustomerNameAlias() { return customer != null ? customer.getName() : ""; }
+    public String getTravelDateAlias() { return pickupDate != null ? pickupDate : ""; }
 }

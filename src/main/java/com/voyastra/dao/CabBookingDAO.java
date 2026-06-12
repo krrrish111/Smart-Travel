@@ -92,6 +92,7 @@ public class CabBookingDAO {
                     booking.setVehicleType(rs.getString("vehicle_type"));
                     booking.setAmount(rs.getDouble("total_price"));
                     booking.setStatus(rs.getString("status"));
+                      booking.setAmount(rs.getDouble("amount"));
                     
                 }
             }

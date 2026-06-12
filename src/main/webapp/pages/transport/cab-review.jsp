@@ -12,22 +12,22 @@
                     <div class="p-5 bg-gray-800 rounded-lg border border-gray-700">
                         <h2 class="text-xl font-bold text-white mb-4">Trip Information</h2>
                         <div class="space-y-2">
-                            <p class="text-gray-300"><span class="text-gray-500 w-24 inline-block">Type:</span> <strong class="text-white">${currentCabBooking.bookingType}</strong></p>
-                            <p class="text-gray-300"><span class="text-gray-500 w-24 inline-block">Pickup:</span> <strong class="text-white">${currentCabBooking.pickup}</strong></p>
-                            <p class="text-gray-300"><span class="text-gray-500 w-24 inline-block">Drop:</span> <strong class="text-white">${currentCabBooking.dropoff}</strong></p>
-                            <p class="text-gray-300"><span class="text-gray-500 w-24 inline-block">Date/Time:</span> <strong class="text-white">${currentCabBooking.date} at ${currentCabBooking.time}</strong></p>
+                            <p class="text-gray-300"><span class="text-gray-500 w-24 inline-block">Type:</span> <strong class="text-white">${booking.bookingType}</strong></p>
+                            <p class="text-gray-300"><span class="text-gray-500 w-24 inline-block">Pickup:</span> <strong class="text-white">${booking.pickup}</strong></p>
+                            <p class="text-gray-300"><span class="text-gray-500 w-24 inline-block">Drop:</span> <strong class="text-white">${booking.dropoff}</strong></p>
+                            <p class="text-gray-300"><span class="text-gray-500 w-24 inline-block">Date/Time:</span> <strong class="text-white">${booking.date} at ${booking.time}</strong></p>
                         </div>
                     </div>
 
                     <div class="p-5 bg-gray-800 rounded-lg border border-gray-700 flex justify-between items-center">
                         <div>
                             <h2 class="text-lg font-bold text-white mb-1">Contact Details</h2>
-                            <p class="text-gray-400 text-sm">${currentCabBooking.passenger.name}</p>
-                            <p class="text-gray-400 text-sm">${currentCabBooking.passenger.phone} | ${currentCabBooking.passenger.email}</p>
+                            <p class="text-gray-400 text-sm">${booking.passenger.name}</p>
+                            <p class="text-gray-400 text-sm">${booking.passenger.phone} | ${booking.passenger.email}</p>
                         </div>
                         <div class="text-right">
                             <span class="bg-gray-700 px-3 py-1 rounded text-sm text-yellow-400 font-bold border border-yellow-500">
-                                ${currentCabBooking.provider} ${currentCabBooking.vehicleType}
+                                ${booking.provider} ${booking.vehicleType}
                             </span>
                         </div>
                     </div>
@@ -39,7 +39,7 @@
                         <h2 class="text-xl font-bold text-white mb-4">Fare Breakdown</h2>
                         <div class="flex justify-between text-gray-300 mb-2">
                             <span>Base Fare</span>
-                            <span>₹${currentCabBooking.amount}</span>
+                            <span>₹${booking.amount}</span>
                         </div>
                         <div class="flex justify-between text-gray-300 mb-4">
                             <span>Taxes & Surcharges</span>
@@ -48,7 +48,7 @@
                         <hr class="border-gray-600 mb-4">
                         <div class="flex justify-between text-white font-bold text-lg mb-6">
                             <span>Total Amount</span>
-                            <span class="text-green-400">₹${currentCabBooking.amount + 50}</span>
+                            <span class="text-green-400">₹${booking.amount + 50}</span>
                         </div>
                         
                         <form action="${pageContext.request.contextPath}/transport/cab/booking" method="post">

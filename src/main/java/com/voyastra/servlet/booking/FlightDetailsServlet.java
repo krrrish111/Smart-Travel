@@ -86,11 +86,6 @@ public class FlightDetailsServlet extends HttpServlet {
         currentFlight.put("date", travelDate);
         currentFlight.put("from", from);
         currentFlight.put("to", to);
-        currentFlight.put("logo",     logo     != null ? logo     : "");
-        currentFlight.put("deptTime", deptTime != null ? deptTime : "");
-        currentFlight.put("arrTime",  arrTime  != null ? arrTime  : "");
-        currentFlight.put("duration", duration != null ? duration : "");
-        currentFlight.put("stops",    stops    != null ? stops    : "0");
         session.setAttribute("currentFlight", currentFlight);
 
         // 2. If session exists: redirect to /flight-details?id=FLIGHT_ID (dispatch to JSP)

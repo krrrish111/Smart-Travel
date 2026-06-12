@@ -43,18 +43,12 @@ public class TrainBookingDAO {
                 }
                 ps.executeBatch();
             }
-
-            System.out.println("TRAIN BOOKING SAVED");
-            System.out.println("BOOKING ID = " + booking.getId());
-            System.out.println("USER ID = " + booking.getUserId());
             return true;
         } catch (Exception e) {
-            System.err.println("[TrainBookingDAO] saveDraft FAILED: " + e.getMessage());
             e.printStackTrace();
             return false;
         }
     }
-
 
     public java.util.List<TrainBooking> getBookingsByUserId(int userId) {
         java.util.List<TrainBooking> list = new java.util.ArrayList<>();

@@ -1,4 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ include file="/components/header.jsp" %>
 <%@ include file="/components/global_ui.jsp" %>
 
@@ -68,11 +69,21 @@
         <p style="color:var(--text-secondary); margin-top:10px;">Booking Reference: ${booking.id != null ? booking.id : ''}</p>
     </div>
     
+    <c:if test="${not empty booking}">
     <div class="details-grid">
         <div class="detail-item">
             <div class="detail-label">Passenger Name</div>
             <div class="detail-value">${booking.passengerName}</div>
         </div>
+            <div class="detail-item">
+                <div class="detail-label">Email</div>
+                <div class="detail-value">${booking.email}</div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-label">Phone</div>
+                <div class="detail-value">${booking.phone}</div>
+            </div>
+
         <div class="detail-item">
             <div class="detail-label">Airline</div>
             <div class="detail-value">${booking.airline}</div>
@@ -131,6 +142,7 @@
         </div>
 
     </div>
+    </c:if>
     
     <div class="actions">
         <button class="btn btn-primary" onclick="window.location.href='${pageContext.request.contextPath}/profile?tab=bookings'">Back to My Bookings</button>

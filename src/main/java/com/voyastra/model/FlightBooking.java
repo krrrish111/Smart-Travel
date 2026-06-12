@@ -95,7 +95,11 @@ public class FlightBooking extends Booking {
     public double getAmount() { return getTotalPrice(); }
     public String getTravelDateAlias() { return getTravelDate() != null ? getTravelDate() : ""; }
 
-    public String getPassengerName() { return "John Doe"; }
+    public String getEmail() { return getCustomerEmail() != null ? getCustomerEmail() : "N/A"; }
+    public String getPhone() { return getCustomerPhone() != null ? getCustomerPhone() : "N/A"; }
+    public String getOrigin() { return departureCity != null ? departureCity : "N/A"; }
+    public String getDestination() { return arrivalCity != null ? arrivalCity : "N/A"; }
+    public String getPassengerName() { return getCustomerName() != null ? getCustomerName() : "Guest"; }
     public String getAirline() { return airlineName != null ? airlineName : ""; }
     public String getFlightNum() { return flightNumber != null ? flightNumber : ""; }
     public String getDepartureDate() { return getTravelDate() != null ? getTravelDate() : ""; }

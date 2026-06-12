@@ -1,4 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -121,11 +122,21 @@
             </div>
         </div>
         
+        <c:if test="${not empty booking}">
         <div class="content-grid">
             <div class="field-group">
                 <div class="label">Passenger Name</div>
                 <div class="value">${booking.passengerName}</div>
             </div>
+            <div class="field-group">
+                <div class="label">Email</div>
+                <div class="value">${booking.email}</div>
+            </div>
+            <div class="field-group">
+                <div class="label">Phone</div>
+                <div class="value">${booking.phone}</div>
+            </div>
+
             <div class="field-group">
                 <div class="label">Airline</div>
                 <div class="value">${booking.airline}</div>
@@ -164,6 +175,7 @@
             </div>
 
         </div>
+        </c:if>
         
         <div class="footer">
             <p>Thank you for choosing Voyastra! For support, visit voyastra.com/help</p>

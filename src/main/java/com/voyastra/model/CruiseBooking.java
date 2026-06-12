@@ -53,12 +53,16 @@ public class CruiseBooking {
 
     public String getReference() { return id != null ? id : ""; }
     public String getOrigin() { return departurePort != null ? departurePort : ""; }
+    public String getDestinationPort() { return destination; }
+    public double getFare() { return amount; }
+    public String getEmail() { return "N/A"; }
+    public String getPhone() { return "N/A"; }
     public String getCustomerNameAlias() { return passengers != null && !passengers.isEmpty() ? passengers.get(0).getName() : ""; }
     public String getTravelDateAlias() { return cruiseDate != null ? cruiseDate : ""; }
 
-    public String getPassengerName() { return "Guest"; }
-    public String getCabinNumber() { return "C-402"; }
-    public String getPort() { return "Port"; }
-    public String getDuration() { return "5 Days"; }
+    public String getPassengerName() { return passengers != null && !passengers.isEmpty() ? passengers.get(0).getName() : "Guest"; }
+    public String getCabinNumber() { return cabinType; }
+    public String getPort() { return departurePort; }
+    public String getDuration() { return durationDays + " Days"; }
     public String getPaymentStatus() { return "PAID"; }
 }

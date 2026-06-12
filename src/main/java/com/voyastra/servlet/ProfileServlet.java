@@ -196,6 +196,12 @@ public class ProfileServlet extends HttpServlet {
             handleChangePassword(request, response, userId);
         } else if ("cancelBooking".equals(action)) {
             handleCancelBooking(request, response, userId);
+        } else if ("cancelCarBooking".equals(action)) {
+            handleCancelCarBooking(request, response, userId);
+        } else if ("cancelCruiseBooking".equals(action)) {
+            handleCancelCruiseBooking(request, response, userId);
+        } else if ("cancelHelicopterBooking".equals(action)) {
+            handleCancelHelicopterBooking(request, response, userId);
         } else if ("cancelHotelBooking".equals(action)) {
             handleCancelHotelBooking(request, response, userId);
         } else {
@@ -351,5 +357,35 @@ public class ProfileServlet extends HttpServlet {
         } else {
             response.sendRedirect(request.getContextPath() + "/profile?tab=security&error=invalid_request");
         }
+    }
+
+    private void handleCancelCarBooking(HttpServletRequest request, HttpServletResponse response, int userId) throws java.io.IOException {
+        String bookingId = request.getParameter("bookingId");
+        if (bookingId != null) {
+            new com.voyastra.dao.CarBookingDAO().updateBookingStatus(bookingId, "CANCELLED");
+            response.sendRedirect(request.getContextPath() + "/profile?tab=bookings&success=cancelled");
+            return;
+        }
+        response.sendRedirect(request.getContextPath() + "/profile?tab=bookings&error=cancel_failed");
+    }
+
+    private void handleCancelCruiseBooking(HttpServletRequest request, HttpServletResponse response, int userId) throws java.io.IOException {
+        String bookingId = request.getParameter("bookingId");
+        if (bookingId != null) {
+            new com.voyastra.dao.CruiseBookingDAO().updateBookingStatus(bookingId, "CANCELLED");
+            response.sendRedirect(request.getContextPath() + "/profile?tab=bookings&success=cancelled");
+            return;
+        }
+        response.sendRedirect(request.getContextPath() + "/profile?tab=bookings&error=cancel_failed");
+    }
+
+    private void handleCancelHelicopterBooking(HttpServletRequest request, HttpServletResponse response, int userId) throws java.io.IOException {
+        String bookingId = request.getParameter("bookingId");
+        if (bookingId != null) {
+            new com.voyastra.dao.HelicopterBookingDAO().updateBookingStatus(bookingId, "CANCELLED");
+            response.sendRedirect(request.getContextPath() + "/profile?tab=bookings&success=cancelled");
+            return;
+        }
+        response.sendRedirect(request.getContextPath() + "/profile?tab=bookings&error=cancel_failed");
     }
 }

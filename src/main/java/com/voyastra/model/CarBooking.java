@@ -36,17 +36,21 @@ public class CarBooking {
     public String getVehicleModel() { return carModel; }
     public String getBookingRef() { return id; }
     public double getamount() { return amount; }
+    public double getTotalFare() { return amount; }
     public double getTotalPrice() { return amount; }
 
     public String getReference() { return id != null ? id : ""; }
     public String getOrigin() { return pickupCity != null ? pickupCity : ""; }
     public String getDestination() { return ""; }
+    public String getVehicleNumber() { return "RENTAL-" + (id != null ? id.substring(id.length() - 4) : "0000"); }
+    public String getEmail() { return customer != null ? customer.getEmail() : "N/A"; }
+    public String getPhone() { return customer != null ? customer.getPhone() : "N/A"; }
     public String getCustomerNameAlias() { return customer != null ? customer.getName() : ""; }
     public String getTravelDateAlias() { return pickupDate != null ? pickupDate : ""; }
 
-    public String getCustomerName() { return "Guest"; }
-    public String getDeposit() { return "₹5000"; }
+    public String getCustomerName() { return customer != null ? customer.getName() : "Guest"; }
+    public String getDeposit() { return "₹0"; }
     public String getRentalCharges() { return "₹" + amount; }
-    public double getTotalPaid() { return 0.0; }
+    public double getTotalPaid() { return amount; }
     public String getPaymentStatus() { return "PAID"; }
 }

@@ -48,11 +48,16 @@ public class HelicopterBooking {
     public void setPassengers(List<HelicopterPassenger> passengers) { this.passengers = passengers; }
 
     public String getReference() { return id != null ? id : ""; }
+    public String getSource() { return origin; }
+    public String getFlightNumber() { return "HELI-" + (id != null ? id.substring(id.length() - 4) : "0000"); }
+    public double getFare() { return amount; }
+    public String getEmail() { return "N/A"; }
+    public String getPhone() { return "N/A"; }
     public String getCustomerNameAlias() { return passengers != null && !passengers.isEmpty() ? passengers.get(0).getName() : ""; }
     public String getTravelDateAlias() { return travelDate != null ? travelDate : ""; }
 
-    public String getPassengerName() { return "Guest"; }
-    public String getSeat() { return "Window"; }
-    public String getDepartureTime() { return "10:30 AM"; }
+    public String getPassengerName() { return passengers != null && !passengers.isEmpty() ? passengers.get(0).getName() : "Guest"; }
+    public String getSeat() { return "Standard"; }
+    public String getDepartureTime() { return travelTime != null ? travelTime : "10:00 AM"; }
     public String getPaymentStatus() { return "PAID"; }
 }

@@ -119,4 +119,17 @@ public class HelicopterBookingDAO {
         return booking;
     }
 
+
+    public boolean updateBookingStatus(String id, String status) {
+        String sql = "UPDATE helicopter_bookings SET status = ? WHERE id = ?";
+        try (java.sql.Connection conn = com.voyastra.util.DBConnection.getConnection();
+             java.sql.PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, status);
+            ps.setString(2, id);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

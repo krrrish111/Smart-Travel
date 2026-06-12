@@ -798,6 +798,7 @@
                                             </div>
                                                                                         <div style="display:flex; gap:5px; justify-content: flex-end; margin-top:10px;">
                                                 <a href="${pageContext.request.contextPath}/car/details?id=${car.id}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">View Details</a>
+                                                <button class="btn btn-danger" style="padding: 6px 12px; font-size: 0.8rem;" onclick="openCancelModal('${car.id}', '${car.totalFare}', 'car')">Cancel Booking</button>
                                                 <a href="${pageContext.request.contextPath}/car/ticket?id=${car.id}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">View Ticket</a>
                                                 <a href="${pageContext.request.contextPath}/car/ticket?id=${car.id}&print=true" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">Print Ticket</a>
                                                 <a href="${pageContext.request.contextPath}/car/download-ticket?id=${car.id}" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Download Ticket</a>
@@ -841,6 +842,7 @@
                                             </div>
                                                                                         <div style="display:flex; gap:5px; justify-content: flex-end; margin-top:10px;">
                                                 <a href="${pageContext.request.contextPath}/cruise/details?id=${cr.id}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">View Details</a>
+                                                <button class="btn btn-danger" style="padding: 6px 12px; font-size: 0.8rem;" onclick="openCancelModal('${cr.id}', '${cr.totalFare}', 'cruise')">Cancel Booking</button>
                                                 <a href="${pageContext.request.contextPath}/cruise/ticket?id=${cr.id}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">View Ticket</a>
                                                 <a href="${pageContext.request.contextPath}/cruise/ticket?id=${cr.id}&print=true" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">Print Ticket</a>
                                                 <a href="${pageContext.request.contextPath}/cruise/download-ticket?id=${cr.id}" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Download Ticket</a>
@@ -884,6 +886,7 @@
                                             </div>
                                                                                         <div style="display:flex; gap:5px; justify-content: flex-end; margin-top:10px;">
                                                 <a href="${pageContext.request.contextPath}/helicopter/details?id=${h.id}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">View Details</a>
+                                                <button class="btn btn-danger" style="padding: 6px 12px; font-size: 0.8rem;" onclick="openCancelModal('${h.id}', '${h.totalFare}', 'helicopter')">Cancel Booking</button>
                                                 <a href="${pageContext.request.contextPath}/helicopter/ticket?id=${h.id}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">View Ticket</a>
                                                 <a href="${pageContext.request.contextPath}/helicopter/ticket?id=${h.id}&print=true" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">Print Ticket</a>
                                                 <a href="${pageContext.request.contextPath}/helicopter/download-ticket?id=${h.id}" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Download Ticket</a>
@@ -1125,6 +1128,12 @@
         let actionInput = document.querySelector('#cancelForm input[name="action"]');
         if (type === 'hotel') {
             actionInput.value = 'cancelHotelBooking';
+        } else if (type === 'car') {
+            actionInput.value = 'cancelCarBooking';
+        } else if (type === 'cruise') {
+            actionInput.value = 'cancelCruiseBooking';
+        } else if (type === 'helicopter') {
+            actionInput.value = 'cancelHelicopterBooking';
         } else {
             actionInput.value = 'cancelBooking';
         }

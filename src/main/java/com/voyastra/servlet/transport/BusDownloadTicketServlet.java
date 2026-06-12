@@ -14,26 +14,25 @@ public class BusDownloadTicketServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String bookingId = request.getParameter("id");
-        System.out.println("Booking ID = " + bookingId);
-        System.out.println("Booking Type = bus");
         if (bookingId == null || bookingId.isEmpty()) {
-            request.getRequestDispatcher("/pages/error.jsp").forward(request, response);
+            response.sendRedirect(request.getContextPath() + "/profile?tab=bookings");
             return;
         }
         BusBooking booking = null;
         try {
-            booking = new com.voyastra.dao.BusBookingDAO().getBookingById(bookingId);
+            String idParam = bookingId;
+            booking = new BusBookingDAO().getBookingById(idParam);
         } catch(Exception e) {
             e.printStackTrace();
         }
-        System.out.println("Booking Loaded = " + booking);
+        
         if (booking == null) {
-            System.out.println("Error: Booking is null for id " + bookingId);
-            request.getRequestDispatcher("/pages/error.jsp").forward(request, response);
+            response.sendRedirect(request.getContextPath() + "/profile?tab=bookings");
             return;
         }
         request.setAttribute("booking", booking);
         request.setAttribute("autoDownload", true);
+        
         request.getRequestDispatcher("/pages/transport/bus-ticket.jsp").forward(request, response);
     }
 }

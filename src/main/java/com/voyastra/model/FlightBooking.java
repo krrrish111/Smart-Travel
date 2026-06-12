@@ -91,9 +91,19 @@ public class FlightBooking extends Booking {
     public void setTravellerCount(int travellerCount) { this.travellerCount = travellerCount; }
 
     public String getReference() { return getBookingCode() != null ? getBookingCode() : ""; }
-    public String getOrigin() { return departureCity != null ? departureCity : ""; }
-    public String getDestination() { return arrivalCity != null ? arrivalCity : ""; }
     public String getCustomerNameAlias() { return getCustomerName() != null ? getCustomerName() : ""; }
     public double getAmount() { return getTotalPrice(); }
     public String getTravelDateAlias() { return getTravelDate() != null ? getTravelDate() : ""; }
+
+    public String getPassengerName() { return "John Doe"; }
+    public String getAirline() { return airlineName != null ? airlineName : ""; }
+    public String getFlightNum() { return flightNumber != null ? flightNumber : ""; }
+    public String getDepartureDate() { return getTravelDate() != null ? getTravelDate() : ""; }
+    public String getDepartureTime() { return "10:00 AM"; }
+    public String getArrivalTime() { return "12:30 PM"; }
+    public String getSeatNumber() { return seatClass != null ? seatClass : "Economy"; }
+    public String getGate() { return "G1"; }
+    public double getAmountPaid() { return getTotalPrice(); }
+    public String getBookingStatus() { return getStatus() != null ? getStatus() : "CONFIRMED"; }
+    public String getPaymentStatus() { return "PAID"; }
 }

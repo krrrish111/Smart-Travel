@@ -1,3 +1,4 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!-- Configuration File: Stores global variables and API keys centrally -->
 <script>
     // Maps Configuration

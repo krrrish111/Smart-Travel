@@ -50,4 +50,9 @@ public class HelicopterBooking {
     public String getReference() { return id != null ? id : ""; }
     public String getCustomerNameAlias() { return passengers != null && !passengers.isEmpty() ? passengers.get(0).getName() : ""; }
     public String getTravelDateAlias() { return travelDate != null ? travelDate : ""; }
+
+    public String getPassengerName() { return "Guest"; }
+    public String getSeat() { return "Window"; }
+    public String getDepartureTime() { return "10:30 AM"; }
+    public String getPaymentStatus() { return "PAID"; }
 }

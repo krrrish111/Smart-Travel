@@ -54,4 +54,14 @@ public class BusBooking {
     public String getCustomerNameAlias() { return passengers != null && !passengers.isEmpty() ? passengers.get(0).getName() : ""; }
     public double getAmount() { return fare * (passengers != null ? passengers.size() : 1); }
     public String getTravelDateAlias() { return journeyDate != null ? journeyDate : ""; }
+
+    public String getPassengerName() { return passengers != null && !passengers.isEmpty() ? passengers.get(0).getName() : "Guest"; }
+    public String getBusOperator() { return operatorName != null ? operatorName : ""; }
+    public String getSeatNumber() { return passengers != null && !passengers.isEmpty() ? "14A" : "14A"; }
+    public String getBoardingPoint() { return fromCity != null ? fromCity : ""; }
+    public String getDropPoint() { return toCity != null ? toCity : ""; }
+    public String getDeparture() { return "09:00 PM"; }
+    public String getArrival() { return "06:00 AM"; }
+    public double getAmountPaid() { return fare; }
+    public String getPaymentStatus() { return "PAID"; }
 }

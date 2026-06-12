@@ -1,100 +1,188 @@
-<%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Car Rental Receipt - ${booking.id}</title>
+    <title>Rental Receipt - Voyastra</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
-        body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin: 0; padding: 40px; background: #fff; color: #111827; }
-        .receipt-card { max-width: 600px; margin: 0 auto; border: 2px solid #8b5cf6; padding: 40px; border-radius: 12px; }
-        .header { display: flex; justify-content: space-between; border-bottom: 2px solid #f3f4f6; padding-bottom: 20px; margin-bottom: 20px; }
-        .logo { font-size: 24px; font-weight: 800; color: #8b5cf6; }
-        .ref { text-align: right; }
-        .ref-id { font-size: 18px; font-weight: bold; font-family: monospace; }
-        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }
-        .info-block { background: #f9fafb; padding: 15px; border-radius: 8px; border: 1px solid #e5e7eb; }
-        .label { font-size: 12px; color: #6b7280; text-transform: uppercase; font-weight: bold; margin-bottom: 5px; }
-        .val { font-size: 16px; font-weight: bold; }
-        .total-row { display: flex; justify-content: space-between; font-size: 20px; font-weight: bold; border-top: 2px solid #f3f4f6; padding-top: 20px; margin-top: 20px; }
-        .print-btn { display: block; width: 200px; margin: 40px auto; padding: 12px; background: #8b5cf6; color: #fff; font-weight: bold; text-align: center; border: none; border-radius: 6px; cursor: pointer; }
-        @media print { .print-btn { display: none; } body { padding: 0; } .receipt-card { border: none; padding: 0; } }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #f4f6f8;
+            margin: 0;
+            padding: 40px;
+            color: #333;
+        }
+        .ticket-container {
+            background: #fff;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 50px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border-top: 10px solid #ff6b00;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px dashed #ccc;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .logo {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #ff6b00;
+            margin: 0;
+        }
+        .ticket-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #111;
+        }
+        .icon-large {
+            font-size: 3rem;
+            color: #ff6b00;
+        }
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        .field-group {
+            margin-bottom: 15px;
+        }
+        .label {
+            font-size: 0.85rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        .value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #000;
+        }
+        .footer {
+            text-align: center;
+            border-top: 2px dashed #ccc;
+            padding-top: 20px;
+            font-size: 0.9rem;
+            color: #888;
+        }
+        .actions-bar {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .btn {
+            display: inline-block;
+            background: #ff6b00;
+            color: #fff;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            margin: 0 10px;
+            cursor: pointer;
+            border: none;
+        }
+        @media print {
+            body { background: #fff; padding: 0; }
+            .ticket-container { box-shadow: none; padding: 20px; border-top: none; border: 2px solid #000; }
+            .actions-bar { display: none; }
+        }
     </style>
 </head>
 <body>
-    <div class="receipt-card">
-        <div class="header">
-            <div class="logo">🚗 Voyastra Self Drive</div>
-            <div class="ref">
-                <div class="label">Booking ID</div>
-                <div class="ref-id">${booking.id}</div>
-            </div>
-        </div>
 
-        <div class="info-block" style="margin-bottom: 20px;">
-            <div class="label">Driver Details</div>
-            <div class="val">${booking.customer.name}</div>
-            <div style="font-size: 14px; color: #4b5563; margin-top: 4px;">DL Verification: <span style="color: #059669; font-weight: bold;">Document Uploaded ✓</span></div>
-        </div>
-
-        <div class="info-grid">
-            <div class="info-block">
-                <div class="label">Vehicle</div>
-                <div class="val">${booking.carModel}</div>
-            </div>
-            <div class="info-block">
-                <div class="label">Location</div>
-                <div class="val">${booking.pickupCity} Hub</div>
-            </div>
-            <div class="info-block">
-                <div class="label">Pickup Date</div>
-                <div class="val">${booking.pickupDate}</div>
-            </div>
-            <div class="info-block">
-                <div class="label">Return Date</div>
-                <div class="val">${booking.returnDate}</div>
-            </div>
-        </div>
-
-        <div class="total-row">
-            <span>Total Paid (inc. Deposit)</span>
-            <span style="color: #059669;">Rs. ${booking.amount + 5500}</span>
-        </div>
-
-        <p style="text-align: center; color: #ef4444; font-size: 12px; margin-top: 40px; font-weight: bold;">
-            Original Driving License MUST be presented at the time of pickup.
-        </p>
+    <div class="actions-bar" id="actionButtons">
+        <button class="btn" onclick="downloadPDF()">Download PDF</button>
+        <button class="btn" onclick="window.print()">Print Ticket</button>
+        <button class="btn" style="background:#333;" onclick="window.history.back()">Back</button>
     </div>
 
-    <button class="print-btn" onclick="window.print()">Print Receipt / PDF</button>
+    <div class="ticket-container" id="ticketArea">
+        <div class="header">
+            <div>
+                <h1 class="logo">VOYASTRA</h1>
+                <p style="margin:5px 0 0 0; color:#666;">Travel Smarter.</p>
+            </div>
+            <div style="text-align:right;">
+                <div class="icon-large">🚗</div>
+                <div class="ticket-title">Rental Receipt</div>
+                <div style="font-weight: bold; color: #555; margin-top: 5px;">Ref: ${booking.id != null ? booking.id : 'N/A'}</div>
+            </div>
+        </div>
+        
+        <div class="content-grid">
+            <div class="field-group">
+                <div class="label">Customer Name</div>
+                <div class="value">${booking.customerName}</div>
+            </div>
+            <div class="field-group">
+                <div class="label">Vehicle</div>
+                <div class="value">${booking.vehicleModel} (${booking.vehicleNumber})</div>
+            </div>
+            <div class="field-group">
+                <div class="label">Pickup City</div>
+                <div class="value">${booking.pickupCity}</div>
+            </div>
+            <div class="field-group">
+                <div class="label">Duration</div>
+                <div class="value">${booking.pickupDate} to ${booking.returnDate}</div>
+            </div>
+            <div class="field-group">
+                <div class="label">Deposit</div>
+                <div class="value">${booking.deposit}</div>
+            </div>
+            <div class="field-group">
+                <div class="label">Rental Charges</div>
+                <div class="value">${booking.rentalCharges}</div>
+            </div>
+            <div class="field-group">
+                <div class="label">Total Paid</div>
+                <div class="value">₹${booking.totalPaid}</div>
+            </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+        </div>
+        
+        <div class="footer">
+            <p>Thank you for choosing Voyastra! For support, visit voyastra.com/help</p>
+            <p>Generated on <%= new java.util.Date() %></p>
+        </div>
+    </div>
+
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var isAutoPrint = '${autoPrint}';
-            var isAutoDownload = '${autoDownload}';
-            
-            if (isAutoPrint === 'true' || isAutoPrint === true) {
+        function downloadPDF() {
+            const element = document.getElementById('ticketArea');
+            const opt = {
+                margin:       0.5,
+                filename:     'Rental_Receipt_${booking.id}.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+            document.getElementById('actionButtons').style.display = 'none';
+            html2pdf().set(opt).from(element).save().then(() => {
+                document.getElementById('actionButtons').style.display = 'block';
+            });
+        }
+        
+        window.onload = function() {
+            if ('${autoDownload}' === 'true') {
+                downloadPDF();
+            }
+            if ('${autoPrint}' === 'true') {
                 window.print();
             }
-            
-            if (isAutoDownload === 'true' || isAutoDownload === true) {
-                // Find the main container to print. If ticket-container exists use it, else use body or main
-                var element = document.querySelector('.ticket-container');
-                if (!element) element = document.getElementById('printableTickets');
-                if (!element) element = document.querySelector('.invoice-container');
-                if (!element) element = document.body;
-                
-                var opt = {
-                  margin:       1,
-                  filename:     'Ticket_${booking.id}.pdf',
-                  image:        { type: 'jpeg', quality: 0.98 },
-                  html2canvas:  { scale: 2 },
-                  jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-                };
-                
-                html2pdf().set(opt).from(element).save();
-            }
-        });
+        };
     </script>
 </body>
 </html>

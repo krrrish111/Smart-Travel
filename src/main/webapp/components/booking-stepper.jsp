@@ -1,3 +1,4 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%-- booking-stepper.jsp
      Usage: <jsp:include page="/components/booking-stepper.jsp">
                 <jsp:param name="step" value="3"/>

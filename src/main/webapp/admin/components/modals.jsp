@@ -1,3 +1,4 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!-- Add/Edit Plan Modal -->
 <div class="admin-modal-overlay" id="planModal">
     <div class="admin-modal">

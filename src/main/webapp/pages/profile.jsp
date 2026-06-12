@@ -29,6 +29,7 @@
 
     /* Sidebar Navigation */
     .profile-sidebar {
+        z-index: 10; position: relative;
         background: var(--surface-glass);
         backdrop-filter: blur(12px);
         border: 1px solid var(--color-border);
@@ -354,34 +355,34 @@
 <div class="dashboard-container">
     <!-- Sidebar -->
     <aside class="profile-sidebar">
-        <div class="nav-item ${activeTab == 'overview' ? 'active' : ''}" onclick="switchSection('overview')">
+        <a href="${pageContext.request.contextPath}/profile?tab=overview" class="nav-item ${activeTab == 'overview' ? 'active' : ''}">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
             Overview
-        </div>
-        <div class="nav-item ${activeTab == 'edit-profile' ? 'active' : ''}" onclick="switchSection('edit-profile')">
+        </a>
+        <a href="${pageContext.request.contextPath}/profile?tab=edit-profile" class="nav-item ${activeTab == 'edit-profile' ? 'active' : ''}">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
             Edit Profile
-        </div>
-        <div class="nav-item ${activeTab == 'bookings' ? 'active' : ''}" onclick="switchSection('bookings')">
+        </a>
+        <a href="${pageContext.request.contextPath}/profile?tab=bookings" class="nav-item ${activeTab == 'bookings' ? 'active' : ''}">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
             My Bookings
-        </div>
-        <div class="nav-item ${activeTab == 'saved-plans' ? 'active' : ''}" onclick="switchSection('saved-plans')">
+        </a>
+        <a href="${pageContext.request.contextPath}/profile?tab=saved-plans" class="nav-item ${activeTab == 'saved-plans' ? 'active' : ''}">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
             Saved Plans
-        </div>
-        <div class="nav-item ${activeTab == 'wishlist' ? 'active' : ''}" onclick="switchSection('wishlist')">
+        </a>
+        <a href="${pageContext.request.contextPath}/profile?tab=wishlist" class="nav-item ${activeTab == 'wishlist' ? 'active' : ''}">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
             Wishlist & History
-        </div>
-        <div class="nav-item ${activeTab == 'security' ? 'active' : ''}" onclick="switchSection('security')">
+        </a>
+        <a href="${pageContext.request.contextPath}/profile?tab=security" class="nav-item ${activeTab == 'security' ? 'active' : ''}">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
             Security
-        </div>
-        <div class="nav-item ${activeTab == 'settings' ? 'active' : ''}" onclick="switchSection('settings')">
+        </a>
+        <a href="${pageContext.request.contextPath}/profile?tab=settings" class="nav-item ${activeTab == 'settings' ? 'active' : ''}">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
             Settings
-        </div>
+        </a>
     </aside>
 
     <!-- Main Content -->
@@ -406,7 +407,7 @@
                 <p class="user-bio-header" style="margin-top: 10px; opacity: 0.8; font-style: italic;">
                     ${not empty user.bio ? user.bio : 'Adventure awaits! Add a bio to tell others about your travel style.'}
                 </p>
-                <button class="btn btn-primary" style="margin-top: 15px;" onclick="switchSection('edit-profile')">Edit Account Details</button>
+                <a href="${pageContext.request.contextPath}/profile?tab=edit-profile" class="btn btn-primary" style="margin-top: 15px; display:inline-block;">Edit Account Details</a>
             </div>
         </div>
 
@@ -469,7 +470,7 @@
                     </c:otherwise>
                 </c:choose>
             </div>
-            <button class="btn btn-outline" style="margin-top: 20px; width: 100%;" onclick="switchSection('bookings')">View All Bookings</button>
+            <a href="${pageContext.request.contextPath}/profile?tab=bookings" class="btn btn-outline" style="margin-top: 20px; width: 100%; display:block; text-align:center;">View All Bookings</a>
         </section>
 
         <!-- Edit Profile Section -->
@@ -1138,28 +1139,7 @@
 <%@ include file="/components/footer.jsp" %>
 
 <script>
-    function switchSection(sectionId) {
-        document.querySelectorAll('.content-section').forEach(section => {
-            section.classList.remove('active');
-        });
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.classList.remove('active');
-        });
-        const target = document.getElementById(sectionId);
-        if(target) target.classList.add('active');
-        
-        // Sync Sidebar
-        const navItems = document.querySelectorAll('.nav-item');
-        navItems.forEach(item => {
-            if(item.textContent.toLowerCase().includes(sectionId.replace('-', ' '))) {
-                item.classList.add('active');
-            }
-        });
-
-        // Update URL without refresh
-        const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?tab=' + sectionId;
-        window.history.pushState({path:newUrl},'',newUrl);
-    }
+    
 
     function showDeleteConfirm() {
         document.getElementById('deleteConfirmation').style.display = 'block';

@@ -14,26 +14,25 @@ public class HotelDownloadTicketServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String bookingId = request.getParameter("id");
-        System.out.println("Booking ID = " + bookingId);
-        System.out.println("Booking Type = hotel");
         if (bookingId == null || bookingId.isEmpty()) {
-            request.getRequestDispatcher("/pages/error.jsp").forward(request, response);
+            response.sendRedirect(request.getContextPath() + "/profile?tab=bookings");
             return;
         }
         HotelBooking booking = null;
         try {
-            booking = new com.voyastra.dao.HotelBookingDAO().getBookingById(Integer.parseInt(bookingId));
+            int idParam = Integer.parseInt(bookingId);
+            booking = new HotelBookingDAO().getBookingById(idParam);
         } catch(Exception e) {
             e.printStackTrace();
         }
-        System.out.println("Booking Loaded = " + booking);
+        
         if (booking == null) {
-            System.out.println("Error: Booking is null for id " + bookingId);
-            request.getRequestDispatcher("/pages/error.jsp").forward(request, response);
+            response.sendRedirect(request.getContextPath() + "/profile?tab=bookings");
             return;
         }
         request.setAttribute("booking", booking);
         request.setAttribute("autoDownload", true);
-        request.getRequestDispatcher("/pages/booking/invoice.jsp").forward(request, response);
+        
+        request.getRequestDispatcher("/pages/hotel-ticket.jsp").forward(request, response);
     }
 }

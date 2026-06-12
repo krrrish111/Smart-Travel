@@ -1,120 +1,184 @@
-<%@ page contentType="text/html; charset=UTF-8" language="java" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Cruise E-Ticket - ${booking.id}</title>
+    <title>Boarding Pass - Voyastra</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
-        body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin: 0; padding: 40px; background: #f9fafb; color: #111827; }
-        .receipt-card { max-width: 700px; margin: 0 auto; background: #fff; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-top: 10px solid #06b6d4; }
-        .header { display: flex; justify-content: space-between; border-bottom: 2px solid #f3f4f6; padding-bottom: 20px; margin-bottom: 20px; }
-        .logo { font-size: 24px; font-weight: 800; color: #06b6d4; }
-        .ref { text-align: right; }
-        .ref-id { font-size: 18px; font-weight: bold; font-family: monospace; }
-        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }
-        .info-block { background: #f9fafb; padding: 15px; border-radius: 8px; }
-        .label { font-size: 12px; color: #6b7280; text-transform: uppercase; font-weight: bold; margin-bottom: 5px; }
-        .val { font-size: 16px; font-weight: bold; }
-        .manifest-table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
-        .manifest-table th, .manifest-table td { padding: 10px; text-align: left; border-bottom: 1px solid #e5e7eb; }
-        .manifest-table th { background: #f9fafb; font-size: 12px; text-transform: uppercase; color: #6b7280; }
-        .total-row { display: flex; justify-content: space-between; font-size: 20px; font-weight: bold; border-top: 2px solid #f3f4f6; padding-top: 20px; }
-        .print-btn { display: block; width: 200px; margin: 40px auto; padding: 12px; background: #06b6d4; color: #fff; font-weight: bold; text-align: center; border: none; border-radius: 6px; cursor: pointer; }
-        @media print { .print-btn { display: none; } body { background: #fff; padding: 0; } .receipt-card { box-shadow: none; padding: 0; } }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #f4f6f8;
+            margin: 0;
+            padding: 40px;
+            color: #333;
+        }
+        .ticket-container {
+            background: #fff;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 50px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border-top: 10px solid #ff6b00;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px dashed #ccc;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .logo {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #ff6b00;
+            margin: 0;
+        }
+        .ticket-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #111;
+        }
+        .icon-large {
+            font-size: 3rem;
+            color: #ff6b00;
+        }
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        .field-group {
+            margin-bottom: 15px;
+        }
+        .label {
+            font-size: 0.85rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        .value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #000;
+        }
+        .footer {
+            text-align: center;
+            border-top: 2px dashed #ccc;
+            padding-top: 20px;
+            font-size: 0.9rem;
+            color: #888;
+        }
+        .actions-bar {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .btn {
+            display: inline-block;
+            background: #ff6b00;
+            color: #fff;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            margin: 0 10px;
+            cursor: pointer;
+            border: none;
+        }
+        @media print {
+            body { background: #fff; padding: 0; }
+            .ticket-container { box-shadow: none; padding: 20px; border-top: none; border: 2px solid #000; }
+            .actions-bar { display: none; }
+        }
     </style>
 </head>
 <body>
-    <div class="receipt-card">
-        <div class="header">
-            <div class="logo">🚢 Voyastra Cruises</div>
-            <div class="ref">
-                <div class="label">Booking Ref</div>
-                <div class="ref-id">${booking.id}</div>
-            </div>
-        </div>
 
-        <div class="info-grid">
-            <div class="info-block">
-                <div class="label">Vessel</div>
-                <div class="val">${booking.shipName} (${booking.cruiseLine})</div>
-            </div>
-            <div class="info-block">
-                <div class="label">Cabin Details</div>
-                <div class="val">${booking.cabinType}</div>
-            </div>
-            <div class="info-block">
-                <div class="label">Embarkation Port</div>
-                <div class="val">${booking.departurePort}</div>
-            </div>
-            <div class="info-block">
-                <div class="label">Sailing Date</div>
-                <div class="val">${booking.cruiseDate} (${booking.durationDays} Nights)</div>
-            </div>
-        </div>
-
-        <div class="label">Passenger Manifest</div>
-        <table class="manifest-table">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Age</th>
-                    <th>Gender</th>
-                    <th>Passport/ID</th>
-                </tr>
-            </thead>
-            <tbody>
-                <c:forEach var="p" items="${booking.passengers}">
-                    <tr>
-                        <td>${p.name}</td>
-                        <td>${p.age}</td>
-                        <td>${p.gender}</td>
-                        <td>${p.passportNumber}</td>
-                    </tr>
-                </c:forEach>
-            </tbody>
-        </table>
-
-        <div class="total-row">
-            <span>Total Paid Amount</span>
-            <span style="color: #059669;">Rs. ${booking.amount + (booking.paxCount * 2500)}</span>
-        </div>
-
-        <p style="text-align: center; color: #ef4444; font-size: 12px; margin-top: 40px; font-weight: bold;">
-            Gates close 2 hours prior to departure. Original passports are mandatory for international waters.
-        </p>
+    <div class="actions-bar" id="actionButtons">
+        <button class="btn" onclick="downloadPDF()">Download PDF</button>
+        <button class="btn" onclick="window.print()">Print Ticket</button>
+        <button class="btn" style="background:#333;" onclick="window.history.back()">Back</button>
     </div>
 
-    <button class="print-btn" onclick="window.print()">Print E-Ticket</button>
+    <div class="ticket-container" id="ticketArea">
+        <div class="header">
+            <div>
+                <h1 class="logo">VOYASTRA</h1>
+                <p style="margin:5px 0 0 0; color:#666;">Travel Smarter.</p>
+            </div>
+            <div style="text-align:right;">
+                <div class="icon-large">🚢</div>
+                <div class="ticket-title">Boarding Pass</div>
+                <div style="font-weight: bold; color: #555; margin-top: 5px;">Ref: ${booking.id != null ? booking.id : 'N/A'}</div>
+            </div>
+        </div>
+        
+        <div class="content-grid">
+            <div class="field-group">
+                <div class="label">Passenger Name</div>
+                <div class="value">${booking.passengerName}</div>
+            </div>
+            <div class="field-group">
+                <div class="label">Cruise & Ship</div>
+                <div class="value">${booking.cruiseLine} - ${booking.shipName}</div>
+            </div>
+            <div class="field-group">
+                <div class="label">Cabin Number</div>
+                <div class="value">${booking.cabinNumber}</div>
+            </div>
+            <div class="field-group">
+                <div class="label">Route</div>
+                <div class="value">${booking.port} to ${booking.destinationPort}</div>
+            </div>
+            <div class="field-group">
+                <div class="label">Duration</div>
+                <div class="value">${booking.duration}</div>
+            </div>
+            <div class="field-group">
+                <div class="label">Fare</div>
+                <div class="value">₹${booking.fare}</div>
+            </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+        </div>
+        
+        <div class="footer">
+            <p>Thank you for choosing Voyastra! For support, visit voyastra.com/help</p>
+            <p>Generated on <%= new java.util.Date() %></p>
+        </div>
+    </div>
+
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var isAutoPrint = '${autoPrint}';
-            var isAutoDownload = '${autoDownload}';
-            
-            if (isAutoPrint === 'true' || isAutoPrint === true) {
+        function downloadPDF() {
+            const element = document.getElementById('ticketArea');
+            const opt = {
+                margin:       0.5,
+                filename:     'Boarding_Pass_${booking.id}.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+            document.getElementById('actionButtons').style.display = 'none';
+            html2pdf().set(opt).from(element).save().then(() => {
+                document.getElementById('actionButtons').style.display = 'block';
+            });
+        }
+        
+        window.onload = function() {
+            if ('${autoDownload}' === 'true') {
+                downloadPDF();
+            }
+            if ('${autoPrint}' === 'true') {
                 window.print();
             }
-            
-            if (isAutoDownload === 'true' || isAutoDownload === true) {
-                // Find the main container to print. If ticket-container exists use it, else use body or main
-                var element = document.querySelector('.ticket-container');
-                if (!element) element = document.getElementById('printableTickets');
-                if (!element) element = document.querySelector('.invoice-container');
-                if (!element) element = document.body;
-                
-                var opt = {
-                  margin:       1,
-                  filename:     'Ticket_${booking.id}.pdf',
-                  image:        { type: 'jpeg', quality: 0.98 },
-                  html2canvas:  { scale: 2 },
-                  jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-                };
-                
-                html2pdf().set(opt).from(element).save();
-            }
-        });
+        };
     </script>
 </body>
 </html>

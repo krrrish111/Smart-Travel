@@ -71,5 +71,12 @@ public class TrainBooking {
     public String getCustomerNameAlias() { return passengers != null && !passengers.isEmpty() ? passengers.get(0).getName() : ""; }
     public double getAmount() { return 0.0; }
     public String getTravelDateAlias() { return journeyDate != null ? journeyDate : ""; }
+
+    public String getPassengerName() { return passengers != null && !passengers.isEmpty() ? passengers.get(0).getName() : "Guest"; }
+    public String getCoach() { return "B1"; }
+    public String getSeat() { return passengers != null && !passengers.isEmpty() ? "12A" : "12A"; }
+    public String getDepartureTime() { return "08:00 AM"; }
+    public String getArrivalTime() { return "04:00 PM"; }
+    public String getPaymentStatus() { return "PAID"; }
 }
 

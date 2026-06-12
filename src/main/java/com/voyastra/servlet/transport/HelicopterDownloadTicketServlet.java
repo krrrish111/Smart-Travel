@@ -14,26 +14,25 @@ public class HelicopterDownloadTicketServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String bookingId = request.getParameter("id");
-        System.out.println("Booking ID = " + bookingId);
-        System.out.println("Booking Type = helicopter");
         if (bookingId == null || bookingId.isEmpty()) {
-            request.getRequestDispatcher("/pages/error.jsp").forward(request, response);
+            response.sendRedirect(request.getContextPath() + "/profile?tab=bookings");
             return;
         }
         HelicopterBooking booking = null;
         try {
-            booking = new com.voyastra.dao.HelicopterBookingDAO().getBookingById(bookingId);
+            String idParam = bookingId;
+            booking = new HelicopterBookingDAO().getBookingById(idParam);
         } catch(Exception e) {
             e.printStackTrace();
         }
-        System.out.println("Booking Loaded = " + booking);
+        
         if (booking == null) {
-            System.out.println("Error: Booking is null for id " + bookingId);
-            request.getRequestDispatcher("/pages/error.jsp").forward(request, response);
+            response.sendRedirect(request.getContextPath() + "/profile?tab=bookings");
             return;
         }
         request.setAttribute("booking", booking);
         request.setAttribute("autoDownload", true);
+        
         request.getRequestDispatcher("/pages/transport/helicopter-ticket.jsp").forward(request, response);
     }
 }

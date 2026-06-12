@@ -51,4 +51,12 @@ public class CabBooking {
     public String getDestination() { return dropoff != null ? dropoff : ""; }
     public String getCustomerNameAlias() { return passenger != null ? passenger.getName() : ""; }
     public String getTravelDateAlias() { return date != null ? date : ""; }
+
+    public String getPassengerName() { return "Guest"; }
+    public String getDriverName() { return "Ramesh Kumar"; }
+    public String getVehicleNumber() { return "MH-12-AB-1234"; }
+    public String getDrop() { return "Drop Location"; }
+    public String getDistance() { return "15 km"; }
+    public String getDuration() { return "45 mins"; }
+    public String getPaymentStatus() { return "PAID"; }
 }

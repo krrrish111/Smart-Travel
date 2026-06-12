@@ -1,50 +1,116 @@
-﻿<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/components/header.jsp" %>
 <%@ include file="/components/global_ui.jsp" %>
-<main style="padding-top: 100px; padding-bottom: 60px; min-height: 80vh; background: var(--color-background);">
-    <div class="container mx-auto px-4 max-w-3xl">
-        <div class="text-center mb-8">
-            <div class="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span class="text-4xl text-white">Γ£ô</span>
-            </div>
-            <h1 class="text-3xl font-bold text-white mb-2">Car Rental Confirmed!</h1>
-            <p class="text-gray-400">Your deposit is secured and your vehicle is blocked. Please bring original DL to the pickup point.</p>
-        </div>
 
-        <div style="background: var(--color-surface); border-radius: 12px; padding: 30px; box-shadow: 0 4px 32px rgba(0,0,0,0.28);">
-            <div class="flex justify-between items-center mb-6 border-b border-gray-700 pb-4">
-                <div>
-                    <p class="text-gray-400 text-sm">Booking ID</p>
-                    <p class="text-xl font-mono text-white font-bold">${booking.id}</p>
-                </div>
-                <div class="text-right">
-                    <p class="text-gray-400 text-sm">Vehicle</p>
-                    <p class="text-xl font-mono text-purple-400 font-bold">${booking.carModel}</p>
-                </div>
-            </div>
+<style>
+    .details-container {
+        max-width: 800px;
+        margin: 60px auto;
+        background: var(--surface-glass);
+        backdrop-filter: blur(12px);
+        border: 1px solid var(--color-border);
+        border-radius: 24px;
+        padding: 40px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    }
+    .details-header {
+        text-align: center;
+        margin-bottom: 40px;
+        border-bottom: 1px solid var(--color-border);
+        padding-bottom: 20px;
+    }
+    .details-icon {
+        font-size: 3rem;
+        margin-bottom: 10px;
+        display: inline-block;
+    }
+    .details-title {
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--text-primary);
+    }
+    .details-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+    .detail-item {
+        background: rgba(255, 255, 255, 0.02);
+        padding: 15px 20px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .detail-label {
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 5px;
+        font-weight: 600;
+    }
+    .detail-value {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--text-primary);
+    }
+    .actions {
+        margin-top: 40px;
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+    }
+</style>
 
-            <div class="grid grid-cols-2 gap-4 mb-6">
-                <div class="bg-gray-800 p-4 rounded">
-                    <p class="text-xs text-gray-500 uppercase font-bold">Pickup details</p>
-                    <p class="text-white">${booking.pickupCity}</p>
-                    <p class="text-gray-400 text-sm mt-2">${booking.pickupDate}</p>
-                </div>
-                <div class="bg-gray-800 p-4 rounded">
-                    <p class="text-xs text-gray-500 uppercase font-bold">Return details</p>
-                    <p class="text-white">${booking.pickupCity} Hub</p>
-                    <p class="text-gray-400 text-sm mt-2">${booking.returnDate}</p>
-                </div>
-            </div>
-
-            <div class="flex justify-center gap-4 mt-8">
-                <a href="${pageContext.request.contextPath}/pages/transport/car-ticket.jsp" target="_blank" class="px-6 py-3 text-white rounded-lg font-bold flex items-center gap-2 transition" style="background-color: #8b5cf6;">
-                    <span>≡ƒôä</span> Download Receipt
-                </a>
-                <a href="${pageContext.request.contextPath}/profile" class="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-bold transition">
-                    View My Bookings
-                </a>
-            </div>
-        </div>
+<div class="details-container">
+    <div class="details-header">
+        <div class="details-icon">🚗</div>
+        <h1 class="details-title">Car Rental Details</h1>
+        <p style="color:var(--text-secondary); margin-top:10px;">Booking Reference: ${booking.id != null ? booking.id : ''}</p>
     </div>
-</main>
+    
+    <div class="details-grid">
+        <div class="detail-item">
+            <div class="detail-label">Customer Name</div>
+            <div class="detail-value">${booking.customerName}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Vehicle Model</div>
+            <div class="detail-value">${booking.vehicleModel}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Vehicle Number</div>
+            <div class="detail-value">${booking.vehicleNumber}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Pickup City</div>
+            <div class="detail-value">${booking.pickupCity}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Pickup Date</div>
+            <div class="detail-value">${booking.pickupDate}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Return Date</div>
+            <div class="detail-value">${booking.returnDate}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Deposit</div>
+            <div class="detail-value">${booking.deposit}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Rental Charges</div>
+            <div class="detail-value">${booking.rentalCharges}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Total Paid</div>
+            <div class="detail-value">₹${booking.totalPaid}</div>
+        </div>
+
+    </div>
+    
+    <div class="actions">
+        <button class="btn btn-primary" onclick="window.location.href='${pageContext.request.contextPath}/profile?tab=bookings'">Back to My Bookings</button>
+    </div>
+</div>
+
 <%@ include file="/components/footer.jsp" %>

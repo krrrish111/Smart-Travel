@@ -1,3 +1,4 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!-- ===== BACKGROUND SLIDER ===== -->
 <div class="bg-slider-container" id="bgSliderContainer">
     <div class="bg-slide active" data-index="0"

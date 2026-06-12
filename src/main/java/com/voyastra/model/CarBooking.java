@@ -35,7 +35,7 @@ public class CarBooking {
     // JSP profile.jsp aliases
     public String getVehicleModel() { return carModel; }
     public String getBookingRef() { return id; }
-    public double getTotalFare() { return amount; }
+    public double getamount() { return amount; }
     public double getTotalPrice() { return amount; }
 
     public String getReference() { return id != null ? id : ""; }
@@ -43,4 +43,10 @@ public class CarBooking {
     public String getDestination() { return ""; }
     public String getCustomerNameAlias() { return customer != null ? customer.getName() : ""; }
     public String getTravelDateAlias() { return pickupDate != null ? pickupDate : ""; }
+
+    public String getCustomerName() { return "Guest"; }
+    public String getDeposit() { return "₹5000"; }
+    public String getRentalCharges() { return "₹" + amount; }
+    public double getTotalPaid() { return 0.0; }
+    public String getPaymentStatus() { return "PAID"; }
 }

@@ -71,4 +71,13 @@ public class HotelBooking {
     public String getDetails() { return room != null ? room.getType() : "Standard Room"; }
     public double getAmount() { return totalPrice; }
     public String getTravelDateAlias() { return checkIn != null ? checkIn.toString() : ""; }
+
+    public String getHotelName() { return hotel != null ? hotel.getName() : ""; }
+    public String getRoomType() { return room != null ? room.getType() : ""; }
+    public String getCheckInDate() { return checkIn != null ? checkIn.toString() : ""; }
+    public String getCheckOutDate() { return checkOut != null ? checkOut.toString() : ""; }
+    public int getGuestCount() { return guests; }
+    public String getHotelAddress() { return hotel != null ? hotel.getAddress() : ""; }
+    public double getAmountPaid() { return totalPrice; }
+    public String getBookingStatus() { return status != null ? status : "CONFIRMED"; }
 }

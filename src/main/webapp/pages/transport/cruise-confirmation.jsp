@@ -1,50 +1,112 @@
-﻿<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/components/header.jsp" %>
 <%@ include file="/components/global_ui.jsp" %>
-<main style="padding-top: 100px; padding-bottom: 60px; min-height: 80vh; background: var(--color-background);">
-    <div class="container mx-auto px-4 max-w-3xl">
-        <div class="text-center mb-8">
-            <div class="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span class="text-4xl text-white">Γ£ô</span>
-            </div>
-            <h1 class="text-3xl font-bold text-white mb-2">Cruise Booking Confirmed!</h1>
-            <p class="text-gray-400">Your cabin is secured. Please prepare your passports for boarding.</p>
-        </div>
 
-        <div style="background: var(--color-surface); border-radius: 12px; padding: 30px; box-shadow: 0 4px 32px rgba(0,0,0,0.28);">
-            <div class="flex justify-between items-center mb-6 border-b border-gray-700 pb-4">
-                <div>
-                    <p class="text-gray-400 text-sm">Booking Reference</p>
-                    <p class="text-xl font-mono text-white font-bold">${booking.id}</p>
-                </div>
-                <div class="text-right">
-                    <p class="text-gray-400 text-sm">Ship</p>
-                    <p class="text-xl font-mono text-cyan-400 font-bold">${booking.shipName}</p>
-                </div>
-            </div>
+<style>
+    .details-container {
+        max-width: 800px;
+        margin: 60px auto;
+        background: var(--surface-glass);
+        backdrop-filter: blur(12px);
+        border: 1px solid var(--color-border);
+        border-radius: 24px;
+        padding: 40px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    }
+    .details-header {
+        text-align: center;
+        margin-bottom: 40px;
+        border-bottom: 1px solid var(--color-border);
+        padding-bottom: 20px;
+    }
+    .details-icon {
+        font-size: 3rem;
+        margin-bottom: 10px;
+        display: inline-block;
+    }
+    .details-title {
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--text-primary);
+    }
+    .details-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+    .detail-item {
+        background: rgba(255, 255, 255, 0.02);
+        padding: 15px 20px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .detail-label {
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 5px;
+        font-weight: 600;
+    }
+    .detail-value {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--text-primary);
+    }
+    .actions {
+        margin-top: 40px;
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+    }
+</style>
 
-            <div class="grid grid-cols-2 gap-4 mb-6">
-                <div class="bg-gray-800 p-4 rounded">
-                    <p class="text-xs text-gray-500 uppercase font-bold">Embarkation</p>
-                    <p class="text-white">${booking.departurePort}</p>
-                    <p class="text-gray-400 text-sm mt-2">${booking.cruiseDate}</p>
-                </div>
-                <div class="bg-gray-800 p-4 rounded">
-                    <p class="text-xs text-gray-500 uppercase font-bold">Itinerary</p>
-                    <p class="text-white">${booking.destination}</p>
-                    <p class="text-gray-400 text-sm mt-2">${booking.durationDays} Nights</p>
-                </div>
-            </div>
-
-            <div class="flex justify-center gap-4 mt-8">
-                <a href="${pageContext.request.contextPath}/pages/transport/cruise-ticket.jsp" target="_blank" class="px-6 py-3 text-gray-900 rounded-lg font-bold flex items-center gap-2 transition" style="background-color: #06b6d4;">
-                    <span>≡ƒÄ½</span> Download Boarding Pass
-                </a>
-                <a href="${pageContext.request.contextPath}/profile" class="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-bold transition">
-                    View My Bookings
-                </a>
-            </div>
-        </div>
+<div class="details-container">
+    <div class="details-header">
+        <div class="details-icon">🚢</div>
+        <h1 class="details-title">Cruise Booking Details</h1>
+        <p style="color:var(--text-secondary); margin-top:10px;">Booking Reference: ${booking.id != null ? booking.id : ''}</p>
     </div>
-</main>
+    
+    <div class="details-grid">
+        <div class="detail-item">
+            <div class="detail-label">Passenger Name</div>
+            <div class="detail-value">${booking.passengerName}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Cruise Name</div>
+            <div class="detail-value">${booking.cruiseLine}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Ship Name</div>
+            <div class="detail-value">${booking.shipName}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Cabin Number</div>
+            <div class="detail-value">${booking.cabinNumber}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Port</div>
+            <div class="detail-value">${booking.port}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Destination</div>
+            <div class="detail-value">${booking.destinationPort}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Duration</div>
+            <div class="detail-value">${booking.duration}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Fare</div>
+            <div class="detail-value">₹${booking.fare}</div>
+        </div>
+
+    </div>
+    
+    <div class="actions">
+        <button class="btn btn-primary" onclick="window.location.href='${pageContext.request.contextPath}/profile?tab=bookings'">Back to My Bookings</button>
+    </div>
+</div>
+
 <%@ include file="/components/footer.jsp" %>

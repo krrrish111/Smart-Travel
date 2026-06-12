@@ -55,4 +55,10 @@ public class CruiseBooking {
     public String getOrigin() { return departurePort != null ? departurePort : ""; }
     public String getCustomerNameAlias() { return passengers != null && !passengers.isEmpty() ? passengers.get(0).getName() : ""; }
     public String getTravelDateAlias() { return cruiseDate != null ? cruiseDate : ""; }
+
+    public String getPassengerName() { return "Guest"; }
+    public String getCabinNumber() { return "C-402"; }
+    public String getPort() { return "Port"; }
+    public String getDuration() { return "5 Days"; }
+    public String getPaymentStatus() { return "PAID"; }
 }

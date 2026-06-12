@@ -10,26 +10,30 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/train/details")
-public class TrainBookingDetailsServlet extends HttpServlet {
+public class TrainDetailsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String bookingId = request.getParameter("id");
-        System.out.println("Booking ID = " + bookingId);
-        System.out.println("Booking Type = train");
         if (bookingId == null || bookingId.isEmpty()) {
-            request.getRequestDispatcher("/pages/error.jsp").forward(request, response);
+            response.sendRedirect(request.getContextPath() + "/profile?tab=bookings");
             return;
         }
         TrainBooking booking = null;
         try {
-            booking = new com.voyastra.dao.TrainBookingDAO().getBookingById(bookingId);
+            String idParam = bookingId;
+            booking = new TrainBookingDAO().getBookingById(idParam);
         } catch(Exception e) {
             e.printStackTrace();
         }
-        System.out.println("Booking Loaded = " + booking);
+        
+        System.out.println("Booking Loaded: " + booking);
+        if (booking != null) {
+            System.out.println("Amount: " + booking);
+            System.out.println("Status: " + booking);
+        }
+        
         if (booking == null) {
-            System.out.println("Error: Booking is null for id " + bookingId);
-            request.getRequestDispatcher("/pages/error.jsp").forward(request, response);
+            response.sendRedirect(request.getContextPath() + "/profile?tab=bookings");
             return;
         }
         request.setAttribute("booking", booking);

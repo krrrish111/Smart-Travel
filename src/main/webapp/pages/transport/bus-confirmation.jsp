@@ -1,53 +1,116 @@
-﻿<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/components/header.jsp" %>
 <%@ include file="/components/global_ui.jsp" %>
-<main style="padding-top: 100px; padding-bottom: 60px; min-height: 80vh; background: var(--color-background);">
-    <div class="container mx-auto px-4 max-w-3xl">
-        <div class="text-center mb-8">
-            <div class="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span class="text-4xl text-white">Γ£ô</span>
-            </div>
-            <h1 class="text-3xl font-bold text-white mb-2">Bus Booking Confirmed!</h1>
-            <p class="text-gray-400">Your payment was successful and your bus seats are reserved.</p>
-        </div>
 
-        <div style="background: var(--color-surface); border-radius: 12px; padding: 30px; box-shadow: 0 4px 32px rgba(0,0,0,0.28);">
-            <div class="flex justify-between items-center mb-6 border-b border-gray-700 pb-4">
-                <div>
-                    <p class="text-gray-400 text-sm">Booking ID</p>
-                    <p class="text-xl font-mono text-white font-bold">${booking.id}</p>
-                </div>
-                <div class="text-right">
-                    <p class="text-gray-400 text-sm">Bus Operator</p>
-                    <p class="text-xl font-mono text-white font-bold">${booking.busName}</p>
-                </div>
-            </div>
+<style>
+    .details-container {
+        max-width: 800px;
+        margin: 60px auto;
+        background: var(--surface-glass);
+        backdrop-filter: blur(12px);
+        border: 1px solid var(--color-border);
+        border-radius: 24px;
+        padding: 40px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    }
+    .details-header {
+        text-align: center;
+        margin-bottom: 40px;
+        border-bottom: 1px solid var(--color-border);
+        padding-bottom: 20px;
+    }
+    .details-icon {
+        font-size: 3rem;
+        margin-bottom: 10px;
+        display: inline-block;
+    }
+    .details-title {
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--text-primary);
+    }
+    .details-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+    .detail-item {
+        background: rgba(255, 255, 255, 0.02);
+        padding: 15px 20px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .detail-label {
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 5px;
+        font-weight: 600;
+    }
+    .detail-value {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--text-primary);
+    }
+    .actions {
+        margin-top: 40px;
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+    }
+</style>
 
-            <h3 class="text-lg font-bold text-white mb-4">Passengers</h3>
-            <div class="space-y-3 mb-6 border-b border-gray-700 pb-6">
-                <c:forEach var="pax" items="${booking.passengers}">
-                    <div class="flex justify-between items-center bg-gray-800 p-3 rounded">
-                        <div>
-                            <p class="text-white font-bold">${pax.name}</p>
-                            <p class="text-xs text-gray-400">${pax.age} yrs, ${pax.gender}</p>
-                        </div>
-                        <span class="bg-green-500 bg-opacity-20 text-green-400 px-3 py-1 rounded text-sm font-bold">
-                            CNF / ${pax.seatPreference}
-                        </span>
-                    </div>
-                </c:forEach>
-            </div>
-
-            <div class="flex justify-center gap-4">
-                <a href="${pageContext.request.contextPath}/pages/transport/bus-ticket.jsp" target="_blank" class="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-bold flex items-center gap-2 transition">
-                    <span>≡ƒôä</span> Download Ticket (PDF)
-                </a>
-                <a href="${pageContext.request.contextPath}/profile" class="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-bold transition">
-                    Go to My Bookings
-                </a>
-            </div>
-        </div>
+<div class="details-container">
+    <div class="details-header">
+        <div class="details-icon">🚌</div>
+        <h1 class="details-title">Bus Booking Details</h1>
+        <p style="color:var(--text-secondary); margin-top:10px;">Booking Reference: ${booking.id != null ? booking.id : ''}</p>
     </div>
-</main>
+    
+    <div class="details-grid">
+        <div class="detail-item">
+            <div class="detail-label">Passenger Name</div>
+            <div class="detail-value">${booking.passengerName}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Bus Operator</div>
+            <div class="detail-value">${booking.busOperator}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Bus Type</div>
+            <div class="detail-value">${booking.busType}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Seat Number</div>
+            <div class="detail-value">${booking.seatNumber}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Boarding Point</div>
+            <div class="detail-value">${booking.boardingPoint}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Drop Point</div>
+            <div class="detail-value">${booking.dropPoint}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Departure</div>
+            <div class="detail-value">${booking.departure}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Arrival</div>
+            <div class="detail-value">${booking.arrival}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Amount Paid</div>
+            <div class="detail-value">₹${booking.amountPaid}</div>
+        </div>
+
+    </div>
+    
+    <div class="actions">
+        <button class="btn btn-primary" onclick="window.location.href='${pageContext.request.contextPath}/profile?tab=bookings'">Back to My Bookings</button>
+    </div>
+</div>
+
 <%@ include file="/components/footer.jsp" %>

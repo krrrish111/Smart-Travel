@@ -1,3 +1,4 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <div class="admin-topbar">
             <!-- Mobile Menu Toggle Button -->
             <button class="mobile-menu-toggle" onclick="toggleAdminSidebar()" style="display:none; align-items:center; justify-content:center; background:var(--surface-light); border:1px solid var(--color-border); color:var(--text-main); border-radius:8px; cursor:pointer; width:40px; height:40px; transition:0.2s;" aria-label="Open Mobile Menu">

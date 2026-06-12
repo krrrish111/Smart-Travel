@@ -14,29 +14,29 @@ public class CarTicketServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String bookingId = request.getParameter("id");
-        System.out.println("Booking ID = " + bookingId);
-        System.out.println("Booking Type = car");
         if (bookingId == null || bookingId.isEmpty()) {
-            request.getRequestDispatcher("/pages/error.jsp").forward(request, response);
+            response.sendRedirect(request.getContextPath() + "/profile?tab=bookings");
             return;
         }
         CarBooking booking = null;
         try {
-            booking = new com.voyastra.dao.CarBookingDAO().getBookingById(bookingId);
+            String idParam = bookingId;
+            booking = new CarBookingDAO().getBookingById(idParam);
         } catch(Exception e) {
             e.printStackTrace();
         }
-        System.out.println("Booking Loaded = " + booking);
+        
         if (booking == null) {
-            System.out.println("Error: Booking is null for id " + bookingId);
-            request.getRequestDispatcher("/pages/error.jsp").forward(request, response);
+            response.sendRedirect(request.getContextPath() + "/profile?tab=bookings");
             return;
         }
         request.setAttribute("booking", booking);
+        
         String print = request.getParameter("print");
-        if (print != null && print.equals("true")) {
+        if ("true".equals(print)) {
             request.setAttribute("autoPrint", true);
         }
+        
         request.getRequestDispatcher("/pages/transport/car-ticket.jsp").forward(request, response);
     }
 }

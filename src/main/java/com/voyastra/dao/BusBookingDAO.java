@@ -82,7 +82,7 @@ public class BusBookingDAO {
 
     public BusBooking getBookingById(String id) {
         BusBooking booking = null;
-        String sql = "SELECT * FROM bus_bookings WHERE id = ?";
+        String sql = "SELECT b.*, u.email as user_email, u.phone as user_phone FROM bus_bookings b LEFT JOIN users u ON b.user_id = u.id WHERE b.id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, id);
@@ -99,6 +99,8 @@ public class BusBookingDAO {
                     booking.setJourneyDate(rs.getString("journey_date"));
                     booking.setSeatNumbers(rs.getString("seat_numbers"));
                     booking.setStatus(rs.getString("status"));
+                    booking.setEmail(rs.getString("user_email"));
+                    booking.setPhone(rs.getString("user_phone"));
                       
                       booking.setFare(rs.getDouble("total_fare"));
                     booking.setPassengers(new java.util.ArrayList<>());

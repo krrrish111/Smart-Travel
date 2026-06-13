@@ -52,11 +52,17 @@ public class CabBooking {
     public String getCustomerNameAlias() { return passenger != null ? passenger.getName() : ""; }
     public String getTravelDateAlias() { return date != null ? date : ""; }
 
-    public String getPassengerName() { return "Guest"; }
-    public String getDriverName() { return "Ramesh Kumar"; }
-    public String getVehicleNumber() { return "MH-12-AB-1234"; }
-    public String getDrop() { return "Drop Location"; }
-    public String getDistance() { return "15 km"; }
-    public String getDuration() { return "45 mins"; }
+    public String getPassengerName() { return passenger != null ? passenger.getName() : "Guest"; }
+    
+    public String getVehicleNumber() { return "Not Assigned"; }
+    
+    
+    
+    public double getAmountPaid() { return amount; }
     public String getPaymentStatus() { return "PAID"; }
+    public String getEmail() { return passenger != null ? passenger.getEmail() : "N/A"; }
+    public String getPhone() { return passenger != null ? passenger.getPhone() : "N/A"; }
+    public String getDriverName() { return "Pending Assignment"; }
+    public String getDistance() { return "TBD"; }
+    public String getDuration() { return "TBD"; }
 }

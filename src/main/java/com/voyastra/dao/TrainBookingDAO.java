@@ -80,7 +80,7 @@ public class TrainBookingDAO {
 
     public TrainBooking getBookingById(String id) {
         TrainBooking booking = null;
-        String sql = "SELECT * FROM train_bookings WHERE id = ?";
+        String sql = "SELECT t.*, u.email as user_email, u.phone as user_phone FROM train_bookings t LEFT JOIN users u ON t.user_id = u.id WHERE t.id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, id);
@@ -96,6 +96,8 @@ public class TrainBookingDAO {
                     booking.setJourneyDate(rs.getString("journey_date"));
                     booking.setTrainClass(rs.getString("train_class"));
                     booking.setStatus(rs.getString("status"));
+                    booking.setEmail(rs.getString("user_email"));
+                    booking.setPhone(rs.getString("user_phone"));
                     booking.setPassengers(new java.util.ArrayList<>());
                 }
             }

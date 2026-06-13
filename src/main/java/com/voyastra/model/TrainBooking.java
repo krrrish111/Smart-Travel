@@ -17,6 +17,15 @@ public class TrainBooking {
     private String status;
     private List<TrainPassenger> passengers = new ArrayList<>();
 
+    private String email;
+    private String phone;
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
+    public int getPassengerAge() { return passengers != null && !passengers.isEmpty() ? passengers.get(0).getAge() : 0; }
+    public String getPassengerGender() { return passengers != null && !passengers.isEmpty() ? passengers.get(0).getGender() : "N/A"; }
+
     public TrainBooking() {}
 
     public String getId() { return id; }
@@ -73,10 +82,13 @@ public class TrainBooking {
     public String getTravelDateAlias() { return journeyDate != null ? journeyDate : ""; }
 
     public String getPassengerName() { return passengers != null && !passengers.isEmpty() ? passengers.get(0).getName() : "Guest"; }
-    public String getCoach() { return "B1"; }
+    
     public String getSeat() { return passengers != null && !passengers.isEmpty() ? "12A" : "12A"; }
+    
+    
+    public String getPaymentStatus() { return "PAID"; }
     public String getDepartureTime() { return "08:00 AM"; }
     public String getArrivalTime() { return "04:00 PM"; }
-    public String getPaymentStatus() { return "PAID"; }
+    public String getCoach() { return passengers != null && !passengers.isEmpty() ? passengers.get(0).getBerthPreference() : "B1"; }
 }
 

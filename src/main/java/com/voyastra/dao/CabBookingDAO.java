@@ -106,7 +106,7 @@ public class CabBookingDAO {
                             p.setName(rs2.getString("name"));
                             p.setPhone(rs2.getString("phone"));
                             p.setEmail(rs2.getString("email"));
-                            // booking.getPassengers().add(p);
+                            booking.setPassenger(p);
                         }
                     }
                 }

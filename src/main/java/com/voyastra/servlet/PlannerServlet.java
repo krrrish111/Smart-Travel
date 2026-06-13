@@ -132,7 +132,11 @@ public class PlannerServlet extends HttpServlet {
                 "8. Smart Weather (what to pack). " +
                 "9. Instagram Spots (highly photogenic areas). " +
                 "10. Gamification tips (challenges or fun things to do). " +
-                "11. Daily plan broken down by morning/afternoon/evening. " +
+                "11. Daily plan broken down by morning/afternoon/evening. IMPORTANT: Natively inject Breakfast, Lunch, and Dinner directly into the daily itinerary activities.\n" +
+                "12. Local Food Specialties (e.g., must-try foods).\n" +
+                "13. Detailed Food Discovery (with ratings, budget, crowd level).\n" +
+                "14. Local Experiences Engine (with authenticity, fun, and photography scores).\n" +
+                "15. Food Trails (structured timelines for eating).\n" +
                 "Return the response ONLY as a strictly formatted JSON object with no markdown wrappers or extra text. " +
                 "Structure: " +
                 "{" +
@@ -145,6 +149,7 @@ public class PlannerServlet extends HttpServlet {
                 "  \"best_travel_mode\": \"Metro / Cab\",\n" +
                 "  \"travel_warnings\": [\"Beware of tourist traps\", \"Drink bottled water\"],\n" +
                 "  \"weather\": \"Sunny with a chance of adventure\",\n" +
+                "  \"local_food_specialties\": [\"Fish Curry Rice\", \"Bebinca\", \"Prawn Balchao\"],\n" +
                 "  \"must_visit\": [\"Place 1\", \"Place 2\"],\n" +
                 "  \"hidden_gems_detailed\": [\n" +
                 "    {\n" +
@@ -170,18 +175,41 @@ public class PlannerServlet extends HttpServlet {
                 "  ],\n" +
                 "  \"food_discovery_detailed\": [\n" +
                 "    {\n" +
-                "      \"name\": \"Local Seafood Shack\",\n" +
+                "      \"name\": \"Martin's Corner\",\n" +
                 "      \"description\": \"The best fresh catch of the day.\",\n" +
-                "      \"price_range\": \"$\",\n" +
-                "      \"category\": \"Street Food\",\n" +
-                "      \"location\": \"Near Beach\"\n" +
+                "      \"price_range\": \"₹₹₹\",\n" +
+                "      \"category\": \"Seafood\",\n" +
+                "      \"location\": \"Near Beach\",\n" +
+                "      \"rating\": 4.8,\n" +
+                "      \"crowd_level\": \"High\",\n" +
+                "      \"short_story\": \"Skip crowded tourist restaurants and try this legendary spot.\"\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  \"local_experiences\": [\n" +
+                "    {\n" +
+                "      \"name\": \"Local Fishing Village Tour\",\n" +
+                "      \"type\": \"Culture\",\n" +
+                "      \"authenticity_score\": 9.8,\n" +
+                "      \"photography_score\": 9.6,\n" +
+                "      \"fun_score\": 8.5,\n" +
+                "      \"budget_score\": 9.5,\n" +
+                "      \"short_story\": \"An authentic walk through the oldest fishing village in the area.\"\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  \"food_trails\": [\n" +
+                "    {\n" +
+                "      \"title\": \"Goa Heritage Food Trail\",\n" +
+                "      \"breakfast\": \"Cafe Bodega\",\n" +
+                "      \"lunch\": \"Martin's Corner\",\n" +
+                "      \"evening\": \"Hidden Chai Point\",\n" +
+                "      \"dinner\": \"Beach Seafood Shack\"\n" +
                 "    }\n" +
                 "  ],\n" +
                 "  \"ai_recommendation_insight\": \"Most tourists visit X. Based on your preference for Y, I recommend Z.\",\n" +
                 "  \"gamification\": [\"Try surfing\", \"Take a polaroid\"],\n" +
                 "  \"travel_tips\": [\"Tip 1\", \"Tip 2\"],\n" +
                 "  \"budget_summary\": [{\"category\": \"Stay\", \"amount\": \"Rs. 10000\"}],\n" +
-                "  \"days\": [ { \"day\": 1, \"title\": \"Arrival\", \"activities\": [ {\"time\": \"Morning\", \"description\": \"...\"} ] } ]\n" +
+                "  \"days\": [ { \"day\": 1, \"title\": \"Arrival\", \"activities\": [ {\"time\": \"Morning\", \"description\": \"...\"}, {\"time\": \"Lunch\", \"description\": \"Eat at Local Cafe...\"} ] } ]\n" +
                 "}",
                 destination, days, budgetStr, type);
 

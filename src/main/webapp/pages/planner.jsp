@@ -393,6 +393,46 @@
             </div>
         </div>
 
+        <!-- PHASE 6: FOOD & LOCAL EXPERIENCES ENGINE -->
+        <div class="mb-10 slide-up delay-2">
+            <div class="flex justify-between items-end mb-4">
+                <h2 class="editorial text-main" style="font-size: 1.8rem;"><i class="ri-restaurant-2-line text-primary mr-2"></i> Food & Local Experiences</h2>
+                <div class="flex gap-2 overflow-x-auto pb-2 custom-scrollbar">
+                    <button class="btn btn-outline btn-xs active-tab">Food Explorer</button>
+                    <button class="btn btn-outline btn-xs">Local Culture</button>
+                    <button class="btn btn-outline btn-xs">Food Trails</button>
+                </div>
+            </div>
+
+            <!-- Local Food Specialties (Chips) -->
+            <div class="glass-panel p-4 rounded-2xl mb-6">
+                <h4 class="text-sm font-bold text-main mb-3 uppercase tracking-wider"><i class="ri-fire-fill text-orange-500 mr-1"></i> Must-Try Local Specialties</h4>
+                <div id="aiLocalFoodSpecialties" class="flex flex-wrap gap-2">
+                    <!-- Specialties injected here -->
+                </div>
+            </div>
+
+            <!-- Food Discovery Grid -->
+            <h3 class="font-bold text-main text-xl mb-4">Curated Food Experiences</h3>
+            <div id="aiFoodGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <!-- Food cards injected here -->
+            </div>
+
+            <!-- Local Experiences Grid -->
+            <h3 class="font-bold text-main text-xl mb-4">Unique Local Activities</h3>
+            <div id="aiExperiencesGrid" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <!-- Experience cards injected here -->
+            </div>
+
+            <!-- Food Trails Timeline -->
+            <div class="glass-panel p-6 rounded-2xl">
+                <h3 class="font-bold text-main text-xl mb-6 flex items-center"><i class="ri-route-line text-primary mr-2"></i> Curated Food Trails</h3>
+                <div id="aiFoodTrails" class="relative border-l border-primary/30 ml-4 pl-6 pb-2 space-y-6">
+                    <!-- Trails injected here -->
+                </div>
+            </div>
+        </div>
+
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <!-- Left: Day-wise timeline -->
             <div class="lg:col-span-2">
@@ -630,7 +670,7 @@ function plotAILocations(centerLatLng, aiData) {
 
     addMarkers(aiData.must_visit, mapLayers.attractions, iconAttraction, 'Tourist Attraction');
     addMarkers(aiData.hidden_gems_detailed || aiData.hidden_gems, mapLayers.hiddenGems, iconHiddenGem, 'Hidden Gem');
-    addMarkers(aiData.food_discovery, mapLayers.food, iconFood, 'Restaurant / Food');
+    addMarkers(aiData.food_discovery_detailed || aiData.food_discovery, mapLayers.food, iconFood, 'Restaurant / Food');
     addMarkers(aiData.instagram_spots, mapLayers.insta, iconInsta, 'Instagram Spot');
 }
 
@@ -862,6 +902,123 @@ function renderItinerary(data) {
                 </div>
             `;
             photoGallery.appendChild(div);
+        });
+    }
+
+    // Phase 6: Food Explorer Data
+    
+    // 1. Local Food Specialties
+    const foodSpecialties = document.getElementById('aiLocalFoodSpecialties');
+    if (foodSpecialties && data.local_food_specialties) {
+        foodSpecialties.innerHTML = '';
+        data.local_food_specialties.forEach(food => {
+            const span = document.createElement('span');
+            span.className = 'px-3 py-1 bg-orange-500/10 text-orange-400 border border-orange-500/20 rounded-full text-xs font-bold';
+            span.innerText = food;
+            foodSpecialties.appendChild(span);
+        });
+    }
+
+    // 2. Food Discovery Grid
+    const foodGrid = document.getElementById('aiFoodGrid');
+    if (foodGrid && data.food_discovery_detailed) {
+        foodGrid.innerHTML = '';
+        data.food_discovery_detailed.forEach((food, idx) => {
+            const query = encodeURIComponent(food.category || "restaurant");
+            const imgUrl = `https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=600&auto=format&fit=crop&sig=${idx+100}`;
+            
+            const card = document.createElement('div');
+            card.className = 'glass-panel rounded-2xl overflow-hidden hover:shadow-xl transition-all border border-white/5 flex flex-col h-full';
+            card.innerHTML = `
+                <div class="h-32 relative shrink-0">
+                    <img src="${imgUrl}" class="w-full h-full object-cover">
+                    <div class="absolute top-2 left-2 bg-black/60 backdrop-blur-md text-white text-[0.6rem] uppercase tracking-wider font-bold px-2 py-0.5 rounded border border-white/10">
+                        ${food.category}
+                    </div>
+                    <div class="absolute top-2 right-2 bg-orange-500 text-white text-[0.65rem] font-bold px-2 py-0.5 rounded shadow-lg flex items-center">
+                        <i class="ri-star-fill text-yellow-200 mr-1"></i> ${food.rating}
+                    </div>
+                </div>
+                <div class="p-4 flex flex-col flex-1">
+                    <h4 class="text-main font-bold text-sm mb-1 line-clamp-1">${food.name}</h4>
+                    <div class="flex gap-2 text-[0.65rem] text-muted mb-2 font-mono">
+                        <span class="text-green-400">${food.price_range}</span>
+                        <span>•</span>
+                        <span>Crowd: ${food.crowd_level}</span>
+                    </div>
+                    <p class="text-xs text-muted/80 leading-relaxed italic mb-3 flex-1 line-clamp-3">"${food.short_story || food.description}"</p>
+                    <button class="btn btn-primary w-full py-1.5 text-xs rounded-full mt-auto" onclick="addToTrip('${food.name.replace(/'/g,"")}', '${food.category}', 0, 0)"><i class="ri-add-line mr-1"></i> Add To Trip</button>
+                </div>
+            `;
+            foodGrid.appendChild(card);
+        });
+    }
+
+    // 3. Local Experiences Grid
+    const expGrid = document.getElementById('aiExperiencesGrid');
+    if (expGrid && data.local_experiences) {
+        expGrid.innerHTML = '';
+        data.local_experiences.forEach(exp => {
+            const card = document.createElement('div');
+            card.className = 'glass-panel p-5 rounded-2xl border border-white/5 relative overflow-hidden';
+            card.innerHTML = `
+                <div class="absolute -right-6 -top-6 text-primary/10">
+                    <i class="ri-compass-discover-fill" style="font-size: 8rem;"></i>
+                </div>
+                <div class="relative z-10">
+                    <span class="text-[0.6rem] text-primary uppercase font-bold tracking-widest mb-1 block">${exp.type}</span>
+                    <h4 class="text-main font-bold text-md mb-2 leading-tight">${exp.name}</h4>
+                    <p class="text-xs text-muted mb-4 line-clamp-2">"${exp.short_story}"</p>
+                    
+                    <div class="space-y-2 text-xs">
+                        <div>
+                            <div class="flex justify-between text-[0.6rem] text-muted mb-1 uppercase tracking-wider"><span>Authenticity</span> <span>${exp.authenticity_score}</span></div>
+                            <div class="w-full bg-white/5 rounded-full h-1.5"><div class="bg-amber-500 h-1.5 rounded-full" style="width: ${(exp.authenticity_score/10)*100}%"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[0.6rem] text-muted mb-1 uppercase tracking-wider"><span>Fun</span> <span>${exp.fun_score}</span></div>
+                            <div class="w-full bg-white/5 rounded-full h-1.5"><div class="bg-pink-500 h-1.5 rounded-full" style="width: ${(exp.fun_score/10)*100}%"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[0.6rem] text-muted mb-1 uppercase tracking-wider"><span>Photography</span> <span>${exp.photography_score}</span></div>
+                            <div class="w-full bg-white/5 rounded-full h-1.5"><div class="bg-blue-500 h-1.5 rounded-full" style="width: ${(exp.photography_score/10)*100}%"></div></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            expGrid.appendChild(card);
+        });
+    }
+
+    // 4. Food Trails
+    const trailsList = document.getElementById('aiFoodTrails');
+    if (trailsList && data.food_trails) {
+        trailsList.innerHTML = '';
+        data.food_trails.forEach(trail => {
+            const div = document.createElement('div');
+            div.className = 'mb-6';
+            div.innerHTML = `
+                <h4 class="text-primary font-bold mb-3 uppercase tracking-widest text-xs"><i class="ri-map-pin-user-line mr-1"></i> ${trail.title}</h4>
+                <div class="flex flex-col gap-3 relative">
+                    <div class="flex items-start gap-3 relative">
+                        <div class="w-6 h-6 rounded-full bg-background border border-primary flex items-center justify-center shrink-0 mt-0.5 text-[0.6rem] text-primary"><i class="ri-cup-line"></i></div>
+                        <div><span class="block text-[0.65rem] text-muted uppercase font-bold tracking-wider">Breakfast</span><span class="text-sm font-bold text-main">${trail.breakfast}</span></div>
+                    </div>
+                    <div class="flex items-start gap-3 relative">
+                        <div class="w-6 h-6 rounded-full bg-background border border-primary flex items-center justify-center shrink-0 mt-0.5 text-[0.6rem] text-primary"><i class="ri-restaurant-line"></i></div>
+                        <div><span class="block text-[0.65rem] text-muted uppercase font-bold tracking-wider">Lunch</span><span class="text-sm font-bold text-main">${trail.lunch}</span></div>
+                    </div>
+                    <div class="flex items-start gap-3 relative">
+                        <div class="w-6 h-6 rounded-full bg-background border border-primary flex items-center justify-center shrink-0 mt-0.5 text-[0.6rem] text-primary"><i class="ri-goblet-line"></i></div>
+                        <div><span class="block text-[0.65rem] text-muted uppercase font-bold tracking-wider">Evening</span><span class="text-sm font-bold text-main">${trail.evening}</span></div>
+                    </div>
+                    <div class="flex items-start gap-3 relative">
+                        <div class="w-6 h-6 rounded-full bg-background border border-primary flex items-center justify-center shrink-0 mt-0.5 text-[0.6rem] text-primary"><i class="ri-knife-line"></i></div>
+                        <div><span class="block text-[0.65rem] text-muted uppercase font-bold tracking-wider">Dinner</span><span class="text-sm font-bold text-main">${trail.dinner}</span></div>
+                    </div>
+                </div>
+            `;
+            trailsList.appendChild(div);
         });
     }
 

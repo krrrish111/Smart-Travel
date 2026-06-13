@@ -335,6 +335,76 @@ public class SchemaBootstrap implements ServletContextListener {
                     "is_read BOOLEAN DEFAULT FALSE, " +
                     "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
                 );
+
+                // Phase 11 Tables
+                stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS weather_cache (" +
+                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "destination VARCHAR(100) NOT NULL, " +
+                    "temp DECIMAL(5,2), " +
+                    "humidity INT, " +
+                    "rain_prob INT, " +
+                    "wind_speed DECIMAL(5,2), " +
+                    "aqi VARCHAR(50), " +
+                    "uv_index DECIMAL(4,1), " +
+                    "weather_score INT, " +
+                    "last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
+                );
+
+                stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS crowd_predictions (" +
+                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "destination VARCHAR(100) NOT NULL, " +
+                    "current_crowd VARCHAR(50), " +
+                    "expected_crowd VARCHAR(50), " +
+                    "peak_season VARCHAR(100), " +
+                    "off_season VARCHAR(100), " +
+                    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
+                );
+
+                stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS safety_scores (" +
+                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "destination VARCHAR(100) NOT NULL, " +
+                    "overall_score DECIMAL(4,1), " +
+                    "night_safety VARCHAR(50), " +
+                    "medical_access VARCHAR(50), " +
+                    "scam_risk VARCHAR(50), " +
+                    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
+                );
+
+                stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS travel_alerts (" +
+                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "destination VARCHAR(100) NOT NULL, " +
+                    "alert_type VARCHAR(50), " +
+                    "severity VARCHAR(50), " +
+                    "message TEXT, " +
+                    "active BOOLEAN DEFAULT TRUE, " +
+                    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
+                );
+
+                stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS destination_insights (" +
+                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "destination VARCHAR(100) NOT NULL, " +
+                    "health_score INT, " +
+                    "best_time_photos VARCHAR(50), " +
+                    "sunrise VARCHAR(20), " +
+                    "sunset VARCHAR(20), " +
+                    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
+                );
+
+                stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS event_impacts (" +
+                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "destination VARCHAR(100) NOT NULL, " +
+                    "event_name VARCHAR(100), " +
+                    "crowd_increase_pct INT, " +
+                    "start_date DATE, " +
+                    "end_date DATE, " +
+                    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
+                );
                 System.out.println("[SchemaBootstrap] Created AI Planner 2.0 tables.");
             } catch (Exception e) {
                 System.err.println("[SchemaBootstrap] Error creating AI Planner tables: " + e.getMessage());

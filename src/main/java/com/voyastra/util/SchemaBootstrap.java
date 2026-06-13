@@ -216,6 +216,68 @@ public class SchemaBootstrap implements ServletContextListener {
                     "owed_amount DECIMAL(10,2) NOT NULL, " +
                     "PRIMARY KEY(expense_id, user_id))"
                 );
+
+                // Phase 9 Tables
+                stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS trip_settlements (" +
+                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "group_id INT NOT NULL, " +
+                    "from_user_id INT NOT NULL, " +
+                    "to_user_id INT NOT NULL, " +
+                    "amount DECIMAL(10,2) NOT NULL, " +
+                    "status VARCHAR(20) DEFAULT 'PENDING', " +
+                    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
+                );
+
+                stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS trip_votes (" +
+                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "group_id INT NOT NULL, " +
+                    "creator_id INT NOT NULL, " +
+                    "question VARCHAR(255) NOT NULL, " +
+                    "category VARCHAR(50), " +
+                    "status VARCHAR(20) DEFAULT 'OPEN', " +
+                    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
+                );
+
+                stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS trip_vote_options (" +
+                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "vote_id INT NOT NULL, " +
+                    "option_text VARCHAR(255) NOT NULL, " +
+                    "voter_ids JSON)" // Store user IDs who voted for this option
+                );
+
+                stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS trip_messages (" +
+                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "group_id INT NOT NULL, " +
+                    "user_id INT NOT NULL, " +
+                    "message TEXT NOT NULL, " +
+                    "type VARCHAR(20) DEFAULT 'TEXT', " + // TEXT, IMAGE, LOCATION
+                    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
+                );
+
+                stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS trip_checklists (" +
+                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "group_id INT NOT NULL, " +
+                    "creator_id INT NOT NULL, " +
+                    "title VARCHAR(100) NOT NULL, " +
+                    "items JSON, " + // Store items and completion status
+                    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
+                );
+
+                stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS trip_documents (" +
+                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "group_id INT NOT NULL, " +
+                    "uploader_id INT NOT NULL, " +
+                    "doc_name VARCHAR(100) NOT NULL, " +
+                    "doc_url VARCHAR(255) NOT NULL, " +
+                    "category VARCHAR(50), " +
+                    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
+                );
                 System.out.println("[SchemaBootstrap] Created AI Planner 2.0 tables.");
             } catch (Exception e) {
                 System.err.println("[SchemaBootstrap] Error creating AI Planner tables: " + e.getMessage());

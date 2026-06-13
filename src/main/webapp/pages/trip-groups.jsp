@@ -19,9 +19,24 @@
         </form>
     </div>
     
-    <div class="mt-8 text-center text-muted">
-        <p>This is the core foundation for the Splitwise clone integration.</p>
-        <p>Future iterations will include expense adding, splitting math, and Venmo/Razorpay P2P integration.</p>
+    <div class="mt-8">
+        <h3 class="text-main font-bold mb-4 text-center">My Groups</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto">
+            <c:if test="${empty myGroups}">
+                <div class="col-span-full text-center p-6 text-muted border border-dashed border-white/10 rounded-xl">
+                    You aren't in any groups yet.
+                </div>
+            </c:if>
+            <c:forEach var="grp" items="${myGroups}">
+                <a href="${pageContext.request.contextPath}/trip-groups?id=${grp.id}" class="glass-panel p-6 rounded-2xl hover:border-primary/50 transition-all text-center flex flex-col items-center justify-center">
+                    <div class="w-12 h-12 rounded-full bg-primary/20 text-primary flex items-center justify-center mb-3">
+                        <i class="ri-group-line text-2xl"></i>
+                    </div>
+                    <h4 class="text-main font-bold mb-1">${grp.name}</h4>
+                    <p class="text-xs text-muted">Click to view dashboard</p>
+                </a>
+            </c:forEach>
+        </div>
     </div>
 </main>
 

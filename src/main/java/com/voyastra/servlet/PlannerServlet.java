@@ -16,6 +16,12 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import com.voyastra.util.DBConnection;
+import com.voyastra.model.User;
 
 /**
  * AI-powered Trip Planner Servlet.
@@ -34,6 +40,26 @@ public class PlannerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        // Track planner_sessions
+        String sessionId = request.getSession().getId();
+        User user = (User) request.getSession().getAttribute("user");
+        int userId = user != null ? user.getId() : -1;
+        
+        try (Connection conn = DBConnection.getConnection()) {
+            String sql = "INSERT INTO planner_sessions (session_id, user_id) VALUES (?, ?) ON DUPLICATE KEY UPDATE last_active = CURRENT_TIMESTAMP";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, sessionId);
+            if (userId != -1) {
+                pstmt.setInt(2, userId);
+            } else {
+                pstmt.setNull(2, java.sql.Types.INTEGER);
+            }
+            pstmt.executeUpdate();
+        } catch (Exception e) {
+            System.err.println("Failed to track planner session: " + e.getMessage());
+        }
+
         request.getRequestDispatcher("/pages/planner.jsp").forward(request, response);
     }
 
@@ -42,26 +68,91 @@ public class PlannerServlet extends HttpServlet {
             throws ServletException, IOException {
 
         // 1. Extract Parameters
+        String origin = request.getParameter("startLocation");
         String destination = request.getParameter("destination");
-        String budget = request.getParameter("budget");
-        String days = request.getParameter("days");
+        String departureDate = request.getParameter("departureDate");
+        String returnDate = request.getParameter("returnDate");
+        String budgetStr = request.getParameter("budget");
         String type = request.getParameter("type");
+        int adults = Integer.parseInt(request.getParameter("adults") != null ? request.getParameter("adults") : "1");
+        int children = Integer.parseInt(request.getParameter("children") != null ? request.getParameter("children") : "0");
+        int seniors = Integer.parseInt(request.getParameter("seniors") != null ? request.getParameter("seniors") : "0");
 
-        if (destination == null || budget == null || days == null || type == null) {
+        if (origin == null || destination == null || departureDate == null || returnDate == null || budgetStr == null) {
             request.setAttribute("error", "Missing required parameters.");
             request.getRequestDispatcher("/pages/planner.jsp").forward(request, response);
             return;
         }
 
-        // 2. Build AI Prompt Dynamically
+        // Calculate Days
+        LocalDate dep = LocalDate.parse(departureDate);
+        LocalDate ret = LocalDate.parse(returnDate);
+        long days = ChronoUnit.DAYS.between(dep, ret);
+        if (days < 1) days = 1;
+
+        // Save Planner Request to Database
+        User user = (User) request.getSession().getAttribute("user");
+        int userId = user != null ? user.getId() : -1;
+
+        try (Connection conn = DBConnection.getConnection()) {
+            String sql = "INSERT INTO planner_requests (user_id, origin, destination, departure_date, return_date, budget, travel_style, adults, children, seniors) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            if (userId != -1) {
+                pstmt.setInt(1, userId);
+            } else {
+                pstmt.setNull(1, java.sql.Types.INTEGER);
+            }
+            pstmt.setString(2, origin);
+            pstmt.setString(3, destination);
+            pstmt.setString(4, departureDate);
+            pstmt.setString(5, returnDate);
+            pstmt.setBigDecimal(6, new java.math.BigDecimal(budgetStr));
+            pstmt.setString(7, type);
+            pstmt.setInt(8, adults);
+            pstmt.setInt(9, children);
+            pstmt.setInt(10, seniors);
+            pstmt.executeUpdate();
+        } catch (Exception e) {
+            System.err.println("Failed to save planner request: " + e.getMessage());
+        }
+
+        // 2. Build AI Prompt Dynamically for AI Concierge
         String prompt = String.format(
-                "Create a detailed travel itinerary for %s for %s days within a budget of %s. " +
-                        "The travel style is %s. " +
-                        "Include: Day-wise plan, Activities, Estimated cost breakdown, Must-visit places, Travel tips. "
-                        +
-                        "Return the response ONLY as a clean JSON object with this structure (no markdown tags): " +
-                        "{ \"title\": \"Name\", \"days\": [ { \"day\": 1, \"title\": \"Day Title\", \"activities\": [ {\"time\": \"Morning\", \"description\": \"...\"} ] } ], \"budget_summary\": [ {\"category\": \"...\", \"amount\": \"...\"} ], \"must_visit\": [\"...\"], \"travel_tips\": [\"...\"] }",
-                destination, days, budget, type);
+                "You are an expert Gen-Z AI Travel Concierge. Create an interactive, personalized itinerary for %s for %d days. " +
+                "The user's budget is INR %s and their travel style is %s. " +
+                "Your response must feel like an Instagram-inspired dynamic planner, not a standard form. " +
+                "Include: " +
+                "1. Trip Summary (Why Visit). " +
+                "2. Recommended Duration. " +
+                "3. Best Season. " +
+                "4. Best Travel Mode. " +
+                "5. Travel Warnings. " +
+                "6. Hidden Gems (unique lesser-known spots). " +
+                "7. Food Discovery (local cuisines and cafes). " +
+                "8. Smart Weather (what to pack). " +
+                "9. Instagram Spots (highly photogenic areas). " +
+                "10. Gamification tips (challenges or fun things to do). " +
+                "11. Daily plan broken down by morning/afternoon/evening. " +
+                "Return the response ONLY as a strictly formatted JSON object with no markdown wrappers or extra text. " +
+                "Structure: " +
+                "{" +
+                "  \"title\": \"Epic Trip to [Destination]\"," +
+                "  \"trip_summary\": \"Overview of why this place is amazing.\"," +
+                "  \"recommended_duration\": \"5-7 Days\"," +
+                "  \"best_season\": \"October to March\"," +
+                "  \"best_travel_mode\": \"Flight + Local Cab\"," +
+                "  \"travel_warnings\": [\"Beware of tourist traps\", \"Drink bottled water\"]," +
+                "  \"weather\": \"Sunny with a chance of adventure\"," +
+                "  \"must_visit\": [\"Place 1\", \"Place 2\"]," +
+                "  \"hidden_gems\": [\"Secret Beach\", \"Old Cafe\"]," +
+                "  \"instagram_spots\": [\"Sunset Point\", \"Colorful Street\"]," +
+                "  \"food_discovery\": [\"Local Dish 1\", \"Famous Restaurant\"]," +
+                "  \"gamification\": [\"Try surfing\", \"Take a polaroid\"]," +
+                "  \"travel_tips\": [\"Tip 1\", \"Tip 2\"]," +
+                "  \"budget_summary\": [{\"category\": \"Stay\", \"amount\": \"Rs. 10000\"}]," +
+                "  \"days\": [ { \"day\": 1, \"title\": \"Arrival\", \"activities\": [ {\"time\": \"Morning\", \"description\": \"...\"} ] } ]" +
+                "}",
+                destination, days, budgetStr, type);
 
         // 3. Call Gemini API
         try {

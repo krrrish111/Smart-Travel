@@ -278,6 +278,63 @@ public class SchemaBootstrap implements ServletContextListener {
                     "category VARCHAR(50), " +
                     "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
                 );
+                
+                // Phase 10 Tables
+                stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS budget_plans (" +
+                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "user_id INT NOT NULL, " +
+                    "destination VARCHAR(100) NOT NULL, " +
+                    "total_budget DECIMAL(10,2) NOT NULL, " +
+                    "flights DECIMAL(10,2), " +
+                    "hotel DECIMAL(10,2), " +
+                    "food DECIMAL(10,2), " +
+                    "activities DECIMAL(10,2), " +
+                    "transportation DECIMAL(10,2), " +
+                    "emergency DECIMAL(10,2), " +
+                    "health_score INT, " +
+                    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
+                );
+
+                stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS trip_cost_predictions (" +
+                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "budget_plan_id INT NOT NULL, " +
+                    "best_case DECIMAL(10,2), " +
+                    "expected DECIMAL(10,2), " +
+                    "worst_case DECIMAL(10,2), " +
+                    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
+                );
+
+                stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS expense_logs (" +
+                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "budget_plan_id INT NOT NULL, " +
+                    "category VARCHAR(50) NOT NULL, " +
+                    "amount DECIMAL(10,2) NOT NULL, " +
+                    "description VARCHAR(255), " +
+                    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
+                );
+
+                stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS deal_alerts (" +
+                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "user_id INT NOT NULL, " +
+                    "destination VARCHAR(100) NOT NULL, " +
+                    "message TEXT NOT NULL, " +
+                    "is_read BOOLEAN DEFAULT FALSE, " +
+                    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
+                );
+
+                stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS budget_notifications (" +
+                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "user_id INT NOT NULL, " +
+                    "type VARCHAR(50), " + // e.g. OVERSPEND, DEAL, ALERT
+                    "message TEXT NOT NULL, " +
+                    "is_read BOOLEAN DEFAULT FALSE, " +
+                    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
+                );
                 System.out.println("[SchemaBootstrap] Created AI Planner 2.0 tables.");
             } catch (Exception e) {
                 System.err.println("[SchemaBootstrap] Error creating AI Planner tables: " + e.getMessage());

@@ -137,20 +137,34 @@ public class PlannerServlet extends HttpServlet {
                 "Structure: " +
                 "{" +
                 "  \"title\": \"Epic Trip to [Destination]\"," +
-                "  \"trip_summary\": \"Overview of why this place is amazing.\"," +
-                "  \"recommended_duration\": \"5-7 Days\"," +
-                "  \"best_season\": \"October to March\"," +
-                "  \"best_travel_mode\": \"Flight + Local Cab\"," +
-                "  \"travel_warnings\": [\"Beware of tourist traps\", \"Drink bottled water\"]," +
-                "  \"weather\": \"Sunny with a chance of adventure\"," +
-                "  \"must_visit\": [\"Place 1\", \"Place 2\"]," +
-                "  \"hidden_gems\": [\"Secret Beach\", \"Old Cafe\"]," +
-                "  \"instagram_spots\": [\"Sunset Point\", \"Colorful Street\"]," +
-                "  \"food_discovery\": [\"Local Dish 1\", \"Famous Restaurant\"]," +
-                "  \"gamification\": [\"Try surfing\", \"Take a polaroid\"]," +
-                "  \"travel_tips\": [\"Tip 1\", \"Tip 2\"]," +
-                "  \"budget_summary\": [{\"category\": \"Stay\", \"amount\": \"Rs. 10000\"}]," +
-                "  \"days\": [ { \"day\": 1, \"title\": \"Arrival\", \"activities\": [ {\"time\": \"Morning\", \"description\": \"...\"} ] } ]" +
+                "  \"trip_summary\": \"A dynamic and culturally rich city...\",\n" +
+                "  \"recommended_duration\": \"4 Days\",\n" +
+                "  \"best_season\": \"October to March\",\n" +
+                "  \"best_travel_mode\": \"Metro / Cab\",\n" +
+                "  \"travel_warnings\": [\"Beware of tourist traps\", \"Drink bottled water\"],\n" +
+                "  \"weather\": \"Sunny with a chance of adventure\",\n" +
+                "  \"must_visit\": [\"Place 1\", \"Place 2\"],\n" +
+                "  \"hidden_gems_detailed\": [\n" +
+                "    {\n" +
+                "      \"name\": \"Secret Beach\",\n" +
+                "      \"description\": \"Hidden behind forest trails, this beach offers unparalleled peace.\",\n" +
+                "      \"category\": \"Secret Beach\",\n" +
+                "      \"beauty_score\": 9.8,\n" +
+                "      \"peace_score\": 9.7,\n" +
+                "      \"photo_score\": 9.6,\n" +
+                "      \"crowd_score\": 2.1,\n" +
+                "      \"authenticity_score\": 9.4,\n" +
+                "      \"overall_score\": 9.5,\n" +
+                "      \"best_time\": \"5 PM\"\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  \"instagram_spots\": [\"Sunset Point\", \"Colorful Street\"],\n" +
+                "  \"food_discovery\": [\"Local Dish 1\", \"Famous Restaurant\"],\n" +
+                "  \"ai_recommendation_insight\": \"Most tourists visit X. Based on your preference for Y, I recommend Z.\",\n" +
+                "  \"gamification\": [\"Try surfing\", \"Take a polaroid\"],\n" +
+                "  \"travel_tips\": [\"Tip 1\", \"Tip 2\"],\n" +
+                "  \"budget_summary\": [{\"category\": \"Stay\", \"amount\": \"Rs. 10000\"}],\n" +
+                "  \"days\": [ { \"day\": 1, \"title\": \"Arrival\", \"activities\": [ {\"time\": \"Morning\", \"description\": \"...\"} ] } ]\n" +
                 "}",
                 destination, days, budgetStr, type);
 

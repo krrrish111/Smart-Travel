@@ -218,6 +218,32 @@
             </div>
         </div>
 
+        <!-- PHASE 4: AI DISCOVERY ENGINE -->
+        <div class="mb-10 slide-up delay-1">
+            <div id="aiInsightPanel" class="bg-primary/10 border border-primary/30 p-5 rounded-2xl mb-6 flex gap-4 items-start">
+                <div class="p-3 bg-primary rounded-full text-white"><i class="ri-gemini-fill text-xl"></i></div>
+                <div>
+                    <h4 class="text-main font-bold mb-1">AI Insight</h4>
+                    <p id="aiInsightText" class="text-sm text-muted">Loading insights...</p>
+                </div>
+            </div>
+            
+            <div class="flex justify-between items-end mb-4">
+                <h2 class="editorial text-main" style="font-size: 1.8rem;">Discover Hidden Gems</h2>
+                <div class="flex gap-2 overflow-x-auto pb-2 custom-scrollbar">
+                    <button class="btn btn-outline btn-xs active-tab">All Gems</button>
+                    <button class="btn btn-outline btn-xs">Photography</button>
+                    <button class="btn btn-outline btn-xs">Peaceful</button>
+                    <button class="btn btn-outline btn-xs">Adventure</button>
+                </div>
+            </div>
+            
+            <!-- Discovery Cards Container -->
+            <div id="aiDiscoveryGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Gem cards injected here -->
+            </div>
+        </div>
+
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <!-- Left: Day-wise timeline -->
             <div class="lg:col-span-2">
@@ -434,6 +460,7 @@ function plotAILocations(centerLatLng, aiData) {
     function addMarkers(list, layerGroup, icon, category) {
         if(!list) return;
         list.forEach((item, idx) => {
+            let itemName = typeof item === 'string' ? item : item.name;
             // Random offset within ~10km (0.1 degree roughly)
             const latOff = (Math.random() - 0.5) * 0.15;
             const lngOff = (Math.random() - 0.5) * 0.15;
@@ -443,9 +470,9 @@ function plotAILocations(centerLatLng, aiData) {
             const popupHtml = `
                 <div class="p-2" style="width: 200px;">
                     <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=200&q=80" class="w-full h-24 object-cover rounded mb-2">
-                    <h5 class="font-bold text-main text-sm mb-1">${item}</h5>
+                    <h5 class="font-bold text-main text-sm mb-1">${itemName}</h5>
                     <p class="text-xs text-muted mb-2">${category}</p>
-                    <button class="btn btn-primary text-xs py-1 px-3 w-full" onclick="addToTrip('${item.replace(/'/g,"")}', '${category}', ${pLat}, ${pLng})">Add To Trip</button>
+                    <button class="btn btn-primary text-xs py-1 px-3 w-full" onclick="addToTrip('${itemName.replace(/'/g,"")}', '${category}', ${pLat}, ${pLng})">Add To Trip</button>
                 </div>
             `;
             L.marker([pLat, pLng], {icon: icon}).bindPopup(popupHtml).addTo(layerGroup);
@@ -453,7 +480,7 @@ function plotAILocations(centerLatLng, aiData) {
     }
 
     addMarkers(aiData.must_visit, mapLayers.attractions, iconAttraction, 'Tourist Attraction');
-    addMarkers(aiData.hidden_gems, mapLayers.hiddenGems, iconHiddenGem, 'Hidden Gem');
+    addMarkers(aiData.hidden_gems_detailed || aiData.hidden_gems, mapLayers.hiddenGems, iconHiddenGem, 'Hidden Gem');
     addMarkers(aiData.food_discovery, mapLayers.food, iconFood, 'Restaurant / Food');
     addMarkers(aiData.instagram_spots, mapLayers.insta, iconInsta, 'Instagram Spot');
 }
@@ -569,6 +596,84 @@ function renderItinerary(data) {
     // Set Meta
     document.getElementById('aiPlanTitle').innerText = data.title || "Custom Itinerary";
     currentAiPlan = data; // Set current state for saving
+    
+    // Set Insights & Warnings
+    document.getElementById('aiBestSeason').innerText = data.best_season || "Year Round";
+    document.getElementById('aiRecDuration').innerText = data.recommended_duration || "Flexible";
+    document.getElementById('aiBestMode').innerText = data.best_travel_mode || "Flight/Cab";
+
+    const warningsList = document.getElementById('aiWarnings');
+    warningsList.innerHTML = '';
+    if (data.travel_warnings) {
+        data.travel_warnings.forEach(w => {
+            const li = document.createElement('li');
+            li.innerText = w;
+            warningsList.appendChild(li);
+        });
+    }
+
+    // Phase 4: Set Insight Text
+    const insightText = document.getElementById('aiInsightText');
+    if (insightText) {
+        insightText.innerText = data.ai_recommendation_insight || "I found some great places based on your travel style.";
+    }
+
+    // Phase 4: Render Hidden Gem Cards
+    const discoveryGrid = document.getElementById('aiDiscoveryGrid');
+    if (discoveryGrid && data.hidden_gems_detailed) {
+        discoveryGrid.innerHTML = '';
+        data.hidden_gems_detailed.forEach((gem, idx) => {
+            const card = document.createElement('div');
+            card.className = 'glass-panel rounded-2xl overflow-hidden hover:shadow-xl transition-all border border-white/5';
+            
+            // Generate a random Unsplash image based on category
+            const query = encodeURIComponent(gem.category || "nature travel");
+            const imgUrl = `https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=600&auto=format&fit=crop&sig=${idx}`;
+            
+            card.innerHTML = `
+                <div class="h-40 relative">
+                    <img src="${imgUrl}" class="w-full h-full object-cover">
+                    <div class="absolute top-3 left-3 bg-black/60 backdrop-blur-md text-white text-[0.65rem] uppercase tracking-wider font-bold px-3 py-1 rounded-full border border-white/10">
+                        ${gem.category || "Hidden Gem"}
+                    </div>
+                    <div class="absolute top-3 right-3 bg-primary text-white text-xs font-bold px-2 py-1 rounded border border-primary/50 shadow-lg">
+                        <i class="ri-star-fill text-yellow-300"></i> ${gem.overall_score || 9.0}
+                    </div>
+                </div>
+                <div class="p-5">
+                    <div class="flex justify-between items-start mb-2">
+                        <h4 class="text-main font-bold text-lg leading-tight">${gem.name}</h4>
+                    </div>
+                    <p class="text-xs text-muted mb-4 line-clamp-2">${gem.description}</p>
+                    
+                    <div class="grid grid-cols-2 gap-y-3 gap-x-2 text-xs mb-4">
+                        <div>
+                            <div class="flex justify-between text-[0.6rem] text-muted mb-1 uppercase tracking-wider"><span>Beauty</span> <span>${gem.beauty_score}</span></div>
+                            <div class="w-full bg-white/5 rounded-full h-1.5"><div class="bg-blue-400 h-1.5 rounded-full" style="width: ${(gem.beauty_score/10)*100}%"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[0.6rem] text-muted mb-1 uppercase tracking-wider"><span>Peace</span> <span>${gem.peace_score}</span></div>
+                            <div class="w-full bg-white/5 rounded-full h-1.5"><div class="bg-purple-400 h-1.5 rounded-full" style="width: ${(gem.peace_score/10)*100}%"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[0.6rem] text-muted mb-1 uppercase tracking-wider"><span>Photo</span> <span>${gem.photo_score}</span></div>
+                            <div class="w-full bg-white/5 rounded-full h-1.5"><div class="bg-pink-400 h-1.5 rounded-full" style="width: ${(gem.photo_score/10)*100}%"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[0.6rem] text-muted mb-1 uppercase tracking-wider"><span>Crowd</span> <span>${gem.crowd_score}</span></div>
+                            <div class="w-full bg-white/5 rounded-full h-1.5"><div class="bg-red-400 h-1.5 rounded-full" style="width: ${(gem.crowd_score/10)*100}%"></div></div>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-2">
+                        <button class="btn btn-primary flex-1 py-2 text-xs" onclick="addToTrip('${gem.name.replace(/'/g,"")}', '${gem.category}', 0, 0)">Add To Trip</button>
+                        <button class="btn btn-outline py-2 px-3 text-xs"><i class="ri-bookmark-line"></i></button>
+                    </div>
+                </div>
+            `;
+            discoveryGrid.appendChild(card);
+        });
+    }
     
     // Render Days
     const dayList = document.getElementById('aiDayCards');

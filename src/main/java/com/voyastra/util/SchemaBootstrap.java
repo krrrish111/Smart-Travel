@@ -120,6 +120,42 @@ public class SchemaBootstrap implements ServletContextListener {
                     "lng DECIMAL(11,8), " +
                     "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
                 );
+
+                stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS hidden_gems (" +
+                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "name VARCHAR(255), " +
+                    "destination VARCHAR(100), " +
+                    "description TEXT, " +
+                    "lat DECIMAL(10,8), " +
+                    "lng DECIMAL(11,8), " +
+                    "image_url VARCHAR(255), " +
+                    "category VARCHAR(100), " +
+                    "beauty_score DECIMAL(3,1), " +
+                    "peace_score DECIMAL(3,1), " +
+                    "photo_score DECIMAL(3,1), " +
+                    "crowd_score DECIMAL(3,1), " +
+                    "authenticity_score DECIMAL(3,1), " +
+                    "safety_score DECIMAL(3,1), " +
+                    "overall_score DECIMAL(3,1), " +
+                    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
+                );
+
+                stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS user_saved_gems (" +
+                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "user_id INT, " +
+                    "gem_id INT, " +
+                    "saved_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
+                );
+
+                stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS user_gamification (" +
+                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "user_id INT, " +
+                    "badge_name VARCHAR(100), " +
+                    "awarded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
+                );
                 
                 stmt.execute(
                     "CREATE TABLE IF NOT EXISTS trip_group_members (" +

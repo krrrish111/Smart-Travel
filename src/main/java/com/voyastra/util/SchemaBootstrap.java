@@ -156,6 +156,26 @@ public class SchemaBootstrap implements ServletContextListener {
                     "badge_name VARCHAR(100), " +
                     "awarded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
                 );
+
+                stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS user_collections (" +
+                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "user_id INT, " +
+                    "name VARCHAR(100), " +
+                    "description TEXT, " +
+                    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
+                );
+
+                stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS collection_items (" +
+                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "collection_id INT, " +
+                    "item_type VARCHAR(50), " + // e.g., 'photo', 'video', 'place'
+                    "item_url VARCHAR(255), " +
+                    "item_name VARCHAR(255), " +
+                    "added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
+                    "FOREIGN KEY (collection_id) REFERENCES user_collections(id) ON DELETE CASCADE)"
+                );
                 
                 stmt.execute(
                     "CREATE TABLE IF NOT EXISTS trip_group_members (" +

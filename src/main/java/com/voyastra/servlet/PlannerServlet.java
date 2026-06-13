@@ -138,6 +138,8 @@ public class PlannerServlet extends HttpServlet {
                 "{" +
                 "  \"title\": \"Epic Trip to [Destination]\"," +
                 "  \"trip_summary\": \"A dynamic and culturally rich city...\",\n" +
+                "  \"destination_story\": \"Wake up to the sound of waves, spend your mornings exploring hidden beaches...\",\n" +
+                "  \"trip_score\": 94,\n" +
                 "  \"recommended_duration\": \"4 Days\",\n" +
                 "  \"best_season\": \"October to March\",\n" +
                 "  \"best_travel_mode\": \"Metro / Cab\",\n" +
@@ -158,8 +160,23 @@ public class PlannerServlet extends HttpServlet {
                 "      \"best_time\": \"5 PM\"\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  \"instagram_spots\": [\"Sunset Point\", \"Colorful Street\"],\n" +
-                "  \"food_discovery\": [\"Local Dish 1\", \"Famous Restaurant\"],\n" +
+                "  \"instagram_spots_detailed\": [\n" +
+                "    {\n" +
+                "      \"name\": \"Sunset Point\",\n" +
+                "      \"photo_score\": 9.8,\n" +
+                "      \"difficulty\": \"Easy\",\n" +
+                "      \"best_time\": \"Golden Hour\"\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  \"food_discovery_detailed\": [\n" +
+                "    {\n" +
+                "      \"name\": \"Local Seafood Shack\",\n" +
+                "      \"description\": \"The best fresh catch of the day.\",\n" +
+                "      \"price_range\": \"$\",\n" +
+                "      \"category\": \"Street Food\",\n" +
+                "      \"location\": \"Near Beach\"\n" +
+                "    }\n" +
+                "  ],\n" +
                 "  \"ai_recommendation_insight\": \"Most tourists visit X. Based on your preference for Y, I recommend Z.\",\n" +
                 "  \"gamification\": [\"Try surfing\", \"Take a polaroid\"],\n" +
                 "  \"travel_tips\": [\"Tip 1\", \"Tip 2\"],\n" +

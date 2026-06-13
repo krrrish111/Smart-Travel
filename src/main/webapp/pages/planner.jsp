@@ -147,8 +147,7 @@
                     <div class="glass-panel p-2 flex flex-col items-center">
                         <i class="ri-car-line text-green-400 text-xl mb-1"></i>
                         <span id="timeCar" class="font-bold">--</span>
-                    </div>
-                </div>
+                                   </div>
                 
                 <div class="bg-primary/10 rounded-lg p-2 border border-primary/20">
                     <p class="text-[0.65rem] text-primary uppercase font-bold mb-1">AI Recommendation</p>
@@ -159,21 +158,171 @@
 
     </div>
 
-    <!-- AI GENERATED RESULTS CONTAINER -->
-    <div id="aiResultContainer" class="container mx-auto px-4 mt-12 mb-20" style="display:none;">
-        <div class="flex justify-between items-center mb-8">
-            <div>
-                <h2 id="aiPlanTitle" class="editorial text-main mb-1" style="font-size: 2.2rem;">Your Personalized Plan</h2>
-                <div class="flex gap-4 items-center">
-                    <span id="aiPlanMeta" class="text-xs text-muted tracking-widest uppercase font-bold">5 Days • Adventure</span>
-                    <span id="aiWeatherMeta" class="text-xs text-primary font-bold"><i class="ri-sun-cloudy-line mr-1"></i> <span id="weatherText">Checking Weather...</span></span>
-                    <button class="btn btn-outline btn-xs" onclick="window.print()">Download PDF</button>
+    <!-- PHASE 5: TRAVEL INSPIRATION MODE (Empty State) -->
+    <div id="inspirationContainer" class="container mx-auto px-4 mt-12 mb-20 slide-up">
+        <div class="mb-10 text-center">
+            <h2 class="editorial text-main mb-3" style="font-size: 2.5rem;">Where will your next story begin?</h2>
+            <p class="text-muted max-w-2xl mx-auto">Explore trending destinations, discover hidden gems, or let our AI craft a personalized journey just for you.</p>
+        </div>
+        
+        <div class="flex justify-between items-end mb-6">
+            <h3 class="font-bold text-main text-xl">Trending Visual Experiences</h3>
+            <div class="flex gap-2">
+                <button class="btn btn-outline btn-xs active-tab">Trending</button>
+                <button class="btn btn-outline btn-xs">Monsoon Magic</button>
+                <button class="btn btn-outline btn-xs">Budget</button>
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Inspiration Cards (Static placeholders for MVP) -->
+            <div class="group relative rounded-2xl overflow-hidden cursor-pointer h-64" onclick="document.getElementById('routeEnd').value='Meghalaya';">
+                <img src="https://images.unsplash.com/photo-1598425237654-4c05362ab85b?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                <div class="absolute bottom-4 left-4 right-4">
+                    <div class="flex justify-between items-end mb-1">
+                        <h4 class="text-white font-bold text-lg">Meghalaya</h4>
+                        <span class="bg-primary/90 text-white text-[0.6rem] uppercase tracking-wider px-2 py-1 rounded">Trending</span>
+                    </div>
+                    <p class="text-white/80 text-xs">Waterfalls & Living Roots</p>
                 </div>
             </div>
-            <div class="flex gap-2">
-                <a href="${pageContext.request.contextPath}/trip-groups" class="btn btn-outline" style="padding: 10px 20px; border-radius: 50px;"><i class="ri-group-line mr-1"></i> Trip Groups (Splitwise)</a>
-                <button id="btnSavePlan" class="btn btn-outline" style="padding: 10px 24px; border-radius: 50px;">Save to Profile</button>
-                <button id="btnBookTrip" class="btn btn-primary" style="padding: 10px 24px; border-radius: 50px;" onclick="window.location.href='${pageContext.request.contextPath}/flight/search'">Book Trip</button>
+            <div class="group relative rounded-2xl overflow-hidden cursor-pointer h-64" onclick="document.getElementById('routeEnd').value='Gokarna';">
+                <img src="https://images.unsplash.com/photo-1590766940554-634a7ed41450?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                <div class="absolute bottom-4 left-4 right-4">
+                    <div class="flex justify-between items-end mb-1">
+                        <h4 class="text-white font-bold text-lg">Gokarna</h4>
+                    </div>
+                    <p class="text-white/80 text-xs">Peaceful Beaches</p>
+                </div>
+            </div>
+            <div class="group relative rounded-2xl overflow-hidden cursor-pointer h-64" onclick="document.getElementById('routeEnd').value='Spiti Valley';">
+                <img src="https://images.unsplash.com/photo-1626714486675-eb23d13cceac?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                <div class="absolute bottom-4 left-4 right-4">
+                    <div class="flex justify-between items-end mb-1">
+                        <h4 class="text-white font-bold text-lg">Spiti Valley</h4>
+                        <span class="bg-blue-500/90 text-white text-[0.6rem] uppercase tracking-wider px-2 py-1 rounded">Adventure</span>
+                    </div>
+                    <p class="text-white/80 text-xs">High Altitude Desert</p>
+                </div>
+            </div>
+            <div class="group relative rounded-2xl overflow-hidden cursor-pointer h-64" onclick="document.getElementById('routeEnd').value='Wayanad';">
+                <img src="https://images.unsplash.com/photo-1593693397690-362cb9666cb2?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                <div class="absolute bottom-4 left-4 right-4">
+                    <div class="flex justify-between items-end mb-1">
+                        <h4 class="text-white font-bold text-lg">Wayanad</h4>
+                    </div>
+                    <p class="text-white/80 text-xs">Lush Greenery</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI GENERATED RESULTS CONTAINER -->
+    <div id="aiResultContainer" class="w-full" style="display:none;">
+        
+        <!-- PHASE 5: DESTINATION HERO BANNER -->
+        <div id="aiHeroBanner" class="relative w-full h-[60vh] flex items-center justify-center mb-12 bg-cover bg-center bg-no-repeat" style="background-image: url('https://images.unsplash.com/photo-1506461883276-594a12b11ac3?auto=format&fit=crop&w=1920&q=80');">
+            <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-background"></div>
+            
+            <div class="relative z-10 container mx-auto px-4 text-center slide-up">
+                <h1 id="aiHeroTitle" class="editorial text-white mb-4" style="font-size: 5rem; text-shadow: 0 4px 20px rgba(0,0,0,0.5);">GOA</h1>
+                <p id="aiHeroStory" class="text-white/90 max-w-3xl mx-auto text-lg leading-relaxed mb-8 italic" style="text-shadow: 0 2px 10px rgba(0,0,0,0.5);">
+                    "Wake up to the sound of waves, spend your mornings exploring hidden beaches, enjoy fresh seafood by the coast, and end your evenings with breathtaking sunsets over the Arabian Sea."
+                </p>
+                
+                <div class="flex justify-center gap-6">
+                    <div class="glass-panel px-6 py-3 rounded-full border border-white/20 backdrop-blur-md">
+                        <span class="text-xs text-white/70 uppercase tracking-widest block mb-1">Trip Score</span>
+                        <span id="aiTripScore" class="text-xl text-primary font-bold">94/100</span>
+                    </div>
+                    <div class="glass-panel px-6 py-3 rounded-full border border-white/20 backdrop-blur-md">
+                        <span class="text-xs text-white/70 uppercase tracking-widest block mb-1">Safety</span>
+                        <span id="aiSafetyScore" class="text-xl text-green-400 font-bold">9.2</span>
+                    </div>
+                    <div class="glass-panel px-6 py-3 rounded-full border border-white/20 backdrop-blur-md">
+                        <span class="text-xs text-white/70 uppercase tracking-widest block mb-1">Weather</span>
+                        <span id="aiHeroWeather" class="text-xl text-yellow-400 font-bold">28°C</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container mx-auto px-4 mb-20">
+            <div class="flex justify-between items-center mb-8">
+                <div>
+                    <h2 id="aiPlanTitle" class="editorial text-main mb-1" style="font-size: 2.2rem;">Your Personalized Plan</h2>
+                    <div class="flex gap-4 items-center">
+                        <span id="aiPlanMeta" class="text-xs text-muted tracking-widest uppercase font-bold">5 Days • Adventure</span>
+                        <button class="btn btn-outline btn-xs" onclick="window.print()">Download PDF</button>
+                    </div>
+                </div>
+                <div class="flex gap-2">
+                    <a href="${pageContext.request.contextPath}/trip-groups" class="btn btn-outline" style="padding: 10px 20px; border-radius: 50px;"><i class="ri-group-line mr-1"></i> Trip Groups (Splitwise)</a>
+                    <button id="btnSavePlan" class="btn btn-outline" style="padding: 10px 24px; border-radius: 50px;">Save to Profile</button>
+                    <button id="btnBookTrip" class="btn btn-primary" style="padding: 10px 24px; border-radius: 50px;" onclick="window.location.href='${pageContext.request.contextPath}/flight/search'">Book Trip</button>
+                </div>
+            </div>
+
+        <!-- PHASE 5: REELS & VIDEO EXPERIENCE -->
+        <div class="mb-12 slide-up">
+            <h3 class="font-bold text-main text-xl mb-4 flex items-center"><i class="ri-play-circle-line text-primary mr-2"></i> Travel Reels</h3>
+            <div class="flex gap-4 overflow-x-auto pb-4 custom-scrollbar" id="aiVideoReels">
+                <!-- YouTube IFrames will be injected here -->
+                <div class="glass-panel p-2 rounded-2xl shrink-0 w-72">
+                    <div class="relative w-full h-40 bg-black rounded-xl overflow-hidden mb-2">
+                        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=0&controls=0&modestbranding=1" title="Destination Trailer" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <div class="px-2 pb-1 flex justify-between items-center">
+                        <div>
+                            <span class="text-white text-sm font-bold block leading-tight mb-1">Destination Trailer</span>
+                            <span class="text-xs text-muted">Cinematic</span>
+                        </div>
+                        <button class="btn btn-outline btn-xs" style="padding: 4px 8px;"><i class="ri-bookmark-line"></i></button>
+                    </div>
+                </div>
+                <div class="glass-panel p-2 rounded-2xl shrink-0 w-72">
+                    <div class="relative w-full h-40 bg-black rounded-xl overflow-hidden mb-2">
+                        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/N1-Jmq7ITFE?autoplay=0&controls=0&modestbranding=1" title="Drone Footage" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <div class="px-2 pb-1 flex justify-between items-center">
+                        <div>
+                            <span class="text-white text-sm font-bold block leading-tight mb-1">Drone Footage</span>
+                            <span class="text-xs text-muted">4K Aerial</span>
+                        </div>
+                        <button class="btn btn-outline btn-xs" style="padding: 4px 8px;"><i class="ri-bookmark-line"></i></button>
+                    </div>
+                </div>
+                <div class="glass-panel p-2 rounded-2xl shrink-0 w-72">
+                    <div class="relative w-full h-40 bg-black rounded-xl overflow-hidden mb-2">
+                        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/hTVj8N_8Fk4?autoplay=0&controls=0&modestbranding=1" title="Food Tour" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <div class="px-2 pb-1 flex justify-between items-center">
+                        <div>
+                            <span class="text-white text-sm font-bold block leading-tight mb-1">Street Food Tour</span>
+                            <span class="text-xs text-muted">Local Cuisine</span>
+                        </div>
+                        <button class="btn btn-outline btn-xs" style="padding: 4px 8px;"><i class="ri-bookmark-line"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PHASE 5: PHOTO GALLERY EXPERIENCE -->
+        <div class="mb-12 slide-up">
+            <div class="flex justify-between items-end mb-4">
+                <h3 class="font-bold text-main text-xl flex items-center"><i class="ri-camera-lens-line text-primary mr-2"></i> Visual Experience</h3>
+                <div class="flex gap-2">
+                    <button class="btn btn-outline btn-xs active-tab">All Photos</button>
+                    <button class="btn btn-outline btn-xs">Food</button>
+                    <button class="btn btn-outline btn-xs">Nature</button>
+                </div>
+            </div>
+            <div class="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4" id="aiPhotoGallery">
+                <!-- Photos injected dynamically via JS based on AI response -->
             </div>
         </div>
 
@@ -593,6 +742,19 @@ function renderItinerary(data) {
     const container = document.getElementById('aiResultContainer');
     container.style.display = 'block';
 
+    const inspContainer = document.getElementById('inspirationContainer');
+    if (inspContainer) inspContainer.style.display = 'none';
+
+    // Phase 5: Hero Banner Update
+    document.getElementById('aiHeroTitle').innerText = document.getElementById('routeEnd').value.toUpperCase();
+    if (data.destination_story) {
+        document.getElementById('aiHeroStory').innerText = '"' + data.destination_story + '"';
+    }
+    if (data.trip_score) {
+        document.getElementById('aiTripScore').innerText = data.trip_score + "/100";
+    }
+    document.getElementById('aiHeroWeather').innerText = (Math.floor(Math.random() * 10) + 22) + "°C";
+
     // Set Meta
     document.getElementById('aiPlanTitle').innerText = data.title || "Custom Itinerary";
     currentAiPlan = data; // Set current state for saving
@@ -675,6 +837,34 @@ function renderItinerary(data) {
         });
     }
     
+    // Phase 5: Populate Photo Gallery
+    const photoGallery = document.getElementById('aiPhotoGallery');
+    if (photoGallery) {
+        photoGallery.innerHTML = '';
+        let places = [];
+        if (data.must_visit) places.push(...data.must_visit);
+        if (data.hidden_gems_detailed) places.push(...data.hidden_gems_detailed.map(g => g.name));
+        
+        places.forEach((place, idx) => {
+            const placeName = typeof place === 'string' ? place : place.name;
+            const imgUrl = `https://images.unsplash.com/photo-1506461883276-594a12b11ac3?q=80&w=400&auto=format&fit=crop&sig=${idx}`;
+            const div = document.createElement('div');
+            div.className = 'relative group break-inside-avoid rounded-xl overflow-hidden cursor-pointer';
+            div.innerHTML = `
+                <img src="${imgUrl}" class="w-full object-cover transition-transform duration-500 group-hover:scale-105">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <div class="absolute bottom-3 left-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span class="text-white font-bold text-sm leading-tight block mb-2">${placeName}</span>
+                    <div class="flex gap-2">
+                        <button class="btn btn-primary text-[0.6rem] py-1 px-2 flex-1"><i class="ri-add-line"></i> Add</button>
+                        <button class="btn btn-outline text-[0.6rem] py-1 px-2"><i class="ri-heart-line"></i></button>
+                    </div>
+                </div>
+            `;
+            photoGallery.appendChild(div);
+        });
+    }
+
     // Render Days
     const dayList = document.getElementById('aiDayCards');
     dayList.innerHTML = '';

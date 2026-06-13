@@ -365,7 +365,16 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Phase 7: Trip Score Breakdown Card -->
+            <div class="glass-panel p-6" style="border-radius: 20px;">
+                <h3 class="text-main mb-4 font-bold flex items-center" style="font-size: 1.1rem;"><i class="ri-bar-chart-2-line text-primary mr-2"></i> Trip Intelligence</h3>
+                <div id="aiTripScoreBreakdown" class="flex flex-col gap-3">
+                    <!-- Scores injected here -->
+                </div>
+            </div>
         </div>
+
 
         <!-- PHASE 4: AI DISCOVERY ENGINE -->
         <div class="mb-10 slide-up delay-1">
@@ -793,6 +802,36 @@ function renderItinerary(data) {
     if (data.trip_score) {
         document.getElementById('aiTripScore').innerText = data.trip_score + "/100";
     }
+
+    // Phase 7: Trip Score Breakdown
+    const tripScoreContainer = document.getElementById('aiTripScoreBreakdown');
+    if (tripScoreContainer && data.trip_score_breakdown) {
+        tripScoreContainer.innerHTML = '';
+        const scores = data.trip_score_breakdown;
+        const addScoreBar = (label, score, colorClass) => {
+            if(!score) return;
+            const pct = (score / 10) * 100;
+            tripScoreContainer.innerHTML += `
+                <div class="mb-2">
+                    <div class="flex justify-between text-[0.65rem] uppercase font-bold text-muted mb-1">
+                        <span>${label}</span>
+                        <span class="text-main">${score}/10</span>
+                    </div>
+                    <div class="w-full bg-white/5 rounded-full h-1.5 overflow-hidden">
+                        <div class="h-1.5 rounded-full ${colorClass}" style="width: ${pct}%"></div>
+                    </div>
+                </div>
+            `;
+        };
+        addScoreBar('Budget Fit', scores.budget_fit, 'bg-green-400');
+        addScoreBar('Weather', scores.weather, 'bg-blue-400');
+        addScoreBar('Safety', scores.safety, 'bg-purple-400');
+        addScoreBar('Crowd Avoidance', scores.crowd, 'bg-yellow-400');
+        addScoreBar('Comfort', scores.comfort, 'bg-primary');
+        addScoreBar('Photography', scores.photography, 'bg-pink-400');
+        addScoreBar('Food Experience', scores.food, 'bg-orange-400');
+    }
+
     document.getElementById('aiHeroWeather').innerText = (Math.floor(Math.random() * 10) + 22) + "°C";
 
     // Set Meta
@@ -1022,37 +1061,104 @@ function renderItinerary(data) {
         });
     }
 
-    // Render Days
+    // Phase 7: Events Detected
     const dayList = document.getElementById('aiDayCards');
     dayList.innerHTML = '';
+    
+    if (data.events_detected && data.events_detected.length > 0) {
+        const eventsBanner = document.createElement('div');
+        eventsBanner.className = 'glass-panel p-4 mb-6 rounded-2xl bg-orange-500/10 border-orange-500/30';
+        let eventsHtml = '';
+        data.events_detected.forEach(ev => {
+            eventsHtml += `<li class="text-sm text-orange-200"><i class="ri-calendar-event-line mr-2"></i>${ev}</li>`;
+        });
+        eventsBanner.innerHTML = `<h4 class="text-orange-400 font-bold mb-2 uppercase tracking-widest text-xs"><i class="ri-notification-3-line mr-1"></i> Events Detected</h4><ul>${eventsHtml}</ul>`;
+        dayList.appendChild(eventsBanner);
+    }
+
+    // Render Days
     data.days.forEach(day => {
         const card = document.createElement('div');
-        card.className = 'glass-panel p-6 reveal-item';
+        card.className = 'glass-panel p-6 reveal-item relative overflow-hidden';
         card.style.borderRadius = '20px';
         
+        let diffColor = 'text-green-400 bg-green-400/10 border-green-400/20';
+        if (day.difficulty_level === 'Moderate') diffColor = 'text-orange-400 bg-orange-400/10 border-orange-400/20';
+        if (day.difficulty_level === 'Intense') diffColor = 'text-red-400 bg-red-400/10 border-red-400/20';
+        
         let activitiesHtml = '';
-        day.activities.forEach((act, idx) => {
-            activitiesHtml += `
-                <div class="flex gap-4 p-3 hover:bg-white/5 rounded-xl transition-all group">
-                    <div class="text-[0.65rem] text-muted font-bold uppercase w-16 pt-1">${act.time}</div>
-                    <div class="flex-1">
-                        <p class="text-sm text-main m-0 editable-activity" contenteditable="true" onblur="updateActivity(${day.day}, ${idx}, this.innerText)">${act.description}</p>
+        if (day.activities) {
+            day.activities.forEach((act, idx) => {
+                let catIcon = 'ri-map-pin-line';
+                let catColor = 'text-primary bg-primary/10';
+                if (act.category === 'Food') { catIcon = 'ri-restaurant-2-line'; catColor = 'text-orange-400 bg-orange-400/10'; }
+                if (act.category === 'Hidden Gem') { catIcon = 'ri-vip-diamond-line'; catColor = 'text-purple-400 bg-purple-400/10'; }
+                if (act.category === 'Logistics') { catIcon = 'ri-car-line'; catColor = 'text-gray-400 bg-gray-400/10'; }
+
+                activitiesHtml += `
+                    <div class="flex gap-4 p-3 hover:bg-white/5 rounded-xl transition-all group relative">
+                        <div class="w-16 shrink-0 pt-1">
+                            <span class="text-[0.65rem] text-muted font-bold uppercase block">${act.time_slot || act.time}</span>
+                            ${act.travel_time ? `<span class="text-[0.55rem] text-muted flex items-center mt-1"><i class="ri-car-line mr-1"></i> ${act.travel_time}</span>` : ''}
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-1">
+                                <h5 class="text-sm text-main font-bold m-0">${act.title || 'Activity'}</h5>
+                                <span class="px-2 py-0.5 rounded text-[0.55rem] uppercase tracking-wider font-bold ${catColor}"><i class="${catIcon} mr-1"></i>${act.category || 'General'}</span>
+                                ${act.recommended_duration ? `<span class="px-2 py-0.5 rounded text-[0.55rem] uppercase tracking-wider font-bold text-muted bg-white/5"><i class="ri-time-line mr-1"></i>${act.recommended_duration}</span>` : ''}
+                            </div>
+                            <p class="text-xs text-muted/80 leading-relaxed editable-activity" contenteditable="true" onblur="updateActivity(${day.day}, ${idx}, this.innerText)">${act.description}</p>
+                        </div>
                     </div>
-                </div>
-            `;
-        });
+                `;
+            });
+        }
 
         card.innerHTML = `
-            <div class="flex justify-between items-center mb-4 cursor-grab drag-handle">
-                <h4 class="text-primary font-bold editorial" style="font-size: 1.4rem;">Day ${day.day}: ${day.title}</h4>
-                <i class="ri-draggable text-muted text-lg"></i>
+            <div class="absolute -right-10 -top-10 text-white/5 pointer-events-none">
+                <span class="font-bold editorial" style="font-size: 10rem;">${day.day}</span>
             </div>
-            <div class="flex flex-col gap-2 sortable-activities" data-day="${day.day}">
-                ${activitiesHtml}
+            <div class="relative z-10">
+                <div class="flex justify-between items-start mb-4 cursor-grab drag-handle">
+                    <div>
+                        <h4 class="text-primary font-bold editorial mb-2" style="font-size: 1.4rem;">Day ${day.day}: ${day.title}</h4>
+                        <div class="flex gap-2 mb-3">
+                            ${day.difficulty_level ? `<span class="px-2 py-1 rounded text-xs font-bold border ${diffColor}"><i class="ri-pulse-line mr-1"></i> ${day.difficulty_level}</span>` : ''}
+                            ${day.weather_forecast ? `<span class="px-2 py-1 rounded text-xs font-bold border text-blue-400 bg-blue-400/10 border-blue-400/20"><i class="ri-sun-cloudy-line mr-1"></i> ${day.weather_forecast}</span>` : ''}
+                            ${day.walking_km ? `<span class="px-2 py-1 rounded text-xs font-bold border text-muted bg-white/5 border-white/10"><i class="ri-walk-line mr-1"></i> ${day.walking_km}</span>` : ''}
+                        </div>
+                        ${day.daily_story ? `<p class="text-sm text-muted/90 italic mb-4">"${day.daily_story}"</p>` : ''}
+                    </div>
+                    <i class="ri-draggable text-muted text-lg mt-2"></i>
+                </div>
+                <div class="flex flex-col gap-1 sortable-activities" data-day="${day.day}">
+                    ${activitiesHtml}
+                </div>
             </div>
         `;
         dayList.appendChild(card);
     });
+
+    // Phase 7: Alternative Plans
+    if (data.alternative_plans && data.alternative_plans.length > 0) {
+        const altContainer = document.createElement('div');
+        altContainer.className = 'glass-panel p-6 mt-6 rounded-2xl border-dashed border border-white/20';
+        altContainer.innerHTML = `<h3 class="font-bold text-main text-lg mb-4 flex items-center"><i class="ri-shuffle-line text-primary mr-2"></i> Alternative Plans</h3>`;
+        
+        const grid = document.createElement('div');
+        grid.className = 'grid grid-cols-1 md:grid-cols-2 gap-4';
+        
+        data.alternative_plans.forEach(alt => {
+            grid.innerHTML += `
+                <div class="p-4 bg-white/5 hover:bg-white/10 rounded-xl transition-all cursor-pointer border border-white/5">
+                    <h5 class="text-sm font-bold text-main mb-1">${alt.plan_name}</h5>
+                    <p class="text-xs text-muted">${alt.description}</p>
+                </div>
+            `;
+        });
+        altContainer.appendChild(grid);
+        dayList.appendChild(altContainer);
+    }
 
     // Initialize Sortable for each day's activities
     document.querySelectorAll('.sortable-activities').forEach(el => {
@@ -1068,13 +1174,24 @@ function renderItinerary(data) {
 
     // Render Budget
     const budgetList = document.getElementById('aiBudgetList');
-    budgetList.innerHTML = '';
-    data.budget_summary.forEach(item => {
-        const row = document.createElement('div');
-        row.className = 'flex justify-between text-sm';
-        row.innerHTML = `<span class="text-muted">${item.category}</span><span class="text-main font-bold">${item.amount}</span>`;
-        budgetList.appendChild(row);
-    });
+    if (budgetList && data.budget_breakdown) {
+        budgetList.innerHTML = '';
+        const b = data.budget_breakdown;
+        const addBudgetRow = (label, val, icon) => {
+            if(!val) return;
+            const row = document.createElement('div');
+            row.className = 'flex justify-between items-center text-sm p-2 hover:bg-white/5 rounded-lg border-b border-white/5';
+            row.innerHTML = `<span class="text-muted flex items-center"><i class="${icon} mr-2 text-primary"></i> ${label}</span><span class="text-main font-bold font-mono">${val}</span>`;
+            budgetList.appendChild(row);
+        };
+        addBudgetRow('Flights', b.flights, 'ri-flight-takeoff-line');
+        addBudgetRow('Hotel', b.hotel, 'ri-hotel-bed-line');
+        addBudgetRow('Food', b.food, 'ri-restaurant-2-line');
+        addBudgetRow('Activities', b.activities, 'ri-ticket-2-line');
+        addBudgetRow('Transport', b.transportation, 'ri-car-line');
+        addBudgetRow('Emergency', b.emergency_fund, 'ri-safe-2-line');
+    }
+
 
     // Render Chips
     const renderChips = (id, items) => {

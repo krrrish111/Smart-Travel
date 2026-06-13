@@ -132,84 +132,59 @@ public class PlannerServlet extends HttpServlet {
                 "8. Smart Weather (what to pack). " +
                 "9. Instagram Spots (highly photogenic areas). " +
                 "10. Gamification tips (challenges or fun things to do). " +
-                "11. Daily plan broken down by morning/afternoon/evening. IMPORTANT: Natively inject Breakfast, Lunch, and Dinner directly into the daily itinerary activities.\n" +
-                "12. Local Food Specialties (e.g., must-try foods).\n" +
+                "11. Detailed Daily Plan. For each day, include weather forecast, difficulty level (Easy/Moderate/Intense), walking distance, and a daily story. " +
+                "    Within activities, explicitly provide time slot, title, description, category (e.g. Food, Hidden Gem), recommended duration, and travel time from the previous location.\n" +
+                "12. Local Food Specialties (must-try foods).\n" +
                 "13. Detailed Food Discovery (with ratings, budget, crowd level).\n" +
                 "14. Local Experiences Engine (with authenticity, fun, and photography scores).\n" +
                 "15. Food Trails (structured timelines for eating).\n" +
+                "16. Smart Budget Engine (explicit distribution across flights, hotel, food, activities, transport, emergency).\n" +
+                "17. Trip Score Breakdown (budget_fit, weather, safety, crowd, comfort, photography, food - out of 10).\n" +
+                "18. Alternative Plans (Plan B, Budget, Luxury, Rain Plan).\n" +
+                "19. Events Intelligence (list local events/festivals happening during the trip).\n" +
                 "Return the response ONLY as a strictly formatted JSON object with no markdown wrappers or extra text. " +
                 "Structure: " +
                 "{" +
                 "  \"title\": \"Epic Trip to [Destination]\"," +
                 "  \"trip_summary\": \"A dynamic and culturally rich city...\",\n" +
-                "  \"destination_story\": \"Wake up to the sound of waves, spend your mornings exploring hidden beaches...\",\n" +
+                "  \"destination_story\": \"Wake up to the sound of waves...\",\n" +
                 "  \"trip_score\": 94,\n" +
                 "  \"recommended_duration\": \"4 Days\",\n" +
                 "  \"best_season\": \"October to March\",\n" +
                 "  \"best_travel_mode\": \"Metro / Cab\",\n" +
                 "  \"travel_warnings\": [\"Beware of tourist traps\", \"Drink bottled water\"],\n" +
                 "  \"weather\": \"Sunny with a chance of adventure\",\n" +
-                "  \"local_food_specialties\": [\"Fish Curry Rice\", \"Bebinca\", \"Prawn Balchao\"],\n" +
+                "  \"local_food_specialties\": [\"Fish Curry Rice\", \"Bebinca\"],\n" +
                 "  \"must_visit\": [\"Place 1\", \"Place 2\"],\n" +
-                "  \"hidden_gems_detailed\": [\n" +
-                "    {\n" +
-                "      \"name\": \"Secret Beach\",\n" +
-                "      \"description\": \"Hidden behind forest trails, this beach offers unparalleled peace.\",\n" +
-                "      \"category\": \"Secret Beach\",\n" +
-                "      \"beauty_score\": 9.8,\n" +
-                "      \"peace_score\": 9.7,\n" +
-                "      \"photo_score\": 9.6,\n" +
-                "      \"crowd_score\": 2.1,\n" +
-                "      \"authenticity_score\": 9.4,\n" +
-                "      \"overall_score\": 9.5,\n" +
-                "      \"best_time\": \"5 PM\"\n" +
-                "    }\n" +
-                "  ],\n" +
-                "  \"instagram_spots_detailed\": [\n" +
-                "    {\n" +
-                "      \"name\": \"Sunset Point\",\n" +
-                "      \"photo_score\": 9.8,\n" +
-                "      \"difficulty\": \"Easy\",\n" +
-                "      \"best_time\": \"Golden Hour\"\n" +
-                "    }\n" +
-                "  ],\n" +
-                "  \"food_discovery_detailed\": [\n" +
-                "    {\n" +
-                "      \"name\": \"Martin's Corner\",\n" +
-                "      \"description\": \"The best fresh catch of the day.\",\n" +
-                "      \"price_range\": \"₹₹₹\",\n" +
-                "      \"category\": \"Seafood\",\n" +
-                "      \"location\": \"Near Beach\",\n" +
-                "      \"rating\": 4.8,\n" +
-                "      \"crowd_level\": \"High\",\n" +
-                "      \"short_story\": \"Skip crowded tourist restaurants and try this legendary spot.\"\n" +
-                "    }\n" +
-                "  ],\n" +
-                "  \"local_experiences\": [\n" +
-                "    {\n" +
-                "      \"name\": \"Local Fishing Village Tour\",\n" +
-                "      \"type\": \"Culture\",\n" +
-                "      \"authenticity_score\": 9.8,\n" +
-                "      \"photography_score\": 9.6,\n" +
-                "      \"fun_score\": 8.5,\n" +
-                "      \"budget_score\": 9.5,\n" +
-                "      \"short_story\": \"An authentic walk through the oldest fishing village in the area.\"\n" +
-                "    }\n" +
-                "  ],\n" +
-                "  \"food_trails\": [\n" +
-                "    {\n" +
-                "      \"title\": \"Goa Heritage Food Trail\",\n" +
-                "      \"breakfast\": \"Cafe Bodega\",\n" +
-                "      \"lunch\": \"Martin's Corner\",\n" +
-                "      \"evening\": \"Hidden Chai Point\",\n" +
-                "      \"dinner\": \"Beach Seafood Shack\"\n" +
-                "    }\n" +
-                "  ],\n" +
+                "  \"hidden_gems_detailed\": [ { \"name\": \"Secret Beach\", \"category\": \"Secret Beach\", \"overall_score\": 9.5 } ],\n" +
+                "  \"instagram_spots_detailed\": [ { \"name\": \"Sunset Point\" } ],\n" +
+                "  \"food_discovery_detailed\": [ { \"name\": \"Martin's Corner\", \"price_range\": \"₹₹₹\", \"category\": \"Seafood\", \"rating\": 4.8, \"crowd_level\": \"High\" } ],\n" +
+                "  \"local_experiences\": [ { \"name\": \"Village Tour\", \"type\": \"Culture\", \"authenticity_score\": 9.8, \"fun_score\": 8.5, \"photography_score\": 9.6 } ],\n" +
+                "  \"food_trails\": [ { \"title\": \"Goa Food Trail\", \"breakfast\": \"Cafe Bodega\", \"lunch\": \"Martin's\", \"evening\": \"Chai Point\", \"dinner\": \"Shack\" } ],\n" +
                 "  \"ai_recommendation_insight\": \"Most tourists visit X. Based on your preference for Y, I recommend Z.\",\n" +
-                "  \"gamification\": [\"Try surfing\", \"Take a polaroid\"],\n" +
-                "  \"travel_tips\": [\"Tip 1\", \"Tip 2\"],\n" +
-                "  \"budget_summary\": [{\"category\": \"Stay\", \"amount\": \"Rs. 10000\"}],\n" +
-                "  \"days\": [ { \"day\": 1, \"title\": \"Arrival\", \"activities\": [ {\"time\": \"Morning\", \"description\": \"...\"}, {\"time\": \"Lunch\", \"description\": \"Eat at Local Cafe...\"} ] } ]\n" +
+                "  \"gamification\": [\"Try surfing\"],\n" +
+                "  \"travel_tips\": [\"Tip 1\"],\n" +
+                "  \"budget_breakdown\": { \"flights\": \"₹15000\", \"hotel\": \"₹18000\", \"food\": \"₹8000\", \"activities\": \"₹7000\", \"transportation\": \"₹3000\", \"emergency_fund\": \"₹2000\" },\n" +
+                "  \"trip_score_breakdown\": { \"budget_fit\": 9, \"weather\": 8, \"safety\": 9, \"crowd\": 7, \"comfort\": 8, \"photography\": 10, \"food\": 9 },\n" +
+                "  \"events_detected\": [\"Local Sunburn Festival (Expected during your dates)\"],\n" +
+                "  \"alternative_plans\": [\n" +
+                "    { \"plan_name\": \"Rain Plan\", \"description\": \"Switch beach days for museum hopping and cafes.\" },\n" +
+                "    { \"plan_name\": \"Luxury Plan\", \"description\": \"Upgrade to a 5-star resort and private cab.\" }\n" +
+                "  ],\n" +
+                "  \"days\": [\n" +
+                "    {\n" +
+                "      \"day\": 1,\n" +
+                "      \"title\": \"Arrival & Golden Hour\",\n" +
+                "      \"weather_forecast\": \"Sunny, 28°C\",\n" +
+                "      \"difficulty_level\": \"Easy\",\n" +
+                "      \"walking_km\": \"2.5 KM\",\n" +
+                "      \"daily_story\": \"Start your morning with breakfast overlooking the Arabian Sea before exploring...\",\n" +
+                "      \"activities\": [\n" +
+                "        { \"time_slot\": \"Morning\", \"title\": \"Hotel Check-in\", \"description\": \"Settle in.\", \"category\": \"Logistics\", \"recommended_duration\": \"1 Hour\", \"travel_time\": \"30 Minutes\" },\n" +
+                "        { \"time_slot\": \"Lunch\", \"title\": \"Seafood Lunch\", \"description\": \"Eat at famous shack.\", \"category\": \"Food\", \"recommended_duration\": \"1.5 Hours\", \"travel_time\": \"10 Minutes\" }\n" +
+                "      ]\n" +
+                "    }\n" +
+                "  ]\n" +
                 "}",
                 destination, days, budgetStr, type);
 

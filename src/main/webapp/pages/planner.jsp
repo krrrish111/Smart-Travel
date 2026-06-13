@@ -448,12 +448,19 @@
                 <div id="aiDayCards" class="flex flex-col gap-6">
                     <!-- Day cards will be injected here -->
                 </div>
+                <!-- Phase 8: Add Custom Day -->
+                <button onclick="addCustomDay()" class="btn btn-outline w-full py-4 mt-6 border-dashed border-2 hover:bg-white/5 text-muted transition-all rounded-2xl flex items-center justify-center gap-2 font-bold">
+                    <i class="ri-add-circle-line text-xl text-primary"></i> Add Custom Day
+                </button>
             </div>
 
             <!-- Right: Insights & Budget -->
             <div class="flex flex-col gap-6">
                 <div class="glass-panel p-6" style="border-radius: 20px;">
-                    <h3 class="text-main mb-4 font-bold" style="font-size: 1.1rem;">Budget Breakdown</h3>
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-main font-bold" style="font-size: 1.1rem;">Budget Tracker</h3>
+                        <span id="aiBudgetRemaining" class="px-3 py-1 bg-green-500/10 text-green-400 border border-green-500/20 rounded-full text-xs font-bold font-mono">Calculating...</span>
+                    </div>
                     <div id="aiBudgetList" class="flex flex-col gap-3">
                         <!-- Budget items injected here -->
                     </div>
@@ -865,7 +872,9 @@ function renderItinerary(data) {
         discoveryGrid.innerHTML = '';
         data.hidden_gems_detailed.forEach((gem, idx) => {
             const card = document.createElement('div');
-            card.className = 'glass-panel rounded-2xl overflow-hidden hover:shadow-xl transition-all border border-white/5';
+            card.className = 'glass-panel rounded-2xl overflow-hidden hover:shadow-xl transition-all border border-white/5 cursor-grab draggable-item';
+            card.setAttribute('data-title', gem.name);
+            card.setAttribute('data-category', gem.category || "Hidden Gem");
             
             // Generate a random Unsplash image based on category
             const query = encodeURIComponent(gem.category || "nature travel");
@@ -913,6 +922,13 @@ function renderItinerary(data) {
                 </div>
             `;
             discoveryGrid.appendChild(card);
+        });
+        
+        // Phase 8: Initialize Sortable
+        new Sortable(discoveryGrid, {
+            group: { name: 'shared', pull: 'clone', put: false },
+            animation: 150,
+            sort: false
         });
     }
     
@@ -967,7 +983,9 @@ function renderItinerary(data) {
             const imgUrl = `https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=600&auto=format&fit=crop&sig=${idx+100}`;
             
             const card = document.createElement('div');
-            card.className = 'glass-panel rounded-2xl overflow-hidden hover:shadow-xl transition-all border border-white/5 flex flex-col h-full';
+            card.className = 'glass-panel rounded-2xl overflow-hidden hover:shadow-xl transition-all border border-white/5 flex flex-col h-full cursor-grab draggable-item';
+            card.setAttribute('data-title', food.name);
+            card.setAttribute('data-category', food.category || "Food");
             card.innerHTML = `
                 <div class="h-32 relative shrink-0">
                     <img src="${imgUrl}" class="w-full h-full object-cover">
@@ -990,6 +1008,13 @@ function renderItinerary(data) {
                 </div>
             `;
             foodGrid.appendChild(card);
+        });
+
+        // Phase 8: Initialize Sortable
+        new Sortable(foodGrid, {
+            group: { name: 'shared', pull: 'clone', put: false },
+            animation: 150,
+            sort: false
         });
     }
 
@@ -1131,9 +1156,12 @@ function renderItinerary(data) {
                     </div>
                     <i class="ri-draggable text-muted text-lg mt-2"></i>
                 </div>
-                <div class="flex flex-col gap-1 sortable-activities" data-day="${day.day}">
+                <div class="flex flex-col gap-1 sortable-activities" data-day="${day.day}" style="min-height: 50px;">
                     ${activitiesHtml}
                 </div>
+                <button onclick="addCustomActivity(this, ${day.day})" class="w-full mt-2 py-2 text-xs text-muted hover:text-main hover:bg-white/5 rounded-xl border border-dashed border-white/10 transition-all">
+                    <i class="ri-add-line mr-1"></i> Add Custom Activity
+                </button>
             </div>
         `;
         dayList.appendChild(card);
@@ -1161,16 +1189,171 @@ function renderItinerary(data) {
     }
 
     // Initialize Sortable for each day's activities
+    // Phase 8: Initialize Sortable for each day's activities and Optimization Engine
+    window.recalculateTripState = () => {
+        let totalActivities = 0;
+        let totalEstimatedCost = 0;
+        
+        document.querySelectorAll('.sortable-activities').forEach(dayList => {
+            const activities = dayList.querySelectorAll('.group');
+            const dayNum = dayList.getAttribute('data-day');
+            
+            // Overload Detection
+            if (activities.length > 6) {
+                VoyastraToast.show(`Trip Overload Detected on Day ${dayNum}. Too many activities!`, "error");
+            }
+            
+            totalActivities += activities.length;
+            totalEstimatedCost += (activities.length * 500); // Mock cost per activity
+        });
+        
+        // Update Live Budget
+        const budgetRemainingEl = document.getElementById('aiBudgetRemaining');
+        if (budgetRemainingEl && currentAiPlan) {
+            // Rough update
+            const newTotal = totalEstimatedCost + 15000; // base flight/hotel
+            budgetRemainingEl.innerText = "₹" + newTotal;
+        }
+    };
+
     document.querySelectorAll('.sortable-activities').forEach(el => {
         new Sortable(el, {
             group: 'shared', // set both lists to same group
             animation: 150,
+            onAdd: function (evt) {
+                const itemEl = evt.item;
+                const title = itemEl.getAttribute('data-title') || 'Custom Activity';
+                let category = itemEl.getAttribute('data-category') || 'General';
+                
+                let catIcon = 'ri-map-pin-line';
+                let catColor = 'text-primary bg-primary/10';
+                if (category === 'Food') { catIcon = 'ri-restaurant-2-line'; catColor = 'text-orange-400 bg-orange-400/10'; }
+                if (category === 'Hidden Gem') { catIcon = 'ri-vip-diamond-line'; catColor = 'text-purple-400 bg-purple-400/10'; }
+                
+                itemEl.className = "flex gap-4 p-3 hover:bg-white/5 rounded-xl transition-all group relative";
+                itemEl.innerHTML = `
+                    <div class="w-16 shrink-0 pt-1">
+                        <span class="text-[0.65rem] text-muted font-bold uppercase block">Custom</span>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-1">
+                            <h5 class="text-sm text-main font-bold m-0">${title}</h5>
+                            <span class="px-2 py-0.5 rounded text-[0.55rem] uppercase tracking-wider font-bold ${catColor}"><i class="${catIcon} mr-1"></i>${category}</span>
+                        </div>
+                        <p class="text-xs text-muted/80 leading-relaxed editable-activity" contenteditable="true">Added from Library</p>
+                    </div>
+                `;
+                VoyastraToast.show("Activity added to itinerary!", "success");
+                window.recalculateTripState();
+            },
             onEnd: function (evt) {
-                // Here we would update the `currentAiPlan` object based on the new DOM
                 VoyastraToast.show("Itinerary updated!", "success");
+                window.recalculateTripState();
             }
         });
     });
+    // Phase 8: Add Custom Day Logic
+    window.addCustomDay = () => {
+        const dayList = document.getElementById('aiDayCards');
+        const nextDayNum = dayList.children.length + 1;
+        
+        const card = document.createElement('div');
+        card.className = 'glass-panel p-6 reveal-item relative overflow-hidden';
+        card.style.borderRadius = '20px';
+        
+        card.innerHTML = `
+            <div class="absolute -right-10 -top-10 text-white/5 pointer-events-none">
+                <span class="font-bold editorial" style="font-size: 10rem;">${nextDayNum}</span>
+            </div>
+            <div class="relative z-10">
+                <div class="flex justify-between items-start mb-4 cursor-grab drag-handle">
+                    <div>
+                        <h4 class="text-primary font-bold editorial mb-2" style="font-size: 1.4rem;" contenteditable="true">Day ${nextDayNum}: Custom Day</h4>
+                        <div class="flex gap-2 mb-3">
+                            <span class="px-2 py-1 rounded text-xs font-bold border text-green-400 bg-green-400/10 border-green-400/20"><i class="ri-pulse-line mr-1"></i> Custom</span>
+                        </div>
+                    </div>
+                    <i class="ri-draggable text-muted text-lg mt-2"></i>
+                </div>
+                <div class="flex flex-col gap-1 sortable-activities" data-day="${nextDayNum}" style="min-height: 50px;">
+                    <!-- Drop Zone -->
+                    <div class="p-4 text-center border-2 border-dashed border-white/10 rounded-xl text-muted text-sm">
+                        Drag activities here
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        dayList.appendChild(card);
+        
+        // Initialize Sortable on new day
+        const newSortableEl = card.querySelector('.sortable-activities');
+        new Sortable(newSortableEl, {
+            group: 'shared',
+            animation: 150,
+            onAdd: function (evt) {
+                const itemEl = evt.item;
+                const title = itemEl.getAttribute('data-title') || 'Custom Activity';
+                let category = itemEl.getAttribute('data-category') || 'General';
+                let catIcon = 'ri-map-pin-line';
+                let catColor = 'text-primary bg-primary/10';
+                if (category === 'Food') { catIcon = 'ri-restaurant-2-line'; catColor = 'text-orange-400 bg-orange-400/10'; }
+                if (category === 'Hidden Gem') { catIcon = 'ri-vip-diamond-line'; catColor = 'text-purple-400 bg-purple-400/10'; }
+                
+                // Clear the "Drag activities here" placeholder if it exists
+                const placeholder = newSortableEl.querySelector('.text-center');
+                if(placeholder) placeholder.remove();
+
+                itemEl.className = "flex gap-4 p-3 hover:bg-white/5 rounded-xl transition-all group relative";
+                itemEl.innerHTML = `
+                    <div class="w-16 shrink-0 pt-1">
+                        <span class="text-[0.65rem] text-muted font-bold uppercase block">Custom</span>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-1">
+                            <h5 class="text-sm text-main font-bold m-0">${title}</h5>
+                            <span class="px-2 py-0.5 rounded text-[0.55rem] uppercase tracking-wider font-bold ${catColor}"><i class="${catIcon} mr-1"></i>${category}</span>
+                        </div>
+                        <p class="text-xs text-muted/80 leading-relaxed editable-activity" contenteditable="true">Added from Library</p>
+                    </div>
+                `;
+                VoyastraToast.show("Activity added to custom day!", "success");
+                window.recalculateTripState();
+            },
+            onEnd: function (evt) {
+                VoyastraToast.show("Itinerary updated!", "success");
+                window.recalculateTripState();
+            }
+        });
+        
+        VoyastraToast.show("Custom Day Added!", "success");
+    };
+
+    window.addCustomActivity = (btnEl, dayNum) => {
+        const title = prompt("Enter Custom Activity Title (e.g. Dinner Reservation)");
+        if (!title) return;
+        
+        const sortableList = btnEl.previousElementSibling;
+        const placeholder = sortableList.querySelector('.text-center');
+        if(placeholder) placeholder.remove();
+        
+        const card = document.createElement('div');
+        card.className = "flex gap-4 p-3 hover:bg-white/5 rounded-xl transition-all group relative";
+        card.innerHTML = `
+            <div class="w-16 shrink-0 pt-1">
+                <span class="text-[0.65rem] text-muted font-bold uppercase block">Custom</span>
+            </div>
+            <div class="flex-1">
+                <div class="flex items-center gap-2 mb-1">
+                    <h5 class="text-sm text-main font-bold m-0">${title}</h5>
+                    <span class="px-2 py-0.5 rounded text-[0.55rem] uppercase tracking-wider font-bold text-primary bg-primary/10"><i class="ri-user-star-line mr-1"></i>Personal</span>
+                </div>
+                <p class="text-xs text-muted/80 leading-relaxed editable-activity" contenteditable="true">Tap to edit notes</p>
+            </div>
+        `;
+        sortableList.appendChild(card);
+        window.recalculateTripState();
+    };
 
     // Render Budget
     const budgetList = document.getElementById('aiBudgetList');
@@ -1194,25 +1377,36 @@ function renderItinerary(data) {
 
 
     // Render Chips
-    const renderChips = (id, items) => {
+    // Render Chips
+    const renderChips = (id, items, defaultCategory) => {
         const el = document.getElementById(id);
         if (el) {
             el.innerHTML = '';
             if (items && Array.isArray(items)) {
                 items.forEach(v => {
                     const chip = document.createElement('li');
-                    chip.className = 'px-3 py-1 bg-white/10 rounded-full text-[0.7rem] text-muted border border-white/5';
-                    chip.innerText = v;
+                    chip.className = 'px-3 py-1 bg-white/10 rounded-full text-[0.7rem] text-muted border border-white/5 cursor-grab draggable-item';
+                    const title = typeof v === 'object' ? v.name : v;
+                    chip.innerText = title;
+                    chip.setAttribute('data-title', title);
+                    chip.setAttribute('data-category', defaultCategory);
                     el.appendChild(chip);
+                });
+
+                // Phase 8: Initialize Sortable
+                new Sortable(el, {
+                    group: { name: 'shared', pull: 'clone', put: false },
+                    animation: 150,
+                    sort: false
                 });
             }
         }
     };
 
-    renderChips('aiMustVisit', data.must_visit);
-    renderChips('aiHiddenGems', data.hidden_gems);
-    renderChips('aiInstaSpots', data.instagram_spots);
-    renderChips('aiFood', data.food_discovery);
+    renderChips('aiMustVisit', data.must_visit, 'Attraction');
+    renderChips('aiHiddenGems', data.hidden_gems, 'Hidden Gem');
+    renderChips('aiInstaSpots', data.instagram_spots, 'Instagram Spot');
+    renderChips('aiFood', data.food_discovery, 'Food');
 
     // Weather
     const weatherEl = document.getElementById('weatherText');

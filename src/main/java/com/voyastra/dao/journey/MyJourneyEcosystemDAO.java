@@ -3,6 +3,8 @@ package com.voyastra.dao.journey;
 import com.voyastra.model.journey.TravelMemory;
 import com.voyastra.model.journey.FamilyMember;
 import com.voyastra.model.journey.TripReport;
+import com.voyastra.model.journey.TravelDNA;
+import com.voyastra.model.Booking;
 import com.voyastra.util.DBConnection;
 
 import java.sql.*;
@@ -141,5 +143,57 @@ public class MyJourneyEcosystemDAO {
             e.printStackTrace();
         }
         return list;
+    }
+
+    public TravelDNA calculateTravelDNA(int userId, List<Booking> completedTrips) {
+        TravelDNA dna = new TravelDNA();
+        
+        List<TravelMemory> memories = getMemoriesForUser(userId);
+        
+        // Base scoring logic
+        int tripCount = completedTrips != null ? completedTrips.size() : 0;
+        
+        int explorer = Math.min(100, 30 + (tripCount * 15)); // Cap at 100
+        
+        int foodCount = 0;
+        int expCount = 0;
+        int photoCount = memories.size();
+
+        for (TravelMemory m : memories) {
+            if ("FOOD".equalsIgnoreCase(m.getType())) foodCount++;
+            if ("EXPERIENCE".equalsIgnoreCase(m.getType())) expCount++;
+        }
+        
+        int foodie = Math.min(100, 20 + (foodCount * 15));
+        int adventure = Math.min(100, 20 + (expCount * 15));
+        int photography = Math.min(100, 20 + (photoCount * 5));
+        
+        int luxury = Math.min(100, 40 + (tripCount * 5)); // Mock logic
+        int budget = 100 - luxury;
+
+        dna.setExplorerScore(explorer);
+        dna.setFoodieScore(foodie);
+        dna.setAdventureScore(adventure);
+        dna.setPhotographyScore(photography);
+        dna.setLuxuryScore(luxury);
+        dna.setBudgetScore(budget);
+
+        List<String> insights = new ArrayList<>();
+        if (explorer > 70) insights.add("You are a natural explorer! You love venturing into the unknown.");
+        else insights.add("You are building your explorer profile one trip at a time.");
+        
+        if (foodie > 60) insights.add("Your food choices suggest you prioritize culinary experiences.");
+        if (adventure > 60) insights.add("You have a high thrill-seeking tendency.");
+        
+        if (luxury > budget) {
+            insights.add("You tend to prefer premium comforts on your travels.");
+        } else {
+            insights.add("You are a smart budget traveler who optimizes for value.");
+        }
+        
+        insights.add("You are highly likely to enjoy an upcoming trip to Vietnam."); // AI mock insight
+
+        dna.setAiInsights(insights);
+        return dna;
     }
 }

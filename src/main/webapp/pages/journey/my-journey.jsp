@@ -894,36 +894,52 @@
                 <h2><i class="ri-dna-line" style="color: var(--primary);"></i> Travel DNA</h2>
                 <p style="color: var(--text-secondary); margin-bottom: 30px;">Deep analytics based on your past travels and preferences.</p>
                 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
-                    <div>
-                        <div class="dna-bar-container">
-                            <div class="dna-bar-header"><span>Explorer Profile</span> <span style="font-weight:bold; color: var(--primary);">92%</span></div>
-                            <div class="dna-track"><div class="dna-fill" style="width: 92%; background: var(--primary); box-shadow: 0 0 10px var(--primary);"></div></div>
+                <c:choose>
+                    <c:when test="${not empty travelDNA}">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
+                            <div>
+                                <div class="dna-bar-container">
+                                    <div class="dna-bar-header"><span>Explorer Profile</span> <span style="font-weight:bold; color: var(--primary);">${travelDNA.explorerScore}%</span></div>
+                                    <div class="dna-track"><div class="dna-fill" style="width: ${travelDNA.explorerScore}%; background: var(--primary); box-shadow: 0 0 10px var(--primary);"></div></div>
+                                </div>
+                                <div class="dna-bar-container">
+                                    <div class="dna-bar-header"><span>Foodie Profile</span> <span style="font-weight:bold; color: #e17055;">${travelDNA.foodieScore}%</span></div>
+                                    <div class="dna-track"><div class="dna-fill" style="width: ${travelDNA.foodieScore}%; background: #e17055; box-shadow: 0 0 10px #e17055;"></div></div>
+                                </div>
+                                <div class="dna-bar-container">
+                                    <div class="dna-bar-header"><span>Adventure Profile</span> <span style="font-weight:bold; color: #00b894;">${travelDNA.adventureScore}%</span></div>
+                                    <div class="dna-track"><div class="dna-fill" style="width: ${travelDNA.adventureScore}%; background: #00b894; box-shadow: 0 0 10px #00b894;"></div></div>
+                                </div>
+                                <div class="dna-bar-container">
+                                    <div class="dna-bar-header"><span>Photography Profile</span> <span style="font-weight:bold; color: #fdcb6e;">${travelDNA.photographyScore}%</span></div>
+                                    <div class="dna-track"><div class="dna-fill" style="width: ${travelDNA.photographyScore}%; background: #fdcb6e; box-shadow: 0 0 10px #fdcb6e;"></div></div>
+                                </div>
+                                <div class="dna-bar-container">
+                                    <div class="dna-bar-header"><span>Luxury Profile</span> <span style="font-weight:bold; color: #0984e3;">${travelDNA.luxuryScore}%</span></div>
+                                    <div class="dna-track"><div class="dna-fill" style="width: ${travelDNA.luxuryScore}%; background: #0984e3; box-shadow: 0 0 10px #0984e3;"></div></div>
+                                </div>
+                                <div class="dna-bar-container">
+                                    <div class="dna-bar-header"><span>Budget Profile</span> <span style="font-weight:bold; color: #d63031;">${travelDNA.budgetScore}%</span></div>
+                                    <div class="dna-track"><div class="dna-fill" style="width: ${travelDNA.budgetScore}%; background: #d63031; box-shadow: 0 0 10px #d63031;"></div></div>
+                                </div>
+                            </div>
+                            
+                            <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--color-border); border-radius: 16px; padding: 25px;">
+                                <h4 style="margin-bottom: 15px; color: white; font-size: 1.2rem;">AI Insights</h4>
+                                <ul style="color: var(--text-secondary); padding-left: 20px; line-height: 1.8;">
+                                    <c:forEach var="insight" items="${travelDNA.aiInsights}">
+                                        <li>${insight}</li>
+                                    </c:forEach>
+                                </ul>
+                            </div>
                         </div>
-                        <div class="dna-bar-container">
-                            <div class="dna-bar-header"><span>Foodie Profile</span> <span style="font-weight:bold; color: #e17055;">85%</span></div>
-                            <div class="dna-track"><div class="dna-fill" style="width: 85%; background: #e17055; box-shadow: 0 0 10px #e17055;"></div></div>
+                    </c:when>
+                    <c:otherwise>
+                        <div style="text-align: center; padding: 40px;">
+                            <p style="color: var(--text-secondary);">We need more travel data to calculate your Travel DNA. Complete a trip and upload memories to get started!</p>
                         </div>
-                        <div class="dna-bar-container">
-                            <div class="dna-bar-header"><span>Adventure Profile</span> <span style="font-weight:bold; color: #00b894;">65%</span></div>
-                            <div class="dna-track"><div class="dna-fill" style="width: 65%; background: #00b894; box-shadow: 0 0 10px #00b894;"></div></div>
-                        </div>
-                        <div class="dna-bar-container">
-                            <div class="dna-bar-header"><span>Luxury Profile</span> <span style="font-weight:bold; color: #0984e3;">40%</span></div>
-                            <div class="dna-track"><div class="dna-fill" style="width: 40%; background: #0984e3; box-shadow: 0 0 10px #0984e3;"></div></div>
-                        </div>
-                    </div>
-                    
-                    <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--color-border); border-radius: 16px; padding: 25px;">
-                        <h4 style="margin-bottom: 15px; color: white; font-size: 1.2rem;">AI Insights</h4>
-                        <ul style="color: var(--text-secondary); padding-left: 20px; line-height: 1.8;">
-                            <li>You tend to prefer <strong>warm weather</strong> destinations.</li>
-                            <li>You spend an average of <strong>35%</strong> of your budget on food.</li>
-                            <li>Your pacing is <strong>fast</strong>, fitting many activities into a day.</li>
-                            <li>You are highly likely to enjoy an upcoming trip to <strong>Vietnam</strong>.</li>
-                        </ul>
-                    </div>
-                </div>
+                    </c:otherwise>
+                </c:choose>
             </div>
         </div>
 

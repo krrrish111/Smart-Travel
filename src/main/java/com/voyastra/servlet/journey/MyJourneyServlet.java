@@ -53,7 +53,7 @@ public class MyJourneyServlet extends HttpServlet {
         request.setAttribute("journey", activeJourney);
         
         // Fetch upcoming and completed trips if required
-        if (tab.equals("upcoming") || tab.equals("completed") || tab.equals("memories") || tab.equals("overview")) {
+        if (tab.equals("upcoming") || tab.equals("completed") || tab.equals("memories") || tab.equals("overview") || tab.equals("calendar") || tab.equals("dna")) {
             List<Booking> allBookings = bookingDAO.getBookingsByUser(user.getId());
             List<Booking> upcomingTrips = new ArrayList<>();
             List<Booking> completedTrips = new ArrayList<>();
@@ -89,6 +89,10 @@ public class MyJourneyServlet extends HttpServlet {
                     memoriesMap.put(t.getId(), ecosystemDAO.getMemoriesForJourney(t.getId()));
                 }
                 request.setAttribute("tripMemoriesMap", memoriesMap);
+            }
+            
+            if (tab.equals("dna")) {
+                request.setAttribute("travelDNA", ecosystemDAO.calculateTravelDNA(user.getId(), completedTrips));
             }
         }
         

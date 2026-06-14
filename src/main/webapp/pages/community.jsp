@@ -33,7 +33,9 @@
             <a href="${pageContext.request.contextPath}/community/reels" class="c-nav-tab" style="text-decoration:none;">
                 <i class="ri-film-line"></i> Reels
             </a>
-            <button class="c-nav-tab" data-tab="hidden-gems"><i class="ri-gem-line"></i> Hidden Gems</button>
+            <a href="${pageContext.request.contextPath}/community/hidden-gems" class="c-nav-tab" style="text-decoration:none;">
+                <i class="ri-gem-line"></i> Hidden Gems
+            </a>
             <button class="c-nav-tab" data-tab="food"><i class="ri-restaurant-2-line"></i> Food</button>
             <button class="c-nav-tab" data-tab="guides"><i class="ri-map-2-line"></i> Guides</button>
             <button class="c-nav-tab" data-tab="creators"><i class="ri-user-star-line"></i> Creators</button>

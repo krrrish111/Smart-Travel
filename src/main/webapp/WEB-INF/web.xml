@@ -228,6 +228,16 @@
         <url-pattern>/community/reels</url-pattern>
     </servlet-mapping>
 
+    <!-- Community Hidden Gems -->
+    <servlet>
+        <servlet-name>HiddenGemsServlet</servlet-name>
+        <servlet-class>com.voyastra.servlet.community.HiddenGemsServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>HiddenGemsServlet</servlet-name>
+        <url-pattern>/community/hidden-gems</url-pattern>
+    </servlet-mapping>
+
     <!-- Community User Profiles: /community/user/{username} -->
     <servlet>
         <servlet-name>UserProfile</servlet-name>

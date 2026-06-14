@@ -1,288 +1,585 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Journey Command Center | Voyastra</title>
-    <jsp:include page="/components/config.jsp" />
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
-    <style>
-        body { background: #f4f6f9; }
-        .journey-dashboard {
-            display: grid;
-            grid-template-columns: 3fr 1fr;
-            gap: 30px;
-            padding: 40px 5%;
-            max-width: 1600px;
-            margin: 0 auto;
-        }
-        .panel {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(20px);
-            border-radius: 24px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            border: 1px solid rgba(255,255,255,0.2);
-            margin-bottom: 30px;
-        }
-        /* Top Hero Card */
-        .trip-hero {
-            background: linear-gradient(135deg, var(--primary), #8E2DE2);
-            color: white;
-            padding: 40px;
-            border-radius: 24px;
-            margin-bottom: 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 15px 35px rgba(108, 92, 231, 0.3);
-        }
-        .trip-hero h1 { font-size: 3rem; margin-bottom: 10px; }
-        .progress-circle {
-            width: 120px; height: 120px;
-            border-radius: 50%;
-            border: 8px solid rgba(255,255,255,0.2);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 2rem; font-weight: bold;
-            position: relative;
-        }
-        /* Plan Timeline */
-        .plan-timeline {
-            border-left: 3px solid #eee;
-            margin-left: 20px;
-            padding-left: 30px;
-        }
-        .plan-item { position: relative; margin-bottom: 30px; }
-        .plan-item::before {
-            content: ''; position: absolute; left: -39px; top: 0;
-            width: 15px; height: 15px; border-radius: 50%;
-            background: var(--primary);
-            border: 4px solid white;
-            box-shadow: 0 0 0 2px var(--primary);
-        }
-        .plan-time { font-weight: bold; color: var(--primary); margin-bottom: 5px; display: block; }
+<%@ include file="/components/header.jsp" %>
+<%@ include file="/components/global_ui.jsp" %>
+
+<style>
+    :root {
+        --profile-sidebar-width: 280px;
+    }
+
+    body {
+        background: radial-gradient(circle at top right, rgba(255, 107, 0, 0.05), transparent),
+                    radial-gradient(circle at bottom left, rgba(0, 122, 255, 0.05), transparent),
+                    #0a0a0a;
+        color: white;
+    }
+
+    .dashboard-container {
+        max-width: 1400px;
+        margin: 40px auto;
+        padding: 0 20px;
+        display: grid;
+        grid-template-columns: var(--profile-sidebar-width) 1fr;
+        gap: 30px;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Disable the fixed scroll-line on dashboard to prevent click blocking */
+    .scroll-line-container { display: none !important; }
+
+    /* Sidebar Navigation */
+    .profile-sidebar {
+        z-index: 10; position: relative;
+        background: var(--surface-glass);
+        backdrop-filter: blur(12px);
+        border: 1px solid var(--color-border);
+        border-radius: 24px;
+        padding: 24px;
+        height: fit-content;
+        position: sticky;
+        top: 100px;
+    }
+
+    .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 18px;
+        border-radius: 12px;
+        color: var(--text-secondary);
+        text-decoration: none;
+        transition: all 0.3s ease;
+        margin-bottom: 8px;
+        font-weight: 500;
+        cursor: pointer;
+    }
+
+    .nav-item:hover {
+        background: rgba(255, 255, 255, 0.05);
+        color: white;
+    }
+
+    .nav-item.active {
+        background: var(--primary);
+        color: white;
+        box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
+    }
+
+    /* Tab Contents */
+    .tab-content {
+        display: none;
+        animation: fadeIn 0.4s ease forwards;
+    }
+    .tab-content.active {
+        display: block;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Generic Panels */
+    .panel {
+        background: var(--surface-glass);
+        backdrop-filter: blur(12px);
+        border: 1px solid var(--color-border);
+        border-radius: 24px;
+        padding: 30px;
+        margin-bottom: 30px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    .panel h2 {
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+        font-family: 'Clash Display', sans-serif;
+        color: white;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    /* Metrics Grid */
+    .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+    }
+    .metric-card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid var(--color-border);
+        padding: 20px;
+        border-radius: 16px;
+        text-align: center;
+        transition: transform 0.3s ease;
+    }
+    .metric-card:hover { transform: translateY(-5px); }
+    .metric-card h3 { font-size: 2.2rem; color: var(--primary); margin-bottom: 5px; font-family: 'Clash Display', sans-serif; }
+    .metric-card span { font-size: 0.9rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; }
+
+    /* Active Journey Specific */
+    .trip-hero {
+        background: linear-gradient(135deg, var(--primary), #8E2DE2);
+        padding: 40px;
+        border-radius: 24px;
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 15px 35px rgba(255, 107, 0, 0.2);
+    }
+    .trip-hero h1 { font-size: 3.5rem; margin-bottom: 10px; font-family: 'Clash Display', sans-serif; }
+    .progress-circle {
+        width: 120px; height: 120px;
+        border-radius: 50%;
+        border: 8px solid rgba(255,255,255,0.2);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 2.5rem; font-weight: bold;
+    }
+
+    /* Plan Timeline */
+    .plan-timeline { border-left: 2px solid var(--color-border); margin-left: 20px; padding-left: 30px; }
+    .plan-item { position: relative; margin-bottom: 30px; }
+    .plan-item::before {
+        content: ''; position: absolute; left: -37px; top: 0;
+        width: 12px; height: 12px; border-radius: 50%;
+        background: var(--primary);
+        box-shadow: 0 0 0 4px rgba(255, 107, 0, 0.2);
+    }
+    .plan-time { font-weight: bold; color: var(--primary); margin-bottom: 5px; display: block; font-size: 1.1rem;}
+
+    /* Memories Masonry */
+    .memories-grid {
+        display: column;
+        column-count: 3;
+        column-gap: 20px;
+    }
+    .memory-item {
+        break-inside: avoid;
+        margin-bottom: 20px;
+        border-radius: 16px;
+        overflow: hidden;
+        position: relative;
+        background: rgba(255,255,255,0.05);
+        border: 1px solid var(--color-border);
+    }
+    .memory-item img { width: 100%; display: block; border-radius: 16px 16px 0 0; }
+    .memory-caption { padding: 15px; font-size: 0.95rem; color: var(--text-secondary); }
+
+    /* Custom CSS Calendar */
+    .calendar {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 10px;
+        text-align: center;
+    }
+    .cal-header { font-weight: bold; color: var(--text-secondary); padding: 10px; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; }
+    .cal-day {
+        background: rgba(255,255,255,0.03);
+        border: 1px solid var(--color-border);
+        border-radius: 12px;
+        padding: 20px 10px;
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        position: relative;
+    }
+    .cal-day:hover { background: rgba(255,255,255,0.1); }
+    .cal-day.has-trip { border-color: var(--primary); color: var(--primary); }
+    .cal-day.has-trip::after {
+        content: ''; position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
+        width: 6px; height: 6px; border-radius: 50%; background: var(--primary);
+    }
+
+    /* DNA Bars */
+    .dna-bar-container { margin-bottom: 20px; }
+    .dna-bar-header { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 1rem; color: white; }
+    .dna-track { background: rgba(255,255,255,0.1); height: 8px; border-radius: 4px; overflow: hidden; }
+    .dna-fill { height: 100%; border-radius: 4px; }
+
+    @media (max-width: 900px) {
+        .dashboard-container { grid-template-columns: 1fr; }
+        .profile-sidebar { position: static; display: flex; overflow-x: auto; padding: 15px; border-radius: 16px; white-space: nowrap; }
+        .nav-item { padding: 10px 15px; margin-bottom: 0; }
+        .memories-grid { column-count: 2; }
+        .trip-hero { flex-direction: column; text-align: center; gap: 20px; }
+    }
+    @media (max-width: 600px) {
+        .memories-grid { column-count: 1; }
+        .calendar { gap: 5px; }
+        .cal-day { padding: 10px 5px; font-size: 1rem; }
+    }
+</style>
+
+<div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="profile-sidebar">
+        <a class="nav-item ${activeTab == 'overview' ? 'active' : ''}" onclick="switchTab('overview', this)">
+            <i class="ri-dashboard-line" style="font-size: 1.2rem;"></i> Overview
+        </a>
+        <a class="nav-item ${activeTab == 'active' ? 'active' : ''}" onclick="switchTab('active', this)">
+            <i class="ri-compass-3-line" style="font-size: 1.2rem;"></i> Active Journey
+        </a>
+        <a class="nav-item ${activeTab == 'upcoming' ? 'active' : ''}" onclick="switchTab('upcoming', this)">
+            <i class="ri-flight-takeoff-line" style="font-size: 1.2rem;"></i> Upcoming Trips
+        </a>
+        <a class="nav-item ${activeTab == 'memories' ? 'active' : ''}" onclick="switchTab('memories', this)">
+            <i class="ri-gallery-line" style="font-size: 1.2rem;"></i> Travel Memories
+        </a>
+        <a class="nav-item ${activeTab == 'calendar' ? 'active' : ''}" onclick="switchTab('calendar', this)">
+            <i class="ri-calendar-event-line" style="font-size: 1.2rem;"></i> Travel Calendar
+        </a>
+        <a class="nav-item ${activeTab == 'dna' ? 'active' : ''}" onclick="switchTab('dna', this)">
+            <i class="ri-dna-line" style="font-size: 1.2rem;"></i> Travel DNA
+        </a>
+        <a class="nav-item ${activeTab == 'family' ? 'active' : ''}" onclick="switchTab('family', this)">
+            <i class="ri-group-line" style="font-size: 1.2rem;"></i> Family Hub
+        </a>
+        <a class="nav-item ${activeTab == 'reports' ? 'active' : ''}" onclick="switchTab('reports', this)">
+            <i class="ri-file-chart-line" style="font-size: 1.2rem;"></i> Trip Reports
+        </a>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main>
         
-        /* Grid Layouts for smaller panels */
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-        }
-        .metric-card {
-            background: #f8f9fa; padding: 15px; border-radius: 12px; text-align: center;
-        }
-        .metric-card h3 { font-size: 1.8rem; color: #2d3436; margin-bottom: 5px; }
-        .metric-card span { font-size: 0.9rem; color: #636e72; }
-
-        /* Document Vault */
-        .doc-item {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 12px 15px; background: #f8f9fa; border-radius: 10px; margin-bottom: 10px;
-        }
-        .doc-item i { font-size: 1.5rem; color: var(--primary); }
-
-        /* Checklist */
-        .checklist-item {
-            display: flex; align-items: center; gap: 15px; padding: 10px 0; border-bottom: 1px solid #eee;
-        }
-        .checklist-item input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--primary); }
-    </style>
-</head>
-<body>
-    <jsp:include page="/components/header.jsp" />
-
-    <div class="journey-dashboard">
-        <!-- Main Column -->
-        <div class="main-col">
-            <!-- SECTION 1: Current Trip Card -->
-            <div class="trip-hero">
-                <div>
-                    <span style="background: rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 20px; font-weight: bold; letter-spacing: 1px; font-size: 0.8rem;">STATUS: ${journey.status}</span>
-                    <h1>${journey.destination}</h1>
-                    <p style="font-size: 1.2rem; opacity: 0.9;"><i class="far fa-calendar-alt"></i> ${journey.startDate} - ${journey.endDate}</p>
-                    <p style="font-size: 1.2rem; margin-top: 10px;"><strong>Day ${journey.currentDay} of ${journey.totalDays}</strong></p>
-                </div>
-                <div class="progress-circle">
-                    ${journey.progressPercentage}%
+        <!-- TAB: OVERVIEW -->
+        <div id="tab-overview" class="tab-content ${activeTab == 'overview' ? 'active' : ''}">
+            <div class="panel">
+                <h2><i class="ri-planet-line" style="color: var(--primary);"></i> Ecosystem Overview</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 30px;">Welcome to your complete Travel Operating System.</p>
+                
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <h3>14</h3>
+                        <span>Countries Visited</span>
+                    </div>
+                    <div class="metric-card">
+                        <h3>5</h3>
+                        <span>Upcoming Trips</span>
+                    </div>
+                    <div class="metric-card">
+                        <h3>128</h3>
+                        <span>Travel Memories</span>
+                    </div>
+                    <div class="metric-card">
+                        <h3>92%</h3>
+                        <span>Explorer DNA</span>
+                    </div>
                 </div>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
-                <!-- SECTION 2: Today's Plan -->
-                <div class="panel">
-                    <h2><i class="fas fa-map-marked-alt"></i> Today's Plan</h2>
-                    <p style="color: #666; margin-bottom: 25px;">Follow your scheduled itinerary.</p>
-                    <div class="plan-timeline">
-                        <div class="plan-item">
-                            <span class="plan-time">Morning</span>
-                            <c:forEach var="item" items="${journey.morningPlan}">
-                                <div>• ${item}</div>
-                            </c:forEach>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+                <div class="panel" style="background: linear-gradient(135deg, rgba(255,107,0,0.1), rgba(0,0,0,0));">
+                    <h2><i class="ri-fire-line"></i> Quick Actions</h2>
+                    <ul style="list-style: none; padding: 0; margin: 0; color: var(--text-secondary); line-height: 2.5;">
+                        <li><i class="ri-add-line" style="color: var(--primary); margin-right: 10px;"></i> Plan a new trip</li>
+                        <li><i class="ri-upload-cloud-line" style="color: var(--primary); margin-right: 10px;"></i> Upload recent memories</li>
+                        <li><i class="ri-user-add-line" style="color: var(--primary); margin-right: 10px;"></i> Add a family member</li>
+                    </ul>
+                </div>
+                <div class="panel" style="background: linear-gradient(135deg, rgba(0,122,255,0.1), rgba(0,0,0,0));">
+                    <h2><i class="ri-notification-3-line"></i> Alerts</h2>
+                    <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; margin-bottom: 10px; border-left: 4px solid #ffcc00;">
+                        Family Passport expiring in 6 months (John Doe).
+                    </div>
+                    <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; border-left: 4px solid var(--primary);">
+                        Check-in opens tomorrow for Tokyo Flight!
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: ACTIVE JOURNEY -->
+        <div id="tab-active" class="tab-content ${activeTab == 'active' ? 'active' : ''}">
+            <c:choose>
+                <c:when test="${not empty journey}">
+                    <div class="trip-hero">
+                        <div>
+                            <span style="background: rgba(255,255,255,0.2); padding: 6px 16px; border-radius: 20px; font-weight: 600; letter-spacing: 1px; font-size: 0.85rem; text-transform: uppercase;">STATUS: ${journey.status}</span>
+                            <h1 style="margin-top: 15px;">${journey.destination}</h1>
+                            <p style="font-size: 1.2rem; opacity: 0.9; margin-bottom: 5px;"><i class="ri-calendar-line"></i> ${journey.startDate} - ${journey.endDate}</p>
+                            <p style="font-size: 1.2rem;"><strong>Day ${journey.currentDay} of ${journey.totalDays}</strong></p>
                         </div>
-                        <div class="plan-item">
-                            <span class="plan-time">Afternoon</span>
-                            <c:forEach var="item" items="${journey.afternoonPlan}">
-                                <div>• ${item}</div>
-                            </c:forEach>
+                        <div class="progress-circle">
+                            ${journey.progressPercentage}%
                         </div>
-                        <div class="plan-item">
-                            <span class="plan-time">Evening</span>
-                            <c:forEach var="item" items="${journey.eveningPlan}">
-                                <div>• ${item}</div>
-                            </c:forEach>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 30px;">
+                        <div class="panel">
+                            <h2><i class="ri-map-pin-time-line"></i> Today's Itinerary</h2>
+                            <div class="plan-timeline" style="margin-top: 25px;">
+                                <div class="plan-item">
+                                    <span class="plan-time">Morning</span>
+                                    <c:forEach var="item" items="${journey.morningPlan}">
+                                        <div style="color: var(--text-secondary); margin-bottom: 5px;">• ${item}</div>
+                                    </c:forEach>
+                                </div>
+                                <div class="plan-item">
+                                    <span class="plan-time">Afternoon</span>
+                                    <c:forEach var="item" items="${journey.afternoonPlan}">
+                                        <div style="color: var(--text-secondary); margin-bottom: 5px;">• ${item}</div>
+                                    </c:forEach>
+                                </div>
+                            </div>
                         </div>
-                        <div class="plan-item">
-                            <span class="plan-time">Night</span>
-                            <c:forEach var="item" items="${journey.nightPlan}">
-                                <div>• ${item}</div>
-                            </c:forEach>
+
+                        <div class="panel" style="background: linear-gradient(135deg, rgba(0, 184, 148, 0.1), rgba(0,0,0,0));">
+                            <h2><i class="ri-sun-cloudy-line"></i> Weather</h2>
+                            <div style="font-size: 3rem; font-weight: bold; font-family: 'Clash Display', sans-serif;">${journey.temperature}°C</div>
+                            <p style="color: var(--text-secondary); font-size: 1.1rem; margin-bottom: 20px;">${journey.weatherCondition}</p>
+                            <c:if test="${not empty journey.weatherAlert}">
+                                <div style="background: rgba(255, 107, 0, 0.2); border: 1px solid var(--primary); padding: 12px; border-radius: 12px; font-size: 0.9rem; color: #fff;">
+                                    <i class="ri-error-warning-line"></i> ${journey.weatherAlert}
+                                </div>
+                            </c:if>
                         </div>
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <div class="panel" style="text-align: center; padding: 80px 20px;">
+                        <i class="ri-luggage-cart-line" style="font-size: 5rem; color: var(--text-secondary); opacity: 0.5;"></i>
+                        <h2 style="justify-content: center; margin-top: 20px;">No Active Journey</h2>
+                        <p style="color: var(--text-secondary); margin-bottom: 30px;">You are currently not on any trip. Go to the Planner to start your next adventure!</p>
+                        <a href="${pageContext.request.contextPath}/planner" class="btn btn-primary">Start Planning</a>
+                    </div>
+                </c:otherwise>
+            </c:choose>
+        </div>
+
+        <!-- TAB: UPCOMING TRIPS -->
+        <div id="tab-upcoming" class="tab-content ${activeTab == 'upcoming' ? 'active' : ''}">
+            <div class="panel">
+                <h2><i class="ri-flight-takeoff-line" style="color: var(--primary);"></i> Upcoming Trips</h2>
+                
+                <!-- Mock Upcoming Trip Card -->
+                <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--color-border); border-radius: 16px; padding: 25px; display: flex; justify-content: space-between; align-items: center; transition: all 0.3s ease; cursor: pointer; margin-bottom: 20px;" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.03)'">
+                    <div>
+                        <h3 style="font-size: 1.6rem; font-family: 'Clash Display', sans-serif; margin-bottom: 8px;">Kyoto, Japan</h3>
+                        <p style="color: var(--text-secondary); font-size: 1rem;"><i class="ri-calendar-event-line"></i> Oct 12 - Oct 20, 2026</p>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="background: rgba(0, 184, 148, 0.2); color: #00b894; padding: 6px 15px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; margin-bottom: 10px; display: inline-block;">Confirmed</div>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">4 months away</p>
                     </div>
                 </div>
 
-                <!-- SECTION 4: Live Budget Tracker -->
-                <div class="panel">
-                    <h2><i class="fas fa-wallet"></i> Live Budget Tracker</h2>
-                    <div class="metrics-grid" style="margin-top: 20px;">
-                        <div class="metric-card" style="grid-column: span 2; background: rgba(108, 92, 231, 0.1);">
-                            <h3 style="color: var(--primary);">₹${journey.totalBudget}</h3>
-                            <span>Total Approved Budget</span>
+                <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--color-border); border-radius: 16px; padding: 25px; display: flex; justify-content: space-between; align-items: center; transition: all 0.3s ease; cursor: pointer;" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.03)'">
+                    <div>
+                        <h3 style="font-size: 1.6rem; font-family: 'Clash Display', sans-serif; margin-bottom: 8px;">Paris, France</h3>
+                        <p style="color: var(--text-secondary); font-size: 1rem;"><i class="ri-calendar-event-line"></i> Dec 24 - Jan 2, 2027</p>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="background: rgba(255, 107, 0, 0.2); color: var(--primary); padding: 6px 15px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; margin-bottom: 10px; display: inline-block;">Planning</div>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">6 months away</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: TRAVEL MEMORIES -->
+        <div id="tab-memories" class="tab-content ${activeTab == 'memories' ? 'active' : ''}">
+            <div class="panel">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                    <h2 style="margin: 0;"><i class="ri-gallery-fill" style="color: var(--primary);"></i> Travel Memories</h2>
+                    <button class="btn btn-primary"><i class="ri-upload-2-line"></i> Upload</button>
+                </div>
+
+                <div class="memories-grid">
+                    <!-- Hardcoded Mock Data for premium visual -->
+                    <div class="memory-item">
+                        <img src="https://images.unsplash.com/photo-1499856871958-5b9627545d1a?q=80&w=800&auto=format&fit=crop" alt="Paris">
+                        <div class="memory-caption">
+                            <strong>Sunset at Eiffel</strong><br>
+                            <span style="font-size: 0.85rem; opacity: 0.7;"><i class="ri-map-pin-line"></i> Paris, 2025</span>
                         </div>
-                        <div class="metric-card">
-                            <h3 style="color: #e17055;">₹${journey.spent}</h3>
-                            <span>Total Spent</span>
+                    </div>
+                    <div class="memory-item">
+                        <img src="https://images.unsplash.com/photo-1542051841857-5f90071e7989?q=80&w=800&auto=format&fit=crop" alt="Tokyo">
+                        <div class="memory-caption">
+                            <strong>Shibuya Crossing</strong><br>
+                            <span style="font-size: 0.85rem; opacity: 0.7;"><i class="ri-map-pin-line"></i> Tokyo, 2024</span>
                         </div>
-                        <div class="metric-card">
-                            <h3 style="color: #00b894;">₹${journey.totalBudget - journey.spent}</h3>
-                            <span>Remaining</span>
+                    </div>
+                    <div class="memory-item">
+                        <img src="https://images.unsplash.com/photo-1506929562872-bb421503ef21?q=80&w=800&auto=format&fit=crop" alt="Beach">
+                        <div class="memory-caption">
+                            <strong>Morning surf vibes</strong><br>
+                            <span style="font-size: 0.85rem; opacity: 0.7;"><i class="ri-map-pin-line"></i> Bali, 2024</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: TRAVEL CALENDAR -->
+        <div id="tab-calendar" class="tab-content ${activeTab == 'calendar' ? 'active' : ''}">
+            <div class="panel">
+                <h2><i class="ri-calendar-2-line" style="color: var(--primary);"></i> Travel Calendar</h2>
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                    <button class="btn btn-outline" style="padding: 8px 15px;"><i class="ri-arrow-left-s-line"></i></button>
+                    <h3 style="font-family: 'Clash Display', sans-serif; font-size: 1.5rem;">October 2026</h3>
+                    <button class="btn btn-outline" style="padding: 8px 15px;"><i class="ri-arrow-right-s-line"></i></button>
+                </div>
+
+                <div class="calendar">
+                    <div class="cal-header">Sun</div><div class="cal-header">Mon</div><div class="cal-header">Tue</div>
+                    <div class="cal-header">Wed</div><div class="cal-header">Thu</div><div class="cal-header">Fri</div><div class="cal-header">Sat</div>
+                    
+                    <!-- Mock Days -->
+                    <div class="cal-day" style="opacity: 0.3;">27</div><div class="cal-day" style="opacity: 0.3;">28</div>
+                    <div class="cal-day" style="opacity: 0.3;">29</div><div class="cal-day" style="opacity: 0.3;">30</div>
+                    <div class="cal-day">1</div><div class="cal-day">2</div><div class="cal-day">3</div>
+                    <div class="cal-day">4</div><div class="cal-day">5</div><div class="cal-day">6</div>
+                    <div class="cal-day">7</div><div class="cal-day">8</div><div class="cal-day">9</div><div class="cal-day">10</div>
+                    <div class="cal-day">11</div>
+                    <div class="cal-day has-trip" title="Kyoto Trip Starts">12</div>
+                    <div class="cal-day has-trip" style="background: rgba(255,107,0,0.1);">13</div>
+                    <div class="cal-day has-trip" style="background: rgba(255,107,0,0.1);">14</div>
+                    <div class="cal-day has-trip" style="background: rgba(255,107,0,0.1);">15</div>
+                    <div class="cal-day has-trip" style="background: rgba(255,107,0,0.1);">16</div>
+                    <div class="cal-day has-trip" style="background: rgba(255,107,0,0.1);">17</div>
+                    <div class="cal-day has-trip" style="background: rgba(255,107,0,0.1);">18</div>
+                    <div class="cal-day has-trip" style="background: rgba(255,107,0,0.1);">19</div>
+                    <div class="cal-day has-trip" title="Kyoto Trip Ends">20</div>
+                    <div class="cal-day">21</div><div class="cal-day">22</div><div class="cal-day">23</div>
+                    <div class="cal-day">24</div><div class="cal-day">25</div><div class="cal-day">26</div><div class="cal-day">27</div>
+                    <div class="cal-day">28</div><div class="cal-day">29</div><div class="cal-day">30</div><div class="cal-day">31</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: TRAVEL DNA -->
+        <div id="tab-dna" class="tab-content ${activeTab == 'dna' ? 'active' : ''}">
+            <div class="panel">
+                <h2><i class="ri-dna-line" style="color: var(--primary);"></i> Travel DNA</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 30px;">Deep analytics based on your past travels and preferences.</p>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
+                    <div>
+                        <div class="dna-bar-container">
+                            <div class="dna-bar-header"><span>Explorer Profile</span> <span style="font-weight:bold; color: var(--primary);">92%</span></div>
+                            <div class="dna-track"><div class="dna-fill" style="width: 92%; background: var(--primary); box-shadow: 0 0 10px var(--primary);"></div></div>
+                        </div>
+                        <div class="dna-bar-container">
+                            <div class="dna-bar-header"><span>Foodie Profile</span> <span style="font-weight:bold; color: #e17055;">85%</span></div>
+                            <div class="dna-track"><div class="dna-fill" style="width: 85%; background: #e17055; box-shadow: 0 0 10px #e17055;"></div></div>
+                        </div>
+                        <div class="dna-bar-container">
+                            <div class="dna-bar-header"><span>Adventure Profile</span> <span style="font-weight:bold; color: #00b894;">65%</span></div>
+                            <div class="dna-track"><div class="dna-fill" style="width: 65%; background: #00b894; box-shadow: 0 0 10px #00b894;"></div></div>
+                        </div>
+                        <div class="dna-bar-container">
+                            <div class="dna-bar-header"><span>Luxury Profile</span> <span style="font-weight:bold; color: #0984e3;">40%</span></div>
+                            <div class="dna-track"><div class="dna-fill" style="width: 40%; background: #0984e3; box-shadow: 0 0 10px #0984e3;"></div></div>
                         </div>
                     </div>
                     
-                    <button class="btn btn-outline" style="width: 100%; margin-top: 20px;"><i class="fas fa-receipt"></i> Add Expense</button>
-                </div>
-            </div>
-
-            <!-- SECTION 6 & 7: Nearby Discovery & Food -->
-            <div class="panel" style="margin-top: 30px;">
-                <h2><i class="fas fa-compass"></i> Discover Nearby</h2>
-                <div style="display: flex; gap: 15px; margin-top: 20px; overflow-x: auto; padding-bottom: 10px;">
-                    <div class="metric-card" style="min-width: 200px; text-align: left;">
-                        <h4><i class="fas fa-utensils"></i> Must Try Food</h4>
-                        <p style="font-size: 0.9rem; color: #666; margin-top: 5px;">Seafood thali at Fisherman's Wharf (2km away)</p>
-                    </div>
-                    <div class="metric-card" style="min-width: 200px; text-align: left;">
-                        <h4><i class="fas fa-camera-retro"></i> Photography Spot</h4>
-                        <p style="font-size: 0.9rem; color: #666; margin-top: 5px;">Chapora Fort sunset view (5km away)</p>
-                    </div>
-                    <div class="metric-card" style="min-width: 200px; text-align: left;">
-                        <h4><i class="fas fa-gem"></i> Hidden Gem</h4>
-                        <p style="font-size: 0.9rem; color: #666; margin-top: 5px;">Butterfly Beach kayaking</p>
+                    <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--color-border); border-radius: 16px; padding: 25px;">
+                        <h4 style="margin-bottom: 15px; color: white; font-size: 1.2rem;">AI Insights</h4>
+                        <ul style="color: var(--text-secondary); padding-left: 20px; line-height: 1.8;">
+                            <li>You tend to prefer <strong>warm weather</strong> destinations.</li>
+                            <li>You spend an average of <strong>35%</strong> of your budget on food.</li>
+                            <li>Your pacing is <strong>fast</strong>, fitting many activities into a day.</li>
+                            <li>You are highly likely to enjoy an upcoming trip to <strong>Vietnam</strong>.</li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Sidebar Column -->
-        <div class="sidebar-col">
-            
-            <!-- SECTION 3 & 8: Weather & Alerts -->
-            <div class="panel" style="background: linear-gradient(135deg, #74b9ff, #0984e3); color: white; border: none;">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <h2><i class="fas fa-cloud-sun"></i> Weather</h2>
-                    <span style="font-size: 2.5rem;">${journey.temperature}°C</span>
+        <!-- TAB: FAMILY HUB -->
+        <div id="tab-family" class="tab-content ${activeTab == 'family' ? 'active' : ''}">
+            <div class="panel">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                    <h2 style="margin: 0;"><i class="ri-group-fill" style="color: var(--primary);"></i> Family Hub</h2>
+                    <button class="btn btn-primary"><i class="ri-add-line"></i> Add Member</button>
                 </div>
-                <p style="font-size: 1.2rem; margin: 10px 0;">${journey.weatherCondition}</p>
                 
-                <div style="background: rgba(255,255,255,0.2); padding: 10px; border-radius: 8px; font-size: 0.9rem; margin-top: 15px;">
-                    <i class="fas fa-exclamation-triangle"></i> Alert: ${journey.weatherAlert}
-                </div>
-            </div>
-
-            <!-- TRAVEL READINESS WIDGET (For International Trips) -->
-            <c:if test="${journey.isInternational}">
-            <div class="panel" style="background: #1e293b; color: white; border: none;">
-                <h2 style="margin-bottom: 15px; color: #60a5fa;"><i class="ri-shield-check-fill"></i> Travel Readiness</h2>
-                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px;">
-                    <div style="font-size: 2rem; font-weight: bold; font-family: 'Clash Display', sans-serif;">92%</div>
-                    <span style="background: rgba(74, 222, 128, 0.2); color: #4ade80; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: bold;">Ready</span>
-                </div>
-                <div style="font-size: 0.85rem; space-y-2">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                        <span><i class="ri-passport-line text-gray-400 mr-2"></i> Visa</span>
-                        <span style="color: #4ade80;"><i class="ri-check-line"></i></span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                        <span><i class="ri-article-line text-gray-400 mr-2"></i> Insurance</span>
-                        <span style="color: #4ade80;"><i class="ri-check-line"></i></span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                        <span><i class="ri-sim-card-2-line text-gray-400 mr-2"></i> eSIM</span>
-                        <span style="color: #fbbf24;">Pending</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                        <span><i class="ri-exchange-dollar-line text-gray-400 mr-2"></i> Forex</span>
-                        <span style="color: #fbbf24;">Pending</span>
-                    </div>
-                </div>
-                <a href="${pageContext.request.contextPath}/travel-center" class="btn btn-outline" style="width: 100%; border-color: #334155; color: white; margin-top: 15px; text-align: center; display: block;">Open Travel Center</a>
-            </div>
-            </c:if>
-
-            <!-- SECTION 5: Document Vault -->
-            <div class="panel">
-                <h2><i class="fas fa-folder-open"></i> Document Vault</h2>
-                <div style="margin-top: 15px;">
-                    <div class="doc-item">
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <i class="fas fa-plane-ticket"></i>
-                            <div><strong>Flight Vistara</strong><br><span style="font-size: 0.8rem; color: #666;">PDF • 1.2MB</span></div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                    <!-- Mock Data -->
+                    <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--color-border); border-radius: 16px; padding: 25px; text-align: center;">
+                        <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #74b9ff, #0984e3); margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: white; font-weight: bold;">JD</div>
+                        <h3 style="color: white; font-size: 1.4rem; margin-bottom: 5px;">Jane Doe</h3>
+                        <p style="color: var(--text-secondary); margin-bottom: 15px;">Spouse • Age 32</p>
+                        <div style="background: rgba(0, 184, 148, 0.1); color: #00b894; padding: 8px; border-radius: 8px; font-size: 0.9rem;">
+                            <i class="ri-passport-line"></i> Passport Ready (100%)
                         </div>
-                        <i class="fas fa-download" style="font-size: 1rem; color: #aaa; cursor: pointer;"></i>
                     </div>
-                    <div class="doc-item">
-                        <div style="display: flex; align-items: center; gap: 10px;">
-                            <i class="fas fa-hotel"></i>
-                            <div><strong>Taj Hotel Voucher</strong><br><span style="font-size: 0.8rem; color: #666;">PDF • 2.4MB</span></div>
+
+                    <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--color-border); border-radius: 16px; padding: 25px; text-align: center;">
+                        <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #a29bfe, #6c5ce7); margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: white; font-weight: bold;">SD</div>
+                        <h3 style="color: white; font-size: 1.4rem; margin-bottom: 5px;">Sam Doe</h3>
+                        <p style="color: var(--text-secondary); margin-bottom: 15px;">Child • Age 8</p>
+                        <div style="background: rgba(255, 107, 0, 0.1); color: var(--primary); padding: 8px; border-radius: 8px; font-size: 0.9rem;">
+                            <i class="ri-error-warning-line"></i> Visa Required (40%)
                         </div>
-                        <i class="fas fa-download" style="font-size: 1rem; color: #aaa; cursor: pointer;"></i>
-                    </div>
-                </div>
-            </div>
-
-            <!-- SECTION 9: Packing Checklist -->
-            <div class="panel">
-                <h2><i class="fas fa-check-square"></i> Packing Checklist</h2>
-                <div style="margin-top: 15px;">
-                    <label class="checklist-item"><input type="checkbox" checked> Sunscreen & Sunglasses</label>
-                    <label class="checklist-item"><input type="checkbox" checked> Swimwear</label>
-                    <label class="checklist-item"><input type="checkbox"> Camera & Drone</label>
-                    <label class="checklist-item"><input type="checkbox"> Powerbank</label>
-                </div>
-            </div>
-
-            <!-- SECTION 11: Travel DNA -->
-            <div class="panel">
-                <h2><i class="fas fa-dna"></i> Travel DNA</h2>
-                <div style="margin-top: 15px;">
-                    <div style="margin-bottom: 10px;">
-                        <div style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 5px;"><span>Explorer</span> <span>${journey.explorerScore}%</span></div>
-                        <div style="background: #eee; height: 6px; border-radius: 3px;"><div style="background: var(--primary); height: 100%; width: ${journey.explorerScore}%; border-radius: 3px;"></div></div>
-                    </div>
-                    <div style="margin-bottom: 10px;">
-                        <div style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 5px;"><span>Foodie</span> <span>${journey.foodieScore}%</span></div>
-                        <div style="background: #eee; height: 6px; border-radius: 3px;"><div style="background: #e17055; height: 100%; width: ${journey.foodieScore}%; border-radius: 3px;"></div></div>
-                    </div>
-                    <div style="margin-bottom: 10px;">
-                        <div style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 5px;"><span>Adventure</span> <span>${journey.adventureScore}%</span></div>
-                        <div style="background: #eee; height: 6px; border-radius: 3px;"><div style="background: #00b894; height: 100%; width: ${journey.adventureScore}%; border-radius: 3px;"></div></div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <jsp:include page="/components/footer.jsp" />
+        <!-- TAB: TRIP REPORTS -->
+        <div id="tab-reports" class="tab-content ${activeTab == 'reports' ? 'active' : ''}">
+            <div class="panel">
+                <h2><i class="ri-file-chart-line" style="color: var(--primary);"></i> Trip Reports</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 30px;">Analytics and summaries from your completed journeys.</p>
+
+                <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--color-border); border-radius: 16px; padding: 25px; margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
+                        <div>
+                            <h3 style="color: white; font-size: 1.5rem; font-family: 'Clash Display', sans-serif;">Bali Explorer 2024</h3>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem;">14 Days • Finished June 2024</p>
+                        </div>
+                        <div style="text-align: right;">
+                            <h3 style="color: var(--primary); font-size: 1.5rem;">$2,450</h3>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem;">Total Cost</p>
+                        </div>
+                    </div>
+                    <p style="color: #ccc; line-height: 1.6; font-size: 0.95rem; margin-bottom: 15px;">
+                        An incredible trip filled with scuba diving, temple visits, and amazing local food. The budget was adhered to perfectly, and no major issues occurred. Best highlight: Nusa Penida day trip.
+                    </p>
+                    <div style="color: #f1c40f; font-size: 1.2rem;">
+                        <i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<jsp:include page="/components/footer.jsp" />
+
+<script>
+    function switchTab(tabId, element) {
+        // Update URL dynamically without reload
+        const url = new URL(window.location);
+        url.searchParams.set('tab', tabId);
+        window.history.pushState({}, '', url);
+
+        // Update active class on nav items
+        document.querySelectorAll('.profile-sidebar .nav-item').forEach(el => el.classList.remove('active'));
+        element.classList.add('active');
+
+        // Show appropriate content tab
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+        document.getElementById('tab-' + tabId).classList.add('active');
+    }
+
+    // Auto-select tab on load if parameter is present and JSP failed to set it
+    document.addEventListener('DOMContentLoaded', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const tab = urlParams.get('tab');
+        if (tab) {
+            const tabBtn = document.querySelector(`.profile-sidebar .nav-item[onclick*="'${tab}'"]`);
+            if (tabBtn) switchTab(tab, tabBtn);
+        }
+    });
+</script>
 </body>
 </html>

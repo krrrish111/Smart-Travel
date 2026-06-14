@@ -484,6 +484,41 @@ public class SchemaBootstrap implements ServletContextListener {
                     "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
                 );
 
+                // Phase 17: My Journey Ecosystem
+                stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS travel_memories (" +
+                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "user_id INT NOT NULL, " +
+                    "journey_id INT, " +
+                    "media_url VARCHAR(255) NOT NULL, " +
+                    "caption VARCHAR(255), " +
+                    "location VARCHAR(100), " +
+                    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
+                );
+
+                stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS family_hub_members (" +
+                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "user_id INT NOT NULL, " +
+                    "relation VARCHAR(50) NOT NULL, " +
+                    "name VARCHAR(100) NOT NULL, " +
+                    "age INT, " +
+                    "passport_readiness INT DEFAULT 0, " +
+                    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
+                );
+
+                stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS trip_reports (" +
+                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "user_id INT NOT NULL, " +
+                    "journey_id INT, " +
+                    "destination VARCHAR(100), " +
+                    "summary TEXT, " +
+                    "total_cost DECIMAL(10,2), " +
+                    "rating INT, " +
+                    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
+                );
+
                 System.out.println("[SchemaBootstrap] Schema migration complete.");
 
         } catch (Exception e) {

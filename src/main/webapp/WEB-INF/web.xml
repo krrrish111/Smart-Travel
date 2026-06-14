@@ -238,6 +238,16 @@
         <url-pattern>/community/hidden-gems</url-pattern>
     </servlet-mapping>
 
+    <!-- Community Food Discovery -->
+    <servlet>
+        <servlet-name>FoodServlet</servlet-name>
+        <servlet-class>com.voyastra.servlet.community.FoodServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>FoodServlet</servlet-name>
+        <url-pattern>/community/food</url-pattern>
+    </servlet-mapping>
+
     <!-- Community User Profiles: /community/user/{username} -->
     <servlet>
         <servlet-name>UserProfile</servlet-name>

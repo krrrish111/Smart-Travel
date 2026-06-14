@@ -16,12 +16,30 @@ public class ContextBuilderService {
         Map<String, String> context = new HashMap<>();
         
         if (userId != null && !userId.isEmpty()) {
-            context.put("User Profile", "Frequent traveler, prefers budget-friendly hotels");
-            context.put("Upcoming Bookings", "Flight to Paris on Aug 15th");
-            context.put("Food Preferences", "Vegetarian, likes street food");
+            // Simulated Deep AI Memory & Preferences
+            context.put("Memory", "User likes to travel light. Prefers hidden gems over tourist traps. Budget is typically medium-range.");
+            context.put("Preferred Destinations", "Beaches, Mountains (Goa, Manali, Bali)");
+            context.put("Favorite Food", "Vegetarian, Street food, Local authentic cuisine");
+            context.put("Travel Style", "Adventure, Backpacking");
+            context.put("Budget Range", "₹10,000 - ₹30,000 per trip");
+            
+            // Past Activity
+            context.put("Past Trips", "3 trips completed this year (Jaipur, Kerala, Spiti Valley)");
+            context.put("Saved Places", "Rishikesh riverside camp, Pondicherry French Quarter");
+            
+            // Current State / Realtime
+            context.put("Upcoming Bookings", "Goa Trip starting in 4 days. Includes flight and beachfront hostel.");
+            context.put("Planner Data", "User has a draft itinerary for Vietnam next month. Missing hotel bookings.");
         } else {
             context.put("User Profile", "Guest User");
+            context.put("Memory", "No prior memory available. Treat as a new user looking for general inspiration.");
         }
+        
+        // Global / Platform Data Context
+        context.put("Hidden Gems", "Varkala cliff beach, Majuli river island, Meghalaya living root bridges");
+        context.put("Trending Community", "People are discussing Goa monsoon travel and affordable stays in Bali.");
+        context.put("Food Database Access", "Available. Can suggest food trails and highly rated local spots.");
+        context.put("Budget Engine", "Active. Can calculate real-time splits and provide optimization strategies.");
         
         return context;
     }

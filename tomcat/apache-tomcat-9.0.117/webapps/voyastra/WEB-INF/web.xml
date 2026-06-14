@@ -218,6 +218,16 @@
         <url-pattern>/community/creator-hub</url-pattern>
     </servlet-mapping>
 
+    <!-- Community Reels -->
+    <servlet>
+        <servlet-name>ReelsServlet</servlet-name>
+        <servlet-class>com.voyastra.servlet.community.ReelsServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ReelsServlet</servlet-name>
+        <url-pattern>/community/reels</url-pattern>
+    </servlet-mapping>
+
     <!-- Community User Profiles: /community/user/{username} -->
     <servlet>
         <servlet-name>UserProfile</servlet-name>

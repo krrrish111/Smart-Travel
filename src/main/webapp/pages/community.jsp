@@ -30,7 +30,9 @@
             <button class="c-nav-tab active" data-tab="foryou"><i class="ri-sparkling-line"></i> For You</button>
             <button class="c-nav-tab" data-tab="trending"><i class="ri-fire-line"></i> Trending</button>
             <button class="c-nav-tab" data-tab="following"><i class="ri-user-follow-line"></i> Following</button>
-            <button class="c-nav-tab" data-tab="reels"><i class="ri-film-line"></i> Reels</button>
+            <a href="${pageContext.request.contextPath}/community/reels" class="c-nav-tab" style="text-decoration:none;">
+                <i class="ri-film-line"></i> Reels
+            </a>
             <button class="c-nav-tab" data-tab="hidden-gems"><i class="ri-gem-line"></i> Hidden Gems</button>
             <button class="c-nav-tab" data-tab="food"><i class="ri-restaurant-2-line"></i> Food</button>
             <button class="c-nav-tab" data-tab="guides"><i class="ri-map-2-line"></i> Guides</button>

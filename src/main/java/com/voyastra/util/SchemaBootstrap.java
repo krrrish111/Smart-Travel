@@ -405,6 +405,25 @@ public class SchemaBootstrap implements ServletContextListener {
                     "end_date DATE, " +
                     "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
                 );
+
+                // AI Travel Buddy Tables
+                stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS ai_chat_sessions (" +
+                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "user_id INT NOT NULL, " +
+                    "context_page VARCHAR(100), " +
+                    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
+                );
+
+                stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS ai_chat_messages (" +
+                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "session_id INT NOT NULL, " +
+                    "sender VARCHAR(20) NOT NULL, " + // 'user' or 'ai'
+                    "message TEXT NOT NULL, " +
+                    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
+                );
+
                 System.out.println("[SchemaBootstrap] Created AI Planner 2.0 tables.");
             } catch (Exception e) {
                 System.err.println("[SchemaBootstrap] Error creating AI Planner tables: " + e.getMessage());

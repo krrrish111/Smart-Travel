@@ -14,6 +14,7 @@
             <p>&copy; 2026 Voyastra. All rights reserved. Made with ❤️ for Travel.</p>
         </div>
     </footer>
+    <jsp:include page="/components/ai-buddy.jsp" />
     <script src="js/autoscroll.js"></script>
     <script src="js/main.js"></script>
 </body>

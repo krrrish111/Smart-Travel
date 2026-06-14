@@ -490,11 +490,17 @@ public class SchemaBootstrap implements ServletContextListener {
                     "id INT AUTO_INCREMENT PRIMARY KEY, " +
                     "user_id INT NOT NULL, " +
                     "journey_id INT, " +
+                    "type VARCHAR(50) DEFAULT 'PHOTO', " +
                     "media_url VARCHAR(255) NOT NULL, " +
                     "caption VARCHAR(255), " +
                     "location VARCHAR(100), " +
                     "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
                 );
+
+                try {
+                    stmt.execute("ALTER TABLE travel_memories ADD COLUMN type VARCHAR(50) DEFAULT 'PHOTO' AFTER journey_id");
+                    System.out.println("[SchemaBootstrap] Added type column to travel_memories.");
+                } catch (Exception e) {}
 
                 stmt.execute(
                     "CREATE TABLE IF NOT EXISTS family_hub_members (" +

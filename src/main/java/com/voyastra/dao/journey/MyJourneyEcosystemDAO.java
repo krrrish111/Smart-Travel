@@ -23,6 +23,7 @@ public class MyJourneyEcosystemDAO {
                     tm.setId(rs.getInt("id"));
                     tm.setUserId(rs.getInt("user_id"));
                     tm.setJourneyId(rs.getInt("journey_id"));
+                    tm.setType(rs.getString("type") != null ? rs.getString("type") : "PHOTO");
                     tm.setMediaUrl(rs.getString("media_url"));
                     tm.setCaption(rs.getString("caption"));
                     tm.setLocation(rs.getString("location"));
@@ -33,6 +34,61 @@ public class MyJourneyEcosystemDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return list;
+    }
+
+    public List<TravelMemory> getMemoriesForJourney(int journeyId) {
+        List<TravelMemory> list = new ArrayList<>();
+        String sql = "SELECT * FROM travel_memories WHERE journey_id = ? ORDER BY created_at DESC";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, journeyId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    TravelMemory tm = new TravelMemory();
+                    tm.setId(rs.getInt("id"));
+                    tm.setUserId(rs.getInt("user_id"));
+                    tm.setJourneyId(rs.getInt("journey_id"));
+                    tm.setType(rs.getString("type") != null ? rs.getString("type") : "PHOTO");
+                    tm.setMediaUrl(rs.getString("media_url"));
+                    tm.setCaption(rs.getString("caption"));
+                    tm.setLocation(rs.getString("location"));
+                    tm.setCreatedAt(rs.getTimestamp("created_at"));
+                    list.add(tm);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // Fallback: If no memories exist for this journey, generate mock ones
+        if (list.isEmpty()) {
+            TravelMemory m1 = new TravelMemory();
+            m1.setJourneyId(journeyId);
+            m1.setType("PHOTO");
+            m1.setMediaUrl("https://images.unsplash.com/photo-1499856871958-5b9627545d1a?q=80&w=800&auto=format&fit=crop");
+            m1.setCaption("A beautiful sunset over the city.");
+            m1.setLocation("City Center");
+            
+            TravelMemory m2 = new TravelMemory();
+            m2.setJourneyId(journeyId);
+            m2.setType("FOOD");
+            m2.setMediaUrl("https://images.unsplash.com/photo-1542051841857-5f90071e7989?q=80&w=800&auto=format&fit=crop");
+            m2.setCaption("Amazing local street food experience!");
+            m2.setLocation("Street Food Alley");
+
+            TravelMemory m3 = new TravelMemory();
+            m3.setJourneyId(journeyId);
+            m3.setType("EXPERIENCE");
+            m3.setMediaUrl("https://images.unsplash.com/photo-1506929562872-bb421503ef21?q=80&w=800&auto=format&fit=crop");
+            m3.setCaption("Surfing early morning waves.");
+            m3.setLocation("Beachside");
+
+            list.add(m1);
+            list.add(m2);
+            list.add(m3);
+        }
+
         return list;
     }
 

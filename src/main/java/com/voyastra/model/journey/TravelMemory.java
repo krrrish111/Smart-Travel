@@ -6,6 +6,7 @@ public class TravelMemory {
     private int id;
     private int userId;
     private int journeyId;
+    private String type;
     private String mediaUrl;
     private String caption;
     private String location;
@@ -21,6 +22,9 @@ public class TravelMemory {
 
     public int getJourneyId() { return journeyId; }
     public void setJourneyId(int journeyId) { this.journeyId = journeyId; }
+
+    public String getType() { return type; }
+    public void setType(String type) { this.type = type; }
 
     public String getMediaUrl() { return mediaUrl; }
     public void setMediaUrl(String mediaUrl) { this.mediaUrl = mediaUrl; }

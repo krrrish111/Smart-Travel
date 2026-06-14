@@ -548,35 +548,146 @@
             <div class="panel">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
                     <h2 style="margin: 0;"><i class="ri-gallery-fill" style="color: var(--primary);"></i> Travel Memories</h2>
-                    <button class="btn btn-primary"><i class="ri-upload-2-line"></i> Upload</button>
                 </div>
 
-                <div class="memories-grid">
-                    <!-- Hardcoded Mock Data for premium visual -->
-                    <div class="memory-item">
-                        <img src="https://images.unsplash.com/photo-1499856871958-5b9627545d1a?q=80&w=800&auto=format&fit=crop" alt="Paris">
-                        <div class="memory-caption">
-                            <strong>Sunset at Eiffel</strong><br>
-                            <span style="font-size: 0.85rem; opacity: 0.7;"><i class="ri-map-pin-line"></i> Paris, 2025</span>
+                <!-- Trip Cards Grid -->
+                <c:choose>
+                    <c:when test="${not empty completedTrips}">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                            <c:forEach var="trip" items="${completedTrips}">
+                                <div class="trip-card" style="background: rgba(255,255,255,0.03); border: 1px solid var(--color-border); border-radius: 16px; overflow: hidden; transition: transform 0.3s ease; cursor: pointer;" onclick="openMemoryModal(${trip.id})">
+                                    <div style="height: 160px; background: url('https://images.unsplash.com/photo-1506929562872-bb421503ef21?q=80&w=600&auto=format&fit=crop') center/cover;"></div>
+                                    <div style="padding: 20px;">
+                                        <h3 style="font-size: 1.4rem; font-family: 'Clash Display', sans-serif; margin-bottom: 5px;">${not empty trip.planTitle ? trip.planTitle : trip.type}</h3>
+                                        <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 15px;"><i class="ri-calendar-event-line"></i> ${trip.travelDate != null ? trip.travelDate : 'Archived'}</p>
+                                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                                            <span style="background: rgba(255,107,0,0.1); color: var(--primary); padding: 4px 10px; border-radius: 12px; font-size: 0.8rem;">View Album <i class="ri-arrow-right-line"></i></span>
+                                            <span style="color: var(--text-secondary); font-size: 0.8rem;">${tripMemoriesMap[trip.id].size()} Memories</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </c:forEach>
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <div style="text-align: center; padding: 40px;">
+                            <p style="color: var(--text-secondary);">You don't have any completed trips to generate memories from yet.</p>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
+            </div>
+        </div>
+
+        <!-- Memory Modal Framework (Hidden by default) -->
+        <div id="memoryModalOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 1000; overflow-y: auto;">
+            <div style="max-width: 1000px; margin: 40px auto; background: var(--surface-glass); border: 1px solid var(--color-border); border-radius: 24px; overflow: hidden; position: relative;">
+                
+                <button onclick="closeMemoryModal()" style="position: absolute; top: 20px; right: 20px; background: rgba(0,0,0,0.5); border: none; color: white; width: 40px; height: 40px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; z-index: 10;"><i class="ri-close-line"></i></button>
+
+                <div id="memoryModalHero" style="height: 300px; background: url('https://images.unsplash.com/photo-1506929562872-bb421503ef21?q=80&w=1200&auto=format&fit=crop') center/cover; position: relative; display: flex; align-items: flex-end; padding: 40px;">
+                    <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);"></div>
+                    <div style="position: relative; z-index: 1;">
+                        <h1 id="modalTripTitle" style="font-size: 3rem; font-family: 'Clash Display', sans-serif; margin-bottom: 10px;">Trip Name</h1>
+                        <p id="modalTripDate" style="font-size: 1.2rem; opacity: 0.8;"><i class="ri-calendar-line"></i> Date</p>
+                    </div>
+                </div>
+
+                <div style="padding: 40px;">
+                    <!-- Actions -->
+                    <div style="display: flex; gap: 15px; margin-bottom: 40px; flex-wrap: wrap;">
+                        <button class="btn btn-primary"><i class="ri-share-forward-line"></i> Share to Community</button>
+                        <button class="btn btn-outline"><i class="ri-download-cloud-2-line"></i> Download Album</button>
+                        <button class="btn btn-outline" style="color: #8E2DE2; border-color: #8E2DE2;"><i class="ri-video-add-line"></i> Generate Reel</button>
+                        <button class="btn btn-outline" style="color: #00b894; border-color: #00b894;"><i class="ri-book-open-line"></i> Generate Journal</button>
+                    </div>
+
+                    <!-- Layout Grid -->
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 30px; margin-bottom: 40px;">
+                        <div>
+                            <h3 style="font-size: 1.5rem; margin-bottom: 15px; font-family: 'Clash Display', sans-serif;"><i class="ri-file-text-line" style="color: var(--primary);"></i> Trip Summary</h3>
+                            <p style="color: #ccc; line-height: 1.8;">An unforgettable journey filled with beautiful sights and amazing local experiences. The weather was perfect for exploring, and all planned activities went smoothly.</p>
+                            
+                            <h3 style="font-size: 1.5rem; margin-top: 30px; margin-bottom: 15px; font-family: 'Clash Display', sans-serif;"><i class="ri-map-pin-time-line" style="color: var(--primary);"></i> Visited Places</h3>
+                            <ul style="color: #ccc; line-height: 1.8; padding-left: 20px;">
+                                <li>City Center Square</li>
+                                <li>National Museum</li>
+                                <li>Sunset Viewpoint</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <div style="background: rgba(255,255,255,0.03); padding: 20px; border-radius: 16px; border: 1px solid var(--color-border);">
+                                <h3 style="font-size: 1.2rem; margin-bottom: 15px;"><i class="ri-wallet-3-line" style="color: #e17055;"></i> Expenses</h3>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 10px; color: var(--text-secondary);"><span>Flights</span> <span>₹12,000</span></div>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 10px; color: var(--text-secondary);"><span>Hotel</span> <span>₹18,000</span></div>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 10px; color: var(--text-secondary);"><span>Food</span> <span>₹5,500</span></div>
+                                <hr style="border-color: rgba(255,255,255,0.1); margin: 15px 0;">
+                                <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 1.2rem;"><span>Total</span> <span style="color: var(--primary);">₹35,500</span></div>
+                            </div>
                         </div>
                     </div>
-                    <div class="memory-item">
-                        <img src="https://images.unsplash.com/photo-1542051841857-5f90071e7989?q=80&w=800&auto=format&fit=crop" alt="Tokyo">
-                        <div class="memory-caption">
-                            <strong>Shibuya Crossing</strong><br>
-                            <span style="font-size: 0.85rem; opacity: 0.7;"><i class="ri-map-pin-line"></i> Tokyo, 2024</span>
-                        </div>
+
+                    <!-- Album Grid -->
+                    <h3 style="font-size: 1.8rem; margin-bottom: 20px; font-family: 'Clash Display', sans-serif;"><i class="ri-image-line" style="color: var(--primary);"></i> Trip Album</h3>
+                    <div id="modalMemoriesGrid" class="memories-grid">
+                        <!-- Rendered via JS -->
                     </div>
-                    <div class="memory-item">
-                        <img src="https://images.unsplash.com/photo-1506929562872-bb421503ef21?q=80&w=800&auto=format&fit=crop" alt="Beach">
-                        <div class="memory-caption">
-                            <strong>Morning surf vibes</strong><br>
-                            <span style="font-size: 0.85rem; opacity: 0.7;"><i class="ri-map-pin-line"></i> Bali, 2024</span>
-                        </div>
-                    </div>
+
                 </div>
             </div>
         </div>
+
+        <script>
+            // Store memories map from JSP to JS variable for dynamic rendering
+            const memoriesData = {
+                <c:forEach var="entry" items="${tripMemoriesMap}">
+                    ${entry.key}: [
+                        <c:forEach var="mem" items="${entry.value}">
+                            {
+                                type: '${mem.type}',
+                                url: '${mem.mediaUrl}',
+                                caption: '${mem.caption.replace("'", "\\'")}',
+                                location: '${mem.location.replace("'", "\\'")}'
+                            },
+                        </c:forEach>
+                    ],
+                </c:forEach>
+            };
+
+            function openMemoryModal(tripId) {
+                // Populate title/date from the clicked card (simple DOM traversal or data attributes. Here we just hardcode mock text for demo if we don't have it)
+                document.getElementById('modalTripTitle').innerText = "Trip " + tripId; // In a real app, pass the title or use data-attributes
+                document.getElementById('modalTripDate').innerText = "Archived";
+                
+                const grid = document.getElementById('modalMemoriesGrid');
+                grid.innerHTML = '';
+
+                const mems = memoriesData[tripId] || [];
+                mems.forEach(m => {
+                    let icon = 'ri-image-line';
+                    if(m.type === 'FOOD') icon = 'ri-restaurant-line';
+                    if(m.type === 'EXPERIENCE') icon = 'ri-compass-3-line';
+                    if(m.type === 'VIDEO') icon = 'ri-video-line';
+
+                    grid.innerHTML += `
+                        <div class="memory-item">
+                            <img src="\${m.url}" alt="\${m.type}">
+                            <div class="memory-caption">
+                                <strong><i class="\${icon}"></i> \${m.caption}</strong><br>
+                                <span style="font-size: 0.85rem; opacity: 0.7;"><i class="ri-map-pin-line"></i> \${m.location}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                document.getElementById('memoryModalOverlay').style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeMemoryModal() {
+                document.getElementById('memoryModalOverlay').style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        </script>
 
         <!-- TAB: TRAVEL CALENDAR -->
         <div id="tab-calendar" class="tab-content ${activeTab == 'calendar' ? 'active' : ''}">

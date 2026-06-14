@@ -53,7 +53,7 @@ public class MyJourneyServlet extends HttpServlet {
         request.setAttribute("journey", activeJourney);
         
         // Fetch upcoming and completed trips if required
-        if (tab.equals("upcoming") || tab.equals("completed") || tab.equals("overview")) {
+        if (tab.equals("upcoming") || tab.equals("completed") || tab.equals("memories") || tab.equals("overview")) {
             List<Booking> allBookings = bookingDAO.getBookingsByUser(user.getId());
             List<Booking> upcomingTrips = new ArrayList<>();
             List<Booking> completedTrips = new ArrayList<>();
@@ -81,12 +81,19 @@ public class MyJourneyServlet extends HttpServlet {
             }
             request.setAttribute("upcomingTrips", upcomingTrips);
             request.setAttribute("completedTrips", completedTrips);
+
+            // If we're on the memories tab, let's also fetch memories for each completed trip
+            if (tab.equals("memories")) {
+                java.util.Map<Integer, List<com.voyastra.model.journey.TravelMemory>> memoriesMap = new java.util.HashMap<>();
+                for (Booking t : completedTrips) {
+                    memoriesMap.put(t.getId(), ecosystemDAO.getMemoriesForJourney(t.getId()));
+                }
+                request.setAttribute("tripMemoriesMap", memoriesMap);
+            }
         }
         
         // Fetch specific data based on tab
-        if (tab.equals("memories")) {
-            request.setAttribute("memories", ecosystemDAO.getMemoriesForUser(user.getId()));
-        } else if (tab.equals("family")) {
+        if (tab.equals("family")) {
             request.setAttribute("familyMembers", ecosystemDAO.getFamilyMembersForUser(user.getId()));
         } else if (tab.equals("reports")) {
             request.setAttribute("tripReports", ecosystemDAO.getTripReportsForUser(user.getId()));

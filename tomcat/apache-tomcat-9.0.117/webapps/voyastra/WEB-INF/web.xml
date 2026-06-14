@@ -218,6 +218,16 @@
         <url-pattern>/community/creator-hub</url-pattern>
     </servlet-mapping>
 
+    <!-- Community User Profiles: /community/user/{username} -->
+    <servlet>
+        <servlet-name>UserProfile</servlet-name>
+        <servlet-class>com.voyastra.servlet.community.UserProfileServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UserProfile</servlet-name>
+        <url-pattern>/community/user/*</url-pattern>
+    </servlet-mapping>
+
     <!-- Welcome File List: Routes root to HomeServlet -->
     <welcome-file-list>
         <welcome-file>home</welcome-file>

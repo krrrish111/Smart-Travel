@@ -710,6 +710,65 @@
             this.innerHTML = saved ? '<i class="ri-bookmark-line"></i> Save' : '<i class="ri-bookmark-fill"></i> Saved';
         });
     });
+
+    // ── Creator Profile Links — make @handles clickable ──
+    // Map of known handles to profile URLs
+    const creatorProfiles = {
+        '@sarahexplores': 'sarahexplores',
+        '@arjunhikes': 'arjunhikes',
+        '@priyaeats': 'priyaeats',
+        '@nishaluxe': 'nishaluxe',
+        '@meerastories': 'meerastories',
+        '@devonbudget': 'devonbudget'
+    };
+
+    // Make reel-creator spans clickable
+    document.querySelectorAll('.reel-creator').forEach(el => {
+        el.style.cursor = 'pointer';
+        el.addEventListener('click', function(e) {
+            const text = this.textContent.trim();
+            const handle = Object.keys(creatorProfiles).find(h => text.includes(h));
+            if (handle) {
+                window.location.href = 'community/user/' + creatorProfiles[handle];
+            }
+        });
+    });
+
+    // Make gem discoverer and guide author links clickable
+    document.querySelectorAll('.gem-discoverer, .guide-author-name').forEach(el => {
+        el.style.cursor = 'pointer';
+        el.addEventListener('click', function() {
+            const text = this.textContent.trim();
+            const handle = Object.keys(creatorProfiles).find(h => text.includes(h.replace('@', '')));
+            if (handle) window.location.href = 'community/user/' + creatorProfiles[handle];
+        });
+    });
+
+    // Make creator card names clickable
+    document.querySelectorAll('.creator-card').forEach(card => {
+        const nameEl = card.querySelector('.creator-name');
+        const handleEl = card.querySelector('.creator-handle');
+        if (nameEl && handleEl) {
+            nameEl.style.cursor = 'pointer';
+            nameEl.addEventListener('click', function() {
+                const handle = handleEl.textContent.trim().replace('@', '');
+                window.location.href = 'community/user/' + handle;
+            });
+        }
+    });
+
+    // Make contributor sidebar items clickable
+    document.querySelectorAll('.contributor-item').forEach(item => {
+        const nameEl = item.querySelector('.contributor-name');
+        if (nameEl) {
+            nameEl.style.cursor = 'pointer';
+            nameEl.addEventListener('click', function() {
+                const name = this.textContent.trim().toLowerCase().replace(/\s+/g, '');
+                window.location.href = 'community/user/' + name;
+            });
+        }
+    });
+
 </script>
 </body>
 </html>

@@ -5,10 +5,12 @@
 <div class="ai-orb" id="aiOrb" onclick="toggleAIChat()">
     <i class="ri-robot-2-line"></i>
 </div>
-
-<!-- Layer 2: Context Tooltip -->
-<div class="ai-tooltip" id="aiTooltip">
-    <span id="aiTooltipText">Need help planning your trip?</span>
+<!-- Layer 1: Floating Orb -->
+<div id="ai-buddy-orb" class="ai-orb" onclick="toggleAIChat()">
+    <div class="orb-core"></div>
+    <div class="orb-pulse"></div>
+    <span class="ai-icon">🤖</span>
+    <div class="ai-tooltip" id="aiTooltip"><span id="aiTooltipText">Need help planning your trip?</span></div>
 </div>
 
 <!-- Layer 3: Full AI Chat Window -->

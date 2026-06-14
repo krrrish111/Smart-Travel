@@ -258,6 +258,16 @@
         <url-pattern>/community/guides</url-pattern>
     </servlet-mapping>
 
+    <!-- Community Challenges -->
+    <servlet>
+        <servlet-name>ChallengesServlet</servlet-name>
+        <servlet-class>com.voyastra.servlet.community.ChallengesServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ChallengesServlet</servlet-name>
+        <url-pattern>/community/challenges</url-pattern>
+    </servlet-mapping>
+
     <!-- Community User Profiles: /community/user/{username} -->
     <servlet>
         <servlet-name>UserProfile</servlet-name>

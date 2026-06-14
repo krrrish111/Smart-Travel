@@ -247,47 +247,164 @@
         
         <!-- TAB: OVERVIEW -->
         <div id="tab-overview" class="tab-content ${activeTab == 'overview' ? 'active' : ''}">
-            <div class="panel">
-                <h2><i class="ri-planet-line" style="color: var(--primary);"></i> Ecosystem Overview</h2>
-                <p style="color: var(--text-secondary); margin-bottom: 30px;">Welcome to your complete Travel Operating System.</p>
-                
-                <div class="metrics-grid">
-                    <div class="metric-card">
-                        <h3>14</h3>
-                        <span>Countries Visited</span>
-                    </div>
-                    <div class="metric-card">
-                        <h3>5</h3>
-                        <span>Upcoming Trips</span>
-                    </div>
-                    <div class="metric-card">
-                        <h3>128</h3>
-                        <span>Travel Memories</span>
-                    </div>
-                    <div class="metric-card">
-                        <h3>92%</h3>
-                        <span>Explorer DNA</span>
-                    </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-bottom: 30px;">
+                <div class="metric-card" style="padding: 15px; border-radius: 12px; background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(0,0,0,0));">
+                    <h3 style="font-size: 1.8rem; margin:0;">12</h3>
+                    <span style="font-size: 0.75rem;">Total Trips</span>
+                </div>
+                <div class="metric-card" style="padding: 15px; border-radius: 12px; background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(0,0,0,0));">
+                    <h3 style="font-size: 1.8rem; margin:0;">14</h3>
+                    <span style="font-size: 0.75rem;">Countries Visited</span>
+                </div>
+                <div class="metric-card" style="padding: 15px; border-radius: 12px; background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(0,0,0,0));">
+                    <h3 style="font-size: 1.8rem; margin:0;">35</h3>
+                    <span style="font-size: 0.75rem;">Cities Visited</span>
+                </div>
+                <div class="metric-card" style="padding: 15px; border-radius: 12px; background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(0,0,0,0));">
+                    <h3 style="font-size: 1.8rem; margin:0;">8</h3>
+                    <span style="font-size: 0.75rem;">Experiences Completed</span>
+                </div>
+                <div class="metric-card" style="padding: 15px; border-radius: 12px; background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(0,0,0,0));">
+                    <h3 style="font-size: 1.8rem; margin:0;">42</h3>
+                    <span style="font-size: 0.75rem;">Community Contributions</span>
                 </div>
             </div>
 
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
-                <div class="panel" style="background: linear-gradient(135deg, rgba(255,107,0,0.1), rgba(0,0,0,0));">
-                    <h2><i class="ri-fire-line"></i> Quick Actions</h2>
-                    <ul style="list-style: none; padding: 0; margin: 0; color: var(--text-secondary); line-height: 2.5;">
-                        <li><i class="ri-add-line" style="color: var(--primary); margin-right: 10px;"></i> Plan a new trip</li>
-                        <li><i class="ri-upload-cloud-line" style="color: var(--primary); margin-right: 10px;"></i> Upload recent memories</li>
-                        <li><i class="ri-user-add-line" style="color: var(--primary); margin-right: 10px;"></i> Add a family member</li>
-                    </ul>
+            <!-- Dashboard Grid -->
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 30px;">
+                
+                <!-- Main Content Column -->
+                <div style="display: flex; flex-direction: column; gap: 30px;">
+                    
+                    <!-- Current Trip Widget -->
+                    <div class="panel" style="padding: 20px; margin-bottom: 0;">
+                        <h2 style="font-size: 1.4rem; margin-bottom: 15px;"><i class="ri-map-pin-user-line" style="color: var(--primary);"></i> Current Trip</h2>
+                        <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--color-border); border-radius: 12px; padding: 15px; display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <h3 style="font-size: 1.4rem; margin-bottom: 5px;">${not empty journey ? journey.destination : 'No Active Trip'}</h3>
+                                <p style="color: var(--text-secondary); font-size: 0.9rem;">
+                                    ${not empty journey ? 'Day '.concat(journey.currentDay).concat(' of ').concat(journey.totalDays) : 'Plan your next adventure!'}
+                                </p>
+                            </div>
+                            <c:if test="${not empty journey}">
+                                <div style="text-align: right;">
+                                    <div style="font-size: 1.5rem; font-weight: bold; color: var(--primary);">${journey.progressPercentage}%</div>
+                                    <span style="font-size: 0.75rem; color: var(--text-secondary);">Progress</span>
+                                </div>
+                            </c:if>
+                        </div>
+                    </div>
+
+                    <!-- Upcoming Trips Widget -->
+                    <div class="panel" style="padding: 20px; margin-bottom: 0;">
+                        <h2 style="font-size: 1.4rem; margin-bottom: 15px;"><i class="ri-flight-takeoff-line" style="color: var(--primary);"></i> Upcoming Trips</h2>
+                        <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--color-border); border-radius: 12px; padding: 15px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <div>
+                                <strong style="font-size: 1.1rem;">Kyoto, Japan</strong>
+                                <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 5px;"><i class="ri-calendar-line"></i> Oct 12 - Oct 20, 2026</div>
+                            </div>
+                            <div style="background: rgba(0, 184, 148, 0.2); color: #00b894; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem;">Confirmed</div>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--color-border); border-radius: 12px; padding: 15px; display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <strong style="font-size: 1.1rem;">Paris, France</strong>
+                                <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 5px;"><i class="ri-calendar-line"></i> Dec 24 - Jan 2, 2027</div>
+                            </div>
+                            <div style="background: rgba(255, 107, 0, 0.2); color: var(--primary); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem;">Planning</div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions Widget -->
+                    <div class="panel" style="padding: 20px; margin-bottom: 0; background: linear-gradient(135deg, rgba(255,107,0,0.1), rgba(0,0,0,0));">
+                        <h2 style="font-size: 1.4rem; margin-bottom: 15px;"><i class="ri-flashlight-line" style="color: #f1c40f;"></i> Quick Actions</h2>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <button class="btn btn-outline" style="flex: 1; padding: 8px; font-size: 0.85rem;" onclick="switchTab('active', document.querySelector('.nav-item:nth-child(2)'))">Continue Journey</button>
+                            <button class="btn btn-outline" style="flex: 1; padding: 8px; font-size: 0.85rem;" onclick="switchTab('memories', document.querySelector('.nav-item:nth-child(4)'))">View Memories</button>
+                            <button class="btn btn-outline" style="flex: 1; padding: 8px; font-size: 0.85rem;" onclick="switchTab('calendar', document.querySelector('.nav-item:nth-child(5)'))">Open Calendar</button>
+                            <button class="btn btn-outline" style="flex: 1; padding: 8px; font-size: 0.85rem;" onclick="switchTab('family', document.querySelector('.nav-item:nth-child(7)'))">Family Hub</button>
+                            <a href="${pageContext.request.contextPath}/travel-center" class="btn btn-primary" style="flex: 1; text-align: center; padding: 8px; font-size: 0.85rem;">Travel Center</a>
+                        </div>
+                    </div>
+
+                    <!-- Recent Memories Widget -->
+                    <div class="panel" style="padding: 20px; margin-bottom: 0;">
+                        <h2 style="font-size: 1.4rem; margin-bottom: 15px;"><i class="ri-camera-lens-line" style="color: var(--primary);"></i> Recent Memories</h2>
+                        <div style="display: flex; gap: 10px;">
+                            <div style="flex:1; height: 120px; border-radius: 12px; background: url('https://images.unsplash.com/photo-1499856871958-5b9627545d1a?q=80&w=400&auto=format&fit=crop') center/cover;"></div>
+                            <div style="flex:1; height: 120px; border-radius: 12px; background: url('https://images.unsplash.com/photo-1542051841857-5f90071e7989?q=80&w=400&auto=format&fit=crop') center/cover;"></div>
+                            <div style="flex:1; height: 120px; border-radius: 12px; background: url('https://images.unsplash.com/photo-1506929562872-bb421503ef21?q=80&w=400&auto=format&fit=crop') center/cover;"></div>
+                        </div>
+                    </div>
+
                 </div>
-                <div class="panel" style="background: linear-gradient(135deg, rgba(0,122,255,0.1), rgba(0,0,0,0));">
-                    <h2><i class="ri-notification-3-line"></i> Alerts</h2>
-                    <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; margin-bottom: 10px; border-left: 4px solid #ffcc00;">
-                        Family Passport expiring in 6 months (John Doe).
+
+                <!-- Sidebar Column (Widgets) -->
+                <div style="display: flex; flex-direction: column; gap: 30px;">
+                    
+                    <!-- Weather Widget -->
+                    <div class="panel" style="padding: 20px; margin-bottom: 0; background: linear-gradient(135deg, rgba(0, 184, 148, 0.1), rgba(0,0,0,0)); text-align: center;">
+                        <h2 style="font-size: 1.2rem; margin-bottom: 10px; justify-content: center;"><i class="ri-sun-cloudy-line"></i> Weather</h2>
+                        <div style="font-size: 2.5rem; font-family: 'Clash Display', sans-serif; font-weight: bold; color: white;">
+                            ${not empty journey ? journey.temperature : '24'}°C
+                        </div>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">${not empty journey ? journey.weatherCondition : 'Sunny'}</p>
                     </div>
-                    <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; border-left: 4px solid var(--primary);">
-                        Check-in opens tomorrow for Tokyo Flight!
+
+                    <!-- Travel Readiness Widget -->
+                    <div class="panel" style="padding: 20px; margin-bottom: 0; background: rgba(30, 41, 59, 0.5);">
+                        <h2 style="font-size: 1.2rem; margin-bottom: 15px;"><i class="ri-shield-check-fill" style="color: #60a5fa;"></i> Travel Readiness</h2>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                            <span style="font-size: 1.8rem; font-family: 'Clash Display', sans-serif; font-weight: bold;">92%</span>
+                            <span style="background: rgba(74, 222, 128, 0.2); color: #4ade80; padding: 4px 8px; border-radius: 12px; font-size: 0.7rem;">Ready</span>
+                        </div>
+                        <div style="font-size: 0.8rem;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                                <span style="color: var(--text-secondary);">Visa</span><span style="color: #4ade80;"><i class="ri-check-line"></i></span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                                <span style="color: var(--text-secondary);">Insurance</span><span style="color: #4ade80;"><i class="ri-check-line"></i></span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                                <span style="color: var(--text-secondary);">eSIM</span><span style="color: #fbbf24;">Pending</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span style="color: var(--text-secondary);">Forex</span><span style="color: #fbbf24;">Pending</span>
+                            </div>
+                        </div>
                     </div>
+
+                    <!-- Travel Budget Widget -->
+                    <div class="panel" style="padding: 20px; margin-bottom: 0;">
+                        <h2 style="font-size: 1.2rem; margin-bottom: 15px;"><i class="ri-wallet-3-line" style="color: var(--primary);"></i> Trip Budget</h2>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <span style="color: var(--text-secondary); font-size: 0.9rem;">Remaining</span>
+                            <strong style="color: #00b894;">₹${not empty journey ? journey.totalBudget - journey.spent : '0'}</strong>
+                        </div>
+                        <div class="dna-track" style="height: 6px;"><div class="dna-fill" style="width: 60%; background: #00b894;"></div></div>
+                        <div style="display: flex; justify-content: space-between; margin-top: 10px;">
+                            <span style="color: var(--text-secondary); font-size: 0.9rem;">Spent: ₹${not empty journey ? journey.spent : '0'}</span>
+                            <span style="color: var(--text-secondary); font-size: 0.9rem;">Total: ₹${not empty journey ? journey.totalBudget : '0'}</span>
+                        </div>
+                    </div>
+
+                    <!-- Travel DNA Widget -->
+                    <div class="panel" style="padding: 20px; margin-bottom: 0;">
+                        <h2 style="font-size: 1.2rem; margin-bottom: 15px;"><i class="ri-dna-line" style="color: #8E2DE2;"></i> Travel DNA</h2>
+                        <div class="dna-bar-container" style="margin-bottom: 10px;">
+                            <div class="dna-bar-header" style="font-size: 0.85rem;"><span style="color: var(--text-secondary);">Explorer</span> <strong style="color: var(--primary);">92%</strong></div>
+                            <div class="dna-track" style="height: 4px;"><div class="dna-fill" style="width: 92%; background: var(--primary);"></div></div>
+                        </div>
+                        <div class="dna-bar-container" style="margin-bottom: 10px;">
+                            <div class="dna-bar-header" style="font-size: 0.85rem;"><span style="color: var(--text-secondary);">Foodie</span> <strong style="color: #e17055;">85%</strong></div>
+                            <div class="dna-track" style="height: 4px;"><div class="dna-fill" style="width: 85%; background: #e17055;"></div></div>
+                        </div>
+                        <div class="dna-bar-container" style="margin-bottom: 0;">
+                            <div class="dna-bar-header" style="font-size: 0.85rem;"><span style="color: var(--text-secondary);">Adventure</span> <strong style="color: #00b894;">65%</strong></div>
+                            <div class="dna-track" style="height: 4px;"><div class="dna-fill" style="width: 65%; background: #00b894;"></div></div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>

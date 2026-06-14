@@ -45,6 +45,9 @@
             <a href="${pageContext.request.contextPath}/community/challenges" class="c-nav-tab" style="text-decoration:none;">
                 <i class="ri-trophy-line"></i> Challenges
             </a>
+            <a href="${pageContext.request.contextPath}/community/discover" class="c-nav-tab" style="text-decoration:none;">
+                <i class="ri-compass-discover-line"></i> AI Discover
+            </a>
             <button class="c-nav-tab" data-tab="creators"><i class="ri-user-star-line"></i> Creators</button>
             <a href="${pageContext.request.contextPath}/community/creator-hub" class="c-nav-tab c-nav-hub-btn">
                 <i class="ri-dashboard-3-line"></i> My Hub

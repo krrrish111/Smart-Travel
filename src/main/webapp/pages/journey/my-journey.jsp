@@ -200,6 +200,36 @@
                 </div>
             </div>
 
+            <!-- TRAVEL READINESS WIDGET (For International Trips) -->
+            <c:if test="${journey.isInternational}">
+            <div class="panel" style="background: #1e293b; color: white; border: none;">
+                <h2 style="margin-bottom: 15px; color: #60a5fa;"><i class="ri-shield-check-fill"></i> Travel Readiness</h2>
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px;">
+                    <div style="font-size: 2rem; font-weight: bold; font-family: 'Clash Display', sans-serif;">92%</div>
+                    <span style="background: rgba(74, 222, 128, 0.2); color: #4ade80; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: bold;">Ready</span>
+                </div>
+                <div style="font-size: 0.85rem; space-y-2">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span><i class="ri-passport-line text-gray-400 mr-2"></i> Visa</span>
+                        <span style="color: #4ade80;"><i class="ri-check-line"></i></span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span><i class="ri-article-line text-gray-400 mr-2"></i> Insurance</span>
+                        <span style="color: #4ade80;"><i class="ri-check-line"></i></span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span><i class="ri-sim-card-2-line text-gray-400 mr-2"></i> eSIM</span>
+                        <span style="color: #fbbf24;">Pending</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span><i class="ri-exchange-dollar-line text-gray-400 mr-2"></i> Forex</span>
+                        <span style="color: #fbbf24;">Pending</span>
+                    </div>
+                </div>
+                <a href="${pageContext.request.contextPath}/travel-center" class="btn btn-outline" style="width: 100%; border-color: #334155; color: white; margin-top: 15px; text-align: center; display: block;">Open Travel Center</a>
+            </div>
+            </c:if>
+
             <!-- SECTION 5: Document Vault -->
             <div class="panel">
                 <h2><i class="fas fa-folder-open"></i> Document Vault</h2>

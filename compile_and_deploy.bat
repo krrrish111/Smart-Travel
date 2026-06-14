@@ -23,7 +23,10 @@ javac -encoding UTF-8 -cp "%CP%" -d "%OUTDIR%" ^
   %SRCROOT%\com\voyastra\servlet\journey\*.java ^
   %SRCROOT%\com\voyastra\filter\*.java ^
   %SRCROOT%\com\voyastra\api\*.java ^
-  %SRCROOT%\com\voyastra\service\*.java
+  %SRCROOT%\com\voyastra\service\*.java ^
+  %SRCROOT%\com\voyastra\model\travelcenter\*.java ^
+  %SRCROOT%\com\voyastra\dao\travelcenter\*.java ^
+  %SRCROOT%\com\voyastra\servlet\travelcenter\*.java
 
 if %ERRORLEVEL% == 0 (
     echo SUCCESS: Compilation complete.

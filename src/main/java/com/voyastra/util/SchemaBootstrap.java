@@ -429,7 +429,62 @@ public class SchemaBootstrap implements ServletContextListener {
                 System.err.println("[SchemaBootstrap] Error creating AI Planner tables: " + e.getMessage());
             }
 
-            System.out.println("[SchemaBootstrap] Schema migration complete.");
+                // Phase 16: Travel Center Tables
+                stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS wallets (" +
+                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "user_id INT NOT NULL, " +
+                    "balance DECIMAL(10,2) DEFAULT 0.00, " +
+                    "currency VARCHAR(10) DEFAULT 'INR', " +
+                    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
+                    "updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)"
+                );
+
+                stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS wallet_transactions (" +
+                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "wallet_id INT NOT NULL, " +
+                    "amount DECIMAL(10,2) NOT NULL, " +
+                    "type VARCHAR(20), " + // CREDIT, DEBIT
+                    "description VARCHAR(255), " +
+                    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
+                );
+
+                stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS reward_profiles (" +
+                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "user_id INT NOT NULL, " +
+                    "current_points INT DEFAULT 0, " +
+                    "lifetime_points INT DEFAULT 0, " +
+                    "tier VARCHAR(50) DEFAULT 'Explorer', " +
+                    "referral_code VARCHAR(50), " +
+                    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
+                );
+
+                stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS reward_history (" +
+                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "user_id INT NOT NULL, " +
+                    "points INT NOT NULL, " +
+                    "type VARCHAR(20), " + // EARNED, REDEEMED
+                    "description VARCHAR(255), " +
+                    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
+                );
+
+                stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS travel_readiness (" +
+                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "user_id INT NOT NULL, " +
+                    "destination VARCHAR(100), " +
+                    "visa_status VARCHAR(20) DEFAULT 'Pending', " +
+                    "insurance_status VARCHAR(20) DEFAULT 'Pending', " +
+                    "forex_status VARCHAR(20) DEFAULT 'Pending', " +
+                    "esim_status VARCHAR(20) DEFAULT 'Pending', " +
+                    "score INT DEFAULT 0, " +
+                    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
+                );
+
+                System.out.println("[SchemaBootstrap] Schema migration complete.");
 
         } catch (Exception e) {
             System.err.println("[SchemaBootstrap] Migration error: " + e.getMessage());

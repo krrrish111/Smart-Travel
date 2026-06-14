@@ -123,6 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const getPageContext = () => {
         const path = window.location.pathname.toLowerCase();
+        if (path.includes('travel-center')) return 'Travel Center';
         if (path.includes('flight')) return 'Flights';
         if (path.includes('journey')) return 'Journey';
         if (path.includes('hotel')) return 'Hotels';
@@ -174,6 +175,13 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
         } else if (context === 'Profile') {
             msg = "You completed 5 trips this year.";
+        } else if (context === 'Travel Center') {
+            msg = "Welcome to the Travel Center. Prepare for your next premium journey.";
+            actions = `
+                <button class="ai-action-btn" data-action="visa">Visa Requirements</button>
+                <button class="ai-action-btn" data-action="forex">Order Forex</button>
+                <button class="ai-action-btn" data-action="insurance">Travel Insurance</button>
+            `;
         } else if (context === 'Bookings') {
             msg = "Your Goa trip starts in 4 days.";
             actions = `

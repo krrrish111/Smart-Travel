@@ -146,7 +146,7 @@ public class BookingDAO {
      */
     public List<Booking> getBookingsByUser(int userId) {
         List<Booking> bookings = new ArrayList<>();
-        String query = "SELECT b.id, b.user_id, b.plan_id, b.total_price, b.status, b.created_at, b.type, b.details, p.title AS plan_title, p.image AS plan_image " +
+        String query = "SELECT b.id, b.user_id, b.plan_id, b.total_price, b.status, b.created_at, b.type, b.details, b.travel_date, b.booking_code, p.title AS plan_title, p.image AS plan_image " +
                        "FROM bookings b " +
                        "LEFT JOIN plans p ON b.plan_id = p.id " +
                        "WHERE b.user_id = ? " +
@@ -165,6 +165,10 @@ public class BookingDAO {
                     booking.setTotalPrice(rs.getDouble("total_price"));
                     booking.setStatus(rs.getString("status"));
                     booking.setCreatedAt(rs.getTimestamp("created_at"));
+                    booking.setType(rs.getString("type"));
+                    booking.setDetails(rs.getString("details"));
+                    booking.setTravelDate(rs.getString("travel_date"));
+                    booking.setBookingCode(rs.getString("booking_code"));
                     booking.setPlanTitle(rs.getString("plan_title"));
                     booking.setPlanImage(rs.getString("plan_image"));
                     bookings.add(booking);

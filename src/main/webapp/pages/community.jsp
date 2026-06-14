@@ -39,7 +39,9 @@
             <a href="${pageContext.request.contextPath}/community/food" class="c-nav-tab" style="text-decoration:none;">
                 <i class="ri-restaurant-2-line"></i> Food
             </a>
-            <button class="c-nav-tab" data-tab="guides"><i class="ri-map-2-line"></i> Guides</button>
+            <a href="${pageContext.request.contextPath}/community/guides" class="c-nav-tab" style="text-decoration:none;">
+                <i class="ri-map-2-line"></i> Guides
+            </a>
             <button class="c-nav-tab" data-tab="creators"><i class="ri-user-star-line"></i> Creators</button>
             <a href="${pageContext.request.contextPath}/community/creator-hub" class="c-nav-tab c-nav-hub-btn">
                 <i class="ri-dashboard-3-line"></i> My Hub

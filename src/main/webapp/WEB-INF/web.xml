@@ -248,6 +248,16 @@
         <url-pattern>/community/food</url-pattern>
     </servlet-mapping>
 
+    <!-- Community Guide Marketplace -->
+    <servlet>
+        <servlet-name>GuidesServlet</servlet-name>
+        <servlet-class>com.voyastra.servlet.community.GuidesServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GuidesServlet</servlet-name>
+        <url-pattern>/community/guides</url-pattern>
+    </servlet-mapping>
+
     <!-- Community User Profiles: /community/user/{username} -->
     <servlet>
         <servlet-name>UserProfile</servlet-name>

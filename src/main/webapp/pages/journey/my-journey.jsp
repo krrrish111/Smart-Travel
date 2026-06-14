@@ -951,26 +951,133 @@
                     <button class="btn btn-primary"><i class="ri-add-line"></i> Add Member</button>
                 </div>
                 
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
-                    <!-- Mock Data -->
-                    <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--color-border); border-radius: 16px; padding: 25px; text-align: center;">
-                        <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #74b9ff, #0984e3); margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: white; font-weight: bold;">JD</div>
-                        <h3 style="color: white; font-size: 1.4rem; margin-bottom: 5px;">Jane Doe</h3>
-                        <p style="color: var(--text-secondary); margin-bottom: 15px;">Spouse • Age 32</p>
-                        <div style="background: rgba(0, 184, 148, 0.1); color: #00b894; padding: 8px; border-radius: 8px; font-size: 0.9rem;">
-                            <i class="ri-passport-line"></i> Passport Ready (100%)
+                <!-- Family Roster -->
+                <h3 style="color: white; font-size: 1.2rem; margin-bottom: 15px;">Family Roster</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 40px;">
+                    <c:choose>
+                        <c:when test="${not empty familyMembers}">
+                            <c:forEach var="member" items="${familyMembers}">
+                                <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--color-border); border-radius: 16px; padding: 25px; text-align: center;">
+                                    <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #74b9ff, #0984e3); margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: white; font-weight: bold;">${fn:substring(member.name, 0, 1)}</div>
+                                    <h3 style="color: white; font-size: 1.4rem; margin-bottom: 5px;">${member.name}</h3>
+                                    <p style="color: var(--text-secondary); margin-bottom: 15px;">${member.relation} • Age ${member.age}</p>
+                                    <c:choose>
+                                        <c:when test="${member.passportReadiness >= 80}">
+                                            <div style="background: rgba(0, 184, 148, 0.1); color: #00b894; padding: 8px; border-radius: 8px; font-size: 0.9rem;">
+                                                <i class="ri-passport-line"></i> Passport Ready (${member.passportReadiness}%)
+                                            </div>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <div style="background: rgba(255, 107, 0, 0.1); color: var(--primary); padding: 8px; border-radius: 8px; font-size: 0.9rem;">
+                                                <i class="ri-error-warning-line"></i> Document Action Needed (${member.passportReadiness}%)
+                                            </div>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
+                            </c:forEach>
+                        </c:when>
+                        <c:otherwise>
+                            <!-- Mock Data -->
+                            <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--color-border); border-radius: 16px; padding: 25px; text-align: center;">
+                                <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #74b9ff, #0984e3); margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: white; font-weight: bold;">JD</div>
+                                <h3 style="color: white; font-size: 1.4rem; margin-bottom: 5px;">Jane Doe</h3>
+                                <p style="color: var(--text-secondary); margin-bottom: 15px;">Parent • Age 32</p>
+                                <div style="background: rgba(0, 184, 148, 0.1); color: #00b894; padding: 8px; border-radius: 8px; font-size: 0.9rem;">
+                                    <i class="ri-passport-line"></i> Passport Ready (100%)
+                                </div>
+                            </div>
+        
+                            <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--color-border); border-radius: 16px; padding: 25px; text-align: center;">
+                                <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #a29bfe, #6c5ce7); margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: white; font-weight: bold;">SD</div>
+                                <h3 style="color: white; font-size: 1.4rem; margin-bottom: 5px;">Sam Doe</h3>
+                                <p style="color: var(--text-secondary); margin-bottom: 15px;">Child • Age 8</p>
+                                <div style="background: rgba(255, 107, 0, 0.1); color: var(--primary); padding: 8px; border-radius: 8px; font-size: 0.9rem;">
+                                    <i class="ri-error-warning-line"></i> Visa Required (40%)
+                                </div>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
+
+                <!-- Family Dashboard Widgets -->
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
+                    
+                    <!-- Left Column: Bucket List & Shared Trips -->
+                    <div style="display: flex; flex-direction: column; gap: 20px;">
+                        
+                        <!-- Family Bucket List -->
+                        <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--color-border); border-radius: 16px; padding: 20px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                <h3 style="color: white; font-size: 1.2rem;"><i class="ri-list-check" style="color: var(--primary);"></i> Family Bucket List</h3>
+                                <button class="btn btn-outline" style="padding: 4px 10px; font-size: 0.8rem;"><i class="ri-add-line"></i> Add</button>
+                            </div>
+                            <ul style="list-style: none; padding: 0; margin: 0;">
+                                <li style="display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                    <input type="checkbox" style="accent-color: var(--primary); width: 18px; height: 18px;">
+                                    <span style="color: white; font-size: 1.1rem;">Visit Kashmir</span>
+                                </li>
+                                <li style="display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                    <input type="checkbox" style="accent-color: var(--primary); width: 18px; height: 18px;">
+                                    <span style="color: white; font-size: 1.1rem;">Visit Kerala</span>
+                                </li>
+                                <li style="display: flex; align-items: center; gap: 10px; padding: 10px 0;">
+                                    <input type="checkbox" style="accent-color: var(--primary); width: 18px; height: 18px;">
+                                    <span style="color: white; font-size: 1.1rem;">Visit Thailand</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Shared Trips -->
+                        <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--color-border); border-radius: 16px; padding: 20px;">
+                            <h3 style="color: white; font-size: 1.2rem; margin-bottom: 15px;"><i class="ri-suitcase-2-line" style="color: #00b894;"></i> Shared Upcoming Trips</h3>
+                            <c:choose>
+                                <c:when test="${not empty upcomingTrips}">
+                                    <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(0,184,148,0.05); padding: 15px; border-radius: 12px; border: 1px solid rgba(0,184,148,0.2);">
+                                        <div>
+                                            <h4 style="color: white; margin-bottom: 5px;">${upcomingTrips[0].planTitle != null ? upcomingTrips[0].planTitle : 'Family Vacation'}</h4>
+                                            <p style="color: var(--text-secondary); font-size: 0.9rem;">${upcomingTrips[0].travelDate}</p>
+                                        </div>
+                                        <div style="display: flex; gap: -10px;">
+                                            <!-- Overlapping avatars -->
+                                            <div style="width: 32px; height: 32px; border-radius: 50%; background: #0984e3; border: 2px solid #1a1a2e; color: white; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; z-index: 2;">JD</div>
+                                            <div style="width: 32px; height: 32px; border-radius: 50%; background: #6c5ce7; border: 2px solid #1a1a2e; color: white; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; z-index: 1; margin-left: -10px;">SD</div>
+                                        </div>
+                                    </div>
+                                </c:when>
+                                <c:otherwise>
+                                    <p style="color: var(--text-secondary); font-size: 0.9rem;">No shared upcoming trips. Add a trip to the planner to get started!</p>
+                                </c:otherwise>
+                            </c:choose>
                         </div>
                     </div>
 
-                    <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--color-border); border-radius: 16px; padding: 25px; text-align: center;">
-                        <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #a29bfe, #6c5ce7); margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: white; font-weight: bold;">SD</div>
-                        <h3 style="color: white; font-size: 1.4rem; margin-bottom: 5px;">Sam Doe</h3>
-                        <p style="color: var(--text-secondary); margin-bottom: 15px;">Child • Age 8</p>
-                        <div style="background: rgba(255, 107, 0, 0.1); color: var(--primary); padding: 8px; border-radius: 8px; font-size: 0.9rem;">
-                            <i class="ri-error-warning-line"></i> Visa Required (40%)
+                    <!-- Right Column: Quick Actions & Stats -->
+                    <div style="display: flex; flex-direction: column; gap: 20px;">
+                        
+                        <!-- Shared Calendar Widget -->
+                        <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--color-border); border-radius: 16px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.3s ease;" onclick="switchTab('calendar', document.querySelector('.nav-item:nth-child(2)'))" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='rgba(255,255,255,0.02)'">
+                            <i class="ri-calendar-event-fill" style="font-size: 2rem; color: #fdcb6e; margin-bottom: 10px; display: block;"></i>
+                            <h4 style="color: white; margin-bottom: 5px;">Shared Calendar</h4>
+                            <p style="color: var(--text-secondary); font-size: 0.85rem;">View family availability and upcoming holidays.</p>
                         </div>
+
+                        <!-- Shared Memories Widget -->
+                        <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--color-border); border-radius: 16px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.3s ease;" onclick="switchTab('memories', document.querySelector('.nav-item:nth-child(4)'))" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='rgba(255,255,255,0.02)'">
+                            <i class="ri-camera-lens-fill" style="font-size: 2rem; color: #e17055; margin-bottom: 10px; display: block;"></i>
+                            <h4 style="color: white; margin-bottom: 5px;">Shared Memories</h4>
+                            <p style="color: var(--text-secondary); font-size: 0.85rem;">View your collaborative family albums.</p>
+                        </div>
+
+                        <!-- Shared Expenses Widget -->
+                        <div style="background: linear-gradient(135deg, rgba(9, 132, 227, 0.1), rgba(0,0,0,0)); border: 1px solid rgba(9, 132, 227, 0.3); border-radius: 16px; padding: 20px;">
+                            <h4 style="color: white; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;"><i class="ri-wallet-3-line" style="color: #0984e3;"></i> Shared Expenses</h4>
+                            <div style="font-size: 1.8rem; font-weight: bold; color: white; margin-bottom: 5px;">₹45,000</div>
+                            <p style="color: var(--text-secondary); font-size: 0.85rem;">Total spent this year on family trips.</p>
+                        </div>
+
                     </div>
                 </div>
+
             </div>
         </div>
 

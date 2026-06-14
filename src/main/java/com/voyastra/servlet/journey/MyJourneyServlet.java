@@ -53,7 +53,7 @@ public class MyJourneyServlet extends HttpServlet {
         request.setAttribute("journey", activeJourney);
         
         // Fetch upcoming and completed trips if required
-        if (tab.equals("upcoming") || tab.equals("completed") || tab.equals("memories") || tab.equals("overview") || tab.equals("calendar") || tab.equals("dna")) {
+        if (tab.equals("upcoming") || tab.equals("completed") || tab.equals("memories") || tab.equals("overview") || tab.equals("calendar") || tab.equals("dna") || tab.equals("family")) {
             List<Booking> allBookings = bookingDAO.getBookingsByUser(user.getId());
             List<Booking> upcomingTrips = new ArrayList<>();
             List<Booking> completedTrips = new ArrayList<>();

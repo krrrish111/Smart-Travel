@@ -691,41 +691,202 @@
 
         <!-- TAB: TRAVEL CALENDAR -->
         <div id="tab-calendar" class="tab-content ${activeTab == 'calendar' ? 'active' : ''}">
-            <div class="panel">
-                <h2><i class="ri-calendar-2-line" style="color: var(--primary);"></i> Travel Calendar</h2>
-                
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-                    <button class="btn btn-outline" style="padding: 8px 15px;"><i class="ri-arrow-left-s-line"></i></button>
-                    <h3 style="font-family: 'Clash Display', sans-serif; font-size: 1.5rem;">October 2026</h3>
-                    <button class="btn btn-outline" style="padding: 8px 15px;"><i class="ri-arrow-right-s-line"></i></button>
+            <div style="display: grid; grid-template-columns: 3fr 1fr; gap: 30px;">
+                <!-- Main Calendar Section -->
+                <div class="panel" style="margin-bottom: 0;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                        <h2 style="margin: 0;"><i class="ri-calendar-2-line" style="color: var(--primary);"></i> Travel Calendar</h2>
+                        <div style="display: flex; gap: 10px; background: rgba(255,255,255,0.05); padding: 5px; border-radius: 12px;">
+                            <button class="btn btn-outline" style="border: none; background: var(--primary); color: white;" onclick="setCalendarView('month')">Month</button>
+                            <button class="btn btn-outline" style="border: none; color: var(--text-secondary);" onclick="setCalendarView('year')">Year</button>
+                            <button class="btn btn-outline" style="border: none; color: var(--text-secondary);" onclick="setCalendarView('timeline')">Timeline</button>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                        <button class="btn btn-outline" style="padding: 8px 15px;" onclick="changeMonth(-1)"><i class="ri-arrow-left-s-line"></i></button>
+                        <h3 id="calendarMonthYearDisplay" style="font-family: 'Clash Display', sans-serif; font-size: 1.5rem;">October 2026</h3>
+                        <button class="btn btn-outline" style="padding: 8px 15px;" onclick="changeMonth(1)"><i class="ri-arrow-right-s-line"></i></button>
+                    </div>
+
+                    <div id="calendarViewContainer">
+                        <div class="calendar" id="dynamicCalendarGrid">
+                            <div class="cal-header">Sun</div><div class="cal-header">Mon</div><div class="cal-header">Tue</div>
+                            <div class="cal-header">Wed</div><div class="cal-header">Thu</div><div class="cal-header">Fri</div><div class="cal-header">Sat</div>
+                            <!-- Days rendered via JS -->
+                        </div>
+                    </div>
                 </div>
 
-                <div class="calendar">
-                    <div class="cal-header">Sun</div><div class="cal-header">Mon</div><div class="cal-header">Tue</div>
-                    <div class="cal-header">Wed</div><div class="cal-header">Thu</div><div class="cal-header">Fri</div><div class="cal-header">Sat</div>
-                    
-                    <!-- Mock Days -->
-                    <div class="cal-day" style="opacity: 0.3;">27</div><div class="cal-day" style="opacity: 0.3;">28</div>
-                    <div class="cal-day" style="opacity: 0.3;">29</div><div class="cal-day" style="opacity: 0.3;">30</div>
-                    <div class="cal-day">1</div><div class="cal-day">2</div><div class="cal-day">3</div>
-                    <div class="cal-day">4</div><div class="cal-day">5</div><div class="cal-day">6</div>
-                    <div class="cal-day">7</div><div class="cal-day">8</div><div class="cal-day">9</div><div class="cal-day">10</div>
-                    <div class="cal-day">11</div>
-                    <div class="cal-day has-trip" title="Kyoto Trip Starts">12</div>
-                    <div class="cal-day has-trip" style="background: rgba(255,107,0,0.1);">13</div>
-                    <div class="cal-day has-trip" style="background: rgba(255,107,0,0.1);">14</div>
-                    <div class="cal-day has-trip" style="background: rgba(255,107,0,0.1);">15</div>
-                    <div class="cal-day has-trip" style="background: rgba(255,107,0,0.1);">16</div>
-                    <div class="cal-day has-trip" style="background: rgba(255,107,0,0.1);">17</div>
-                    <div class="cal-day has-trip" style="background: rgba(255,107,0,0.1);">18</div>
-                    <div class="cal-day has-trip" style="background: rgba(255,107,0,0.1);">19</div>
-                    <div class="cal-day has-trip" title="Kyoto Trip Ends">20</div>
-                    <div class="cal-day">21</div><div class="cal-day">22</div><div class="cal-day">23</div>
-                    <div class="cal-day">24</div><div class="cal-day">25</div><div class="cal-day">26</div><div class="cal-day">27</div>
-                    <div class="cal-day">28</div><div class="cal-day">29</div><div class="cal-day">30</div><div class="cal-day">31</div>
+                <!-- Sidebar Section -->
+                <div style="display: flex; flex-direction: column; gap: 20px;">
+                    <!-- Legend -->
+                    <div class="panel" style="padding: 20px; margin-bottom: 0;">
+                        <h3 style="font-size: 1.1rem; margin-bottom: 15px;">Legend</h3>
+                        <div style="display: flex; flex-direction: column; gap: 10px; font-size: 0.9rem;">
+                            <div style="display: flex; align-items: center; gap: 10px;"><div style="width: 12px; height: 12px; border-radius: 50%; background: #00b894;"></div> Upcoming Trips</div>
+                            <div style="display: flex; align-items: center; gap: 10px;"><div style="width: 12px; height: 12px; border-radius: 50%; background: rgba(255,255,255,0.2);"></div> Past Trips</div>
+                            <div style="display: flex; align-items: center; gap: 10px;"><div style="width: 12px; height: 12px; border-radius: 50%; background: var(--primary);"></div> Saved Plans</div>
+                            <div style="display: flex; align-items: center; gap: 10px;"><div style="width: 12px; height: 12px; border-radius: 50%; background: #0984e3;"></div> Holidays / Long Weekends</div>
+                        </div>
+                    </div>
+
+                    <!-- AI Suggestions -->
+                    <div class="panel" style="padding: 20px; margin-bottom: 0; background: linear-gradient(135deg, rgba(142, 45, 226, 0.1), rgba(0,0,0,0)); border-color: rgba(142, 45, 226, 0.3);">
+                        <h3 style="font-size: 1.1rem; margin-bottom: 15px;"><i class="ri-sparkling-line" style="color: #8E2DE2;"></i> AI Suggestions</h3>
+                        <div id="aiSuggestionContent">
+                            <!-- Rendered via JS -->
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <script>
+            // Prepare trips data for calendar
+            const allTripsForCalendar = [
+                <c:forEach var="trip" items="${upcomingTrips}">
+                    { title: "${not empty trip.planTitle ? trip.planTitle.replace('\"', '\\\"') : 'Upcoming Trip'}", date: "${trip.travelDate}", status: "UPCOMING" },
+                </c:forEach>
+                <c:forEach var="trip" items="${completedTrips}">
+                    { title: "${not empty trip.planTitle ? trip.planTitle.replace('\"', '\\\"') : 'Past Trip'}", date: "${trip.travelDate}", status: "PAST" },
+                </c:forEach>
+            ];
+
+            // Mocked Holidays / Long Weekends
+            const holidays = [
+                { date: "2026-10-02", title: "Gandhi Jayanti (Holiday)", type: "HOLIDAY" },
+                { date: "2026-10-23", title: "Dussehra (Long Weekend)", type: "HOLIDAY" },
+                { date: "2026-11-09", title: "Diwali (Long Weekend)", type: "HOLIDAY" }
+            ];
+
+            // Mocked AI Suggestions per month (0-indexed)
+            const aiSuggestions = {
+                9: { // October
+                    weekend: "Oct 23 - Oct 25",
+                    destination: "Goa, India",
+                    reason: "Perfect weather for the Dussehra long weekend.",
+                    budget: "₹18,000"
+                },
+                10: { // November
+                    weekend: "Nov 7 - Nov 9",
+                    destination: "Udaipur, India",
+                    reason: "Experience the royal Diwali festival.",
+                    budget: "₹22,000"
+                }
+            };
+
+            let currentCalDate = new Date(); // Start at current date
+
+            function setCalendarView(viewType) {
+                // In a full implementation, this toggles between Month/Year/Timeline grids.
+                // For now, we only render the 'month' view natively, others show placeholders.
+                const container = document.getElementById('calendarViewContainer');
+                const controls = event.target.parentElement.querySelectorAll('.btn');
+                controls.forEach(c => { c.style.background = 'transparent'; c.style.color = 'var(--text-secondary)'; });
+                event.target.style.background = 'var(--primary)';
+                event.target.style.color = 'white';
+
+                if (viewType === 'month') {
+                    container.innerHTML = `
+                        <div class="calendar" id="dynamicCalendarGrid">
+                            <div class="cal-header">Sun</div><div class="cal-header">Mon</div><div class="cal-header">Tue</div>
+                            <div class="cal-header">Wed</div><div class="cal-header">Thu</div><div class="cal-header">Fri</div><div class="cal-header">Sat</div>
+                        </div>
+                    `;
+                    renderCalendar();
+                } else if (viewType === 'year') {
+                    container.innerHTML = `<div style="text-align:center; padding: 100px; color: var(--text-secondary);"><i class="ri-calendar-event-line" style="font-size: 3rem;"></i><p>Year View Coming Soon</p></div>`;
+                } else if (viewType === 'timeline') {
+                    container.innerHTML = `<div style="text-align:center; padding: 100px; color: var(--text-secondary);"><i class="ri-git-commit-line" style="font-size: 3rem;"></i><p>Timeline View Coming Soon</p></div>`;
+                }
+            }
+
+            function changeMonth(offset) {
+                currentCalDate.setMonth(currentCalDate.getMonth() + offset);
+                renderCalendar();
+            }
+
+            function renderCalendar() {
+                const grid = document.getElementById('dynamicCalendarGrid');
+                if(!grid) return; // Not in month view
+
+                const year = currentCalDate.getFullYear();
+                const month = currentCalDate.getMonth();
+                
+                // Update header
+                const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                document.getElementById('calendarMonthYearDisplay').innerText = `\${monthNames[month]} \${year}`;
+
+                // Update AI Suggestion
+                const suggestionBox = document.getElementById('aiSuggestionContent');
+                const aiData = aiSuggestions[month];
+                if (aiData) {
+                    suggestionBox.innerHTML = `
+                        <div style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 12px; border: 1px solid rgba(142,45,226,0.3);">
+                            <div style="color: var(--primary); font-size: 0.8rem; font-weight: bold; margin-bottom: 5px;">3-DAY WEEKEND</div>
+                            <strong style="display:block; margin-bottom: 5px;">\${aiData.weekend}</strong>
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;"><i class="ri-map-pin-line" style="color: #00b894;"></i> \${aiData.destination}</div>
+                            <p style="font-size: 0.85rem; color: #ccc; margin-bottom: 10px;">\${aiData.reason}</p>
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="font-size: 0.9rem; color: var(--text-secondary);">Est. Budget: \${aiData.budget}</span>
+                                <button class="btn btn-primary" style="padding: 4px 10px; font-size: 0.8rem;">Plan Now</button>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    suggestionBox.innerHTML = `<p style="color: var(--text-secondary); font-size: 0.9rem;">No specific AI recommendations for this month yet. Explore the planner to generate ideas!</p>`;
+                }
+
+                // Clear old days (keep headers)
+                const headers = grid.querySelectorAll('.cal-header');
+                grid.innerHTML = '';
+                headers.forEach(h => grid.appendChild(h));
+
+                const firstDay = new Date(year, month, 1).getDay();
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+                // Pad empty days
+                for (let i = 0; i < firstDay; i++) {
+                    grid.innerHTML += `<div class="cal-day" style="opacity: 0.1;"></div>`;
+                }
+
+                // Render days
+                for (let d = 1; d <= daysInMonth; d++) {
+                    // Format current day string 'YYYY-MM-DD'
+                    const dateStr = `\${year}-\${String(month+1).padStart(2, '0')}-\${String(d).padStart(2, '0')}`;
+                    
+                    let dayHtml = `<div class="cal-day" style="display: flex; flex-direction: column; justify-content: space-between;">`;
+                    dayHtml += `<span style="font-weight: bold;">\${d}</span>`;
+                    
+                    let eventsHtml = '';
+                    
+                    // Check holidays
+                    const h = holidays.find(x => x.date === dateStr);
+                    if (h) {
+                        eventsHtml += `<div style="background: rgba(9, 132, 227, 0.2); color: #0984e3; font-size: 0.65rem; padding: 2px 4px; border-radius: 4px; margin-top: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="\${h.title}">\${h.title}</div>`;
+                    }
+
+                    // Check trips
+                    const trips = allTripsForCalendar.filter(x => x.date && x.date.startsWith(dateStr));
+                    trips.forEach(t => {
+                        let color = t.status === 'UPCOMING' ? '#00b894' : 'rgba(255,255,255,0.4)';
+                        let bg = t.status === 'UPCOMING' ? 'rgba(0, 184, 148, 0.2)' : 'rgba(255,255,255,0.05)';
+                        eventsHtml += `<div style="background: \${bg}; color: \${color}; font-size: 0.65rem; padding: 2px 4px; border-radius: 4px; margin-top: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="\${t.title}">\${t.title}</div>`;
+                    });
+
+                    dayHtml += `<div style="margin-top: auto;">\${eventsHtml}</div>`;
+                    dayHtml += `</div>`;
+                    grid.innerHTML += dayHtml;
+                }
+            }
+
+            // Init calendar on load
+            document.addEventListener('DOMContentLoaded', () => {
+                // wait for a bit to ensure it doesn't break other DOM loads
+                setTimeout(renderCalendar, 100);
+            });
+        </script>
 
         <!-- TAB: TRAVEL DNA -->
         <div id="tab-dna" class="tab-content ${activeTab == 'dna' ? 'active' : ''}">

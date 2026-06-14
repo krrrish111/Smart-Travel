@@ -53,7 +53,7 @@ public class MyJourneyServlet extends HttpServlet {
         request.setAttribute("journey", activeJourney);
         
         // Fetch upcoming and completed trips if required
-        if (tab.equals("upcoming") || tab.equals("completed") || tab.equals("memories") || tab.equals("overview") || tab.equals("calendar") || tab.equals("dna") || tab.equals("family")) {
+        if (tab.equals("upcoming") || tab.equals("completed") || tab.equals("memories") || tab.equals("overview") || tab.equals("calendar") || tab.equals("dna") || tab.equals("family") || tab.equals("reports")) {
             List<Booking> allBookings = bookingDAO.getBookingsByUser(user.getId());
             List<Booking> upcomingTrips = new ArrayList<>();
             List<Booking> completedTrips = new ArrayList<>();
@@ -101,6 +101,8 @@ public class MyJourneyServlet extends HttpServlet {
             request.setAttribute("familyMembers", ecosystemDAO.getFamilyMembersForUser(user.getId()));
         } else if (tab.equals("reports")) {
             request.setAttribute("tripReports", ecosystemDAO.getTripReportsForUser(user.getId()));
+            List<Booking> completedTrips = (List<Booking>) request.getAttribute("completedTrips");
+            request.setAttribute("annualReport", ecosystemDAO.generateAnnualReport(user.getId(), completedTrips));
         }
         
         // We always go to the main ecosystem dashboard now

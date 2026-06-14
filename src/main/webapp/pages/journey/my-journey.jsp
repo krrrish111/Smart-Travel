@@ -240,6 +240,9 @@
         <a class="nav-item ${activeTab == 'completed' ? 'active' : ''}" onclick="switchTab('completed', this)">
             <i class="ri-history-line" style="font-size: 1.2rem;"></i> Completed Trips
         </a>
+        <a class="nav-item ${activeTab == 'reports' ? 'active' : ''}" onclick="switchTab('reports', this)">
+            <i class="ri-bar-chart-box-line" style="font-size: 1.2rem;"></i> Trip Reports
+        </a>
     </aside>
 
     <!-- Main Content Area -->
@@ -1113,6 +1116,98 @@
                         <div style="text-align: center; padding: 40px;">
                             <p style="color: var(--text-secondary);">No completed trips yet.</p>
                         </div>
+                    </c:otherwise>
+                </c:choose>
+            </div>
+        </div>
+
+        <!-- TAB: TRIP REPORTS (WRAPPED) -->
+        <div id="tab-reports" class="tab-content ${activeTab == 'reports' ? 'active' : ''}">
+            <c:choose>
+                <c:when test="${not empty annualReport}">
+                    <!-- Travel Year in Review Hero -->
+                    <div style="background: linear-gradient(135deg, #FF007A 0%, #7928CA 100%); border-radius: 24px; padding: 40px; color: white; text-align: center; margin-bottom: 30px; box-shadow: 0 10px 30px rgba(121, 40, 202, 0.3);">
+                        <h2 style="font-size: 2.5rem; margin-bottom: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px;">Your Travel Year in Review</h2>
+                        <p style="font-size: 1.2rem; opacity: 0.9;">Look at all the incredible places you've explored this year.</p>
+                    </div>
+
+                    <!-- Highlights row -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px;">
+                        <div style="background: rgba(255, 0, 122, 0.1); border: 1px solid rgba(255, 0, 122, 0.3); border-radius: 16px; padding: 25px; text-align: center;">
+                            <i class="ri-map-pin-line" style="font-size: 2.5rem; color: #FF007A; margin-bottom: 10px; display: block;"></i>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Top Destination</p>
+                            <h3 style="color: white; font-size: 1.5rem;">${annualReport.topDestination}</h3>
+                        </div>
+                        <div style="background: rgba(121, 40, 202, 0.1); border: 1px solid rgba(121, 40, 202, 0.3); border-radius: 16px; padding: 25px; text-align: center;">
+                            <i class="ri-restaurant-2-line" style="font-size: 2.5rem; color: #7928CA; margin-bottom: 10px; display: block;"></i>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Favorite Food</p>
+                            <h3 style="color: white; font-size: 1.5rem;">${annualReport.favoriteFood}</h3>
+                        </div>
+                        <div style="background: rgba(0, 184, 148, 0.1); border: 1px solid rgba(0, 184, 148, 0.3); border-radius: 16px; padding: 25px; text-align: center;">
+                            <i class="ri-compass-3-line" style="font-size: 2.5rem; color: #00b894; margin-bottom: 10px; display: block;"></i>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Most Visited Place</p>
+                            <h3 style="color: white; font-size: 1.5rem;">${annualReport.mostVisitedPlace}</h3>
+                        </div>
+                    </div>
+
+                    <!-- Statistics Grid -->
+                    <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--color-border); border-radius: 16px; padding: 30px;">
+                        <h3 style="color: white; margin-bottom: 20px; font-size: 1.4rem;"><i class="ri-bar-chart-2-line" style="color: var(--primary);"></i> Travel Statistics</h3>
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                            <div style="padding: 15px; border-radius: 12px; background: rgba(255,255,255,0.03);">
+                                <p style="color: var(--text-secondary); font-size: 0.9rem;">Distance Traveled</p>
+                                <h4 style="color: white; font-size: 1.8rem; margin: 5px 0;">${annualReport.distanceTraveled} <span style="font-size:1rem; color:var(--text-secondary);">km</span></h4>
+                            </div>
+                            <div style="padding: 15px; border-radius: 12px; background: rgba(255,255,255,0.03);">
+                                <p style="color: var(--text-secondary); font-size: 0.9rem;">Cities Visited</p>
+                                <h4 style="color: white; font-size: 1.8rem; margin: 5px 0;">${annualReport.citiesVisited}</h4>
+                            </div>
+                            <div style="padding: 15px; border-radius: 12px; background: rgba(255,255,255,0.03);">
+                                <p style="color: var(--text-secondary); font-size: 0.9rem;">Money Spent</p>
+                                <h4 style="color: white; font-size: 1.8rem; margin: 5px 0; color: #e1b12c;">₹${annualReport.totalMoneySpent}</h4>
+                            </div>
+                            <div style="padding: 15px; border-radius: 12px; background: rgba(255,255,255,0.03);">
+                                <p style="color: var(--text-secondary); font-size: 0.9rem;">Experiences</p>
+                                <h4 style="color: white; font-size: 1.8rem; margin: 5px 0;">${annualReport.experiencesCompleted}</h4>
+                            </div>
+                            <div style="padding: 15px; border-radius: 12px; background: rgba(255,255,255,0.03);">
+                                <p style="color: var(--text-secondary); font-size: 0.9rem;">Food Spots</p>
+                                <h4 style="color: white; font-size: 1.8rem; margin: 5px 0;">${annualReport.foodSpotsVisited}</h4>
+                            </div>
+                            <div style="padding: 15px; border-radius: 12px; background: rgba(255,255,255,0.03);">
+                                <p style="color: var(--text-secondary); font-size: 0.9rem;">Hidden Gems</p>
+                                <h4 style="color: white; font-size: 1.8rem; margin: 5px 0; color: #a29bfe;">${annualReport.hiddenGemsFound}</h4>
+                            </div>
+                        </div>
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <div class="panel text-center" style="padding: 50px;">
+                        <p style="color: var(--text-secondary);">Your travel data is being compiled. Check back after your first trip!</p>
+                    </div>
+                </c:otherwise>
+            </c:choose>
+            
+            <!-- Standard Trip Reports (Logs) -->
+            <div style="margin-top: 40px;">
+                <h3 style="color: white; font-size: 1.4rem; margin-bottom: 20px;">Expense Reports & Summaries</h3>
+                <c:choose>
+                    <c:when test="${not empty tripReports}">
+                        <c:forEach var="tr" items="${tripReports}">
+                            <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--color-border); border-radius: 16px; padding: 20px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <h4 style="color: white; margin-bottom: 5px;">${tr.destination}</h4>
+                                    <p style="color: var(--text-secondary); font-size: 0.9rem;">${tr.summary}</p>
+                                </div>
+                                <div style="text-align: right;">
+                                    <h4 style="color: #e1b12c;">₹${tr.totalCost}</h4>
+                                    <p style="color: var(--text-secondary); font-size: 0.8rem;">Rating: ${tr.rating}/5</p>
+                                </div>
+                            </div>
+                        </c:forEach>
+                    </c:when>
+                    <c:otherwise>
+                        <p style="color: var(--text-secondary);">No trip reports generated yet.</p>
                     </c:otherwise>
                 </c:choose>
             </div>

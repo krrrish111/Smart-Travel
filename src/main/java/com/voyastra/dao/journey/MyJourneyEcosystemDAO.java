@@ -4,6 +4,7 @@ import com.voyastra.model.journey.TravelMemory;
 import com.voyastra.model.journey.FamilyMember;
 import com.voyastra.model.journey.TripReport;
 import com.voyastra.model.journey.TravelDNA;
+import com.voyastra.model.journey.AnnualReport;
 import com.voyastra.model.Booking;
 import com.voyastra.util.DBConnection;
 
@@ -195,5 +196,45 @@ public class MyJourneyEcosystemDAO {
 
         dna.setAiInsights(insights);
         return dna;
+    }
+
+    public AnnualReport generateAnnualReport(int userId, List<Booking> completedTrips) {
+        AnnualReport report = new AnnualReport();
+        List<TravelMemory> memories = getMemoriesForUser(userId);
+
+        int tripCount = completedTrips != null ? completedTrips.size() : 0;
+        
+        // Mock calculations based on available data for prototype
+        report.setDistanceTraveled(tripCount * 2450 + 1200); // Arbitrary distance multiplier
+        report.setCitiesVisited(tripCount + 2); 
+        
+        java.math.BigDecimal totalSpent = java.math.BigDecimal.ZERO;
+        if (completedTrips != null) {
+            for (Booking b : completedTrips) {
+                totalSpent = totalSpent.add(java.math.BigDecimal.valueOf(b.getTotalPrice()));
+            }
+        }
+        report.setTotalMoneySpent(totalSpent.add(new java.math.BigDecimal("15000"))); // adding mock base
+
+        int foodSpots = 0;
+        int expCount = 0;
+        int hiddenGems = 0;
+
+        for (TravelMemory m : memories) {
+            if ("FOOD".equalsIgnoreCase(m.getType())) foodSpots++;
+            else if ("EXPERIENCE".equalsIgnoreCase(m.getType())) expCount++;
+            else if ("HIDDEN_GEM".equalsIgnoreCase(m.getType())) hiddenGems++;
+        }
+        
+        report.setFoodSpotsVisited(foodSpots + 4);
+        report.setExperiencesCompleted(expCount + 5);
+        report.setHiddenGemsFound(hiddenGems + 2);
+
+        // Spotify Wrapped style highlights
+        report.setTopDestination("Bali, Indonesia");
+        report.setFavoriteFood("Spicy Ramen");
+        report.setMostVisitedPlace("Beachside Cafes");
+
+        return report;
     }
 }

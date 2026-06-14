@@ -2012,6 +2012,22 @@
     font-family: 'Poppins', sans-serif;
 }
 
+/* ── My Hub CTA Button (stands out in nav) ── */
+.c-nav-hub-btn {
+    background: linear-gradient(135deg, var(--color-primary), #ef4444) !important;
+    border-color: transparent !important;
+    color: white !important;
+    text-decoration: none;
+    box-shadow: 0 4px 14px rgba(212, 165, 116, 0.4);
+}
+
+.c-nav-hub-btn:hover {
+    opacity: 0.9;
+    box-shadow: 0 6px 20px rgba(212, 165, 116, 0.55);
+    background: linear-gradient(135deg, var(--color-primary), #ef4444) !important;
+    color: white !important;
+}
+
 .lb-you { color: var(--text-muted) !important; }
 
 .lb-streak {

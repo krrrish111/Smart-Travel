@@ -208,6 +208,16 @@
         <url-pattern>/confirmation</url-pattern>
     </servlet-mapping>
 
+    <!-- Community Creator Hub -->
+    <servlet>
+        <servlet-name>CreatorHub</servlet-name>
+        <jsp-file>/pages/community/creator-hub.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CreatorHub</servlet-name>
+        <url-pattern>/community/creator-hub</url-pattern>
+    </servlet-mapping>
+
     <!-- Welcome File List: Routes root to HomeServlet -->
     <welcome-file-list>
         <welcome-file>home</welcome-file>

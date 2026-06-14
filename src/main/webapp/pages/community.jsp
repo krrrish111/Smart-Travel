@@ -35,6 +35,9 @@
             <button class="c-nav-tab" data-tab="food"><i class="ri-restaurant-2-line"></i> Food</button>
             <button class="c-nav-tab" data-tab="guides"><i class="ri-map-2-line"></i> Guides</button>
             <button class="c-nav-tab" data-tab="creators"><i class="ri-user-star-line"></i> Creators</button>
+            <a href="${pageContext.request.contextPath}/community/creator-hub" class="c-nav-tab c-nav-hub-btn">
+                <i class="ri-dashboard-3-line"></i> My Hub
+            </a>
         </nav>
     </div>
 

@@ -19,6 +19,8 @@ javac -encoding UTF-8 -cp "%CP%" -d "%OUTDIR%" ^
   %SRCROOT%\com\voyastra\servlet\*.java ^
   %SRCROOT%\com\voyastra\servlet\booking\*.java ^
   %SRCROOT%\com\voyastra\servlet\transport\*.java ^
+  %SRCROOT%\com\voyastra\servlet\experience\*.java ^
+  %SRCROOT%\com\voyastra\servlet\journey\*.java ^
   %SRCROOT%\com\voyastra\filter\*.java ^
   %SRCROOT%\com\voyastra\api\*.java ^
   %SRCROOT%\com\voyastra\service\*.java

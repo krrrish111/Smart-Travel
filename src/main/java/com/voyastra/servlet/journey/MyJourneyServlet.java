@@ -33,7 +33,7 @@ public class MyJourneyServlet extends HttpServlet {
         User user = (User) session.getAttribute("user");
         
         // Fetch active journey for user
-        Journey activeJourney = journeyDAO.getActiveJourneyForUser(user.getId());
+        Journey activeJourney = journeyDAO.getActiveJourneyForUser(String.valueOf(user.getId()));
         
         if (activeJourney != null) {
             request.setAttribute("journey", activeJourney);

@@ -43,7 +43,7 @@ public class ExperienceBookingServlet extends HttpServlet {
             Date bookingDate = new SimpleDateFormat("yyyy-MM-dd").parse(dateStr);
             
             ExperienceBooking booking = new ExperienceBooking();
-            booking.setUserId(user.getId());
+            booking.setUserId(String.valueOf(user.getId()));
             booking.setExperienceId(expId);
             booking.setBookingDate(bookingDate);
             booking.setNumberOfTravelers(travelers);

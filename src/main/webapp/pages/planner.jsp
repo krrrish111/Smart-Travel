@@ -675,9 +675,9 @@ function plotAILocations(centerLatLng, aiData) {
             const popupHtml = `
                 <div class="p-2" style="width: 200px;">
                     <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=200&q=80" class="w-full h-24 object-cover rounded mb-2">
-                    <h5 class="font-bold text-main text-sm mb-1">${itemName}</h5>
-                    <p class="text-xs text-muted mb-2">${category}</p>
-                    <button class="btn btn-primary text-xs py-1 px-3 w-full" onclick="addToTrip('${itemName.replace(/'/g,"")}', '${category}', ${pLat}, ${pLng})">Add To Trip</button>
+                    <h5 class="font-bold text-main text-sm mb-1">\${itemName}</h5>
+                    <p class="text-xs text-muted mb-2">\${category}</p>
+                    <button class="btn btn-primary text-xs py-1 px-3 w-full" onclick="addToTrip('\${itemName.replace(/'/g,"")}', '\${category}', \${pLat}, \${pLng})">Add To Trip</button>
                 </div>
             `;
             L.marker([pLat, pLng], {icon: icon}).bindPopup(popupHtml).addTo(layerGroup);
@@ -821,11 +821,11 @@ function renderItinerary(data) {
             tripScoreContainer.innerHTML += `
                 <div class="mb-2">
                     <div class="flex justify-between text-[0.65rem] uppercase font-bold text-muted mb-1">
-                        <span>${label}</span>
-                        <span class="text-main">${score}/10</span>
+                        <span>\${label}</span>
+                        <span class="text-main">\${score}/10</span>
                     </div>
                     <div class="w-full bg-white/5 rounded-full h-1.5 overflow-hidden">
-                        <div class="h-1.5 rounded-full ${colorClass}" style="width: ${pct}%"></div>
+                        <div class="h-1.5 rounded-full \${colorClass}" style="width: \${pct}%"></div>
                     </div>
                 </div>
             `;
@@ -878,45 +878,45 @@ function renderItinerary(data) {
             
             // Generate a random Unsplash image based on category
             const query = encodeURIComponent(gem.category || "nature travel");
-            const imgUrl = `https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=600&auto=format&fit=crop&sig=${idx}`;
+            const imgUrl = `https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=600&auto=format&fit=crop&sig=\${idx}`;
             
             card.innerHTML = `
                 <div class="h-40 relative">
-                    <img src="${imgUrl}" class="w-full h-full object-cover">
+                    <img src="\${imgUrl}" class="w-full h-full object-cover">
                     <div class="absolute top-3 left-3 bg-black/60 backdrop-blur-md text-white text-[0.65rem] uppercase tracking-wider font-bold px-3 py-1 rounded-full border border-white/10">
-                        ${gem.category || "Hidden Gem"}
+                        \${gem.category || "Hidden Gem"}
                     </div>
                     <div class="absolute top-3 right-3 bg-primary text-white text-xs font-bold px-2 py-1 rounded border border-primary/50 shadow-lg">
-                        <i class="ri-star-fill text-yellow-300"></i> ${gem.overall_score || 9.0}
+                        <i class="ri-star-fill text-yellow-300"></i> \${gem.overall_score || 9.0}
                     </div>
                 </div>
                 <div class="p-5">
                     <div class="flex justify-between items-start mb-2">
-                        <h4 class="text-main font-bold text-lg leading-tight">${gem.name}</h4>
+                        <h4 class="text-main font-bold text-lg leading-tight">\${gem.name}</h4>
                     </div>
-                    <p class="text-xs text-muted mb-4 line-clamp-2">${gem.description}</p>
+                    <p class="text-xs text-muted mb-4 line-clamp-2">\${gem.description}</p>
                     
                     <div class="grid grid-cols-2 gap-y-3 gap-x-2 text-xs mb-4">
                         <div>
-                            <div class="flex justify-between text-[0.6rem] text-muted mb-1 uppercase tracking-wider"><span>Beauty</span> <span>${gem.beauty_score}</span></div>
-                            <div class="w-full bg-white/5 rounded-full h-1.5"><div class="bg-blue-400 h-1.5 rounded-full" style="width: ${(gem.beauty_score/10)*100}%"></div></div>
+                            <div class="flex justify-between text-[0.6rem] text-muted mb-1 uppercase tracking-wider"><span>Beauty</span> <span>\${gem.beauty_score}</span></div>
+                            <div class="w-full bg-white/5 rounded-full h-1.5"><div class="bg-blue-400 h-1.5 rounded-full" style="width: \${(gem.beauty_score/10)*100}%"></div></div>
                         </div>
                         <div>
-                            <div class="flex justify-between text-[0.6rem] text-muted mb-1 uppercase tracking-wider"><span>Peace</span> <span>${gem.peace_score}</span></div>
-                            <div class="w-full bg-white/5 rounded-full h-1.5"><div class="bg-purple-400 h-1.5 rounded-full" style="width: ${(gem.peace_score/10)*100}%"></div></div>
+                            <div class="flex justify-between text-[0.6rem] text-muted mb-1 uppercase tracking-wider"><span>Peace</span> <span>\${gem.peace_score}</span></div>
+                            <div class="w-full bg-white/5 rounded-full h-1.5"><div class="bg-purple-400 h-1.5 rounded-full" style="width: \${(gem.peace_score/10)*100}%"></div></div>
                         </div>
                         <div>
-                            <div class="flex justify-between text-[0.6rem] text-muted mb-1 uppercase tracking-wider"><span>Photo</span> <span>${gem.photo_score}</span></div>
-                            <div class="w-full bg-white/5 rounded-full h-1.5"><div class="bg-pink-400 h-1.5 rounded-full" style="width: ${(gem.photo_score/10)*100}%"></div></div>
+                            <div class="flex justify-between text-[0.6rem] text-muted mb-1 uppercase tracking-wider"><span>Photo</span> <span>\${gem.photo_score}</span></div>
+                            <div class="w-full bg-white/5 rounded-full h-1.5"><div class="bg-pink-400 h-1.5 rounded-full" style="width: \${(gem.photo_score/10)*100}%"></div></div>
                         </div>
                         <div>
-                            <div class="flex justify-between text-[0.6rem] text-muted mb-1 uppercase tracking-wider"><span>Crowd</span> <span>${gem.crowd_score}</span></div>
-                            <div class="w-full bg-white/5 rounded-full h-1.5"><div class="bg-red-400 h-1.5 rounded-full" style="width: ${(gem.crowd_score/10)*100}%"></div></div>
+                            <div class="flex justify-between text-[0.6rem] text-muted mb-1 uppercase tracking-wider"><span>Crowd</span> <span>\${gem.crowd_score}</span></div>
+                            <div class="w-full bg-white/5 rounded-full h-1.5"><div class="bg-red-400 h-1.5 rounded-full" style="width: \${(gem.crowd_score/10)*100}%"></div></div>
                         </div>
                     </div>
 
                     <div class="flex gap-2">
-                        <button class="btn btn-primary flex-1 py-2 text-xs" onclick="addToTrip('${gem.name.replace(/'/g,"")}', '${gem.category}', 0, 0)">Add To Trip</button>
+                        <button class="btn btn-primary flex-1 py-2 text-xs" onclick="addToTrip('\${gem.name.replace(/'/g,"")}', '\${gem.category}', 0, 0)">Add To Trip</button>
                         <button class="btn btn-outline py-2 px-3 text-xs"><i class="ri-bookmark-line"></i></button>
                     </div>
                 </div>
@@ -942,14 +942,14 @@ function renderItinerary(data) {
         
         places.forEach((place, idx) => {
             const placeName = typeof place === 'string' ? place : place.name;
-            const imgUrl = `https://images.unsplash.com/photo-1506461883276-594a12b11ac3?q=80&w=400&auto=format&fit=crop&sig=${idx}`;
+            const imgUrl = `https://images.unsplash.com/photo-1506461883276-594a12b11ac3?q=80&w=400&auto=format&fit=crop&sig=\${idx}`;
             const div = document.createElement('div');
             div.className = 'relative group break-inside-avoid rounded-xl overflow-hidden cursor-pointer';
             div.innerHTML = `
-                <img src="${imgUrl}" class="w-full object-cover transition-transform duration-500 group-hover:scale-105">
+                <img src="\${imgUrl}" class="w-full object-cover transition-transform duration-500 group-hover:scale-105">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 <div class="absolute bottom-3 left-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <span class="text-white font-bold text-sm leading-tight block mb-2">${placeName}</span>
+                    <span class="text-white font-bold text-sm leading-tight block mb-2">\${placeName}</span>
                     <div class="flex gap-2">
                         <button class="btn btn-primary text-[0.6rem] py-1 px-2 flex-1"><i class="ri-add-line"></i> Add</button>
                         <button class="btn btn-outline text-[0.6rem] py-1 px-2"><i class="ri-heart-line"></i></button>
@@ -980,7 +980,7 @@ function renderItinerary(data) {
         foodGrid.innerHTML = '';
         data.food_discovery_detailed.forEach((food, idx) => {
             const query = encodeURIComponent(food.category || "restaurant");
-            const imgUrl = `https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=600&auto=format&fit=crop&sig=${idx+100}`;
+            const imgUrl = `https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=600&auto=format&fit=crop&sig=\${idx+100}`;
             
             const card = document.createElement('div');
             card.className = 'glass-panel rounded-2xl overflow-hidden hover:shadow-xl transition-all border border-white/5 flex flex-col h-full cursor-grab draggable-item';
@@ -988,23 +988,23 @@ function renderItinerary(data) {
             card.setAttribute('data-category', food.category || "Food");
             card.innerHTML = `
                 <div class="h-32 relative shrink-0">
-                    <img src="${imgUrl}" class="w-full h-full object-cover">
+                    <img src="\${imgUrl}" class="w-full h-full object-cover">
                     <div class="absolute top-2 left-2 bg-black/60 backdrop-blur-md text-white text-[0.6rem] uppercase tracking-wider font-bold px-2 py-0.5 rounded border border-white/10">
-                        ${food.category}
+                        \${food.category}
                     </div>
                     <div class="absolute top-2 right-2 bg-orange-500 text-white text-[0.65rem] font-bold px-2 py-0.5 rounded shadow-lg flex items-center">
-                        <i class="ri-star-fill text-yellow-200 mr-1"></i> ${food.rating}
+                        <i class="ri-star-fill text-yellow-200 mr-1"></i> \${food.rating}
                     </div>
                 </div>
                 <div class="p-4 flex flex-col flex-1">
-                    <h4 class="text-main font-bold text-sm mb-1 line-clamp-1">${food.name}</h4>
+                    <h4 class="text-main font-bold text-sm mb-1 line-clamp-1">\${food.name}</h4>
                     <div class="flex gap-2 text-[0.65rem] text-muted mb-2 font-mono">
-                        <span class="text-green-400">${food.price_range}</span>
+                        <span class="text-green-400">\${food.price_range}</span>
                         <span>•</span>
-                        <span>Crowd: ${food.crowd_level}</span>
+                        <span>Crowd: \${food.crowd_level}</span>
                     </div>
-                    <p class="text-xs text-muted/80 leading-relaxed italic mb-3 flex-1 line-clamp-3">"${food.short_story || food.description}"</p>
-                    <button class="btn btn-primary w-full py-1.5 text-xs rounded-full mt-auto" onclick="addToTrip('${food.name.replace(/'/g,"")}', '${food.category}', 0, 0)"><i class="ri-add-line mr-1"></i> Add To Trip</button>
+                    <p class="text-xs text-muted/80 leading-relaxed italic mb-3 flex-1 line-clamp-3">"\${food.short_story || food.description}"</p>
+                    <button class="btn btn-primary w-full py-1.5 text-xs rounded-full mt-auto" onclick="addToTrip('\${food.name.replace(/'/g,"")}', '\${food.category}', 0, 0)"><i class="ri-add-line mr-1"></i> Add To Trip</button>
                 </div>
             `;
             foodGrid.appendChild(card);
@@ -1030,22 +1030,22 @@ function renderItinerary(data) {
                     <i class="ri-compass-discover-fill" style="font-size: 8rem;"></i>
                 </div>
                 <div class="relative z-10">
-                    <span class="text-[0.6rem] text-primary uppercase font-bold tracking-widest mb-1 block">${exp.type}</span>
-                    <h4 class="text-main font-bold text-md mb-2 leading-tight">${exp.name}</h4>
-                    <p class="text-xs text-muted mb-4 line-clamp-2">"${exp.short_story}"</p>
+                    <span class="text-[0.6rem] text-primary uppercase font-bold tracking-widest mb-1 block">\${exp.type}</span>
+                    <h4 class="text-main font-bold text-md mb-2 leading-tight">\${exp.name}</h4>
+                    <p class="text-xs text-muted mb-4 line-clamp-2">"\${exp.short_story}"</p>
                     
                     <div class="space-y-2 text-xs">
                         <div>
-                            <div class="flex justify-between text-[0.6rem] text-muted mb-1 uppercase tracking-wider"><span>Authenticity</span> <span>${exp.authenticity_score}</span></div>
-                            <div class="w-full bg-white/5 rounded-full h-1.5"><div class="bg-amber-500 h-1.5 rounded-full" style="width: ${(exp.authenticity_score/10)*100}%"></div></div>
+                            <div class="flex justify-between text-[0.6rem] text-muted mb-1 uppercase tracking-wider"><span>Authenticity</span> <span>\${exp.authenticity_score}</span></div>
+                            <div class="w-full bg-white/5 rounded-full h-1.5"><div class="bg-amber-500 h-1.5 rounded-full" style="width: \${(exp.authenticity_score/10)*100}%"></div></div>
                         </div>
                         <div>
-                            <div class="flex justify-between text-[0.6rem] text-muted mb-1 uppercase tracking-wider"><span>Fun</span> <span>${exp.fun_score}</span></div>
-                            <div class="w-full bg-white/5 rounded-full h-1.5"><div class="bg-pink-500 h-1.5 rounded-full" style="width: ${(exp.fun_score/10)*100}%"></div></div>
+                            <div class="flex justify-between text-[0.6rem] text-muted mb-1 uppercase tracking-wider"><span>Fun</span> <span>\${exp.fun_score}</span></div>
+                            <div class="w-full bg-white/5 rounded-full h-1.5"><div class="bg-pink-500 h-1.5 rounded-full" style="width: \${(exp.fun_score/10)*100}%"></div></div>
                         </div>
                         <div>
-                            <div class="flex justify-between text-[0.6rem] text-muted mb-1 uppercase tracking-wider"><span>Photography</span> <span>${exp.photography_score}</span></div>
-                            <div class="w-full bg-white/5 rounded-full h-1.5"><div class="bg-blue-500 h-1.5 rounded-full" style="width: ${(exp.photography_score/10)*100}%"></div></div>
+                            <div class="flex justify-between text-[0.6rem] text-muted mb-1 uppercase tracking-wider"><span>Photography</span> <span>\${exp.photography_score}</span></div>
+                            <div class="w-full bg-white/5 rounded-full h-1.5"><div class="bg-blue-500 h-1.5 rounded-full" style="width: \${(exp.photography_score/10)*100}%"></div></div>
                         </div>
                     </div>
                 </div>
@@ -1062,23 +1062,23 @@ function renderItinerary(data) {
             const div = document.createElement('div');
             div.className = 'mb-6';
             div.innerHTML = `
-                <h4 class="text-primary font-bold mb-3 uppercase tracking-widest text-xs"><i class="ri-map-pin-user-line mr-1"></i> ${trail.title}</h4>
+                <h4 class="text-primary font-bold mb-3 uppercase tracking-widest text-xs"><i class="ri-map-pin-user-line mr-1"></i> \${trail.title}</h4>
                 <div class="flex flex-col gap-3 relative">
                     <div class="flex items-start gap-3 relative">
                         <div class="w-6 h-6 rounded-full bg-background border border-primary flex items-center justify-center shrink-0 mt-0.5 text-[0.6rem] text-primary"><i class="ri-cup-line"></i></div>
-                        <div><span class="block text-[0.65rem] text-muted uppercase font-bold tracking-wider">Breakfast</span><span class="text-sm font-bold text-main">${trail.breakfast}</span></div>
+                        <div><span class="block text-[0.65rem] text-muted uppercase font-bold tracking-wider">Breakfast</span><span class="text-sm font-bold text-main">\${trail.breakfast}</span></div>
                     </div>
                     <div class="flex items-start gap-3 relative">
                         <div class="w-6 h-6 rounded-full bg-background border border-primary flex items-center justify-center shrink-0 mt-0.5 text-[0.6rem] text-primary"><i class="ri-restaurant-line"></i></div>
-                        <div><span class="block text-[0.65rem] text-muted uppercase font-bold tracking-wider">Lunch</span><span class="text-sm font-bold text-main">${trail.lunch}</span></div>
+                        <div><span class="block text-[0.65rem] text-muted uppercase font-bold tracking-wider">Lunch</span><span class="text-sm font-bold text-main">\${trail.lunch}</span></div>
                     </div>
                     <div class="flex items-start gap-3 relative">
                         <div class="w-6 h-6 rounded-full bg-background border border-primary flex items-center justify-center shrink-0 mt-0.5 text-[0.6rem] text-primary"><i class="ri-goblet-line"></i></div>
-                        <div><span class="block text-[0.65rem] text-muted uppercase font-bold tracking-wider">Evening</span><span class="text-sm font-bold text-main">${trail.evening}</span></div>
+                        <div><span class="block text-[0.65rem] text-muted uppercase font-bold tracking-wider">Evening</span><span class="text-sm font-bold text-main">\${trail.evening}</span></div>
                     </div>
                     <div class="flex items-start gap-3 relative">
                         <div class="w-6 h-6 rounded-full bg-background border border-primary flex items-center justify-center shrink-0 mt-0.5 text-[0.6rem] text-primary"><i class="ri-knife-line"></i></div>
-                        <div><span class="block text-[0.65rem] text-muted uppercase font-bold tracking-wider">Dinner</span><span class="text-sm font-bold text-main">${trail.dinner}</span></div>
+                        <div><span class="block text-[0.65rem] text-muted uppercase font-bold tracking-wider">Dinner</span><span class="text-sm font-bold text-main">\${trail.dinner}</span></div>
                     </div>
                 </div>
             `;
@@ -1095,9 +1095,9 @@ function renderItinerary(data) {
         eventsBanner.className = 'glass-panel p-4 mb-6 rounded-2xl bg-orange-500/10 border-orange-500/30';
         let eventsHtml = '';
         data.events_detected.forEach(ev => {
-            eventsHtml += `<li class="text-sm text-orange-200"><i class="ri-calendar-event-line mr-2"></i>${ev}</li>`;
+            eventsHtml += `<li class="text-sm text-orange-200"><i class="ri-calendar-event-line mr-2"></i>\${ev}</li>`;
         });
-        eventsBanner.innerHTML = `<h4 class="text-orange-400 font-bold mb-2 uppercase tracking-widest text-xs"><i class="ri-notification-3-line mr-1"></i> Events Detected</h4><ul>${eventsHtml}</ul>`;
+        eventsBanner.innerHTML = `<h4 class="text-orange-400 font-bold mb-2 uppercase tracking-widest text-xs"><i class="ri-notification-3-line mr-1"></i> Events Detected</h4><ul>\${eventsHtml}</ul>`;
         dayList.appendChild(eventsBanner);
     }
 
@@ -1123,16 +1123,16 @@ function renderItinerary(data) {
                 activitiesHtml += `
                     <div class="flex gap-4 p-3 hover:bg-white/5 rounded-xl transition-all group relative">
                         <div class="w-16 shrink-0 pt-1">
-                            <span class="text-[0.65rem] text-muted font-bold uppercase block">${act.time_slot || act.time}</span>
-                            ${act.travel_time ? `<span class="text-[0.55rem] text-muted flex items-center mt-1"><i class="ri-car-line mr-1"></i> ${act.travel_time}</span>` : ''}
+                            <span class="text-[0.65rem] text-muted font-bold uppercase block">\${act.time_slot || act.time}</span>
+                            \${act.travel_time ? \`<span class="text-[0.55rem] text-muted flex items-center mt-1"><i class="ri-car-line mr-1"></i> \${act.travel_time}</span>\` : ''}
                         </div>
                         <div class="flex-1">
                             <div class="flex items-center gap-2 mb-1">
-                                <h5 class="text-sm text-main font-bold m-0">${act.title || 'Activity'}</h5>
-                                <span class="px-2 py-0.5 rounded text-[0.55rem] uppercase tracking-wider font-bold ${catColor}"><i class="${catIcon} mr-1"></i>${act.category || 'General'}</span>
-                                ${act.recommended_duration ? `<span class="px-2 py-0.5 rounded text-[0.55rem] uppercase tracking-wider font-bold text-muted bg-white/5"><i class="ri-time-line mr-1"></i>${act.recommended_duration}</span>` : ''}
+                                <h5 class="text-sm text-main font-bold m-0">\${act.title || 'Activity'}</h5>
+                                <span class="px-2 py-0.5 rounded text-[0.55rem] uppercase tracking-wider font-bold \${catColor}"><i class="\${catIcon} mr-1"></i>\${act.category || 'General'}</span>
+                                \${act.recommended_duration ? \`<span class="px-2 py-0.5 rounded text-[0.55rem] uppercase tracking-wider font-bold text-muted bg-white/5"><i class="ri-time-line mr-1"></i>\${act.recommended_duration}</span>\` : ''}
                             </div>
-                            <p class="text-xs text-muted/80 leading-relaxed editable-activity" contenteditable="true" onblur="updateActivity(${day.day}, ${idx}, this.innerText)">${act.description}</p>
+                            <p class="text-xs text-muted/80 leading-relaxed editable-activity" contenteditable="true" onblur="updateActivity(\${day.day}, \${idx}, this.innerText)">\${act.description}</p>
                         </div>
                     </div>
                 `;
@@ -1141,25 +1141,25 @@ function renderItinerary(data) {
 
         card.innerHTML = `
             <div class="absolute -right-10 -top-10 text-white/5 pointer-events-none">
-                <span class="font-bold editorial" style="font-size: 10rem;">${day.day}</span>
+                <span class="font-bold editorial" style="font-size: 10rem;">\${day.day}</span>
             </div>
             <div class="relative z-10">
                 <div class="flex justify-between items-start mb-4 cursor-grab drag-handle">
                     <div>
-                        <h4 class="text-primary font-bold editorial mb-2" style="font-size: 1.4rem;">Day ${day.day}: ${day.title}</h4>
+                        <h4 class="text-primary font-bold editorial mb-2" style="font-size: 1.4rem;">Day \${day.day}: \${day.title}</h4>
                         <div class="flex gap-2 mb-3">
-                            ${day.difficulty_level ? `<span class="px-2 py-1 rounded text-xs font-bold border ${diffColor}"><i class="ri-pulse-line mr-1"></i> ${day.difficulty_level}</span>` : ''}
-                            ${day.weather_forecast ? `<span class="px-2 py-1 rounded text-xs font-bold border text-blue-400 bg-blue-400/10 border-blue-400/20"><i class="ri-sun-cloudy-line mr-1"></i> ${day.weather_forecast}</span>` : ''}
-                            ${day.walking_km ? `<span class="px-2 py-1 rounded text-xs font-bold border text-muted bg-white/5 border-white/10"><i class="ri-walk-line mr-1"></i> ${day.walking_km}</span>` : ''}
+                            \${day.difficulty_level ? \`<span class="px-2 py-1 rounded text-xs font-bold border \${diffColor}"><i class="ri-pulse-line mr-1"></i> \${day.difficulty_level}</span>\` : ''}
+                            \${day.weather_forecast ? \`<span class="px-2 py-1 rounded text-xs font-bold border text-blue-400 bg-blue-400/10 border-blue-400/20"><i class="ri-sun-cloudy-line mr-1"></i> \${day.weather_forecast}</span>\` : ''}
+                            \${day.walking_km ? \`<span class="px-2 py-1 rounded text-xs font-bold border text-muted bg-white/5 border-white/10"><i class="ri-walk-line mr-1"></i> \${day.walking_km}</span>\` : ''}
                         </div>
-                        ${day.daily_story ? `<p class="text-sm text-muted/90 italic mb-4">"${day.daily_story}"</p>` : ''}
+                        \${day.daily_story ? \`<p class="text-sm text-muted/90 italic mb-4">"\${day.daily_story}"</p>\` : ''}
                     </div>
                     <i class="ri-draggable text-muted text-lg mt-2"></i>
                 </div>
-                <div class="flex flex-col gap-1 sortable-activities" data-day="${day.day}" style="min-height: 50px;">
-                    ${activitiesHtml}
+                <div class="flex flex-col gap-1 sortable-activities" data-day="\${day.day}" style="min-height: 50px;">
+                    \${activitiesHtml}
                 </div>
-                <button onclick="addCustomActivity(this, ${day.day})" class="w-full mt-2 py-2 text-xs text-muted hover:text-main hover:bg-white/5 rounded-xl border border-dashed border-white/10 transition-all">
+                <button onclick="addCustomActivity(this, \${day.day})" class="w-full mt-2 py-2 text-xs text-muted hover:text-main hover:bg-white/5 rounded-xl border border-dashed border-white/10 transition-all">
                     <i class="ri-add-line mr-1"></i> Add Custom Activity
                 </button>
             </div>
@@ -1179,8 +1179,8 @@ function renderItinerary(data) {
         data.alternative_plans.forEach(alt => {
             grid.innerHTML += `
                 <div class="p-4 bg-white/5 hover:bg-white/10 rounded-xl transition-all cursor-pointer border border-white/5">
-                    <h5 class="text-sm font-bold text-main mb-1">${alt.plan_name}</h5>
-                    <p class="text-xs text-muted">${alt.description}</p>
+                    <h5 class="text-sm font-bold text-main mb-1">\${alt.plan_name}</h5>
+                    <p class="text-xs text-muted">\${alt.description}</p>
                 </div>
             `;
         });
@@ -1200,7 +1200,7 @@ function renderItinerary(data) {
             
             // Overload Detection
             if (activities.length > 6) {
-                VoyastraToast.show(`Trip Overload Detected on Day ${dayNum}. Too many activities!`, "error");
+                VoyastraToast.show(`Trip Overload Detected on Day \${dayNum}. Too many activities!`, "error");
             }
             
             totalActivities += activities.length;
@@ -1237,8 +1237,8 @@ function renderItinerary(data) {
                     </div>
                     <div class="flex-1">
                         <div class="flex items-center gap-2 mb-1">
-                            <h5 class="text-sm text-main font-bold m-0">${title}</h5>
-                            <span class="px-2 py-0.5 rounded text-[0.55rem] uppercase tracking-wider font-bold ${catColor}"><i class="${catIcon} mr-1"></i>${category}</span>
+                            <h5 class="text-sm text-main font-bold m-0">\${title}</h5>
+                            <span class="px-2 py-0.5 rounded text-[0.55rem] uppercase tracking-wider font-bold \${catColor}"><i class="\${catIcon} mr-1"></i>\${category}</span>
                         </div>
                         <p class="text-xs text-muted/80 leading-relaxed editable-activity" contenteditable="true">Added from Library</p>
                     </div>
@@ -1263,19 +1263,19 @@ function renderItinerary(data) {
         
         card.innerHTML = `
             <div class="absolute -right-10 -top-10 text-white/5 pointer-events-none">
-                <span class="font-bold editorial" style="font-size: 10rem;">${nextDayNum}</span>
+                <span class="font-bold editorial" style="font-size: 10rem;">\${nextDayNum}</span>
             </div>
             <div class="relative z-10">
                 <div class="flex justify-between items-start mb-4 cursor-grab drag-handle">
                     <div>
-                        <h4 class="text-primary font-bold editorial mb-2" style="font-size: 1.4rem;" contenteditable="true">Day ${nextDayNum}: Custom Day</h4>
+                        <h4 class="text-primary font-bold editorial mb-2" style="font-size: 1.4rem;" contenteditable="true">Day \${nextDayNum}: Custom Day</h4>
                         <div class="flex gap-2 mb-3">
                             <span class="px-2 py-1 rounded text-xs font-bold border text-green-400 bg-green-400/10 border-green-400/20"><i class="ri-pulse-line mr-1"></i> Custom</span>
                         </div>
                     </div>
                     <i class="ri-draggable text-muted text-lg mt-2"></i>
                 </div>
-                <div class="flex flex-col gap-1 sortable-activities" data-day="${nextDayNum}" style="min-height: 50px;">
+                <div class="flex flex-col gap-1 sortable-activities" data-day="\${nextDayNum}" style="min-height: 50px;">
                     <!-- Drop Zone -->
                     <div class="p-4 text-center border-2 border-dashed border-white/10 rounded-xl text-muted text-sm">
                         Drag activities here
@@ -1311,8 +1311,8 @@ function renderItinerary(data) {
                     </div>
                     <div class="flex-1">
                         <div class="flex items-center gap-2 mb-1">
-                            <h5 class="text-sm text-main font-bold m-0">${title}</h5>
-                            <span class="px-2 py-0.5 rounded text-[0.55rem] uppercase tracking-wider font-bold ${catColor}"><i class="${catIcon} mr-1"></i>${category}</span>
+                            <h5 class="text-sm text-main font-bold m-0">\${title}</h5>
+                            <span class="px-2 py-0.5 rounded text-[0.55rem] uppercase tracking-wider font-bold \${catColor}"><i class="\${catIcon} mr-1"></i>\${category}</span>
                         </div>
                         <p class="text-xs text-muted/80 leading-relaxed editable-activity" contenteditable="true">Added from Library</p>
                     </div>
@@ -1345,7 +1345,7 @@ function renderItinerary(data) {
             </div>
             <div class="flex-1">
                 <div class="flex items-center gap-2 mb-1">
-                    <h5 class="text-sm text-main font-bold m-0">${title}</h5>
+                    <h5 class="text-sm text-main font-bold m-0">\${title}</h5>
                     <span class="px-2 py-0.5 rounded text-[0.55rem] uppercase tracking-wider font-bold text-primary bg-primary/10"><i class="ri-user-star-line mr-1"></i>Personal</span>
                 </div>
                 <p class="text-xs text-muted/80 leading-relaxed editable-activity" contenteditable="true">Tap to edit notes</p>
@@ -1364,7 +1364,7 @@ function renderItinerary(data) {
             if(!val) return;
             const row = document.createElement('div');
             row.className = 'flex justify-between items-center text-sm p-2 hover:bg-white/5 rounded-lg border-b border-white/5';
-            row.innerHTML = `<span class="text-muted flex items-center"><i class="${icon} mr-2 text-primary"></i> ${label}</span><span class="text-main font-bold font-mono">${val}</span>`;
+            row.innerHTML = `<span class="text-muted flex items-center"><i class="\${icon} mr-2 text-primary"></i> \${label}</span><span class="text-main font-bold font-mono">\${val}</span>`;
             budgetList.appendChild(row);
         };
         addBudgetRow('Flights', b.flights, 'ri-flight-takeoff-line');
@@ -1480,7 +1480,7 @@ document.getElementById('btnSavePlan')?.addEventListener('click', function() {
     
     const params = new URLSearchParams();
     params.append('title', currentAiPlan.title || 'My Smart Trip');
-    params.append('destination', "${param.destination}" || 'Custom Destination');
+    params.append('destination', "\${param.destination}" || 'Custom Destination');
     params.append('itineraryData', JSON.stringify(currentAiPlan));
 
     fetch('${pageContext.request.contextPath}/itinerary', {

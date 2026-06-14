@@ -84,12 +84,11 @@
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                     </button>
                     <a href="${pageContext.request.contextPath}/" class="nav-link">Home</a>
-                    <a href="${pageContext.request.contextPath}/explore" class="nav-link">Explore</a>
-                    <a href="${pageContext.request.contextPath}/community" class="nav-link">Community</a>
+                    <a href="${pageContext.request.contextPath}/booking" class="nav-link">Booking</a>
+                    <a href="${pageContext.request.contextPath}/planner" class="nav-link">Planner</a>
                     <a href="${pageContext.request.contextPath}/experiences" class="nav-link">Experiences</a>
+                    <a href="${pageContext.request.contextPath}/community" class="nav-link">Community</a>
                     <a href="${pageContext.request.contextPath}/my-journey" class="nav-link">My Journey</a>
-                    <a href="${pageContext.request.contextPath}/flights" class="nav-link">Flights</a>
-                    <a href="${pageContext.request.contextPath}/booking" class="nav-link">Bookings</a>
                     <!-- ── Auth widget (Server-side rendering) ── -->
                     <div class="nav-auth-widget">
                         <c:choose>

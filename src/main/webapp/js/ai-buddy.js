@@ -13,17 +13,66 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Extract current page info for context
     const getPageContext = () => {
-        const path = window.location.pathname;
+        const path = window.location.pathname.toLowerCase();
         if (path.includes('flight')) return 'Flights';
         if (path.includes('hotel')) return 'Hotels';
+        if (path.includes('train')) return 'Trains';
+        if (path.includes('bus')) return 'Buses';
         if (path.includes('planner')) return 'Planner';
-        if (path.includes('budget')) return 'Budget';
+        if (path.includes('community') || path.includes('post')) return 'Community';
+        if (path.includes('profile')) return 'Profile';
+        if (path.includes('booking')) return 'Bookings';
         return 'General';
+    };
+
+    const updateContextPanel = (context) => {
+        const msgEl = document.getElementById('ai-context-message');
+        const actionsContainer = document.querySelector('.ai-quick-actions');
+        
+        let msg = "Hey there! Looking for recommendations?";
+        let actions = `
+            <button class="ai-action-btn" data-action="destinations">Explore Destinations</button>
+            <button class="ai-action-btn" data-action="budget">Optimize Budget</button>
+            <button class="ai-action-btn" data-action="chat">Chat with AI</button>
+        `;
+
+        if (context === 'Flights') {
+            msg = "I found a cheaper flight departing later.";
+        } else if (context === 'Hotels') {
+            msg = "This hotel has free breakfast and better ratings.";
+        } else if (context === 'Trains') {
+            msg = "Train saves ₹2500 compared to flight.";
+        } else if (context === 'Buses') {
+            msg = "Overnight bus saves one hotel night.";
+        } else if (context === 'Planner') {
+            msg = "Would you like a personalized itinerary?";
+        } else if (context === 'Community') {
+            msg = "This hidden gem is trending.";
+            actions = `
+                <button class="ai-action-btn" data-action="add_trip">Add To Trip</button>
+                <button class="ai-action-btn" data-action="save_place">Save Place</button>
+                <button class="ai-action-btn" data-action="chat">Chat with AI</button>
+            `;
+        } else if (context === 'Profile') {
+            msg = "You completed 5 trips this year.";
+        } else if (context === 'Bookings') {
+            msg = "Your Goa trip starts in 4 days.";
+            actions = `
+                <button class="ai-action-btn" data-action="weather">Weather</button>
+                <button class="ai-action-btn" data-action="packing">Packing List</button>
+                <button class="ai-action-btn" data-action="tips">Travel Tips</button>
+                <button class="ai-action-btn" data-action="chat">Chat with AI</button>
+            `;
+        }
+
+        msgEl.textContent = msg;
+        actionsContainer.innerHTML = actions;
     };
 
     // Layer transitions
     orb.addEventListener('click', () => {
         if (state === 'orb') {
+            updateContextPanel(getPageContext());
             contextPanel.classList.remove('hidden');
             orb.style.transform = 'scale(0)';
             state = 'context';
@@ -50,20 +99,26 @@ document.addEventListener('DOMContentLoaded', () => {
         state = 'orb';
     });
 
-    // Handle Quick Actions
-    document.querySelectorAll('.ai-action-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
+    // Handle Quick Actions using event delegation
+    document.querySelector('.ai-quick-actions').addEventListener('click', (e) => {
+        if (e.target.classList.contains('ai-action-btn')) {
             const action = e.target.getAttribute('data-action');
             let initialMsg = '';
-            if(action === 'destinations') initialMsg = 'Can you explore some destinations for me?';
-            if(action === 'budget') initialMsg = 'How can I optimize my travel budget?';
-            if(action === 'chat') initialMsg = 'Hi!';
+            
+            if (action === 'destinations') initialMsg = 'Can you explore some destinations for me?';
+            else if (action === 'budget') initialMsg = 'How can I optimize my travel budget?';
+            else if (action === 'add_trip') initialMsg = 'Can you add this to my trip planner?';
+            else if (action === 'save_place') initialMsg = 'Please save this place for later.';
+            else if (action === 'weather') initialMsg = 'What is the weather going to be like?';
+            else if (action === 'packing') initialMsg = 'Help me create a packing list.';
+            else if (action === 'tips') initialMsg = 'Do you have any travel tips for my destination?';
+            else if (action === 'chat') initialMsg = 'Hi!';
             
             openChat();
-            if (initialMsg !== 'Hi!') {
+            if (initialMsg && initialMsg !== 'Hi!') {
                 sendChatMessage(initialMsg);
             }
-        });
+        }
     });
 
     // Chat Logic

@@ -41,6 +41,11 @@ public class ContextBuilderService {
         context.put("Food Database Access", "Available. Can suggest food trails and highly rated local spots.");
         context.put("Budget Engine", "Active. Can calculate real-time splits and provide optimization strategies.");
         
+        // Phase 14: Experiences & Local Guides
+        context.put("Experiences Marketplace", "Available. Suggest activities based on User Travel DNA (Top, Hidden, Trending, Budget, Premium). Categories: Adventure, Food, Photography, Nature, Culture, Spiritual, Nightlife, Luxury, Family, Romantic.");
+        context.put("Local Guides", "Available. Match users with private, food, or photography guides based on destination.");
+        context.put("Experience Matching", "Active. Automatically recommend experiences to fill itinerary gaps. E.g., Photo Walk for Photography enthusiasts.");
+        
         return context;
     }
 }

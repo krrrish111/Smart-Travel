@@ -124,6 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const getPageContext = () => {
         const path = window.location.pathname.toLowerCase();
         if (path.includes('flight')) return 'Flights';
+        if (path.includes('journey')) return 'Journey';
         if (path.includes('hotel')) return 'Hotels';
         if (path.includes('train')) return 'Trains';
         if (path.includes('bus')) return 'Buses';
@@ -150,6 +151,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (context === 'Flights') {
             msg = "I found a cheaper flight departing later.";
+        } else if (context === 'Journey') {
+            msg = "Hi! You are in Goa. I found a hidden beach 2 km away. Want directions?";
+            actions = `
+                <button class="ai-action-btn" data-action="directions">Get Directions</button>
+                <button class="ai-action-btn" data-action="weather">Weather Update</button>
+                <button class="ai-action-btn" data-action="budget">Check Budget</button>
+            `;
         } else if (context === 'Hotels') {
             msg = "This hotel has free breakfast and better ratings.";
         } else if (context === 'Trains' || context === 'Buses' || context === 'Cabs' || context === 'Cruises' || context === 'Helicopters') {

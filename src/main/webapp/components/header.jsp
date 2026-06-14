@@ -86,7 +86,9 @@
                     <a href="${pageContext.request.contextPath}/" class="nav-link">Home</a>
                     <a href="${pageContext.request.contextPath}/explore" class="nav-link">Explore</a>
                     <a href="${pageContext.request.contextPath}/community" class="nav-link">Community</a>
-                    <a href="${pageContext.request.contextPath}/planner" class="nav-link">Planner</a>
+                    <a href="${pageContext.request.contextPath}/experiences" class="nav-link">Experiences</a>
+                    <a href="${pageContext.request.contextPath}/my-journey" class="nav-link">My Journey</a>
+                    <a href="${pageContext.request.contextPath}/flights" class="nav-link">Flights</a>
                     <a href="${pageContext.request.contextPath}/booking" class="nav-link">Bookings</a>
                     <!-- ── Auth widget (Server-side rendering) ── -->
                     <div class="nav-auth-widget">

@@ -6,19 +6,23 @@
 <div class="community-page">
 
     <!-- ══════════════════════════════════════════════════════
-         HERO
+         HERO — Dark Travel Background
     ══════════════════════════════════════════════════════════ -->
-    <div class="community-hero">
-        <h1>Creator Community</h1>
-        <p>Discover stories, creators, hidden gems and food trails from passionate travelers across India.</p>
-        <div class="community-stats-bar">
-            <div class="community-stat"><div class="community-stat-value">48.2K</div><div class="community-stat-label">Travelers</div></div>
-            <div class="community-stat-divider"></div>
-            <div class="community-stat"><div class="community-stat-value">12.5K</div><div class="community-stat-label">Stories</div></div>
-            <div class="community-stat-divider"></div>
-            <div class="community-stat"><div class="community-stat-value">3.8K</div><div class="community-stat-label">Creators</div></div>
-            <div class="community-stat-divider"></div>
-            <div class="community-stat"><div class="community-stat-value">340+</div><div class="community-stat-label">Destinations</div></div>
+    <div class="community-hero-wrap">
+        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1600&q=80" class="community-hero-bg" alt="" aria-hidden="true">
+        <div class="community-hero-overlay"></div>
+        <div class="community-hero">
+            <h1>Creator Community</h1>
+            <p>Discover stories, creators, hidden gems and food trails from passionate travelers across India.</p>
+            <div class="community-stats-bar">
+                <div class="community-stat"><div class="community-stat-value">48.2K</div><div class="community-stat-label">Travelers</div></div>
+                <div class="community-stat-divider"></div>
+                <div class="community-stat"><div class="community-stat-value">12.5K</div><div class="community-stat-label">Stories</div></div>
+                <div class="community-stat-divider"></div>
+                <div class="community-stat"><div class="community-stat-value">3.8K</div><div class="community-stat-label">Creators</div></div>
+                <div class="community-stat-divider"></div>
+                <div class="community-stat"><div class="community-stat-value">340+</div><div class="community-stat-label">Destinations</div></div>
+            </div>
         </div>
     </div>
 
@@ -30,26 +34,16 @@
             <button class="c-nav-tab active" data-tab="foryou"><i class="ri-sparkling-line"></i> For You</button>
             <button class="c-nav-tab" data-tab="trending"><i class="ri-fire-line"></i> Trending</button>
             <button class="c-nav-tab" data-tab="following"><i class="ri-user-follow-line"></i> Following</button>
-            <a href="${pageContext.request.contextPath}/community/reels" class="c-nav-tab" style="text-decoration:none;">
-                <i class="ri-film-line"></i> Reels
-            </a>
-            <a href="${pageContext.request.contextPath}/community/hidden-gems" class="c-nav-tab" style="text-decoration:none;">
-                <i class="ri-gem-line"></i> Hidden Gems
-            </a>
-            <a href="${pageContext.request.contextPath}/community/food" class="c-nav-tab" style="text-decoration:none;">
-                <i class="ri-restaurant-2-line"></i> Food
-            </a>
-            <a href="${pageContext.request.contextPath}/community/guides" class="c-nav-tab" style="text-decoration:none;">
-                <i class="ri-map-2-line"></i> Guides
-            </a>
-            <a href="${pageContext.request.contextPath}/community/challenges" class="c-nav-tab" style="text-decoration:none;">
-                <i class="ri-trophy-line"></i> Challenges
-            </a>
+            <button class="c-nav-tab" data-tab="reels"><i class="ri-film-line"></i> Reels</button>
+            <button class="c-nav-tab" data-tab="hidden-gems"><i class="ri-gem-line"></i> Hidden Gems</button>
+            <button class="c-nav-tab" data-tab="food"><i class="ri-restaurant-2-line"></i> Food</button>
+            <button class="c-nav-tab" data-tab="guides"><i class="ri-map-2-line"></i> Guides</button>
+            <button class="c-nav-tab" data-tab="challenges"><i class="ri-trophy-line"></i> Challenges</button>
             <a href="${pageContext.request.contextPath}/community/discover" class="c-nav-tab" style="text-decoration:none;">
                 <i class="ri-compass-discover-line"></i> AI Discover
             </a>
             <button class="c-nav-tab" data-tab="creators"><i class="ri-user-star-line"></i> Creators</button>
-            <a href="${pageContext.request.contextPath}/community/creator-hub" class="c-nav-tab c-nav-hub-btn">
+            <a href="${pageContext.request.contextPath}/community/creator-hub" class="c-nav-tab c-nav-hub-btn" style="text-decoration:none;">
                 <i class="ri-dashboard-3-line"></i> My Hub
             </a>
         </nav>
@@ -483,7 +477,7 @@
                 <h3><i class="ri-trophy-line"></i> Active Challenges</h3>
                 <button class="home-see-all" onclick="switchCommunityTab('challenges')">See All <i class="ri-arrow-right-s-line"></i></button>
             </div>
-            <div class="home-row-2">
+            <div class="challenges-row-3">
                 <div class="challenge-card">
                     <div class="challenge-banner" style="background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);">
                         <div class="challenge-prize-badge">🏆 ₹10,000 Prize</div>
@@ -510,6 +504,34 @@
                         <button class="challenge-join-btn" style="background: linear-gradient(135deg, #10b981, #06b6d4);" onclick="VoyastraToast.show('Joined #HiddenIndia! Start posting.', 'success')"><i class="ri-gem-line"></i> Join Challenge</button>
                     </div>
                 </div>
+                <div class="challenge-card">
+                    <div class="challenge-banner" style="background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);">
+                        <div class="challenge-prize-badge">🍜 ₹5,000 Voucher</div>
+                        <div class="challenge-icon">🍛</div>
+                    </div>
+                    <div class="challenge-body">
+                        <h3 class="challenge-name">#TravelGoals</h3>
+                        <p class="challenge-desc">Share your most iconic travel food moment. Street food, local cuisine, or hidden cafés — the best story wins!</p>
+                        <div class="challenge-stats"><span><i class="ri-camera-line"></i> 2,156 entries</span><span class="challenge-countdown"><i class="ri-time-line"></i> 9d left</span></div>
+                        <div class="challenge-progress"><div class="challenge-bar" style="width: 55%; background: linear-gradient(90deg, #6366f1, #ec4899);"></div></div>
+                        <button class="challenge-join-btn" style="background: linear-gradient(135deg, #6366f1, #ec4899);" onclick="VoyastraToast.show('Joined #TravelGoals! Share your food story.', 'success')"><i class="ri-restaurant-2-line"></i> Join Challenge</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Trending Hashtags ── -->
+        <div class="home-section">
+            <div class="home-section-header">
+                <h3><i class="ri-bar-chart-line"></i> Trending Now</h3>
+            </div>
+            <div class="trending-hashtags-row">
+                <div class="hashtag-pill">#Ladakh2026 <span>4.2K</span></div>
+                <div class="hashtag-pill">#HiddenIndia <span>3.8K</span></div>
+                <div class="hashtag-pill">#TravelGoals <span>3.1K</span></div>
+                <div class="hashtag-pill">#GoaFoodTrail <span>2.4K</span></div>
+                <div class="hashtag-pill">#SunriseShot <span>1.9K</span></div>
+                <div class="hashtag-pill">#MonsoonTrails <span>1.5K</span></div>
             </div>
         </div>
 

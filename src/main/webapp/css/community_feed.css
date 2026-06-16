@@ -15,13 +15,41 @@
 }
 
 /* ══════════════════════════════════════════════════════════════
+   COMMUNITY HERO WRAP — Dark travel image background
+══════════════════════════════════════════════════════════════ */
+.community-hero-wrap {
+    position: relative;
+    max-height: 350px;
+    overflow: hidden;
+    margin-bottom: 0;
+}
+
+.community-hero-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: 0;
+    filter: brightness(0.45) saturate(0.8);
+}
+
+.community-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(10,5,2,0.4) 0%, rgba(10,5,2,0.72) 100%);
+    z-index: 1;
+}
+
+/* ══════════════════════════════════════════════════════════════
    COMMUNITY HERO
 ══════════════════════════════════════════════════════════════ */
 .community-hero {
-    text-align: center;
-    padding: 48px 24px 36px 24px;
     position: relative;
-    z-index: 10;
+    z-index: 2;
+    text-align: center;
+    padding: 52px 24px 44px 24px;
     max-width: 680px;
     margin: 0 auto;
 }
@@ -29,10 +57,8 @@
 .community-hero h1 {
     font-size: clamp(2rem, 4.5vw, 3.2rem);
     font-weight: 800;
-    background: linear-gradient(135deg, var(--text-main) 0%, var(--color-primary) 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: #fff;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.5);
     margin-bottom: 10px;
     font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
     line-height: 1.15;
@@ -40,7 +66,7 @@
 
 .community-hero p {
     font-size: 1rem;
-    color: var(--text-muted);
+    color: rgba(255,255,255,0.82);
     max-width: 520px;
     margin: 0 auto 24px auto;
     line-height: 1.7;
@@ -2250,6 +2276,49 @@
 
 /* ── Challenges in home-row-2 ── */
 .home-row-2 .challenge-card { margin-bottom: 0; }
+
+/* ── 3-column challenges row ── */
+.challenges-row-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+.challenges-row-3 .challenge-card { margin-bottom: 0; }
+@media (max-width: 900px) { .challenges-row-3 { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) { .challenges-row-3 { grid-template-columns: 1fr; } }
+
+/* ── Trending hashtag pills row ── */
+.trending-hashtags-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 4px 0 8px;
+}
+.hashtag-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px;
+    border-radius: 50px;
+    background: var(--surface-glass);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--color-border);
+    color: var(--color-primary);
+    font-weight: 700;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.hashtag-pill:hover {
+    background: rgba(212,165,116,0.14);
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
+}
+.hashtag-pill span {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
 
 /* ── Home section bottom padding ── */
 .community-page { padding-bottom: 60px; }

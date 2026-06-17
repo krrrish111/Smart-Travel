@@ -1,27 +1,49 @@
-# --- Secrets / Config ---
-oauth.properties
+# Environment Files
+.env
+.env.local
+.env.production
+*.env
 
-# --- Build artifacts ---
+# Secrets
+secrets.properties
+oauth.properties
+application-local.properties
+config/secrets/*
+*.key
+*.pem
+*.p12
+*.jks
+
+# Build artifacts
+target/
+build/
+out/
 *.war
 *.class
-target/
 build_war/
 
-# --- Tomcat runtime ---
+# Tomcat
 tomcat/
+apache-tomcat*/
+logs/
+work/
+temp/
 
-# --- IDE ---
+# IDE
 .idea/
-*.iml
 .vscode/
 .settings/
-.classpath
 .project
+.classpath
+*.iml
 
-# --- OS ---
+# Database Dumps
+*.sql
+*.bak
+
+# Logs
+*.log
+
+# OS
 .DS_Store
 Thumbs.db
-
-# --- Env files ---
-.env
-*.env

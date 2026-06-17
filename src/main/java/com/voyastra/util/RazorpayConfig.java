@@ -7,11 +7,11 @@ import java.util.Base64;
 public class RazorpayConfig {
     
     public static String getKeyId() {
-        return OAuthConfig.getRazorpayKeyId();
+        return com.voyastra.config.ConfigManager.get("RAZORPAY_KEY");
     }
     
     public static String getKeySecret() {
-        return OAuthConfig.getRazorpayKeySecret();
+        return com.voyastra.config.ConfigManager.get("RAZORPAY_SECRET");
     }
     
     /**

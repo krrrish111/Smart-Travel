@@ -25,9 +25,9 @@ import java.nio.charset.StandardCharsets;
 @WebServlet("/google-login")
 public class GoogleLoginServlet extends HttpServlet {
 
-    // --- Loaded from oauth.properties (git-ignored) or env vars ---
-    private static final String CLIENT_ID = OAuthConfig.getClientId();
-    private static final String CLIENT_SECRET = OAuthConfig.getClientSecret();
+    // --- Loaded from ConfigManager ---
+    private static final String CLIENT_ID = com.voyastra.config.ConfigManager.get("GOOGLE_CLIENT_ID");
+    private static final String CLIENT_SECRET = com.voyastra.config.ConfigManager.get("GOOGLE_CLIENT_SECRET");
 
     private static final String REDIRECT_URI = "http://localhost:8080/voyastra/google-login";
     private static final String AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth";

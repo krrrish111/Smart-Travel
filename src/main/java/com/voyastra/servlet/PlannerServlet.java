@@ -56,19 +56,51 @@ public class PlannerServlet extends HttpServlet {
             throws ServletException, IOException {
 
         Map<String, String> params = new HashMap<>();
-        params.put("source", request.getParameter("startLocation"));
-        params.put("destination", request.getParameter("destination"));
-        params.put("startDate", request.getParameter("departureDate"));
-        params.put("endDate", request.getParameter("returnDate"));
-        params.put("budget", request.getParameter("budget"));
-        params.put("travelStyle", request.getParameter("type"));
-        params.put("interests", request.getParameter("interests"));
-        
-        int adults = Integer.parseInt(request.getParameter("adults") != null && !request.getParameter("adults").isEmpty() ? request.getParameter("adults") : "1");
-        int children = Integer.parseInt(request.getParameter("children") != null && !request.getParameter("children").isEmpty() ? request.getParameter("children") : "0");
-        int seniors = Integer.parseInt(request.getParameter("seniors") != null && !request.getParameter("seniors").isEmpty() ? request.getParameter("seniors") : "0");
-        int totalTravelers = adults + children + seniors;
-        params.put("travelers", String.valueOf(totalTravelers));
+        int adults = 1;
+        int children = 0;
+        int seniors = 0;
+
+        String contentType = request.getContentType();
+        if (contentType != null && contentType.contains("application/json")) {
+            StringBuilder sb = new StringBuilder();
+            String line;
+            try (java.io.BufferedReader reader = request.getReader()) {
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line);
+                }
+            }
+            String jsonStr = sb.toString();
+            System.out.println("Received JSON body: " + jsonStr);
+            try {
+                com.google.gson.JsonObject jsonObj = com.google.gson.JsonParser.parseString(jsonStr).getAsJsonObject();
+                params.put("source", jsonObj.has("origin") ? jsonObj.get("origin").getAsString() : "");
+                params.put("destination", jsonObj.has("destination") ? jsonObj.get("destination").getAsString() : "");
+                params.put("startDate", (jsonObj.has("departureDate") && !jsonObj.get("departureDate").getAsString().isEmpty()) ? jsonObj.get("departureDate").getAsString() : new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date()));
+                params.put("endDate", (jsonObj.has("returnDate") && !jsonObj.get("returnDate").getAsString().isEmpty()) ? jsonObj.get("returnDate").getAsString() : new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date(System.currentTimeMillis() + 5L * 24L * 60L * 60L * 1000L)));
+                params.put("budget", jsonObj.has("budget") ? jsonObj.get("budget").getAsString() : "");
+                params.put("travelStyle", jsonObj.has("interests") ? jsonObj.get("interests").getAsString() : "");
+                
+                String travelersVal = jsonObj.has("travelers") ? jsonObj.get("travelers").getAsString() : "1";
+                params.put("travelers", travelersVal);
+                adults = Integer.parseInt(travelersVal);
+            } catch (Exception ex) {
+                System.err.println("JSON parse error: " + ex.getMessage());
+            }
+        } else {
+            params.put("source", request.getParameter("startLocation"));
+            params.put("destination", request.getParameter("destination"));
+            params.put("startDate", request.getParameter("departureDate"));
+            params.put("endDate", request.getParameter("returnDate"));
+            params.put("budget", request.getParameter("budget"));
+            params.put("travelStyle", request.getParameter("type"));
+            params.put("interests", request.getParameter("interests"));
+            
+            adults = Integer.parseInt(request.getParameter("adults") != null && !request.getParameter("adults").isEmpty() ? request.getParameter("adults") : "1");
+            children = Integer.parseInt(request.getParameter("children") != null && !request.getParameter("children").isEmpty() ? request.getParameter("children") : "0");
+            seniors = Integer.parseInt(request.getParameter("seniors") != null && !request.getParameter("seniors").isEmpty() ? request.getParameter("seniors") : "0");
+            int totalTravelers = adults + children + seniors;
+            params.put("travelers", String.valueOf(totalTravelers));
+        }
 
         System.out.println("--- Planner Form Submitted ---");
         System.out.println("Source: " + params.get("source"));
@@ -113,8 +145,10 @@ public class PlannerServlet extends HttpServlet {
         }
 
         String acceptHeader = request.getHeader("Accept");
+        String reqContentType = request.getContentType();
         boolean isJsonRequested = (acceptHeader != null && acceptHeader.contains("application/json")) ||
-                "XMLHttpRequest".equals(request.getHeader("X-Requested-With"));
+                "XMLHttpRequest".equals(request.getHeader("X-Requested-With")) ||
+                (reqContentType != null && reqContentType.contains("application/json"));
 
         try {
             System.out.println("Calling Gemini...");

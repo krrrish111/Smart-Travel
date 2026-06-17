@@ -12,11 +12,11 @@ import java.util.Properties;
 public class EmailService {
 
     // --- Configuration (Environment Variables preferred in Production) ---
-    private static final String SMTP_HOST = System.getenv("SMTP_HOST") != null ? System.getenv("SMTP_HOST") : "smtp.gmail.com";
-    private static final String SMTP_PORT = System.getenv("SMTP_PORT") != null ? System.getenv("SMTP_PORT") : "587";
-    private static final String SMTP_USER = System.getenv("SMTP_USER") != null ? System.getenv("SMTP_USER") : "voyastra.travel@gmail.com"; 
-    private static final String SMTP_PASS = System.getenv("SMTP_PASS") != null ? System.getenv("SMTP_PASS") : "your-app-password";         
-    private static final String FROM_EMAIL = System.getenv("FROM_EMAIL") != null ? System.getenv("FROM_EMAIL") : "no-reply@voyastra.com";
+    private static final String SMTP_HOST = com.voyastra.config.ConfigManager.get("SMTP_HOST", "smtp.gmail.com");
+    private static final String SMTP_PORT = com.voyastra.config.ConfigManager.get("SMTP_PORT", "587");
+    private static final String SMTP_USER = com.voyastra.config.ConfigManager.get("SMTP_USER", "voyastra.travel@gmail.com"); 
+    private static final String SMTP_PASS = com.voyastra.config.ConfigManager.get("SMTP_PASS", "your-app-password");         
+    private static final String FROM_EMAIL = com.voyastra.config.ConfigManager.get("FROM_EMAIL", "no-reply@voyastra.com");
     private static final String FROM_NAME  = "Voyastra Travel";
 
     private static final Properties props = new Properties();

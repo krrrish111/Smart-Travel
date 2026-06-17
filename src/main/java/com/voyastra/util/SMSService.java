@@ -10,9 +10,9 @@ import java.net.URLEncoder;
 public class SMSService {
 
     // IMPORTANT: Replace these with your actual Twilio Account SID and Auth Token
-    private static final String TWILIO_ACCOUNT_SID = System.getenv("TWILIO_SID") != null ? System.getenv("TWILIO_SID") : "AC_dummy_sid";
-    private static final String TWILIO_AUTH_TOKEN = System.getenv("TWILIO_TOKEN") != null ? System.getenv("TWILIO_TOKEN") : "dummy_token";
-    private static final String TWILIO_PHONE_NUMBER = System.getenv("TWILIO_PHONE") != null ? System.getenv("TWILIO_PHONE") : "+1234567890";
+    private static final String TWILIO_ACCOUNT_SID = com.voyastra.config.ConfigManager.get("TWILIO_SID", "AC_dummy_sid");
+    private static final String TWILIO_AUTH_TOKEN = com.voyastra.config.ConfigManager.get("TWILIO_TOKEN", "dummy_token");
+    private static final String TWILIO_PHONE_NUMBER = com.voyastra.config.ConfigManager.get("TWILIO_PHONE", "+1234567890");
 
     public static void sendBookingConfirmationSMS(String toPhoneNumber, String pnr, String flightName, String date) {
         if (toPhoneNumber == null || toPhoneNumber.trim().isEmpty()) {

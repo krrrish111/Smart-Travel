@@ -24,6 +24,15 @@
             <form id="plannerChatForm" action="${pageContext.request.contextPath}/generatePlan" method="post" class="ai-chat-container">
                 <input type="hidden" name="action" value="generate">
                 
+                <c:if test="${not empty error}">
+                    <div class="bg-red-500/20 border border-red-500/50 rounded-lg p-4 mb-4 mt-2">
+                        <div class="flex items-center gap-3">
+                            <i class="ri-error-warning-fill text-red-400 text-2xl"></i>
+                            <p class="text-white text-sm font-bold">${error}</p>
+                        </div>
+                    </div>
+                </c:if>
+
                 <!-- AI Greeting -->
                 <div class="chat-bubble ai mt-2">
                     <p class="text-main font-bold mb-1" style="font-size: 0.95rem;">Voyastra AI</p>
@@ -759,14 +768,40 @@ if (plannerForm) {
             }
         }, 800);
 
-        // 4. Redirect after simulation completes (4 seconds)
-        // setTimeout(() => {
-        //     clearInterval(interval);
-        //     plannerForm.submit(); 
-        // }, 4000);
-
-        // 4. Submit form normally to allow request attribute flow
-        plannerForm.submit();
+        // 4. Submit form via AJAX
+        const formData = new URLSearchParams(new FormData(plannerForm));
+        
+        fetch('${pageContext.request.contextPath}/generatePlan', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            },
+            body: formData.toString()
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("HTTP error " + response.status);
+            }
+            return response.json();
+        })
+        .then(data => {
+            clearInterval(interval);
+            overlay.classList.remove('active');
+            if (data.error) {
+                VoyastraToast.show(data.error, "error");
+                return;
+            }
+            renderItinerary(data);
+            VoyastraToast.show("Your itinerary is ready!", "success");
+        })
+        .catch(error => {
+            clearInterval(interval);
+            overlay.classList.remove('active');
+            console.error("AJAX Error: ", error);
+            VoyastraToast.show("Unable to generate trip plan. Please try again later.", "error");
+        });
     });
 }
 

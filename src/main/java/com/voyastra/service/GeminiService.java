@@ -1,83 +1,251 @@
 package com.voyastra.service;
 
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.time.Duration;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonArray;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.Map;
+import java.util.Properties;
 
 public class GeminiService {
-    
-    // In production, this would be injected via properties or environment variables
-    private static final String GEMINI_API_KEY = System.getenv("GEMINI_API_KEY");
-    private static final String GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=";
 
-    public String getAIResponse(String userMessage, String pageContext, java.util.Map<String, String> userContext) {
+    private static final String CONFIG_FILE = "config.properties";
+    private static final String MODEL_ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=";
+
+    private String apiKey;
+
+    public GeminiService() {
+        loadApiKey();
+    }
+
+    private void loadApiKey() {
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream(CONFIG_FILE)) {
+            Properties prop = new Properties();
+            if (input == null) {
+                System.err.println("Sorry, unable to find " + CONFIG_FILE);
+                // Fallback or handle missing config
+                this.apiKey = System.getenv("GEMINI_API_KEY");
+                return;
+            }
+            prop.load(input);
+            String key = prop.getProperty("gemini.api.key");
+            this.apiKey = (key != null) ? key.trim() : null;
+            if (this.apiKey == null || this.apiKey.isEmpty() || this.apiKey.equals("YOUR_API_KEY")) {
+                this.apiKey = System.getenv("GEMINI_API_KEY"); // Fallback
+            }
+        } catch (Exception ex) {
+            System.err.println("Error loading API Key: " + ex.getMessage());
+            this.apiKey = System.getenv("GEMINI_API_KEY");
+        }
+    }
+
+    public String generateTripPlan(Map<String, String> params) throws Exception {
+        if (apiKey == null || apiKey.trim().isEmpty()) {
+            throw new Exception("API Key is missing. Please configure gemini.api.key in config.properties.");
+        }
+
+        String prompt = buildPrompt(params);
+
+        JsonObject requestBody = new JsonObject();
+        JsonArray contents = new JsonArray();
+        JsonObject content = new JsonObject();
+        JsonArray parts = new JsonArray();
+        JsonObject part = new JsonObject();
+        
+        part.addProperty("text", prompt);
+        parts.add(part);
+        content.add("parts", parts);
+        contents.add(content);
+        requestBody.add("contents", contents);
+
+        // System instructions to force JSON could also be added, but appending to prompt works well.
+
+        URL url = new URL(MODEL_ENDPOINT + apiKey);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Content-Type", "application/json");
+        conn.setDoOutput(true);
+        // Set timeouts (e.g., 60 seconds)
+        conn.setConnectTimeout(60000);
+        conn.setReadTimeout(60000);
+
+        try (OutputStream os = conn.getOutputStream()) {
+            byte[] input = requestBody.toString().getBytes(StandardCharsets.UTF_8);
+            os.write(input, 0, input.length);
+        }
+
+        int status = conn.getResponseCode();
+        if (status != 200) {
+            throw new Exception("API request failed with HTTP status " + status);
+        }
+
+        BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = in.readLine()) != null) {
+            sb.append(line);
+        }
+        in.close();
+
+        String rawResponse = sb.toString();
+        System.out.println("Gemini Response: " + rawResponse);
+        return parseGeminiResponse(rawResponse);
+    }
+
+    private String buildPrompt(Map<String, String> params) {
+        String source = params.getOrDefault("source", "");
+        String destination = params.getOrDefault("destination", "");
+        String startDate = params.getOrDefault("startDate", "");
+        String endDate = params.getOrDefault("endDate", "");
+        String budget = params.getOrDefault("budget", "");
+        String travelers = params.getOrDefault("travelers", "1");
+        String travelStyle = params.getOrDefault("travelStyle", "");
+        String interests = params.getOrDefault("interests", "");
+
+        return "You are an expert AI Travel Concierge. Generate a personalized trip plan based on the following details:\n" +
+                "Source: " + source + "\n" +
+                "Destination: " + destination + "\n" +
+                "Start Date: " + startDate + "\n" +
+                "End Date: " + endDate + "\n" +
+                "Budget: " + budget + "\n" +
+                "Travelers: " + travelers + "\n" +
+                "Travel Style: " + travelStyle + "\n" +
+                "Interests: " + interests + "\n\n" +
+                "You must return ONLY a JSON object. Do not include markdown code blocks like ```json or any other text.\n" +
+                "The JSON must strictly follow this structure:\n" +
+                "{\n" +
+                "  \"tripSummary\": {\n" +
+                "    \"destination\": \"\",\n" +
+                "    \"durationDays\": 0,\n" +
+                "    \"budget\": \"\",\n" +
+                "    \"overview\": \"\"\n" +
+                "  },\n" +
+                "  \"estimatedBudget\": {\n" +
+                "    \"transport\": 0,\n" +
+                "    \"hotel\": 0,\n" +
+                "    \"food\": 0,\n" +
+                "    \"activities\": 0,\n" +
+                "    \"total\": 0\n" +
+                "  },\n" +
+                "  \"recommendedHotels\": [\n" +
+                "    {\n" +
+                "      \"name\": \"\",\n" +
+                "      \"location\": \"\",\n" +
+                "      \"pricePerNight\": 0,\n" +
+                "      \"rating\": 0\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  \"itinerary\": [\n" +
+                "    {\n" +
+                "      \"day\": 1,\n" +
+                "      \"morning\": [\"\", \"\"],\n" +
+                "      \"afternoon\": [\"\"],\n" +
+                "      \"evening\": [\"\"],\n" +
+                "      \"estimatedCost\": 0\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  \"foodRecommendations\": [\"\", \"\"],\n" +
+                "  \"transportOptions\": [\"\", \"\"],\n" +
+                "  \"travelTips\": [\"\", \"\"]\n" +
+                "}";
+    }
+
+    private String parseGeminiResponse(String responseBody) throws Exception {
+        JsonObject geminiResponse = JsonParser.parseString(responseBody).getAsJsonObject();
+
+        if (!geminiResponse.has("candidates") || geminiResponse.get("candidates").getAsJsonArray().size() == 0) {
+            throw new Exception("AI generated an empty response.");
+        }
+
+        String rawText = geminiResponse.get("candidates").getAsJsonArray()
+                .get(0).getAsJsonObject()
+                .get("content").getAsJsonObject()
+                .get("parts").getAsJsonArray()
+                .get(0).getAsJsonObject()
+                .get("text").getAsString();
+
+        // Multi-stage sanitization to ensure pure JSON
+        int firstBrace = rawText.indexOf("{");
+        int lastBrace = rawText.lastIndexOf("}");
+        if (firstBrace != -1 && lastBrace != -1 && lastBrace >= firstBrace) {
+            rawText = rawText.substring(firstBrace, lastBrace + 1);
+        }
+
+        rawText = rawText.replace("```json", "").replace("```", "").trim();
+
+        // Validate JSON
+        JsonParser.parseString(rawText);
+
+        return rawText;
+    }
+
+    public String getAIResponse(String message, String contextPage, Map<String, String> userContext) {
         try {
-            if (GEMINI_API_KEY == null || GEMINI_API_KEY.isEmpty()) {
-                // Return a mock response if no API key is provided so the UI works
-                return generateMockResponse(userMessage, pageContext, userContext);
+            if (apiKey == null || apiKey.trim().isEmpty()) {
+                return "AI Service is currently unavailable.";
             }
 
-            // Build the system prompt using page context and user database context
-            String systemPrompt = "You are the Voyastra AI Travel Buddy. Be helpful, concise, and friendly. " +
-                                  "Current Page Context: " + pageContext + ". " +
-                                  "User Context: " + userContext.toString();
+            String prompt = "You are AIBuddy for Voyastra. User says: " + message + ". Context page: " + contextPage + ". User Context: " + userContext;
 
-            String fullPrompt = systemPrompt + "\nUser Message: " + userMessage;
+            JsonObject requestBody = new JsonObject();
+            JsonArray contents = new JsonArray();
+            JsonObject content = new JsonObject();
+            JsonArray parts = new JsonArray();
+            JsonObject part = new JsonObject();
+            
+            part.addProperty("text", prompt);
+            parts.add(part);
+            content.add("parts", parts);
+            contents.add(content);
+            requestBody.add("contents", contents);
 
-            String jsonBody = "{" +
-                "\"contents\": [{" +
-                    "\"parts\":[{\"text\": \"" + escapeJson(fullPrompt) + "\"}]" +
-                "}]" +
-            "}";
+            URL url = new URL(MODEL_ENDPOINT + apiKey);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setDoOutput(true);
+            conn.setConnectTimeout(60000);
+            conn.setReadTimeout(60000);
 
-            HttpClient client = HttpClient.newBuilder()
-                    .version(HttpClient.Version.HTTP_2)
-                    .connectTimeout(Duration.ofSeconds(10))
-                    .build();
-
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(GEMINI_URL + GEMINI_API_KEY))
-                    .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
-                    .build();
-
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-            if (response.statusCode() == 200) {
-                // Parse the JSON response minimally (in real app, use Jackson or Gson)
-                String body = response.body();
-                int textIndex = body.indexOf("\"text\": \"");
-                if (textIndex > -1) {
-                    int startIndex = textIndex + 9;
-                    int endIndex = body.indexOf("\"", startIndex);
-                    String reply = body.substring(startIndex, endIndex);
-                    return reply.replace("\\n", "\n").replace("\\\"", "\"");
-                }
+            try (OutputStream os = conn.getOutputStream()) {
+                byte[] input = requestBody.toString().getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
             }
-            return "Sorry, I had trouble processing your request with my AI core.";
+
+            if (conn.getResponseCode() != 200) {
+                return "Error from AI Service.";
+            }
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = in.readLine()) != null) {
+                sb.append(line);
+            }
+            in.close();
+
+            JsonObject geminiResponse = JsonParser.parseString(sb.toString()).getAsJsonObject();
+            if (!geminiResponse.has("candidates") || geminiResponse.get("candidates").getAsJsonArray().size() == 0) {
+                return "No response.";
+            }
+
+            return geminiResponse.get("candidates").getAsJsonArray()
+                    .get(0).getAsJsonObject()
+                    .get("content").getAsJsonObject()
+                    .get("parts").getAsJsonArray()
+                    .get(0).getAsJsonObject()
+                    .get("text").getAsString().trim();
 
         } catch (Exception e) {
             e.printStackTrace();
-            return "I'm having network issues at the moment. Please try again later.";
+            return "Sorry, I encountered an error.";
         }
-    }
-
-    private String escapeJson(String text) {
-        return text.replace("\"", "\\\"").replace("\n", "\\n");
-    }
-
-    private String generateMockResponse(String msg, String context, java.util.Map<String, String> userCtx) {
-        msg = msg.toLowerCase();
-        if (msg.contains("destination")) {
-            return "Based on your preference for budget-friendly places, I'd highly recommend exploring Hanoi, Vietnam, or Oaxaca, Mexico!";
-        } else if (msg.contains("budget")) {
-            return "I see you have an upcoming flight to Paris. I can suggest some great free walking tours and affordable vegetarian restaurants there.";
-        } else if (msg.contains("food")) {
-            return "You mentioned you like vegetarian street food. How about trying the famous falafel stands in the Marais district?";
-        }
-        return "I am the Voyastra AI Buddy! (Mock Mode: GEMINI_API_KEY not set). " +
-               "I see you are on the " + context + " page. How can I assist you with your travels today?";
     }
 }

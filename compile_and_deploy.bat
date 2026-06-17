@@ -32,6 +32,8 @@ javac -encoding UTF-8 -cp "%CP%" -d "%OUTDIR%" ^
 
 if %ERRORLEVEL% == 0 (
     echo SUCCESS: Compilation complete.
+    echo Copying resource files...
+    xcopy /S /Y src\main\resources\* "%OUTDIR%\"
     echo Cleaning up old index.jsp and deploying new files...
     if exist "%WEBAPP_DIR%\index.jsp" del "%WEBAPP_DIR%\index.jsp"
     xcopy /S /Y src\main\webapp\*.jsp "%WEBAPP_DIR%\"

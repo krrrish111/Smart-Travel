@@ -19,6 +19,7 @@
 
     function createBar() {
         if (bar) return;
+        if (!document.body) return;
         bar = document.createElement('div');
         bar.id = 'vx-progress-bar';
         bar.innerHTML = '<div id="vx-progress-fill"></div>';
@@ -38,10 +39,14 @@
     }
 
     function startBar() {
+        if (!document.body) {
+            document.addEventListener('DOMContentLoaded', startBar);
+            return;
+        }
         createBar();
         barValue = 5;
         setBarWidth(barValue);
-        bar.classList.add('active');
+        if (bar) bar.classList.add('active');
 
         // Trickle up to 90%
         function trickle() {

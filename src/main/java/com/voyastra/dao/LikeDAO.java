@@ -9,53 +9,48 @@ import java.sql.SQLException;
 
 public class LikeDAO {
 
-    /**
-     * Inserts a record identifying that a user liked a post.
-     */
+    public boolean toggleLike(int postId, int userId) {
+        if (hasLiked(postId, userId)) {
+            return deleteLike(postId, userId);
+        } else {
+            return addLike(postId, userId);
+        }
+    }
+
     public boolean addLike(int postId, int userId) {
-        String query = "INSERT INTO likes (post_id, user_id) VALUES (?, ?)";
+        String query = "INSERT IGNORE INTO likes (post_id, user_id) VALUES (?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
-             
             stmt.setInt(1, postId);
             stmt.setInt(2, userId);
-            
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            // Might throw exception if like already exists and unique constraint is enforced
-            System.err.println("ERROR: LikeDAO.addLike failed or duplicate entry.");
             e.printStackTrace();
         }
         return false;
     }
 
-    /**
-     * Deletes a like record.
-     */
-    public boolean removeLike(int postId, int userId) {
+    public boolean deleteLike(int postId, int userId) {
         String query = "DELETE FROM likes WHERE post_id = ? AND user_id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
-             
             stmt.setInt(1, postId);
             stmt.setInt(2, userId);
-            
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.err.println("ERROR: LikeDAO.removeLike failed.");
             e.printStackTrace();
         }
         return false;
     }
 
-    /**
-     * Checks if a user has already liked a post.
-     */
-    public boolean hasUserLiked(int postId, int userId) {
+    public boolean removeLike(int postId, int userId) {
+        return deleteLike(postId, userId);
+    }
+
+    public boolean hasLiked(int postId, int userId) {
         String query = "SELECT 1 FROM likes WHERE post_id = ? AND user_id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
-             
             stmt.setInt(1, postId);
             stmt.setInt(2, userId);
             try (ResultSet rs = stmt.executeQuery()) {
@@ -67,18 +62,18 @@ public class LikeDAO {
         return false;
     }
 
-    /**
-     * Counts the total number of likes for a specific post.
-     */
+    public boolean hasUserLiked(int postId, int userId) {
+        return hasLiked(postId, userId);
+    }
+
     public int getLikeCount(int postId) {
-        String query = "SELECT COUNT(*) AS total FROM likes WHERE post_id = ?";
+        String query = "SELECT COUNT(*) FROM likes WHERE post_id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
-             
             stmt.setInt(1, postId);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return rs.getInt("total");
+                    return rs.getInt(1);
                 }
             }
         } catch (SQLException e) {

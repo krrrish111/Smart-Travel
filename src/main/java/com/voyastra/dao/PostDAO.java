@@ -16,14 +16,16 @@ public class PostDAO {
      * Inserts a new community post into the database.
      */
     public boolean addPost(Post post) {
-        String query = "INSERT INTO posts (user_id, text, image_url, location) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO posts (user_id, content, location, image_url, category, hashtags) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
              
             stmt.setInt(1, post.getUserId());
             stmt.setString(2, post.getText());
-            stmt.setString(3, post.getImageUrl());
-            stmt.setString(4, post.getLocation());
+            stmt.setString(3, post.getLocation());
+            stmt.setString(4, post.getImageUrl());
+            stmt.setString(5, post.getCategory() != null ? post.getCategory() : "For You");
+            stmt.setString(6, post.getHashtags() != null ? post.getHashtags() : "");
             
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -34,59 +36,93 @@ public class PostDAO {
     }
 
     /**
-     * Fetches all trending posts, including like counts and whether the given user liked each post.
-     * Pass userId = 0 for guests (hasLiked will always be false).
+     * Fetches posts based on category, offset, and limit, resolving social relationships.
      */
-    public List<Post> getAllPosts(int userId) {
+    public List<Post> getFeedPosts(int userId, String category, int offset, int limit) {
         List<Post> posts = new ArrayList<>();
-        String query =
-            "SELECT p.id, p.user_id, p.text, p.image_url, p.location, p.created_at, " +
+        StringBuilder query = new StringBuilder(
+            "SELECT p.id, p.user_id, p.content, p.location, p.image_url, p.category, p.hashtags, p.created_at, " +
             "       u.name AS user_name, u.role AS user_role, " +
-            "       COUNT(DISTINCT l.id) AS like_count, " +
-            "       MAX(CASE WHEN l.user_id = ? THEN 1 ELSE 0 END) AS user_liked " +
+            "       (SELECT COUNT(*) FROM likes WHERE post_id = p.id) AS like_count, " +
+            "       (SELECT COUNT(*) FROM comments WHERE post_id = p.id) AS comment_count, " +
+            "       (SELECT COUNT(*) FROM likes WHERE post_id = p.id AND user_id = ?) AS user_liked, " +
+            "       (SELECT COUNT(*) FROM saved_posts WHERE post_id = p.id AND user_id = ?) AS user_saved, " +
+            "       (SELECT COUNT(*) FROM follows WHERE follower_id = ? AND followed_id = p.user_id) AS is_following " +
             "FROM posts p " +
-            "JOIN users u ON p.user_id = u.id " +
-            "LEFT JOIN likes l ON l.post_id = p.id " +
-            "GROUP BY p.id, p.user_id, p.text, p.image_url, p.location, p.created_at, u.name, u.role " +
-            "ORDER BY p.created_at DESC";
+            "JOIN users u ON p.user_id = u.id "
+        );
+
+        List<Object> params = new ArrayList<>();
+        params.add(userId);
+        params.add(userId);
+        params.add(userId);
+
+        if ("Following".equalsIgnoreCase(category)) {
+            query.append("WHERE p.user_id IN (SELECT followed_id FROM follows WHERE follower_id = ?) ");
+            params.add(userId);
+        } else if (category != null && !category.isEmpty() && !"For You".equalsIgnoreCase(category) && !"Trending".equalsIgnoreCase(category)) {
+            query.append("WHERE p.category = ? ");
+            params.add(category);
+        }
+
+        if ("Trending".equalsIgnoreCase(category)) {
+            query.append("ORDER BY like_count DESC, p.created_at DESC ");
+        } else {
+            query.append("ORDER BY p.created_at DESC ");
+        }
+
+        query.append("LIMIT ? OFFSET ?");
+        params.add(limit);
+        params.add(offset);
 
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+             PreparedStatement stmt = conn.prepareStatement(query.toString())) {
 
-            stmt.setInt(1, userId);
+            for (int i = 0; i < params.size(); i++) {
+                stmt.setObject(i + 1, params.get(i));
+            }
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     Post post = new Post();
                     post.setId(rs.getInt("id"));
                     post.setUserId(rs.getInt("user_id"));
-                    post.setText(rs.getString("text"));
+                    post.setText(rs.getString("content"));
                     post.setImageUrl(rs.getString("image_url"));
                     post.setLocation(rs.getString("location"));
+                    post.setCategory(rs.getString("category"));
+                    post.setHashtags(rs.getString("hashtags"));
                     post.setCreatedAt(rs.getTimestamp("created_at"));
                     post.setUserName(rs.getString("user_name"));
                     post.setUserRole(rs.getString("user_role"));
                     post.setLikeCount(rs.getInt("like_count"));
-                    post.setHasLiked(rs.getInt("user_liked") == 1);
+                    post.setCommentCount(rs.getInt("comment_count"));
+                    post.setHasLiked(rs.getInt("user_liked") > 0);
+                    post.setHasSaved(rs.getInt("user_saved") > 0);
+                    post.setFollowingCreator(rs.getInt("is_following") > 0);
                     posts.add(post);
                 }
             }
         } catch (SQLException e) {
-            System.err.println("ERROR: PostDAO.getAllPosts failed.");
+            System.err.println("ERROR: PostDAO.getFeedPosts failed.");
             e.printStackTrace();
         }
         return posts;
     }
 
     /**
-     * Convenience overload for guests / admin-list (no hasLiked resolution).
+     * Backward compatibility or default retrieval.
      */
+    public List<Post> getAllPosts(int userId) {
+        return getFeedPosts(userId, "For You", 0, 50);
+    }
+
     public List<Post> getAllPosts() {
         return getAllPosts(0);
     }
 
     /**
-     * Allows an admin to completely delete a post from the database.
+     * Allows deleting a post.
      */
     public boolean deletePost(int id) {
         String query = "DELETE FROM posts WHERE id = ?";
@@ -103,41 +139,45 @@ public class PostDAO {
     }
 
     public Post getPostById(int id) {
-        Post post = null;
-        String query = "SELECT p.id, p.user_id, p.text, p.image_url, p.location, p.created_at, u.name AS user_name, u.role AS user_role " +
-                       "FROM posts p JOIN users u ON p.user_id = u.id WHERE p.id = ?";
+        String query = "SELECT p.id, p.user_id, p.content, p.image_url, p.location, p.category, p.hashtags, p.created_at, " +
+                       "u.name AS user_name, u.role AS user_role FROM posts p JOIN users u ON p.user_id = u.id WHERE p.id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    post = new Post();
+                    Post post = new Post();
                     post.setId(rs.getInt("id"));
                     post.setUserId(rs.getInt("user_id"));
-                    post.setText(rs.getString("text"));
+                    post.setText(rs.getString("content"));
                     post.setImageUrl(rs.getString("image_url"));
                     post.setLocation(rs.getString("location"));
+                    post.setCategory(rs.getString("category"));
+                    post.setHashtags(rs.getString("hashtags"));
                     post.setCreatedAt(rs.getTimestamp("created_at"));
                     post.setUserName(rs.getString("user_name"));
                     post.setUserRole(rs.getString("user_role"));
+                    return post;
                 }
             }
         } catch (SQLException e) {
             System.err.println("ERROR: PostDAO.getPostById failed.");
             e.printStackTrace();
         }
-        return post;
+        return null;
     }
 
     public boolean updatePost(Post post) {
-        String query = "UPDATE posts SET user_id = ?, text = ?, image_url = ?, location = ? WHERE id = ?";
+        String query = "UPDATE posts SET user_id = ?, content = ?, image_url = ?, location = ?, category = ?, hashtags = ? WHERE id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, post.getUserId());
             stmt.setString(2, post.getText());
             stmt.setString(3, post.getImageUrl());
             stmt.setString(4, post.getLocation());
-            stmt.setInt(5, post.getId());
+            stmt.setString(5, post.getCategory());
+            stmt.setString(6, post.getHashtags());
+            stmt.setInt(7, post.getId());
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             System.err.println("ERROR: PostDAO.updatePost failed.");

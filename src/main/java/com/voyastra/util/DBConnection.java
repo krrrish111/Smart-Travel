@@ -18,7 +18,7 @@ public class DBConnection {
         
         // 1. Connection settings
         // Using 'localhost' instead of '127.0.0.1' for consistent behavior
-        config.setJdbcUrl("jdbc:mysql://localhost:3306/voyastra?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true");
+        config.setJdbcUrl("jdbc:mysql://127.0.0.1:3306/voyastra?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true");
         config.setUsername("root");
         config.setPassword("Home@123");
         config.setDriverClassName("com.mysql.cj.jdbc.Driver");

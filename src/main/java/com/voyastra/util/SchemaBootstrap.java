@@ -525,6 +525,68 @@ public class SchemaBootstrap implements ServletContextListener {
                     "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
                 );
 
+                // --- Premium Social Community Migrations ---
+                try {
+                    stmt.execute("ALTER TABLE posts ADD COLUMN image_url VARCHAR(255) DEFAULT NULL");
+                } catch (Exception e) {}
+                try {
+                    stmt.execute("ALTER TABLE posts ADD COLUMN category VARCHAR(50) DEFAULT 'For You'");
+                } catch (Exception e) {}
+                try {
+                    stmt.execute("ALTER TABLE posts ADD COLUMN hashtags VARCHAR(255) DEFAULT ''");
+                } catch (Exception e) {}
+
+                stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS comments (" +
+                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "post_id INT NOT NULL, " +
+                    "user_id INT NOT NULL, " +
+                    "text TEXT NOT NULL, " +
+                    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
+                    "FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE, " +
+                    "FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE)"
+                );
+
+                stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS likes (" +
+                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "post_id INT NOT NULL, " +
+                    "user_id INT NOT NULL, " +
+                    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
+                    "FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE, " +
+                    "FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE, " +
+                    "UNIQUE KEY (post_id, user_id))"
+                );
+
+                stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS follows (" +
+                    "follower_id INT NOT NULL, " +
+                    "followed_id INT NOT NULL, " +
+                    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
+                    "PRIMARY KEY (follower_id, followed_id), " +
+                    "FOREIGN KEY (follower_id) REFERENCES users(id) ON DELETE CASCADE, " +
+                    "FOREIGN KEY (followed_id) REFERENCES users(id) ON DELETE CASCADE)"
+                );
+
+                stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS stories (" +
+                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "user_id INT NOT NULL, " +
+                    "media_url VARCHAR(255) NOT NULL, " +
+                    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
+                    "FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE)"
+                );
+
+                stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS saved_posts (" +
+                    "user_id INT NOT NULL, " +
+                    "post_id INT NOT NULL, " +
+                    "saved_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
+                    "PRIMARY KEY (user_id, post_id), " +
+                    "FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE, " +
+                    "FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE)"
+                );
+
                 System.out.println("[SchemaBootstrap] Schema migration complete.");
 
         } catch (Exception e) {

@@ -49,7 +49,8 @@
      * Checks if a user is currently authenticated on the server.
      */
     function isAuthenticated() {
-        return !!getSession();
+        var hasSession = (window.javaSession && window.javaSession.userId && window.javaSession.userId !== '0' && window.javaSession.userId !== '');
+        return hasSession || !!getSession();
     }
 
     /**
@@ -101,8 +102,8 @@
      * Route protector for JSP pages that require authentication.
      */
     function requireAuth(role) {
-        var s = getSession();
-        if (!s) {
+        var hasSession = (window.javaSession && window.javaSession.userId && window.javaSession.userId !== '0' && window.javaSession.userId !== '');
+        if (!hasSession && !getSession()) {
             window.location.href = 'login?error=auth_required&redirect=' + encodeURIComponent(window.location.pathname);
             return false;
         }

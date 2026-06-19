@@ -1,6 +1,8 @@
 package com.voyastra.servlet;
 
 import com.google.gson.JsonObject;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import com.voyastra.dao.BookingDAO;
 import com.voyastra.dao.AdminTransportDAO;
 import com.voyastra.dao.DestinationDAO;
@@ -20,6 +22,8 @@ import java.io.IOException;
  */
 @WebServlet("/admin/stats")
 public class AdminAnalyticsServlet extends HttpServlet {
+    private static final Logger logger = Logger.getLogger(AdminAnalyticsServlet.class.getName());
+
 
     private UserDAO userDAO;
     private BookingDAO bookingDAO;
@@ -64,7 +68,7 @@ public class AdminAnalyticsServlet extends HttpServlet {
             JsonObject error = new JsonObject();
             error.addProperty("error", "Failed to fetch analytics data");
             response.getWriter().write(error.toString());
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Exception occurred", e);
         }
     }
 }

@@ -1,6 +1,8 @@
 package com.voyastra.servlet;
 
 import com.voyastra.model.User;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import com.voyastra.util.DBConnection;
 
 import javax.servlet.ServletException;
@@ -12,6 +14,8 @@ import java.util.*;
 
 @WebServlet("/trip-groups")
 public class TripGroupsServlet extends HttpServlet {
+    private static final Logger logger = Logger.getLogger(TripGroupsServlet.class.getName());
+
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -114,7 +118,7 @@ public class TripGroupsServlet extends HttpServlet {
                 request.getRequestDispatcher("/pages/group-dashboard.jsp").forward(request, response);
                 return;
             } catch (SQLException e) {
-                e.printStackTrace();
+                logger.log(Level.SEVERE, "Exception occurred", e);
             }
         } else {
             // View list of groups
@@ -131,7 +135,7 @@ public class TripGroupsServlet extends HttpServlet {
                     groups.add(group);
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                logger.log(Level.SEVERE, "Exception occurred", e);
             }
             request.setAttribute("myGroups", groups);
             request.getRequestDispatcher("/pages/trip-groups.jsp").forward(request, response);
@@ -218,7 +222,7 @@ public class TripGroupsServlet extends HttpServlet {
                 return;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Exception occurred", e);
         }
         
         response.sendRedirect(request.getContextPath() + "/trip-groups");

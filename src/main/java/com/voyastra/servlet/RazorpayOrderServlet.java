@@ -1,6 +1,8 @@
 package com.voyastra.servlet;
 
 import com.voyastra.model.HotelBooking;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import com.voyastra.util.RazorpayConfig;
 
 import javax.servlet.ServletException;
@@ -20,6 +22,8 @@ import java.util.UUID;
 
 @WebServlet("/api/razorpay/create-order")
 public class RazorpayOrderServlet extends HttpServlet {
+    private static final Logger logger = Logger.getLogger(RazorpayOrderServlet.class.getName());
+
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -69,7 +73,7 @@ public class RazorpayOrderServlet extends HttpServlet {
 
         } catch (Exception e) {
             System.err.println("[RazorpayOrderServlet] Order Creation Exception:");
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Exception occurred", e);
             
             response.setStatus(500);
             

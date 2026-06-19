@@ -1,6 +1,8 @@
 package com.voyastra.servlet;
 
 import com.voyastra.model.User;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import com.voyastra.util.DBConnection;
 
 import javax.servlet.ServletException;
@@ -12,6 +14,8 @@ import java.sql.*;
 
 @WebServlet("/api/ai-buddy")
 public class AIBuddyServlet extends HttpServlet {
+    private static final Logger logger = Logger.getLogger(AIBuddyServlet.class.getName());
+
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -85,7 +89,7 @@ public class AIBuddyServlet extends HttpServlet {
             out.flush();
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Exception occurred", e);
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }

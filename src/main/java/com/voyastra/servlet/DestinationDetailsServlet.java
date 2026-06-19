@@ -1,6 +1,8 @@
 package com.voyastra.servlet;
 
 import com.voyastra.dao.DestinationDAO;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import com.voyastra.dao.ReviewDAO;
 import com.voyastra.model.Destination;
 import com.voyastra.model.Review;
@@ -15,6 +17,8 @@ import java.util.List;
 
 @WebServlet("/destination")
 public class DestinationDetailsServlet extends HttpServlet {
+    private static final Logger logger = Logger.getLogger(DestinationDetailsServlet.class.getName());
+
 
     private DestinationDAO destinationDAO;
     private ReviewDAO reviewDAO;
@@ -59,7 +63,7 @@ public class DestinationDetailsServlet extends HttpServlet {
         } catch (NumberFormatException e) {
             response.sendRedirect(request.getContextPath() + "/explore.jsp");
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Exception occurred", e);
             response.sendRedirect(request.getContextPath() + "/explore.jsp?error=serverError");
         }
     }

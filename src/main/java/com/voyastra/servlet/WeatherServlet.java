@@ -1,6 +1,8 @@
 package com.voyastra.servlet;
 
 import com.google.gson.JsonObject;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import com.google.gson.JsonParser;
 
 import javax.servlet.ServletException;
@@ -22,6 +24,8 @@ import java.nio.charset.StandardCharsets;
  */
 @WebServlet("/api/weather")
 public class WeatherServlet extends HttpServlet {
+    private static final Logger logger = Logger.getLogger(WeatherServlet.class.getName());
+
 
     // Placeholder Key - User should replace with a real OpenWeatherMap API Key
     private static final String API_KEY = "8c77f0a9b8c7d6e5f4a3b2c1d0e9f8a7"; // Example placeholder
@@ -75,7 +79,7 @@ public class WeatherServlet extends HttpServlet {
             JsonObject error = new JsonObject();
             error.addProperty("error", "Failed to fetch weather data: " + e.getMessage());
             response.getWriter().write(error.toString());
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Exception occurred", e);
         }
     }
 }

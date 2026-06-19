@@ -1,6 +1,8 @@
 package com.voyastra.servlet;
 
 import com.voyastra.dao.LikeDAO;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,6 +15,8 @@ import java.io.PrintWriter;
 
 @WebServlet("/api/like")
 public class LikeServlet extends HttpServlet {
+    private static final Logger logger = Logger.getLogger(LikeServlet.class.getName());
+
 
     private LikeDAO likeDAO;
 
@@ -82,7 +86,7 @@ public class LikeServlet extends HttpServlet {
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             out.print("{\"error\": \"Internal server error occurred\"}");
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Exception occurred", e);
         } finally {
             out.flush();
             out.close();

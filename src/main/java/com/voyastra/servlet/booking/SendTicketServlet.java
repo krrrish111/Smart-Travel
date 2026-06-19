@@ -1,6 +1,8 @@
 package com.voyastra.servlet.booking;
 
 import com.voyastra.util.EmailService;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -15,6 +17,8 @@ import java.io.InputStream;
 @WebServlet("/api/send-ticket")
 @MultipartConfig
 public class SendTicketServlet extends HttpServlet {
+    private static final Logger logger = Logger.getLogger(SendTicketServlet.class.getName());
+
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -48,7 +52,7 @@ public class SendTicketServlet extends HttpServlet {
                 response.getWriter().write("{\"status\":\"error\", \"message\":\"No file part found\"}");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Exception occurred", e);
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write("{\"status\":\"error\", \"message\":\"" + e.getMessage() + "\"}");
         }

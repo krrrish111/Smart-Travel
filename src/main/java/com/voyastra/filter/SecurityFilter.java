@@ -72,13 +72,22 @@ public class SecurityFilter implements Filter {
             HttpSession session = req.getSession(false);
             boolean loggedIn = session != null && session.getAttribute("user_id") != null;
 
+            boolean isAjax = "XMLHttpRequest".equals(req.getHeader("X-Requested-With"));
+
             if (!loggedIn) {
+                if (isAjax) {
+                    resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    resp.setContentType("application/json;charset=UTF-8");
+                    resp.getWriter().write("{\"message\":\"Session expired. Please log in.\"}");
+                    return;
+                }
                 String queryString = req.getQueryString();
                 String target = path;
                 if (queryString != null)
                     target += "?" + queryString;
-                resp.sendRedirect(req.getContextPath() + "/login?redirect=" +
-                        java.net.URLEncoder.encode(target, "UTF-8"));
+                String redirectTarget = req.getContextPath() + "/login?redirect=" + java.net.URLEncoder.encode(target, "UTF-8");
+                System.out.println("REDIRECTING TO: " + redirectTarget);
+                resp.sendRedirect(redirectTarget);
                 return;
             }
 
@@ -87,7 +96,15 @@ public class SecurityFilter implements Filter {
             if (isAdminPath) {
                 String role = (String) session.getAttribute("role");
                 if (!"admin".equals(role)) {
-                    resp.sendRedirect(req.getContextPath() + "/login?error=admin_only");
+                    if (isAjax) {
+                        resp.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                        resp.setContentType("application/json;charset=UTF-8");
+                        resp.getWriter().write("{\"message\":\"Access denied.\"}");
+                        return;
+                    }
+                    String redirectTarget = req.getContextPath() + "/login?error=admin_only";
+                    System.out.println("REDIRECTING TO: " + redirectTarget);
+                    resp.sendRedirect(redirectTarget);
                     return;
                 }
             }

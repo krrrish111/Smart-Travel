@@ -1,6 +1,8 @@
 package com.voyastra.servlet;
 
 import com.voyastra.dao.HotelBookingDAO;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import com.voyastra.model.HotelBooking;
 import com.voyastra.model.User;
 import com.voyastra.util.EmailUtil;
@@ -16,6 +18,8 @@ import java.time.temporal.ChronoUnit;
 
 @WebServlet("/hotel-review")
 public class HotelReviewServlet extends HttpServlet {
+    private static final Logger logger = Logger.getLogger(HotelReviewServlet.class.getName());
+
     private HotelBookingDAO bookingDAO = new HotelBookingDAO();
 
     @Override
@@ -108,7 +112,7 @@ public class HotelReviewServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/pages/payment.jsp");
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Exception occurred", e);
             request.setAttribute("error", "An unexpected error occurred. Please try again.");
             doGet(request, response);
         }

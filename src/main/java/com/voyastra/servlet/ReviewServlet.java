@@ -1,6 +1,8 @@
 package com.voyastra.servlet;
 
 import com.voyastra.dao.ReviewDAO;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import com.voyastra.model.Review;
 import com.voyastra.util.AdminLogger;
 
@@ -20,6 +22,8 @@ import com.google.gson.Gson;
 
 @WebServlet("/review")
 public class ReviewServlet extends HttpServlet {
+    private static final Logger logger = Logger.getLogger(ReviewServlet.class.getName());
+
 
     private ReviewDAO reviewDAO;
     private final Gson gson = new Gson();
@@ -89,7 +93,7 @@ public class ReviewServlet extends HttpServlet {
                 response.sendRedirect(request.getContextPath() + "/destination?id=" + destinationId + "&reviewed=true");
 
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.log(Level.SEVERE, "Exception occurred", e);
                 response.sendRedirect(request.getContextPath() + "/index.jsp?error=reviewFailed");
             }
 
@@ -113,7 +117,7 @@ public class ReviewServlet extends HttpServlet {
                 gson.toJson(res, response.getWriter());
 
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.log(Level.SEVERE, "Exception occurred", e);
                 response.setContentType("application/json;charset=UTF-8");
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 response.getWriter().write("{\"status\":\"error\", \"message\":\"Server error executing operation.\"}");
@@ -146,7 +150,7 @@ public class ReviewServlet extends HttpServlet {
                 gson.toJson(mappedResults, response.getWriter());
 
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.log(Level.SEVERE, "Exception occurred", e);
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
         }
@@ -168,7 +172,7 @@ public class ReviewServlet extends HttpServlet {
                 response.sendRedirect(request.getContextPath() + "/destination?id=" + destinationId);
                 
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.log(Level.SEVERE, "Exception occurred", e);
                 response.sendRedirect(request.getContextPath() + "/explore.jsp");
             }
         } else {

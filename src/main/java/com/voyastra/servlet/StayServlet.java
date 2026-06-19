@@ -1,6 +1,8 @@
 package com.voyastra.servlet;
 
 import com.voyastra.dao.StayDAO;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import com.voyastra.model.Stay;
 import com.voyastra.util.AdminLogger;
 
@@ -16,6 +18,8 @@ import com.google.gson.Gson;
 
 @WebServlet("/stays")
 public class StayServlet extends HttpServlet {
+    private static final Logger logger = Logger.getLogger(StayServlet.class.getName());
+
 
     private StayDAO stayDAO;
 
@@ -57,7 +61,7 @@ public class StayServlet extends HttpServlet {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Exception occurred", e);
             response.sendRedirect(request.getContextPath() + "/booking.jsp?error=stayFetchFailed");
         }
     }
@@ -106,7 +110,7 @@ public class StayServlet extends HttpServlet {
                 response.sendRedirect(redirectUrl);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Exception occurred", e);
             response.sendRedirect(redirectUrl + "?error=invalidStayData");
         }
     }

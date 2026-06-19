@@ -1,6 +1,8 @@
 package com.voyastra.servlet;
 
 import com.voyastra.dao.TransportDAO;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import com.voyastra.model.Transport;
 import com.voyastra.util.AdminLogger;
 
@@ -16,6 +18,8 @@ import com.google.gson.Gson;
 
 @WebServlet("/transport")
 public class TransportServlet extends HttpServlet {
+    private static final Logger logger = Logger.getLogger(TransportServlet.class.getName());
+
 
     private TransportDAO transportDAO;
 
@@ -61,7 +65,7 @@ public class TransportServlet extends HttpServlet {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Exception occurred", e);
             response.sendRedirect(request.getContextPath() + "/booking.jsp?error=transportFetchFailed");
         }
     }
@@ -112,7 +116,7 @@ public class TransportServlet extends HttpServlet {
                 response.sendRedirect(redirectUrl);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Exception occurred", e);
             response.sendRedirect(redirectUrl + "?error=invalidTransportEntry");
         }
     }

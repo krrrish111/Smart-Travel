@@ -1,6 +1,8 @@
 package com.voyastra.servlet;
 
 import com.voyastra.dao.TrendingDAO;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import com.voyastra.model.TrendingPlace;
 import com.voyastra.util.AdminLogger;
 
@@ -15,6 +17,8 @@ import java.util.List;
 
 @WebServlet("/trending")
 public class TrendingServlet extends HttpServlet {
+    private static final Logger logger = Logger.getLogger(TrendingServlet.class.getName());
+
 
     private TrendingDAO trendingDAO;
 
@@ -46,7 +50,7 @@ public class TrendingServlet extends HttpServlet {
             request.getRequestDispatcher("/pages/index.jsp").forward(request, response);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Exception occurred", e);
             response.sendRedirect(request.getContextPath() + "/index.jsp?error=trendingFetchFailed");
         }
     }
@@ -94,7 +98,7 @@ public class TrendingServlet extends HttpServlet {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Exception occurred", e);
             response.sendRedirect(redirectUrl + "?error=invalidTrendingData");
         }
     }

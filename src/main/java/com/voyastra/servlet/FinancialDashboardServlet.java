@@ -1,6 +1,8 @@
 package com.voyastra.servlet;
 
 import com.voyastra.model.User;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import com.voyastra.util.DBConnection;
 
 import javax.servlet.ServletException;
@@ -12,6 +14,8 @@ import java.util.*;
 
 @WebServlet("/budget")
 public class FinancialDashboardServlet extends HttpServlet {
+    private static final Logger logger = Logger.getLogger(FinancialDashboardServlet.class.getName());
+
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -85,7 +89,7 @@ public class FinancialDashboardServlet extends HttpServlet {
             request.getRequestDispatcher("/pages/finance-dashboard.jsp").forward(request, response);
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Exception occurred", e);
             response.sendRedirect(request.getContextPath() + "/");
         }
     }
@@ -201,7 +205,7 @@ public class FinancialDashboardServlet extends HttpServlet {
             }
             response.sendRedirect(request.getContextPath() + "/budget");
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Exception occurred", e);
             response.sendRedirect(request.getContextPath() + "/budget?error=1");
         }
     }

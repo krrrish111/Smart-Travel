@@ -1,6 +1,8 @@
 package com.voyastra.servlet;
 
 import com.voyastra.dao.UserDAO;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import com.voyastra.dao.BookingDAO;
 import com.voyastra.dao.ItineraryDAO;
 import com.voyastra.model.User;
@@ -29,6 +31,8 @@ import java.util.UUID;
     maxRequestSize = 1024 * 1024 * 50   // 50MB
 )
 public class ProfileServlet extends HttpServlet {
+    private static final Logger logger = Logger.getLogger(ProfileServlet.class.getName());
+
 
     private final UserDAO userDAO = new UserDAO();
     private final BookingDAO bookingDAO = new BookingDAO();
@@ -246,7 +250,7 @@ public class ProfileServlet extends HttpServlet {
                     return;
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.log(Level.SEVERE, "Exception occurred", e);
             }
         }
         response.sendRedirect(request.getContextPath() + "/profile?tab=bookings&error=cancel_failed");
@@ -290,7 +294,7 @@ public class ProfileServlet extends HttpServlet {
                     return;
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.log(Level.SEVERE, "Exception occurred", e);
             }
         }
         response.sendRedirect(request.getContextPath() + "/profile?tab=bookings&error=cancel_failed");
@@ -333,7 +337,7 @@ public class ProfileServlet extends HttpServlet {
                 response.sendRedirect(request.getContextPath() + "/profile?tab=edit-profile&error=db_error");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Exception occurred", e);
             response.sendRedirect(request.getContextPath() + "/profile?tab=edit-profile&error=exception");
         }
     }

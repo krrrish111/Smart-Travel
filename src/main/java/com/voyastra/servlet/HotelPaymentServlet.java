@@ -1,6 +1,8 @@
 package com.voyastra.servlet;
 
 import com.voyastra.dao.HotelBookingDAO;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import com.voyastra.dao.PaymentDAO;
 import com.voyastra.model.HotelBooking;
 import com.voyastra.model.Payment;
@@ -17,6 +19,8 @@ import java.io.IOException;
 
 @WebServlet("/process-hotel-payment")
 public class HotelPaymentServlet extends HttpServlet {
+    private static final Logger logger = Logger.getLogger(HotelPaymentServlet.class.getName());
+
     private HotelBookingDAO bookingDAO = new HotelBookingDAO();
     private PaymentDAO paymentDAO = new PaymentDAO();
 
@@ -79,7 +83,7 @@ public class HotelPaymentServlet extends HttpServlet {
                 response.sendRedirect(request.getContextPath() + "/pages/payment.jsp?error=PaymentFailed");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Exception occurred", e);
             response.sendRedirect(request.getContextPath() + "/pages/payment.jsp?error=SystemError");
         }
     }

@@ -1,6 +1,8 @@
 package com.voyastra.servlet;
 
 import com.voyastra.dao.PlanDAO;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import com.voyastra.model.Plan;
 import com.voyastra.util.AdminLogger;
 
@@ -14,6 +16,8 @@ import java.io.IOException;
 
 @WebServlet("/addPlan")
 public class AddPlanServlet extends HttpServlet {
+    private static final Logger logger = Logger.getLogger(AddPlanServlet.class.getName());
+
 
     private PlanDAO planDAO;
 
@@ -104,7 +108,7 @@ public class AddPlanServlet extends HttpServlet {
             session.setAttribute("errorMsg", "Invalid numerical data — please check numbers and try again.");
             response.sendRedirect(request.getContextPath() + "/admin/plans.jsp");
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Exception occurred", e);
             session.setAttribute("errorMsg", "An unexpected error occurred. Please try again.");
             response.sendRedirect(request.getContextPath() + "/admin/plans.jsp");
         }

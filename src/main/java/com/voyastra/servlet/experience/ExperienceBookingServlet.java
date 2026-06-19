@@ -1,6 +1,8 @@
 package com.voyastra.servlet.experience;
 
 import com.voyastra.dao.ExperienceBookingDAO;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import com.voyastra.model.ExperienceBooking;
 import com.voyastra.model.User;
 
@@ -16,6 +18,8 @@ import java.util.Date;
 
 @WebServlet("/api/experience/book")
 public class ExperienceBookingServlet extends HttpServlet {
+    private static final Logger logger = Logger.getLogger(ExperienceBookingServlet.class.getName());
+
 
     private ExperienceBookingDAO bookingDAO;
 
@@ -56,7 +60,7 @@ public class ExperienceBookingServlet extends HttpServlet {
             // Redirect to a success page or user bookings
             response.sendRedirect(request.getContextPath() + "/dashboard?msg=ExperienceBooked");
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Exception occurred", e);
             response.sendRedirect(request.getContextPath() + "/experiences?error=BookingFailed");
         }
     }

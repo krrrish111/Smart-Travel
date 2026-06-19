@@ -17,7 +17,9 @@ import java.util.Properties;
 public class GeminiService {
 
     private static final String CONFIG_FILE = "config.properties";
-    private static final String MODEL_ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=";
+    private static final String BASE_ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models/";
+    // Primary model → fallback chain (tried in order until one succeeds)
+    private static final String[] MODELS = { "gemini-3.5-flash", "gemini-3.1-flash-lite" };
 
     private String apiKey;
 
@@ -29,61 +31,38 @@ public class GeminiService {
         this.apiKey = com.voyastra.config.ConfigManager.get("GEMINI_API_KEY");
     }
 
-    public String generateTripPlan(Map<String, String> params) throws Exception {
+    public String generateTripPlan(String sessionId, Map<String, String> params) {
+        System.out.println("PlannerService Started");
+        
         if (apiKey == null || apiKey.trim().isEmpty() || apiKey.equals("YOUR_API_KEY")) {
-            System.out.println("Gemini API Key is missing or default. Using high-fidelity mock trip planner.");
+            PlannerDebugService.log(sessionId, "Gemini Configuration", "WARNING", "API key missing. Falling back.", 0);
             return generateMockTripPlan(params);
         }
 
-        try {
-            String prompt = buildPrompt(params);
+        String prompt = buildPrompt(params);
 
-            JsonObject requestBody = new JsonObject();
-            JsonArray contents = new JsonArray();
-            JsonObject content = new JsonObject();
-            JsonArray parts = new JsonArray();
-            JsonObject part = new JsonObject();
-            
-            part.addProperty("text", prompt);
-            parts.add(part);
-            content.add("parts", parts);
-            contents.add(content);
-            requestBody.add("contents", contents);
-
-            URL url = new URL(MODEL_ENDPOINT + apiKey);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "application/json");
-            conn.setDoOutput(true);
-            conn.setConnectTimeout(60000);
-            conn.setReadTimeout(60000);
-
-            try (OutputStream os = conn.getOutputStream()) {
-                byte[] input = requestBody.toString().getBytes(StandardCharsets.UTF_8);
-                os.write(input, 0, input.length);
+        // Try each model in order until one succeeds
+        for (String model : MODELS) {
+            try {
+                System.out.println("[GeminiService] Trying model: " + model);
+                String rawResponse = callGeminiModel(model, prompt);
+                String parsedResponse = parseGeminiResponse(rawResponse);
+                PlannerDebugService.log(sessionId, "Gemini API", "SUCCESS", "Model: " + model, 0);
+                PlannerDebugService.setAiOutput(sessionId, parsedResponse);
+                return parsedResponse;
+            } catch (Exception e) {
+                System.err.println("[GeminiService] Model " + model + " failed: " + e.getMessage());
+                PlannerDebugService.log(sessionId, "Gemini API", "WARNING", model + " failed: " + e.getMessage(), 0);
+                // Continue to next model in chain
             }
-
-            int status = conn.getResponseCode();
-            if (status != 200) {
-                throw new Exception("API request failed with HTTP status " + status);
-            }
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = in.readLine()) != null) {
-                sb.append(line);
-            }
-            in.close();
-
-            String rawResponse = sb.toString();
-            System.out.println("Gemini Response: " + rawResponse);
-            return parseGeminiResponse(rawResponse);
-        } catch (Exception e) {
-            System.err.println("Gemini API Error: " + e.getMessage() + ". Falling back to high-fidelity mock trip plan.");
-            e.printStackTrace();
-            return generateMockTripPlan(params);
         }
+
+        // All models failed — use local high-fidelity mock
+        System.err.println("[GeminiService] All models failed. Using local mock.");
+        PlannerDebugService.log(sessionId, "Gemini Fallback", "WARNING", "All models failed. Using local mock.", 0);
+        String mock = generateMockTripPlan(params);
+        PlannerDebugService.setAiOutput(sessionId, mock);
+        return mock;
     }
 
     private String escapeJson(String text) {
@@ -91,17 +70,76 @@ public class GeminiService {
         return text.replace("\"", "\\\"").replace("\n", "\\n");
     }
 
+    /**
+     * Makes a single POST request to the Gemini API for the given model and returns the raw JSON response body.
+     * Throws an exception with HTTP status + error body details on any non-200 response.
+     */
+    private String callGeminiModel(String model, String prompt) throws Exception {
+        JsonObject requestBody = new JsonObject();
+        JsonArray contents = new JsonArray();
+        JsonObject content = new JsonObject();
+        JsonArray parts = new JsonArray();
+        JsonObject part = new JsonObject();
+
+        part.addProperty("text", prompt);
+        parts.add(part);
+        content.add("parts", parts);
+        contents.add(content);
+        requestBody.add("contents", contents);
+
+        String endpoint = BASE_ENDPOINT + model + ":generateContent?key=" + apiKey;
+        System.out.println("[GeminiService] POST → " + BASE_ENDPOINT + model + ":generateContent?key=***");
+
+        URL url = new URL(endpoint);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Content-Type", "application/json");
+        conn.setDoOutput(true);
+        conn.setConnectTimeout(60000);
+        conn.setReadTimeout(60000);
+
+        try (OutputStream os = conn.getOutputStream()) {
+            byte[] input = requestBody.toString().getBytes(StandardCharsets.UTF_8);
+            os.write(input, 0, input.length);
+        }
+
+        int status = conn.getResponseCode();
+        System.out.println("[GeminiService] HTTP " + status + " ← " + model);
+
+        if (status != 200) {
+            StringBuilder errBody = new StringBuilder();
+            try (BufferedReader er = new BufferedReader(new InputStreamReader(
+                    conn.getErrorStream() != null ? conn.getErrorStream() : conn.getInputStream(),
+                    StandardCharsets.UTF_8))) {
+                String ln;
+                while ((ln = er.readLine()) != null) errBody.append(ln);
+            }
+            System.err.println("[GeminiService] Error body (" + model + "): " + errBody);
+            throw new Exception("HTTP " + status + " from " + model + ": " +
+                    errBody.toString().substring(0, Math.min(200, errBody.length())));
+        }
+
+        StringBuilder sb = new StringBuilder();
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8))) {
+            String ln;
+            while ((ln = in.readLine()) != null) sb.append(ln);
+        }
+        return sb.toString();
+    }
+
+
     private String generateMockTripPlan(Map<String, String> params) {
         String destination = params.getOrDefault("destination", "Goa");
         String travelStyle = params.getOrDefault("travelStyle", "Relaxation");
         if (travelStyle == null || travelStyle.isEmpty()) {
             travelStyle = params.getOrDefault("interests", "Relaxation");
         }
-        String budget = params.getOrDefault("budget", "50000");
+        
+        // Use our new dynamic budget engine even in the fallback!
+        Map<String, String> budgetMap = BudgetCalculationEngine.calculateDynamicBudget(params);
 
         destination = escapeJson(destination);
         travelStyle = escapeJson(travelStyle);
-        budget = escapeJson(budget);
 
         return "{\n" +
             "  \"title\": \"Splendid Getaway to " + destination + "\",\n" +
@@ -120,23 +158,23 @@ public class GeminiService {
             "  \"recommended_duration\": \"4-5 Days\",\n" +
             "  \"best_travel_mode\": \"Cab / Local Transit\",\n" +
             "  \"travel_warnings\": [\n" +
-            "    \"Carry cash for small local merchants.\",\n" +
+            "    \"Carry cash for small local merchants in " + destination + ".\",\n" +
             "    \"Stay hydrated during afternoon sightseeing.\"\n" +
             "  ],\n" +
-            "  \"ai_recommendation_insight\": \"Since you prefer " + travelStyle + ", I have focused on local heritage, peaceful spots, and signature food trails.\",\n" +
+            "  \"ai_recommendation_insight\": \"Since you prefer " + travelStyle + ", I have focused on local heritage, peaceful spots, and signature food trails in " + destination + ".\",\n" +
             "  \"hidden_gems_detailed\": [\n" +
             "    {\n" +
-            "      \"name\": \"Secret Panoramic Cliff\",\n" +
+            "      \"name\": \"Secret Panoramic Cliff of " + destination + "\",\n" +
             "      \"category\": \"Nature\",\n" +
             "      \"overall_score\": 9.5,\n" +
-            "      \"description\": \"A tranquil cliffside view overlooking the beautiful valley, perfect for sunset photographs.\",\n" +
+            "      \"description\": \"A tranquil cliffside view overlooking the beautiful valley of " + destination + ", perfect for sunset photographs.\",\n" +
             "      \"beauty_score\": 10,\n" +
             "      \"peace_score\": 9,\n" +
             "      \"photo_score\": 10,\n" +
             "      \"crowd_score\": 9\n" +
             "    },\n" +
             "    {\n" +
-            "      \"name\": \"Artisanal Pottery Village\",\n" +
+            "      \"name\": \"Artisanal Pottery Village near " + destination + "\",\n" +
             "      \"category\": \"Culture\",\n" +
             "      \"overall_score\": 9.1,\n" +
             "      \"description\": \"Witness traditional craftsmen modeling clay and try your hand at the wheel.\",\n" +
@@ -267,12 +305,12 @@ public class GeminiService {
             "    }\n" +
             "  ],\n" +
             "  \"budget_breakdown\": {\n" +
-            "    \"flights\": \"₹16,000\",\n" +
-            "    \"hotel\": \"₹14,000\",\n" +
-            "    \"food\": \"₹6,000\",\n" +
-            "    \"activities\": \"₹4,000\",\n" +
-            "    \"transportation\": \"₹5,000\",\n" +
-            "    \"emergency_fund\": \"₹3,000\"\n" +
+            "    \"flights\": \"" + budgetMap.get("flights") + "\",\n" +
+            "    \"hotel\": \"" + budgetMap.get("hotel") + "\",\n" +
+            "    \"food\": \"" + budgetMap.get("food") + "\",\n" +
+            "    \"activities\": \"" + budgetMap.get("activities") + "\",\n" +
+            "    \"transportation\": \"" + budgetMap.get("transportation") + "\",\n" +
+            "    \"emergency_fund\": \"" + budgetMap.get("emergency_fund") + "\"\n" +
             "  },\n" +
             "  \"weather\": \"Partly Cloudy, 22°C\",\n" +
             "  \"travel_tips\": [\n" +
@@ -288,61 +326,7 @@ public class GeminiService {
     }
 
     private String buildPrompt(Map<String, String> params) {
-        String source = params.getOrDefault("source", "");
-        String destination = params.getOrDefault("destination", "");
-        String startDate = params.getOrDefault("startDate", "");
-        String endDate = params.getOrDefault("endDate", "");
-        String budget = params.getOrDefault("budget", "");
-        String travelers = params.getOrDefault("travelers", "1");
-        String travelStyle = params.getOrDefault("travelStyle", "");
-        String interests = params.getOrDefault("interests", "");
-
-        return "You are an expert AI Travel Concierge. Generate a personalized trip plan based on the following details:\n" +
-                "Source: " + source + "\n" +
-                "Destination: " + destination + "\n" +
-                "Start Date: " + startDate + "\n" +
-                "End Date: " + endDate + "\n" +
-                "Budget: " + budget + "\n" +
-                "Travelers: " + travelers + "\n" +
-                "Travel Style: " + travelStyle + "\n" +
-                "Interests: " + interests + "\n\n" +
-                "You must return ONLY a JSON object. Do not include markdown code blocks like ```json or any other text.\n" +
-                "The JSON must strictly follow this structure:\n" +
-                "{\n" +
-                "  \"tripSummary\": {\n" +
-                "    \"destination\": \"\",\n" +
-                "    \"durationDays\": 0,\n" +
-                "    \"budget\": \"\",\n" +
-                "    \"overview\": \"\"\n" +
-                "  },\n" +
-                "  \"estimatedBudget\": {\n" +
-                "    \"transport\": 0,\n" +
-                "    \"hotel\": 0,\n" +
-                "    \"food\": 0,\n" +
-                "    \"activities\": 0,\n" +
-                "    \"total\": 0\n" +
-                "  },\n" +
-                "  \"recommendedHotels\": [\n" +
-                "    {\n" +
-                "      \"name\": \"\",\n" +
-                "      \"location\": \"\",\n" +
-                "      \"pricePerNight\": 0,\n" +
-                "      \"rating\": 0\n" +
-                "    }\n" +
-                "  ],\n" +
-                "  \"itinerary\": [\n" +
-                "    {\n" +
-                "      \"day\": 1,\n" +
-                "      \"morning\": [\"\", \"\"],\n" +
-                "      \"afternoon\": [\"\"],\n" +
-                "      \"evening\": [\"\"],\n" +
-                "      \"estimatedCost\": 0\n" +
-                "    }\n" +
-                "  ],\n" +
-                "  \"foodRecommendations\": [\"\", \"\"],\n" +
-                "  \"transportOptions\": [\"\", \"\"],\n" +
-                "  \"travelTips\": [\"\", \"\"]\n" +
-                "}";
+        return PromptBuilderService.buildDynamicPrompt(params);
     }
 
     private String parseGeminiResponse(String responseBody) throws Exception {
@@ -394,7 +378,7 @@ public class GeminiService {
             contents.add(content);
             requestBody.add("contents", contents);
 
-            URL url = new URL(MODEL_ENDPOINT + apiKey);
+            URL url = new URL(BASE_ENDPOINT + MODELS[0] + ":generateContent?key=" + apiKey);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json");

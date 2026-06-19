@@ -1,6 +1,8 @@
 package com.voyastra.servlet;
 
 import com.voyastra.dao.PlanDAO;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import com.voyastra.util.AdminLogger;
 
 import javax.servlet.ServletException;
@@ -13,6 +15,8 @@ import java.io.IOException;
 
 @WebServlet("/deletePlan")
 public class DeletePlanServlet extends HttpServlet {
+    private static final Logger logger = Logger.getLogger(DeletePlanServlet.class.getName());
+
 
     private PlanDAO planDAO;
 
@@ -62,7 +66,7 @@ public class DeletePlanServlet extends HttpServlet {
             session.setAttribute("errorMsg", "Invalid Plan ID provided.");
             response.sendRedirect(request.getContextPath() + "/admin/plans.jsp");
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Exception occurred", e);
             session.setAttribute("errorMsg", "An unexpected error occurred. Please try again.");
             response.sendRedirect(request.getContextPath() + "/admin/plans.jsp");
         }

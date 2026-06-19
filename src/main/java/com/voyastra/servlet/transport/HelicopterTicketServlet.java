@@ -1,6 +1,8 @@
 package com.voyastra.servlet.transport;
 
 import com.voyastra.model.HelicopterBooking;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import com.voyastra.dao.HelicopterBookingDAO;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,6 +13,8 @@ import java.io.IOException;
 
 @WebServlet("/helicopter/ticket")
 public class HelicopterTicketServlet extends HttpServlet {
+    private static final Logger logger = Logger.getLogger(HelicopterTicketServlet.class.getName());
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String bookingId = request.getParameter("id");
@@ -23,7 +27,7 @@ public class HelicopterTicketServlet extends HttpServlet {
             String idParam = bookingId;
             booking = new HelicopterBookingDAO().getBookingById(idParam);
         } catch(Exception e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Exception occurred", e);
         }
         
         if (booking == null) {

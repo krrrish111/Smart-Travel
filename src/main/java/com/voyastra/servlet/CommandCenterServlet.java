@@ -1,6 +1,8 @@
 package com.voyastra.servlet;
 
 import com.voyastra.model.User;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import com.voyastra.util.DBConnection;
 
 import javax.servlet.ServletException;
@@ -12,6 +14,8 @@ import java.util.*;
 
 @WebServlet("/command-center")
 public class CommandCenterServlet extends HttpServlet {
+    private static final Logger logger = Logger.getLogger(CommandCenterServlet.class.getName());
+
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -153,7 +157,7 @@ public class CommandCenterServlet extends HttpServlet {
             request.getRequestDispatcher("/pages/command-center.jsp").forward(request, response);
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Exception occurred", e);
             response.sendRedirect(request.getContextPath() + "/");
         }
     }

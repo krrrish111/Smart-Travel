@@ -1,6 +1,8 @@
 package com.voyastra.servlet.transport;
 
 import com.voyastra.model.BusBooking;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import com.voyastra.dao.BusBookingDAO;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,6 +13,8 @@ import java.io.IOException;
 
 @WebServlet("/bus/download-ticket")
 public class BusDownloadTicketServlet extends HttpServlet {
+    private static final Logger logger = Logger.getLogger(BusDownloadTicketServlet.class.getName());
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String bookingId = request.getParameter("id");
@@ -23,7 +27,7 @@ public class BusDownloadTicketServlet extends HttpServlet {
             String idParam = bookingId;
             booking = new BusBookingDAO().getBookingById(idParam);
         } catch(Exception e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Exception occurred", e);
         }
         
         if (booking == null) {

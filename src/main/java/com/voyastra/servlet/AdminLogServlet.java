@@ -1,6 +1,8 @@
 package com.voyastra.servlet;
 
 import com.voyastra.dao.AdminLogDAO;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import com.voyastra.model.AdminLog;
 
 import javax.servlet.ServletException;
@@ -16,6 +18,8 @@ import java.util.stream.Collectors;
 
 @WebServlet("/admin/logs")
 public class AdminLogServlet extends HttpServlet {
+    private static final Logger logger = Logger.getLogger(AdminLogServlet.class.getName());
+
 
     private AdminLogDAO logDAO;
 
@@ -98,7 +102,7 @@ public class AdminLogServlet extends HttpServlet {
             request.getRequestDispatcher("/admin/logs.jsp").forward(request, response);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Exception occurred", e);
             if ("json".equalsIgnoreCase(format)) {
                 response.setStatus(500);
                 response.getWriter().print("{\"error\":\"logFetchFailed\"}");

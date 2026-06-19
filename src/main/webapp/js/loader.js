@@ -16,6 +16,8 @@
     var barTimeout = null;
     var barValue = 0;
     var barRAF = null;
+    var barStarted  = false;
+    var barFinished = false;
 
     function createBar() {
         if (bar) return;
@@ -39,6 +41,9 @@
     }
 
     function startBar() {
+        if (barFinished) return;
+        barStarted = true;
+
         if (!document.body) {
             document.addEventListener('DOMContentLoaded', startBar);
             return;
@@ -61,6 +66,7 @@
     }
 
     function finishBar() {
+        barFinished = true;
         clearTimeout(barRAF);
         barValue = 100;
         setBarWidth(100);
@@ -69,9 +75,32 @@
         var main = document.querySelector('main');
         if (main) main.style.opacity = '1';
 
+        // Fade it out then remove
+        var loaderContainer = document.getElementById('loader-container');
+        if (loaderContainer) {
+            loaderContainer.style.transition = 'opacity 0.3s ease';
+            loaderContainer.style.opacity = '0';
+            setTimeout(function () {
+                if (loaderContainer.parentNode) {
+                    loaderContainer.parentNode.removeChild(loaderContainer);
+                }
+            }, 350);
+        }
+
         setTimeout(function() {
-            if (bar) bar.classList.remove('active');
+            if (bar) {
+                bar.classList.remove('active');
+                if (bar.parentNode) bar.parentNode.removeChild(bar);
+            }
+            
+            // Also remove any orphaned bar elements appended to body
+            document.querySelectorAll('#vx-progress-bar, .loader-bar, .loader-dot').forEach(function (el) {
+                if (el.parentNode) el.parentNode.removeChild(el);
+            });
+            
             barValue = 0;
+            barStarted = false;
+            barFinished = false; // Reset for next navigation
         }, 400);
     }
 
@@ -227,29 +256,31 @@
     /* ══════════════════════════════════════════════
        5. INIT
     ══════════════════════════════════════════════ */
-    document.addEventListener('DOMContentLoaded', function() {
-        // Finish the bar when the page is fully ready
-        finishBar();
-
-        // Init lazy image shimmer
+    function runInit() {
         initLazyImages();
-
-        // Wire page transitions
         initPageTransitions();
 
-        // Auto-inject skeletons on grids with data-skeleton attribute
         document.querySelectorAll('[data-skeleton]').forEach(function(el) {
             var type = el.getAttribute('data-skeleton') || 'card';
             var count = parseInt(el.getAttribute('data-skeleton-count') || '6', 10);
-            // Only inject if empty (no server-rendered content)
             if (!el.children.length) {
                 skeletons(el, count, type);
             }
         });
-    });
+    }
 
-    // Start bar immediately when script loads (covers server render time)
-    startBar();
+    if (document.readyState === 'loading') {
+        startBar(); // registers its own DOMContentLoaded listener internally
+        document.addEventListener('DOMContentLoaded', function () {
+            finishBar();
+            runInit();
+        });
+    } else {
+        // DOM already parsed — skip animation entirely, just ensure visible
+        var main = document.querySelector('main');
+        if (main) main.style.opacity = '1';
+        runInit();
+    }
 
     window.VoyastraLoader = {
         start: startBar,
@@ -259,3 +290,25 @@
     };
 
 })(window);
+
+function createBar(container) {
+    if (!container) return null;
+    const bar = document.createElement('div');
+    bar.className = 'loader-bar';
+    container.appendChild(bar);
+    return bar;
+}
+
+function showLoader() {
+    const container = document.getElementById('loader-container');
+    if (!container) return;
+    container.style.display = 'block';
+    createBar(container);
+}
+
+function hideLoader() {
+    const container = document.getElementById('loader-container');
+    if (!container) return;
+    container.style.display = 'none';
+    container.innerHTML = '';
+}

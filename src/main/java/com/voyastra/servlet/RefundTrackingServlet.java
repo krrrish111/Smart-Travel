@@ -1,6 +1,8 @@
 package com.voyastra.servlet;
 
 import com.voyastra.dao.RefundDAO;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import com.voyastra.model.Refund;
 import com.voyastra.dao.HotelBookingDAO;
 import com.voyastra.model.HotelBooking;
@@ -15,6 +17,8 @@ import java.io.IOException;
 
 @WebServlet("/refund-status")
 public class RefundTrackingServlet extends HttpServlet {
+    private static final Logger logger = Logger.getLogger(RefundTrackingServlet.class.getName());
+
     private final RefundDAO refundDAO = new RefundDAO();
     private final HotelBookingDAO hotelBookingDAO = new HotelBookingDAO();
 
@@ -40,7 +44,7 @@ public class RefundTrackingServlet extends HttpServlet {
                     return;
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.log(Level.SEVERE, "Exception occurred", e);
             }
         }
         

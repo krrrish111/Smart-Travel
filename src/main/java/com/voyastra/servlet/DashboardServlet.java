@@ -1,6 +1,8 @@
 package com.voyastra.servlet;
 
 import com.voyastra.dao.BookingDAO;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import com.voyastra.dao.ItineraryDAO;
 import com.voyastra.dao.DestinationDAO;
 import com.voyastra.model.Booking;
@@ -20,6 +22,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class DashboardServlet extends HttpServlet {
+    private static final Logger logger = Logger.getLogger(DashboardServlet.class.getName());
+
 
     private final BookingDAO bookingDAO = new BookingDAO();
     private final ItineraryDAO itineraryDAO = new ItineraryDAO();
@@ -75,7 +79,7 @@ public class DashboardServlet extends HttpServlet {
 
         } catch (Exception e) {
             System.err.println("[DashboardServlet] Error fetching dashboard data: " + e.getMessage());
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Exception occurred", e);
         }
 
         request.getRequestDispatcher("/pages/user-home.jsp").forward(request, response);

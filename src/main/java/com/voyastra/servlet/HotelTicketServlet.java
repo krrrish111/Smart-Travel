@@ -1,6 +1,8 @@
 package com.voyastra.servlet;
 
 import com.voyastra.model.HotelBooking;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import com.voyastra.dao.HotelBookingDAO;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,6 +13,8 @@ import java.io.IOException;
 
 @WebServlet("/hotel/ticket")
 public class HotelTicketServlet extends HttpServlet {
+    private static final Logger logger = Logger.getLogger(HotelTicketServlet.class.getName());
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String bookingId = request.getParameter("id");
@@ -23,7 +27,7 @@ public class HotelTicketServlet extends HttpServlet {
             int idParam = Integer.parseInt(bookingId);
             booking = new HotelBookingDAO().getBookingById(idParam);
         } catch(Exception e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Exception occurred", e);
         }
         
         if (booking == null) {

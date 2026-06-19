@@ -1,6 +1,8 @@
 package com.voyastra.servlet;
 
 import com.google.gson.Gson;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import com.voyastra.dao.BookingDAO;
 import com.voyastra.dao.AdminTransportDAO;
 import com.voyastra.model.Booking;
@@ -20,6 +22,8 @@ import java.util.stream.Collectors;
 
 @WebServlet("/AdminBookingServlet")
 public class AdminBookingServlet extends HttpServlet {
+    private static final Logger logger = Logger.getLogger(AdminBookingServlet.class.getName());
+
     
     private BookingDAO bookingDAO;
     private AdminTransportDAO adminTransportDAO;
@@ -112,7 +116,7 @@ public class AdminBookingServlet extends HttpServlet {
             result.put("success", success);
             out.print(gson.toJson(result));
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Exception occurred", e);
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             out.print("{\"error\":\"Server Error\"}");
         }

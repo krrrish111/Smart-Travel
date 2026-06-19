@@ -1,6 +1,8 @@
 package com.voyastra.servlet;
 
 import com.voyastra.dao.HotelBookingDAO;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import com.voyastra.dao.HotelDAO;
 import com.voyastra.model.Hotel;
 import com.voyastra.model.HotelBooking;
@@ -22,6 +24,8 @@ import java.time.temporal.ChronoUnit;
 
 @WebServlet("/hotel-checkout")
 public class HotelCheckoutServlet extends HttpServlet {
+    private static final Logger logger = Logger.getLogger(HotelCheckoutServlet.class.getName());
+
     private HotelDAO hotelDAO = new HotelDAO();
     private HotelBookingDAO bookingDAO = new HotelBookingDAO();
 
@@ -99,7 +103,7 @@ public class HotelCheckoutServlet extends HttpServlet {
 
             request.getRequestDispatcher("/pages/hotel-checkout.jsp").forward(request, response);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Exception occurred", e);
             if (hotelIdStr != null && !hotelIdStr.isEmpty()) {
                 response.sendRedirect(request.getContextPath() + "/hotel-details?id=" + hotelIdStr);
             } else {
@@ -203,7 +207,7 @@ public class HotelCheckoutServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/hotel-review");
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Exception occurred", e);
             String hotelIdStr = request.getParameter("hotelId");
             if (hotelIdStr != null && !hotelIdStr.isEmpty()) {
                 response.sendRedirect(request.getContextPath() + "/hotel-details?id=" + hotelIdStr);

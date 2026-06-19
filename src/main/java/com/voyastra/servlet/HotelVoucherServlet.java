@@ -1,6 +1,8 @@
 package com.voyastra.servlet;
 
 import com.itextpdf.text.BaseColor;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
@@ -23,6 +25,8 @@ import java.io.IOException;
 
 @WebServlet("/hotel-voucher")
 public class HotelVoucherServlet extends HttpServlet {
+    private static final Logger logger = Logger.getLogger(HotelVoucherServlet.class.getName());
+
     private HotelBookingDAO bookingDAO = new HotelBookingDAO();
 
     @Override
@@ -56,7 +60,7 @@ public class HotelVoucherServlet extends HttpServlet {
             response.getOutputStream().write(pdfBytes);
 
         } catch (NumberFormatException | com.itextpdf.text.DocumentException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Exception occurred", e);
             response.sendRedirect("profile?tab=bookings");
         }
     }

@@ -1,0 +1,13 @@
+package com.voyastra.model;
+
+public enum PlannerStatus {
+    REQUEST_RECEIVED,
+    VALIDATING_INPUT,
+    GENERATING_ITINERARY,
+    FETCHING_IMAGES,
+    FETCHING_VIDEOS,
+    CALCULATING_BUDGET,
+    RENDERING_PAGE,
+    COMPLETED,
+    FAILED
+}

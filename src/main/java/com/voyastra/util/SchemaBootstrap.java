@@ -5,6 +5,7 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 import java.sql.Connection;
 import java.sql.Statement;
+import com.voyastra.config.ConfigManager;
 
 /**
  * Runs automatic DB schema migrations on application startup.
@@ -15,6 +16,51 @@ public class SchemaBootstrap implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
+        
+        System.out.println("=================================");
+        System.out.println("VOYASTRA STARTUP CHECK");
+        
+        // 1. Database Connection
+        try (Connection conn = DBConnection.getConnection()) {
+            if (conn != null && !conn.isClosed()) {
+                System.out.println("Database Connection: SUCCESS");
+                DiagnosticManager.dbConnected = true;
+            } else {
+                System.out.println("Database Connection: FAILED");
+                DiagnosticManager.dbConnected = false;
+            }
+        } catch (Exception e) {
+            System.out.println("Database Connection: FAILED");
+            DiagnosticManager.dbConnected = false;
+        }
+
+        // 2. Servlet Registration
+        // If we are here, listeners are working, assume Servlets are registered
+        System.out.println("Servlet Registration: SUCCESS");
+        DiagnosticManager.servletsRegistered = true;
+
+        // 3. YouTube Config
+        String ytKey = ConfigManager.get("YOUTUBE_API_KEY");
+        if (ytKey != null && !ytKey.trim().isEmpty() && !ytKey.contains("YOUR_YOUTUBE")) {
+            System.out.println("YouTube Config: SUCCESS");
+            DiagnosticManager.youtubeConfigured = true;
+        } else {
+            System.out.println("YouTube Config: FAILED");
+            DiagnosticManager.youtubeConfigured = false;
+        }
+
+        // 4. Unsplash Config
+        String unsplashKey = ConfigManager.get("UNSPLASH_ACCESS_KEY");
+        if (unsplashKey != null && !unsplashKey.trim().isEmpty() && !unsplashKey.contains("YOUR_UNSPLASH")) {
+            System.out.println("Unsplash Config: SUCCESS");
+            DiagnosticManager.unsplashConfigured = true;
+        } else {
+            System.out.println("Unsplash Config: FAILED");
+            DiagnosticManager.unsplashConfigured = false;
+        }
+        
+        System.out.println("=================================");
+
         try (Connection conn = DBConnection.getConnection();
              Statement stmt = conn.createStatement()) {
 

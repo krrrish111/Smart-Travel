@@ -1,6 +1,8 @@
 package com.voyastra.servlet;
 
 import com.google.gson.JsonObject;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import com.google.gson.JsonParser;
 import com.voyastra.dao.UserDAO;
 import com.voyastra.model.User;
@@ -24,6 +26,8 @@ import java.nio.charset.StandardCharsets;
  */
 @WebServlet("/google-login")
 public class GoogleLoginServlet extends HttpServlet {
+    private static final Logger logger = Logger.getLogger(GoogleLoginServlet.class.getName());
+
 
     // --- Loaded from ConfigManager ---
     private static final String CLIENT_ID = com.voyastra.config.ConfigManager.get("GOOGLE_CLIENT_ID");
@@ -102,7 +106,7 @@ public class GoogleLoginServlet extends HttpServlet {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Exception occurred", e);
             request.setAttribute("errorMsg", "Google Authentication failed: " + e.getMessage());
             request.getRequestDispatcher("/pages/login.jsp").forward(request, response);
         }

@@ -1,6 +1,8 @@
 package com.voyastra.servlet.transport;
 
 import com.voyastra.dao.CruiseBookingDAO;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import com.voyastra.model.CruiseBooking;
 import com.voyastra.service.PaymentService;
 import com.voyastra.util.NotificationManager;
@@ -14,6 +16,8 @@ import java.io.IOException;
 
 @WebServlet("/transport/cruise/payment-callback")
 public class CruisePaymentServlet extends HttpServlet {
+    private static final Logger logger = Logger.getLogger(CruisePaymentServlet.class.getName());
+
     private CruiseBookingDAO bookingDAO;
 
     @Override
@@ -69,7 +73,7 @@ public class CruisePaymentServlet extends HttpServlet {
             saved = bookingDAO.saveBooking(draft);
         } catch (Exception e) {
             System.err.println("[CruisePayment] Exception during saveBooking: " + e.getMessage());
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Exception occurred", e);
         }
 
         if (saved) {

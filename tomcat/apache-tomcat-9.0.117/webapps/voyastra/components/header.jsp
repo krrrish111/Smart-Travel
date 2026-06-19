@@ -20,6 +20,20 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/animations.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/responsive.css">
     <script src="${pageContext.request.contextPath}/js/loader.js"></script>
+    <script>
+        // Emergency fallback: if loader.js race condition recurs,
+        // force main visible after 2 seconds maximum — no dependencies
+        window.addEventListener('DOMContentLoaded', function () {
+            setTimeout(function () {
+                var main = document.querySelector('main');
+                if (main && parseFloat(main.style.opacity) < 1) {
+                    main.style.transition = 'none';
+                    main.style.opacity    = '1';
+                    console.warn('[Voyastra] loader fallback fired — check loader.js order');
+                }
+            }, 2000);
+        });
+    </script>
     <script src="${pageContext.request.contextPath}/js/auth-guard.js"></script>
     <script src="${pageContext.request.contextPath}/js/toast.js"></script>
     <script src="${pageContext.request.contextPath}/js/validate.js"></script>

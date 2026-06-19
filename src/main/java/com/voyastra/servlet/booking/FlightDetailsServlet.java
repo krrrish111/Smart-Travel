@@ -1,6 +1,8 @@
 package com.voyastra.servlet.booking;
 
 import com.voyastra.model.FlightBooking;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import com.voyastra.dao.FlightBookingDAO;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,6 +13,8 @@ import java.io.IOException;
 
 @WebServlet("/flight/details")
 public class FlightDetailsServlet extends HttpServlet {
+    private static final Logger logger = Logger.getLogger(FlightDetailsServlet.class.getName());
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String bookingId = request.getParameter("id");
@@ -23,7 +27,7 @@ public class FlightDetailsServlet extends HttpServlet {
             int idParam = Integer.parseInt(bookingId);
             booking = new FlightBookingDAO().getBookingById(idParam);
         } catch(Exception e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Exception occurred", e);
         }
         
         System.out.println("Booking Loaded: " + booking);

@@ -1,6 +1,8 @@
 package com.voyastra.servlet;
 
 import com.voyastra.dao.ItineraryDAO;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import com.voyastra.model.Itinerary;
 
 import javax.servlet.ServletException;
@@ -17,6 +19,8 @@ import java.io.PrintWriter;
  */
 @WebServlet("/itinerary")
 public class ItineraryServlet extends HttpServlet {
+    private static final Logger logger = Logger.getLogger(ItineraryServlet.class.getName());
+
 
     private ItineraryDAO itineraryDAO;
 
@@ -104,7 +108,7 @@ public class ItineraryServlet extends HttpServlet {
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             out.print("{\"status\": \"error\", \"message\": \"An internal error occurred.\"}");
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Exception occurred", e);
         } finally {
             out.flush();
             out.close();

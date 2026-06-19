@@ -1,6 +1,8 @@
 package com.voyastra.servlet;
 
 import com.voyastra.dao.DestinationDAO;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import com.voyastra.model.Destination;
 import com.voyastra.util.AdminLogger;
 
@@ -21,6 +23,8 @@ import java.util.List;
     maxRequestSize = 1024 * 1024 * 15    // 15MB
 )
 public class DestinationServlet extends HttpServlet {
+    private static final Logger logger = Logger.getLogger(DestinationServlet.class.getName());
+
 
     private DestinationDAO destinationDAO;
 
@@ -79,7 +83,7 @@ public class DestinationServlet extends HttpServlet {
             out.flush();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Exception occurred", e);
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             out.print("{\"status\":\"error\", \"message\":\"Failed to fetch destinations.\"}");
             out.flush();
@@ -131,7 +135,7 @@ public class DestinationServlet extends HttpServlet {
                     out.flush();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Exception occurred", e);
             // Important: Send JSON error instead of allowing GlobalExceptionFilter to forward to HTML error page
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             out.print("{\"status\":\"error\", \"message\":\"Server error executing operation: " + e.getMessage().replace("\"", "'") + "\"}");
@@ -190,7 +194,7 @@ public class DestinationServlet extends HttpServlet {
                 response.sendRedirect(request.getContextPath() + "/admin/destinations.jsp?status=error&message=db_failed");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Exception occurred", e);
             response.sendRedirect(request.getContextPath() + "/admin/destinations.jsp?status=error&message=" + java.net.URLEncoder.encode(e.getMessage(), "UTF-8"));
         }
     }
@@ -245,7 +249,7 @@ public class DestinationServlet extends HttpServlet {
                 response.sendRedirect(request.getContextPath() + "/admin/destinations.jsp?status=error&message=db_failed");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Exception occurred", e);
             response.sendRedirect(request.getContextPath() + "/admin/destinations.jsp?status=error&message=" + java.net.URLEncoder.encode(e.getMessage(), "UTF-8"));
         }
     }
@@ -269,7 +273,7 @@ public class DestinationServlet extends HttpServlet {
         } catch (NumberFormatException e) {
             out.print("{\"status\":\"error\", \"message\":\"Invalid ID format.\"}");
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Exception occurred", e);
             out.print("{\"status\":\"error\", \"message\":\"Error during deletion: " + e.getMessage() + "\"}");
         }
     }

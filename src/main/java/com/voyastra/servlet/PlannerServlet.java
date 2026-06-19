@@ -6,6 +6,9 @@ import java.util.logging.Level;
 import com.voyastra.service.PlannerDebugService;
 import com.voyastra.model.User;
 import com.voyastra.util.DBConnection;
+import com.voyastra.service.UnsplashService;
+import com.voyastra.service.YouTubeService;
+import com.voyastra.service.BudgetCalculationEngine;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,10 +21,9 @@ import java.sql.PreparedStatement;
 import java.util.HashMap;
 import java.util.Map;
 
-@WebServlet(urlPatterns = {"/planner", "/my-plans", "/planner-debug"})
+@WebServlet(name = "PlannerServlet", urlPatterns = {"/planner", "/my-plans", "/planner-debug", "/planner-result", "/planner-result.jsp"})
 public class PlannerServlet extends HttpServlet {
     private static final Logger logger = Logger.getLogger(PlannerServlet.class.getName());
-
 
     private GeminiService geminiService;
 
@@ -66,6 +68,11 @@ public class PlannerServlet extends HttpServlet {
             request.getRequestDispatcher("/pages/planner-debug.jsp").forward(request, response);
             return;
         }
+        
+        if ("/planner-result".equals(path) || "/planner-result.jsp".equals(path)) {
+            request.getRequestDispatcher("/pages/planner-result.jsp").forward(request, response);
+            return;
+        }
 
         request.getRequestDispatcher("/pages/planner.jsp").forward(request, response);
     }
@@ -73,134 +80,328 @@ public class PlannerServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        System.out.println("===== PLANNER SERVLET HIT =====");
-        System.out.println("STEP 1: PlannerServlet Entered");
-        System.out.println("PlannerServlet Started");
-        System.out.println("PlannerServlet Reached (POST)");
-        System.out.println("GeneratePlanServlet Started");
+        String sessionId = request.getSession().getId();
+        PlannerDebugService.clearSession(sessionId);
+
+        String destination = request.getParameter("destination");
+        String budget = request.getParameter("budget");
+        String travelStyle = request.getParameter("type");
+
+        System.out.println("========== PLANNER START ==========");
+        System.out.println("Destination: " + destination);
+        System.out.println("Budget: " + budget);
+        System.out.println("Travel Style: " + travelStyle);
+
+        // 1. Input Validation
+        String currentStep = "Input Validation";
         try {
-            Map<String, String> params = new HashMap<>();
-            int adults = 1;
-            int children = 0;
-            int seniors = 0;
+            System.out.println("[STEP 1] Input Validation Started");
+            PlannerDebugService.log(sessionId, "Input Validation", "STARTED", "Validating inputs", 0);
+            
+            if (request.getParameter("startLocation") == null || destination == null || 
+                request.getParameter("departureDate") == null || request.getParameter("returnDate") == null || budget == null) {
+                throw new IllegalArgumentException("Missing required travel parameters.");
+            }
+            PlannerDebugService.log(sessionId, "Input Validation", "SUCCESS", "Input validation passed", 0);
+            System.out.println("[STEP 1] Input Validation Success");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("FAILED STEP: " + currentStep);
+            PlannerDebugService.log(sessionId, "Input Validation", "ERROR", e.getMessage(), 0);
+            request.setAttribute("plannerError", e.getMessage());
+            request.setAttribute("error", e.getMessage());
+            request.getRequestDispatcher("/pages/planner.jsp").forward(request, response);
+            return;
+        }
 
-            String contentType = request.getContentType();
-            if (contentType != null && contentType.contains("application/json")) {
-                StringBuilder sb = new StringBuilder();
-                String line;
-                try (java.io.BufferedReader reader = request.getReader()) {
-                    while ((line = reader.readLine()) != null) {
-                        sb.append(line);
-                    }
-                }
-                String jsonStr = sb.toString();
-                System.out.println("Received JSON body: " + jsonStr);
-                try {
-                    com.google.gson.JsonObject jsonObj = com.google.gson.JsonParser.parseString(jsonStr).getAsJsonObject();
-                    params.put("source", jsonObj.has("origin") ? jsonObj.get("origin").getAsString() : "");
-                    params.put("destination", jsonObj.has("destination") ? jsonObj.get("destination").getAsString() : "");
-                    params.put("startDate", (jsonObj.has("departureDate") && !jsonObj.get("departureDate").getAsString().isEmpty()) ? jsonObj.get("departureDate").getAsString() : new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date()));
-                    params.put("endDate", (jsonObj.has("returnDate") && !jsonObj.get("returnDate").getAsString().isEmpty()) ? jsonObj.get("returnDate").getAsString() : new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date(System.currentTimeMillis() + 5L * 24L * 60L * 60L * 1000L)));
-                    params.put("budget", jsonObj.has("budget") ? jsonObj.get("budget").getAsString() : "");
-                    params.put("travelStyle", jsonObj.has("interests") ? jsonObj.get("interests").getAsString() : "");
-                    
-                    String travelersVal = jsonObj.has("travelers") ? jsonObj.get("travelers").getAsString() : "1";
-                    params.put("travelers", travelersVal);
-                    adults = Integer.parseInt(travelersVal);
-                } catch (Exception ex) {
-                    System.err.println("JSON parse error: " + ex.getMessage());
-                }
+        Map<String, String> params = new HashMap<>();
+        params.put("source", request.getParameter("startLocation"));
+        params.put("destination", destination);
+        params.put("startDate", request.getParameter("departureDate"));
+        params.put("endDate", request.getParameter("returnDate"));
+        params.put("budget", budget);
+        params.put("travelStyle", travelStyle);
+        params.put("interests", request.getParameter("interests"));
+        
+        int adults = 1;
+        try {
+            adults = Integer.parseInt(request.getParameter("adults") != null && !request.getParameter("adults").isEmpty() ? request.getParameter("adults") : "1");
+        } catch (Exception e) {}
+        int children = 0;
+        try {
+            children = Integer.parseInt(request.getParameter("children") != null && !request.getParameter("children").isEmpty() ? request.getParameter("children") : "0");
+        } catch (Exception e) {}
+        int seniors = 0;
+        try {
+            seniors = Integer.parseInt(request.getParameter("seniors") != null && !request.getParameter("seniors").isEmpty() ? request.getParameter("seniors") : "0");
+        } catch (Exception e) {}
+        int totalTravelers = adults + children + seniors;
+        params.put("travelers", String.valueOf(totalTravelers));
+
+        // DB save
+        User user = (User) request.getSession().getAttribute("user");
+        int userId = user != null ? user.getId() : -1;
+        try (Connection conn = DBConnection.getConnection()) {
+            String sql = "INSERT INTO planner_requests (user_id, origin, destination, departure_date, return_date, budget, travel_style, adults, children, seniors) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            if (userId != -1) {
+                pstmt.setInt(1, userId);
             } else {
-                params.put("source", request.getParameter("startLocation"));
-                params.put("destination", request.getParameter("destination"));
-                params.put("startDate", request.getParameter("departureDate"));
-                params.put("endDate", request.getParameter("returnDate"));
-                params.put("budget", request.getParameter("budget"));
-                params.put("travelStyle", request.getParameter("type"));
-                params.put("interests", request.getParameter("interests"));
-                
-                adults = Integer.parseInt(request.getParameter("adults") != null && !request.getParameter("adults").isEmpty() ? request.getParameter("adults") : "1");
-                children = Integer.parseInt(request.getParameter("children") != null && !request.getParameter("children").isEmpty() ? request.getParameter("children") : "0");
-                seniors = Integer.parseInt(request.getParameter("seniors") != null && !request.getParameter("seniors").isEmpty() ? request.getParameter("seniors") : "0");
-                int totalTravelers = adults + children + seniors;
-                params.put("travelers", String.valueOf(totalTravelers));
+                pstmt.setNull(1, java.sql.Types.INTEGER);
             }
+            pstmt.setString(2, params.get("source"));
+            pstmt.setString(3, params.get("destination"));
+            pstmt.setString(4, params.get("startDate"));
+            pstmt.setString(5, params.get("endDate"));
+            pstmt.setBigDecimal(6, new java.math.BigDecimal(params.get("budget")));
+            pstmt.setString(7, params.get("travelStyle"));
+            pstmt.setInt(8, adults);
+            pstmt.setInt(9, children);
+            pstmt.setInt(10, seniors);
+            pstmt.executeUpdate();
+        } catch (Exception e) {
+            System.err.println("Failed to save planner request: " + e.getMessage());
+        }
 
-            String sessionId = request.getSession().getId();
-            PlannerDebugService.log(sessionId, "Input Validation", "SUCCESS", "Captured inputs: " + params.get("destination"), 0);
-
-            System.out.println("--- Planner Form Submitted ---");
-            System.out.println("Origin = " + params.get("source"));
-            System.out.println("Destination = " + params.get("destination"));
-            System.out.println("Start Date: " + params.get("startDate"));
-            System.out.println("End Date: " + params.get("endDate"));
-            System.out.println("Budget: " + params.get("budget"));
-
-            if (params.get("source") == null || params.get("destination") == null || 
-                params.get("startDate") == null || params.get("endDate") == null || params.get("budget") == null) {
-                System.err.println("Validation failed: Missing required parameters.");
-                PlannerDebugService.log(sessionId, "Input Validation", "ERROR", "Missing required parameters.", 0);
-                request.setAttribute("error", "Missing required parameters.");
-                request.getRequestDispatcher("/pages/planner.jsp").forward(request, response);
-                return;
-            }
-
-            // DB save
-            User user = (User) request.getSession().getAttribute("user");
-            int userId = user != null ? user.getId() : -1;
-
-            try (Connection conn = DBConnection.getConnection()) {
-                String sql = "INSERT INTO planner_requests (user_id, origin, destination, departure_date, return_date, budget, travel_style, adults, children, seniors) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                PreparedStatement pstmt = conn.prepareStatement(sql);
-                if (userId != -1) {
-                    pstmt.setInt(1, userId);
-                } else {
-                    pstmt.setNull(1, java.sql.Types.INTEGER);
-                }
-                pstmt.setString(2, params.get("source"));
-                pstmt.setString(3, params.get("destination"));
-                pstmt.setString(4, params.get("startDate"));
-                pstmt.setString(5, params.get("endDate"));
-                pstmt.setBigDecimal(6, new java.math.BigDecimal(params.get("budget")));
-                pstmt.setString(7, params.get("travelStyle"));
-                pstmt.setInt(8, adults);
-                pstmt.setInt(9, children);
-                pstmt.setInt(10, seniors);
-                pstmt.executeUpdate();
-                System.out.println("Saved planner request to database.");
-            } catch (Exception e) {
-                System.err.println("Failed to save planner request: " + e.getMessage());
-            }
-
-            System.out.println("Calling Gemini...");
-            PlannerDebugService.log(sessionId, "Gemini API", "STARTED", "Generating trip to " + params.get("destination"), 0);
+        // 2. Gemini API Request & 3. Gemini API Response
+        String itineraryJson = "";
+        currentStep = "Gemini API";
+        try {
+            System.out.println("[STEP 2] Gemini Request Started");
+            PlannerDebugService.log(sessionId, "Gemini API", "STARTED", "Calling Gemini API", 0);
             long geminiStart = System.currentTimeMillis();
             
-            String itineraryJson = geminiService.generateTripPlan(sessionId, params);
+            itineraryJson = geminiService.generateTripPlan(sessionId, params);
             
-            PlannerDebugService.log(sessionId, "Gemini API", "SUCCESS", "Generated JSON payload", System.currentTimeMillis() - geminiStart);
-            System.out.println("Gemini Response = " + itineraryJson);
-            
-            // Initialize empty lists to avoid NPE in JSPTL
-            java.lang.reflect.Type type = new com.google.gson.reflect.TypeToken<java.util.Map<String, Object>>(){}.getType();
-            java.util.Map<String, Object> plan = new com.google.gson.Gson().fromJson(itineraryJson, type);
-            
-            // Store generated itinerary
-            request.setAttribute("generatedPlan", plan);
-            request.setAttribute("tripData", itineraryJson);
-            request.setAttribute("itineraryJson", itineraryJson);
-            
-            System.out.println("STEP 2: Trip Generated");
-            System.out.println("Trip Generated");
-            System.out.println("STEP 3: Forwarding To planner-result.jsp");
-            System.out.println("Forwarding To planner-result.jsp");
-            request.getRequestDispatcher("/pages/planner-result.jsp").forward(request, response);
-
+            long geminiDuration = System.currentTimeMillis() - geminiStart;
+            PlannerDebugService.log(sessionId, "Gemini API", "SUCCESS", "Gemini response generated successfully", geminiDuration);
+            System.out.println("[STEP 3] Gemini Response Received");
+            System.out.println(itineraryJson.substring(0, Math.min(500, itineraryJson.length())));
         } catch (Exception e) {
-            String sid = request.getSession().getId();
-            com.voyastra.service.PlannerDebugService.log(sid, "System Error", "EXCEPTION", e.getMessage(), 0);
-            logger.log(Level.SEVERE, "Exception occurred", e);
-            request.setAttribute("error", "Gemini API Error: " + e.getMessage());
+            e.printStackTrace();
+            System.out.println("FAILED STEP: " + currentStep);
+            PlannerDebugService.log(sessionId, "Gemini API", "ERROR", e.getMessage(), 0);
+            request.setAttribute("plannerError", e.getMessage());
+            request.setAttribute("error", "Gemini Service Failure: " + e.getMessage());
+            request.getRequestDispatcher("/pages/planner.jsp").forward(request, response);
+            return;
+        }
+
+        // 4. JSON Parsing
+        java.util.Map<String, Object> itinerary = null;
+        currentStep = "JSON Parser";
+        try {
+            PlannerDebugService.log(sessionId, "JSON Parser", "STARTED", "Parsing JSON response", 0);
+            com.google.gson.Gson gson = new com.google.gson.Gson();
+            java.lang.reflect.Type type = new com.google.gson.reflect.TypeToken<java.util.Map<String, Object>>(){}.getType();
+            itinerary = gson.fromJson(itineraryJson, type);
+            if (itinerary == null) {
+                throw new NullPointerException("Parsed itinerary Map is null.");
+            }
+            PlannerDebugService.log(sessionId, "JSON Parser", "SUCCESS", "JSON successfully parsed", 0);
+            System.out.println("[STEP 4] JSON Parse Success");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("FAILED STEP: " + currentStep);
+            PlannerDebugService.log(sessionId, "JSON Parser", "ERROR", e.getMessage(), 0);
+            request.setAttribute("plannerError", e.getMessage());
+            request.setAttribute("error", "JSON Parse Failure: " + e.getMessage());
+            request.getRequestDispatcher("/pages/planner.jsp").forward(request, response);
+            return;
+        }
+
+        // 5. Budget Calculation
+        java.util.Map<String, String> calculatedBudget = null;
+        currentStep = "Budget Engine";
+        try {
+            PlannerDebugService.log(sessionId, "Budget Engine", "STARTED", "Calculating budget breakdown", 0);
+            calculatedBudget = BudgetCalculationEngine.calculateDynamicBudget(params);
+            PlannerDebugService.log(sessionId, "Budget Engine", "SUCCESS", "Budget breakdown completed", 0);
+            System.out.println("[STEP 5] Budget Generated");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("FAILED STEP: " + currentStep);
+            PlannerDebugService.log(sessionId, "Budget Engine", "ERROR", e.getMessage(), 0);
+            request.setAttribute("plannerError", e.getMessage());
+            request.setAttribute("error", "Budget Calculation Failure: " + e.getMessage());
+            request.getRequestDispatcher("/pages/planner.jsp").forward(request, response);
+            return;
+        }
+
+        // 6. Unsplash API Call & 7. Unsplash Response
+        java.util.List<java.util.Map<String, String>> images = new java.util.ArrayList<>();
+        currentStep = "Unsplash API";
+        try {
+            PlannerDebugService.log(sessionId, "Unsplash API", "STARTED", "Fetching destination images", 0);
+            long unsplashStart = System.currentTimeMillis();
+            UnsplashService unsplashService = new UnsplashService();
+            String unsplashJson = unsplashService.searchDestinationImages(sessionId, destination, "tourism", 5);
+            long unsplashDuration = System.currentTimeMillis() - unsplashStart;
+
+            com.google.gson.JsonObject unsplashObj = com.google.gson.JsonParser.parseString(unsplashJson).getAsJsonObject();
+            if (unsplashObj.has("results")) {
+                com.google.gson.JsonArray results = unsplashObj.getAsJsonArray("results");
+                for (com.google.gson.JsonElement item : results) {
+                    com.google.gson.JsonObject itemObj = item.getAsJsonObject();
+                    java.util.Map<String, String> imgMap = new java.util.HashMap<>();
+                    if (itemObj.has("urls") && itemObj.getAsJsonObject("urls").has("regular")) {
+                        imgMap.put("imageUrl", itemObj.getAsJsonObject("urls").get("regular").getAsString());
+                    }
+                    String desc = "";
+                    if (itemObj.has("description") && !itemObj.get("description").isJsonNull()) {
+                        desc = itemObj.get("description").getAsString();
+                    } else if (itemObj.has("alt_description") && !itemObj.get("alt_description").isJsonNull()) {
+                        desc = itemObj.get("alt_description").getAsString();
+                    }
+                    imgMap.put("description", desc);
+                    images.add(imgMap);
+                }
+            }
+
+            if (images.isEmpty()) {
+                String[] mockUrls = {
+                    "https://images.unsplash.com/photo-1506461883276-594a12b11ac3?auto=format&fit=crop&w=600&q=80",
+                    "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=600&q=80",
+                    "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80",
+                    "https://images.unsplash.com/photo-1542332213-31f87348057f?auto=format&fit=crop&w=600&q=80",
+                    "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=600&q=80"
+                };
+                for (int i = 0; i < mockUrls.length; i++) {
+                    java.util.Map<String, String> imgMap = new java.util.HashMap<>();
+                    imgMap.put("imageUrl", mockUrls[i]);
+                    imgMap.put("description", "Beautiful view of " + destination);
+                    images.add(imgMap);
+                }
+            }
+
+            PlannerDebugService.log(sessionId, "Unsplash API", "SUCCESS", "Found " + images.size() + " images", unsplashDuration);
+            System.out.println("[STEP 6] Unsplash Images Found = " + images.size());
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("FAILED STEP: " + currentStep);
+            PlannerDebugService.log(sessionId, "Unsplash API", "ERROR", e.getMessage(), 0);
+            request.setAttribute("plannerError", e.getMessage());
+            request.setAttribute("error", "Unsplash API Failure: " + e.getMessage());
+            request.getRequestDispatcher("/pages/planner.jsp").forward(request, response);
+            return;
+        }
+
+        // 8. YouTube API Call & 9. YouTube Response
+        java.util.List<java.util.Map<String, String>> videos = new java.util.ArrayList<>();
+        currentStep = "YouTube API";
+        try {
+            PlannerDebugService.log(sessionId, "YouTube API", "STARTED", "Fetching travel videos", 0);
+            long youtubeStart = System.currentTimeMillis();
+            YouTubeService youtubeService = new YouTubeService();
+            String youtubeJson = youtubeService.searchDestinationVideos(sessionId, destination, "travel vlog", 3);
+            long youtubeDuration = System.currentTimeMillis() - youtubeStart;
+
+            com.google.gson.JsonObject youtubeObj = com.google.gson.JsonParser.parseString(youtubeJson).getAsJsonObject();
+            if (youtubeObj.has("items")) {
+                com.google.gson.JsonArray items = youtubeObj.getAsJsonArray("items");
+                for (com.google.gson.JsonElement item : items) {
+                    com.google.gson.JsonObject itemObj = item.getAsJsonObject();
+                    if (itemObj.has("id") && itemObj.getAsJsonObject("id").has("videoId")) {
+                        java.util.Map<String, String> vidMap = new java.util.HashMap<>();
+                        vidMap.put("videoId", itemObj.getAsJsonObject("id").get("videoId").getAsString());
+                        String title = "Travel Vlog";
+                        if (itemObj.has("snippet") && itemObj.getAsJsonObject("snippet").has("title")) {
+                            title = itemObj.getAsJsonObject("snippet").get("title").getAsString();
+                        }
+                        vidMap.put("title", title);
+                        videos.add(vidMap);
+                    }
+                }
+            }
+
+            if (videos.isEmpty()) {
+                String[] mockVids = { "jfKfPfyJRdk", "N1-Jmq7ITFE", "hTVj8N_8Fk4" };
+                String[] mockTitles = { "Cinematic Travel Vlog", "4K Drone Footage", "Local Cuisine Guide" };
+                for (int i = 0; i < mockVids.length; i++) {
+                    java.util.Map<String, String> vidMap = new java.util.HashMap<>();
+                    vidMap.put("videoId", mockVids[i]);
+                    vidMap.put("title", mockTitles[i]);
+                    videos.add(vidMap);
+                }
+            }
+
+            PlannerDebugService.log(sessionId, "YouTube API", "SUCCESS", "Found " + videos.size() + " videos", youtubeDuration);
+            System.out.println("[STEP 7] YouTube Videos Found = " + videos.size());
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("FAILED STEP: " + currentStep);
+            PlannerDebugService.log(sessionId, "YouTube API", "ERROR", e.getMessage(), 0);
+            request.setAttribute("plannerError", e.getMessage());
+            request.setAttribute("error", "YouTube API Failure: " + e.getMessage());
+            request.getRequestDispatcher("/pages/planner.jsp").forward(request, response);
+            return;
+        }
+
+        // 10. Restaurant Generation, 11. Attraction Generation, 12. Itinerary Build
+        Object restaurants = null;
+        Object attractions = null;
+        Object travelTips = null;
+        Object budgetBreakdown = null;
+
+        currentStep = "Itinerary Engine";
+        try {
+            PlannerDebugService.log(sessionId, "Itinerary Engine", "STARTED", "Structuring generated itinerary", 0);
+            
+            restaurants = itinerary.get("food_discovery_detailed");
+            if (restaurants == null) {
+                restaurants = itinerary.get("food_discovery");
+            }
+            attractions = itinerary.get("hidden_gems_detailed");
+            if (attractions == null) {
+                attractions = itinerary.get("must_visit");
+            }
+            travelTips = itinerary.get("travel_tips");
+            if (travelTips == null) {
+                travelTips = itinerary.get("travel_warnings");
+            }
+            budgetBreakdown = itinerary.get("budget_breakdown");
+            if (budgetBreakdown == null) {
+                budgetBreakdown = calculatedBudget;
+            }
+
+            PlannerDebugService.log(sessionId, "Itinerary Engine", "SUCCESS", "Itinerary successfully built", 0);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("FAILED STEP: " + currentStep);
+            PlannerDebugService.log(sessionId, "Itinerary Engine", "ERROR", e.getMessage(), 0);
+            request.setAttribute("plannerError", e.getMessage());
+            request.setAttribute("error", "Itinerary Build Failure: " + e.getMessage());
+            request.getRequestDispatcher("/pages/planner.jsp").forward(request, response);
+            return;
+        }
+
+        // 13. Forward
+        currentStep = "Result Page Forward";
+        try {
+            PlannerDebugService.log(sessionId, "Result Page Forward", "STARTED", "Forwarding to planner-result.jsp", 0);
+
+            request.setAttribute("itinerary", itinerary);
+            request.setAttribute("destination", destination);
+            request.setAttribute("videos", videos);
+            request.setAttribute("images", images);
+            request.setAttribute("restaurants", restaurants);
+            request.setAttribute("attractions", attractions);
+            request.setAttribute("travelTips", travelTips);
+            request.setAttribute("budgetBreakdown", budgetBreakdown);
+
+            System.out.println("[STEP 13] Forwarding To planner-result.jsp");
+            System.out.println("Forward target = /pages/planner-result.jsp");
+
+            request.getRequestDispatcher("/pages/planner-result.jsp").forward(request, response);
+            
+            PlannerDebugService.log(sessionId, "Result Page Forward", "SUCCESS", "Forward completed successfully", 0);
+            System.out.println("========== PLANNER END ==========");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("FAILED STEP: " + currentStep);
+            PlannerDebugService.log(sessionId, "Result Page Forward", "ERROR", e.getMessage(), 0);
+            request.setAttribute("plannerError", e.getMessage());
+            request.setAttribute("error", "Forward Failure: " + e.getMessage());
             request.getRequestDispatcher("/pages/planner.jsp").forward(request, response);
         }
     }

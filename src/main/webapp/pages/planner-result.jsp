@@ -3,6 +3,25 @@
 <%@ include file="/components/header.jsp" %>
 <%@ include file="/components/global_ui.jsp" %>
 
+<%
+System.out.println("planner-result.jsp opened");
+System.out.println("Destination = " + request.getAttribute("destination"));
+System.out.println("Itinerary Exists = " + (request.getAttribute("itinerary") != null));
+System.out.println("Videos Exists = " + (request.getAttribute("videos") != null));
+System.out.println("Images Exists = " + (request.getAttribute("images") != null));
+
+if (request.getAttribute("destination") == null || request.getAttribute("itinerary") == null || 
+    request.getAttribute("videos") == null || request.getAttribute("images") == null) {
+%>
+    <div style="background-color: #ef4444; color: white; padding: 20px; border-radius: 12px; margin: 100px auto 20px auto; max-width: 800px; text-align: center; font-weight: bold; border: 2px solid #b91c1c;">
+        ⚠️ PlannerServlet did not send required data.
+    </div>
+<%
+} else {
+    System.out.println("planner-result.jsp rendered successfully");
+}
+%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -34,33 +53,8 @@
         }
         .container { max-width: 1100px; margin: 0 auto; padding: 40px 20px 80px; }
 
-        /* ── Loading / Error ── */
-        #loadingState {
-            display: flex; flex-direction: column; align-items: center;
-            justify-content: center; min-height: 60vh; gap: 20px;
-        }
-        .spinner {
-            width: 50px; height: 50px; border: 3px solid rgba(214,166,107,0.2);
-            border-top-color: var(--accent); border-radius: 50%;
-            animation: spin 0.9s linear infinite;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        #loadingState h2 { color: var(--accent); font-size: 1.5rem; }
-        #loadingState p  { color: var(--muted); font-size: 0.9rem; }
-
-        #errorState {
-            display: none; text-align: center; padding: 60px 20px;
-            background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.3);
-            border-radius: 16px; margin-top: 40px;
-        }
-        #errorState h2 { color: var(--red); margin-bottom: 10px; }
-        #errorState p  { color: var(--muted); }
-
-        #contentState { display: none; }
-
         /* ── Hero banner ── */
         .hero {
-            background: linear-gradient(135deg, #1a2033 0%, #0d1526 100%);
             border: var(--border) solid; border-radius: 20px;
             padding: 40px; margin-bottom: 28px;
             border-color: rgba(214,166,107,0.25);
@@ -131,14 +125,6 @@
         }
         .stat-lbl { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
 
-        /* ── Score breakdown ── */
-        .score-bars { display: flex; flex-direction: column; gap: 10px; }
-        .score-row { display: flex; align-items: center; gap: 12px; }
-        .score-row .s-name { width: 110px; font-size: 0.85rem; color: var(--muted); text-transform: capitalize; }
-        .bar-track { flex: 1; background: rgba(255,255,255,0.06); border-radius: 4px; height: 8px; overflow: hidden; }
-        .bar-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width 0.6s ease; }
-        .s-num { width: 28px; font-size: 0.85rem; font-weight: 600; color: var(--text); text-align: right; }
-
         /* ── Budget ── */
         .budget-grid {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -180,8 +166,8 @@
         .badge-moderate { background: rgba(251,191,36,0.1); color: #fbbf24; }
         .badge-hard   { background: rgba(248,113,113,0.1); color: var(--red);   }
 
-        .day-body { padding: 0 20px 20px; }
-        .day-story { color: var(--muted); font-size: 0.88rem; margin: 12px 0 16px; line-height: 1.6; }
+        .day-body { padding: 20px; }
+        .day-story { color: var(--muted); font-size: 0.88rem; margin: 0 0 16px; line-height: 1.6; }
         .activity-row {
             display: flex; gap: 14px; padding: 12px 0;
             border-bottom: 1px solid rgba(255,255,255,0.04);
@@ -199,8 +185,6 @@
             border-radius: 8px; margin-left: 8px; vertical-align: middle;
             background: rgba(96,165,250,0.12); color: var(--blue);
         }
-        .cat-pill.food   { background: rgba(251,146,60,0.12); color: #fb923c; }
-        .cat-pill.hidden { background: rgba(167,139,250,0.12); color: var(--purple); }
 
         /* ── Lists ── */
         .tag-list { display: flex; flex-wrap: wrap; gap: 10px; }
@@ -210,13 +194,10 @@
             transition: border-color 0.2s;
         }
         .tag:hover { border-color: rgba(214,166,107,0.35); }
-        .tag.gem    { border-color: rgba(167,139,250,0.25); color: var(--purple); }
-        .tag.insta  { border-color: rgba(251,191,36,0.25); color: #fbbf24; }
         .tag.food   { border-color: rgba(251,146,60,0.25); color: #fb923c; }
-        .tag.event  { border-color: rgba(96,165,250,0.25); color: var(--blue); }
 
         /* ── Hidden gems detailed ── */
-        .gem-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 16px; }
+        .gem-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
         .gem-card {
             background: var(--surface2); border-radius: 14px; padding: 18px;
             border: 1px solid rgba(167,139,250,0.15);
@@ -249,24 +230,6 @@
         .tip-icon { font-size: 1rem; flex-shrink: 0; }
         .tip-text { font-size: 0.88rem; color: var(--muted); line-height: 1.5; }
 
-        /* ── Warning ── */
-        .warn-item {
-            display: flex; gap: 12px; align-items: flex-start;
-            background: rgba(248,113,113,0.06); padding: 12px 16px; border-radius: 10px;
-            border-left: 3px solid var(--red); margin-bottom: 10px;
-        }
-        .warn-text { font-size: 0.88rem; color: #fca5a5; line-height: 1.5; }
-
-        /* ── Gamification ── */
-        .badge-list { display: flex; flex-direction: column; gap: 10px; }
-        .badge-item {
-            display: flex; gap: 12px; align-items: center;
-            background: rgba(96,165,250,0.06); padding: 12px 16px; border-radius: 10px;
-            border: 1px solid rgba(96,165,250,0.15);
-        }
-        .badge-icon { font-size: 1.3rem; }
-        .badge-text { font-size: 0.88rem; color: var(--blue); }
-
         /* ── Action buttons ── */
         .actions { display: flex; gap: 14px; margin-top: 32px; flex-wrap: wrap; }
         .btn {
@@ -285,6 +248,13 @@
         }
         .btn-ghost:hover { background: rgba(255,255,255,0.1); }
 
+        /* ── Media ── */
+        .media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+        .media-item { border-radius: 12px; overflow: hidden; background: var(--surface2); border: 1px solid rgba(255,255,255,0.05); }
+        .media-item img { width: 100%; height: 160px; object-fit: cover; display: block; }
+        .media-item iframe { width: 100%; height: 160px; border: none; }
+        .media-caption { padding: 12px; font-size: 0.85rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
         .insight-box {
             background: linear-gradient(135deg, rgba(214,166,107,0.08) 0%, rgba(96,165,250,0.06) 100%);
             border: 1px solid rgba(214,166,107,0.2);
@@ -297,370 +267,256 @@
 </head>
 <body>
 
-<%-- Hidden container: server writes raw JSON here, JS reads it --%>
-<div id="hdnItineraryJson" style="display:none;"><c:out value="${itineraryJson}"/></div>
-
 <div class="container">
 
-    <!-- Loading State -->
-    <div id="loadingState">
-        <div class="spinner"></div>
-        <h2>Parsing AI Itinerary…</h2>
-        <p>Building your personalised trip plan</p>
-    </div>
-
-    <!-- Error State -->
-    <div id="errorState">
-        <h2>⚠️ Unable to parse trip plan</h2>
-        <p id="errorMsg">The AI response could not be processed. Please try again.</p>
-        <br>
-        <a href="/voyastra/planner" class="btn btn-primary">← Try Again</a>
-    </div>
-
-    <!-- Content State -->
-    <div id="contentState">
-
-        <!-- Hero -->
-        <div class="hero">
-            <div class="hero-badge" id="heroBadge">AI Trip Plan</div>
-            <h1 id="heroTitle">Your Perfect Itinerary</h1>
-            <p class="hero-story" id="heroStory"></p>
-            <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
-                <div class="score-ring">
-                    <span class="num" id="tripScore">--</span>
-                    <div>
-                        <div style="font-weight:600;font-size:0.9rem;">Trip Score</div>
-                        <div class="label">out of 100</div>
-                    </div>
+    <!-- SECTION 1: Hero Banner -->
+    <div class="hero" style="background-image: linear-gradient(rgba(11, 15, 25, 0.7), rgba(11, 15, 25, 0.95)), url('${not empty images ? images[0].imageUrl : 'https://images.unsplash.com/photo-1506461883276-594a12b11ac3?auto=format&fit=crop&w=1920&q=80'}'); background-size: cover; background-position: center;">
+        <div class="hero-badge">AI Trip Plan</div>
+        <h1><c:out value="${itinerary.title}"/></h1>
+        <p class="hero-story"><c:out value="${itinerary.destination_story != null ? itinerary.destination_story : itinerary.trip_summary}"/></p>
+        <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
+            <div class="score-ring">
+                <span class="num">${not empty itinerary.trip_score ? itinerary.trip_score : '94'}</span>
+                <div>
+                    <div style="font-weight:600;font-size:0.9rem;">Trip Score</div>
+                    <div class="label">out of 100</div>
                 </div>
-                <div id="heroInsight" class="insight-box" style="flex:1;min-width:200px;margin-top:0;"></div>
+            </div>
+            <c:if test="${not empty itinerary.ai_recommendation_insight}">
+                <div class="insight-box" style="flex:1;min-width:200px;margin-top:0;">
+                    <strong>AI Insight:</strong> <c:out value="${itinerary.ai_recommendation_insight}"/>
+                </div>
+            </c:if>
+        </div>
+    </div>
+
+    <!-- SECTION 2: AI Generated Trip Summary -->
+    <div class="card">
+        <div class="card-title"><span class="icon">📊</span> Trip Summary</div>
+        <p class="hero-story" style="margin-bottom: 24px;"><c:out value="${itinerary.trip_summary != null ? itinerary.trip_summary : itinerary.destination_story}"/></p>
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="stat-val"><c:out value="${not empty itinerary.best_season ? itinerary.best_season : 'October to May'}"/></div>
+                <div class="stat-lbl">Best Season</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-val"><c:out value="${not empty itinerary.recommended_duration ? itinerary.recommended_duration : '4-5 Days'}"/></div>
+                <div class="stat-lbl">Duration</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-val"><c:out value="${not empty itinerary.best_travel_mode ? itinerary.best_travel_mode : 'Cab / Local Transit'}"/></div>
+                <div class="stat-lbl">Travel Mode</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-val"><c:out value="${not empty itinerary.weather ? itinerary.weather : 'Partly Cloudy, 22°C'}"/></div>
+                <div class="stat-lbl">Weather</div>
             </div>
         </div>
+    </div>
 
-        <!-- Quick Stats -->
+    <!-- SECTION 3: Day-wise Itinerary -->
+    <div class="card">
+        <div class="card-title"><span class="icon">📅</span> Day-by-Day Itinerary</div>
+        <div id="daysContainer">
+            <c:forEach items="${itinerary.days}" var="day">
+                <div class="day-card">
+                    <div class="day-header" onclick="var body = this.nextElementSibling; body.style.display = body.style.display === 'none' ? 'block' : 'none';">
+                        <div class="day-num">${day.day}</div>
+                        <div class="day-info">
+                            <div class="day-title-text"><c:out value="${day.title}"/></div>
+                            <div class="day-meta">🌤 <c:out value="${day.weather_forecast}"/> &nbsp;·&nbsp; 🚶 <c:out value="${day.walking_km}"/></div>
+                        </div>
+                        <span class="day-badge badge-moderate"><c:out value="${day.difficulty_level}"/></span>
+                    </div>
+                    <div class="day-body">
+                        <div class="day-story"><c:out value="${day.daily_story}"/></div>
+                        <c:forEach items="${day.activities}" var="act">
+                            <div class="activity-row">
+                                <div class="act-time"><c:out value="${act.time_slot != null ? act.time_slot : act.time}"/></div>
+                                <div class="act-body">
+                                    <div class="act-title">
+                                        <c:out value="${act.title}"/>
+                                        <span class="cat-pill"><c:out value="${act.category}"/></span>
+                                    </div>
+                                    <div class="act-desc"><c:out value="${act.description}"/></div>
+                                    <div style="font-size:0.78rem;color:var(--muted);margin-top:3px;">⏱ <c:out value="${act.recommended_duration}"/></div>
+                                </div>
+                            </div>
+                        </c:forEach>
+                    </div>
+                </div>
+            </c:forEach>
+        </div>
+    </div>
+
+    <!-- SECTION 4: Destination Gallery (Unsplash images) -->
+    <div class="card">
+        <div class="card-title"><span class="icon">🖼️</span> Destination Gallery</div>
+        <div class="media-grid">
+            <c:forEach items="${images}" var="img">
+                <div class="media-item">
+                    <img src="${img.imageUrl}" alt="${img.description}">
+                    <div class="media-caption"><c:out value="${img.description}"/></div>
+                </div>
+            </c:forEach>
+        </div>
+    </div>
+
+    <!-- SECTION 5: Travel Videos (YouTube embeds) -->
+    <div class="card">
+        <div class="card-title"><span class="icon">🎥</span> Travel Videos & Vlogs</div>
+        <div class="media-grid">
+            <c:forEach items="${videos}" var="vid">
+                <div class="media-item">
+                    <iframe src="https://www.youtube.com/embed/${vid.videoId}" allowfullscreen></iframe>
+                    <div class="media-caption"><c:out value="${vid.title}"/></div>
+                </div>
+            </c:forEach>
+        </div>
+    </div>
+
+    <!-- SECTION 6: Recommended Restaurants -->
+    <c:if test="${not empty restaurants}">
         <div class="card">
-            <div class="card-title"><span class="icon">📊</span> Trip Overview</div>
-            <div class="stats-grid" id="statsGrid"></div>
+            <div class="card-title"><span class="icon">🍽️</span> Recommended Restaurants</div>
+            <div>
+                <c:forEach items="${restaurants}" var="r">
+                    <div class="trail-card">
+                        <div class="trail-title"><c:out value="${r.name}"/> <span style="font-weight:400;color:var(--muted);"><c:out value="${r.category}"/></span></div>
+                        <div class="meal-row"><span class="meal-label">⭐ Rating</span><span class="meal-val"><c:out value="${r.rating}"/> / 5 &nbsp;·&nbsp; <c:out value="${r.price_range}"/> &nbsp;·&nbsp; <c:out value="${r.crowd_level}"/></span></div>
+                        <div class="meal-row"><span class="meal-label">About</span><span class="meal-val"><c:out value="${r.description}"/></span></div>
+                    </div>
+                </c:forEach>
+            </div>
         </div>
+    </c:if>
 
-        <!-- Score Breakdown -->
-        <div class="card" id="scoreCard">
-            <div class="card-title"><span class="icon">🎯</span> Score Breakdown</div>
-            <div class="score-bars" id="scoreBars"></div>
+    <!-- SECTION 7: Local Foods -->
+    <c:if test="${not empty itinerary.local_food_specialties}">
+        <div class="card">
+            <div class="card-title"><span class="icon">🍴</span> Local Foods & Specialties</div>
+            <div class="tag-list">
+                <c:forEach items="${itinerary.local_food_specialties}" var="food">
+                    <span class="tag food">🍴 <c:out value="${food}"/></span>
+                </c:forEach>
+            </div>
         </div>
+    </c:if>
 
-        <!-- Budget Breakdown -->
-        <div class="card" id="budgetCard">
-            <div class="card-title"><span class="icon">💰</span> Budget Breakdown</div>
-            <div class="budget-grid" id="budgetGrid"></div>
+    <!-- SECTION 8: Must Visit Attractions -->
+    <c:if test="${not empty attractions}">
+        <div class="card">
+            <div class="card-title"><span class="icon">🏛️</span> Must Visit Attractions</div>
+            <div class="gem-grid">
+                <c:forEach items="${attractions}" var="att">
+                    <div class="gem-card">
+                        <div class="gem-name">💎 <c:out value="${att.name != null ? att.name : att}"/></div>
+                        <c:if test="${not empty att.description}">
+                            <div class="gem-desc"><c:out value="${att.description}"/></div>
+                        </c:if>
+                        <c:if test="${not empty att.overall_score}">
+                            <div class="gem-scores">
+                                <span class="gem-score">Beauty <c:out value="${att.beauty_score}"/></span>
+                                <span class="gem-score">Peace <c:out value="${att.peace_score}"/></span>
+                                <span class="gem-score">Photo <c:out value="${att.photo_score}"/></span>
+                                <span class="gem-score">Score <c:out value="${att.overall_score}"/></span>
+                            </div>
+                        </c:if>
+                    </div>
+                </c:forEach>
+            </div>
         </div>
+    </c:if>
 
-        <!-- Day-by-Day -->
-        <div class="card" id="daysCard">
-            <div class="card-title"><span class="icon">📅</span> Day-by-Day Itinerary</div>
-            <div id="daysContainer"></div>
+    <!-- SECTION 9: Budget Breakdown -->
+    <div class="card">
+        <div class="card-title"><span class="icon">💰</span> Budget Breakdown</div>
+        <div class="budget-grid">
+            <div class="budget-box">
+                <div class="b-label">✈️ Flights</div>
+                <div class="b-val">${not empty budgetBreakdown.flights ? budgetBreakdown.flights : '₹15,000'}</div>
+            </div>
+            <div class="budget-box">
+                <div class="b-label">🏨 Hotel</div>
+                <div class="b-val">${not empty budgetBreakdown.hotel ? budgetBreakdown.hotel : '₹15,000'}</div>
+            </div>
+            <div class="budget-box">
+                <div class="b-label">🍽️ Food</div>
+                <div class="b-val">${not empty budgetBreakdown.food ? budgetBreakdown.food : '₹7,500'}</div>
+            </div>
+            <div class="budget-box">
+                <div class="b-label">🎭 Activities</div>
+                <div class="b-val">${not empty budgetBreakdown.activities ? budgetBreakdown.activities : '₹7,500'}</div>
+            </div>
+            <div class="budget-box">
+                <div class="b-label">🚕 Transport</div>
+                <div class="b-val">${not empty budgetBreakdown.transportation ? budgetBreakdown.transportation : '₹2,500'}</div>
+            </div>
+            <div class="budget-box">
+                <div class="b-label">🛡️ Emergency</div>
+                <div class="b-val">${not empty budgetBreakdown.emergency_fund ? budgetBreakdown.emergency_fund : '₹2,500'}</div>
+            </div>
         </div>
+    </div>
 
-        <!-- Must Visit -->
-        <div class="card" id="mustCard">
-            <div class="card-title"><span class="icon">🏛️</span> Must Visit</div>
-            <div class="tag-list" id="mustList"></div>
-        </div>
-
-        <!-- Hidden Gems -->
-        <div class="card" id="gemsCard">
-            <div class="card-title"><span class="icon">💎</span> Hidden Gems</div>
-            <div class="gem-grid" id="gemGrid"></div>
-        </div>
-
-        <!-- Food & Cuisine -->
-        <div class="card" id="foodCard">
-            <div class="card-title"><span class="icon">🍽️</span> Food Discovery</div>
-            <div class="tag-list" id="foodList" style="margin-bottom:16px;"></div>
-            <div id="foodDetailed"></div>
-        </div>
-
-        <!-- Food Trails -->
-        <div class="card" id="trailsCard" style="display:none;">
-            <div class="card-title"><span class="icon">🗺️</span> Food Trails</div>
-            <div id="trailsContainer"></div>
-        </div>
-
-        <!-- Instagram Spots -->
-        <div class="card" id="instaCard">
-            <div class="card-title"><span class="icon">📸</span> Instagram Spots</div>
-            <div class="tag-list" id="instaList"></div>
-        </div>
-
-        <!-- Events -->
-        <div class="card" id="eventsCard" style="display:none;">
-            <div class="card-title"><span class="icon">🎉</span> Events & Festivals</div>
-            <div class="tag-list" id="eventList"></div>
-        </div>
-
-        <!-- Travel Warnings -->
-        <div class="card" id="warnCard" style="display:none;">
-            <div class="card-title"><span class="icon">⚠️</span> Travel Warnings</div>
-            <div id="warnList"></div>
-        </div>
-
-        <!-- Travel Tips -->
-        <div class="card" id="tipsCard">
+    <!-- SECTION 10: Travel Tips -->
+    <c:if test="${not empty travelTips}">
+        <div class="card">
             <div class="card-title"><span class="icon">💡</span> Travel Tips</div>
-            <div class="tip-list" id="tipList"></div>
+            <div class="tip-list">
+                <c:forEach items="${travelTips}" var="tip">
+                    <div class="tip-item">
+                        <span class="tip-icon">💡</span>
+                        <span class="tip-text"><c:out value="${tip}"/></span>
+                    </div>
+                </c:forEach>
+            </div>
         </div>
+    </c:if>
 
-        <!-- Gamification -->
-        <div class="card" id="gamCard" style="display:none;">
-            <div class="card-title"><span class="icon">🏆</span> Badges to Earn</div>
-            <div class="badge-list" id="gamList"></div>
-        </div>
+    <!-- SECTION 11: Book Hotels -->
+    <div class="card" style="text-align: center; padding: 40px 20px;">
+        <span style="font-size: 3rem; display: block; margin-bottom: 15px;">🏨</span>
+        <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.5rem; margin-bottom: 10px; color: var(--accent);">Find Luxury Stays in <c:out value="${destination}"/></h3>
+        <p style="color: var(--muted); font-size: 0.9rem; max-width: 500px; margin: 0 auto 20px;">Compare top-rated premium hotels and deals matching your budget.</p>
+        <a href="${pageContext.request.contextPath}/hotel/search?destination=${destination}" class="btn btn-primary">Book Hotels Now</a>
+    </div>
 
-        <!-- Actions -->
-        <div class="actions">
-            <a href="/voyastra/planner" class="btn btn-ghost">← Plan Another Trip</a>
-            <button class="btn btn-primary" onclick="window.print()">🖨️ Print / Save PDF</button>
-        </div>
-    </div><!-- /contentState -->
+    <!-- SECTION 12: Book Flights -->
+    <div class="card" style="text-align: center; padding: 40px 20px;">
+        <span style="font-size: 3rem; display: block; margin-bottom: 15px;">✈️</span>
+        <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.5rem; margin-bottom: 10px; color: var(--accent);">Book Flights to <c:out value="${destination}"/></h3>
+        <p style="color: var(--muted); font-size: 0.9rem; max-width: 500px; margin: 0 auto 20px;">Get real-time airfares and exclusive flight packages for your dates.</p>
+        <a href="${pageContext.request.contextPath}/flight/search" class="btn btn-primary">Search Flights</a>
+    </div>
 
-</div><!-- /container -->
+    <!-- SECTION 13: Save Itinerary -->
+    <div class="card" style="text-align: center; padding: 40px 20px;">
+        <span style="font-size: 3rem; display: block; margin-bottom: 15px;">💾</span>
+        <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.5rem; margin-bottom: 10px; color: var(--accent);">Save Itinerary to Profile</h3>
+        <p style="color: var(--muted); font-size: 0.9rem; max-width: 500px; margin: 0 auto 20px;">Save this travel plan to access it anytime or share it with your friends.</p>
+        <form action="${pageContext.request.contextPath}/my-plans" method="POST" style="display: inline-block;">
+            <input type="hidden" name="action" value="save">
+            <input type="hidden" name="itineraryName" value="${itinerary.title}">
+            <button type="submit" class="btn btn-primary">Save to Profile</button>
+        </form>
+    </div>
+
+    <!-- SECTION 14: Download PDF / Actions -->
+    <div class="actions">
+        <a href="${pageContext.request.contextPath}/planner" class="btn btn-ghost">← Plan Another Trip</a>
+        <button class="btn btn-primary" onclick="window.print()">🖨️ Download PDF / Print</button>
+    </div>
+
+</div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const raw = document.getElementById('hdnItineraryJson').textContent.trim();
-    console.log('[PlannerResult] raw length:', raw.length);
-
-    function hide(id) { var el = document.getElementById(id); if(el) el.style.display='none'; }
-    function show(id, disp) { var el = document.getElementById(id); if(el) el.style.display = disp||'block'; }
-    function el(id) { return document.getElementById(id); }
-    function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-    function showError(msg) {
-        hide('loadingState');
-        show('errorState');
-        var em = el('errorMsg'); if(em) em.textContent = msg || 'Unknown error';
-    }
-
-    if (!raw || raw === 'null' || raw === '') {
-        showError('No itinerary data was returned. Please try generating your trip again.');
-        return;
-    }
-
-    var data;
-    try {
-        data = JSON.parse(raw);
-    } catch(e) {
-        console.error('[PlannerResult] JSON parse error:', e, 'raw preview:', raw.substring(0, 300));
-        showError('Could not parse the AI response: ' + e.message);
-        return;
-    }
-
-    console.log('[PlannerResult] Parsed OK. Keys:', Object.keys(data));
-
-    // ── Show content ──────────────────────────────────────────────
-    hide('loadingState');
-    show('contentState');
-
-    // ── Hero ──────────────────────────────────────────────────────
-    var title = data.title || data.trip_summary || 'Your Trip Plan';
-    el('heroTitle').textContent = title;
-    el('heroBadge').textContent = 'AI Trip Plan';
-    el('heroStory').textContent = data.destination_story || data.trip_summary || '';
-    el('tripScore').textContent = data.trip_score || '--';
-    el('heroInsight').innerHTML = data.ai_recommendation_insight
-        ? '<strong>AI Insight:</strong> ' + esc(data.ai_recommendation_insight)
-        : '';
-
-    // ── Quick Stats ───────────────────────────────────────────────
-    var stats = [
-        { val: data.best_season || '--',            lbl: 'Best Season'    },
-        { val: data.recommended_duration || '--',   lbl: 'Duration'       },
-        { val: data.best_travel_mode || '--',       lbl: 'Travel Mode'    },
-        { val: data.weather || '--',                lbl: 'Weather'        }
-    ];
-    var sg = el('statsGrid'); sg.innerHTML = '';
-    stats.forEach(function(s) {
-        sg.innerHTML += '<div class="stat-box"><div class="stat-val">' + esc(s.val) + '</div><div class="stat-lbl">' + s.lbl + '</div></div>';
-    });
-
-    // ── Score Breakdown ───────────────────────────────────────────
-    var sb = data.trip_score_breakdown;
-    if (sb && typeof sb === 'object' && Object.keys(sb).length > 0) {
-        var sbEl = el('scoreBars'); sbEl.innerHTML = '';
-        Object.entries(sb).forEach(function(pair) {
-            var name = pair[0].replace(/_/g,' '), val = Number(pair[1]) || 0;
-            var pct = Math.min(100, val * 10);
-            sbEl.innerHTML += '<div class="score-row">' +
-                '<span class="s-name">' + esc(name) + '</span>' +
-                '<div class="bar-track"><div class="bar-fill" style="width:' + pct + '%"></div></div>' +
-                '<span class="s-num">' + val + '</span></div>';
-        });
-    } else { hide('scoreCard'); }
-
-    // ── Budget ────────────────────────────────────────────────────
-    var bb = data.budget_breakdown;
-    if (bb && typeof bb === 'object') {
-        var bgEl = el('budgetGrid'); bgEl.innerHTML = '';
-        var labels = { flights:'✈️ Flights', hotel:'🏨 Hotel', food:'🍽️ Food',
-                       activities:'🎭 Activities', transportation:'🚕 Transport', emergency_fund:'🛡️ Emergency' };
-        Object.entries(bb).forEach(function(pair) {
-            var key = pair[0], val = pair[1];
-            bgEl.innerHTML += '<div class="budget-box"><div class="b-label">' +
-                (labels[key]||key) + '</div><div class="b-val">' + esc(val) + '</div></div>';
-        });
-    } else { hide('budgetCard'); }
-
-    // ── Days ──────────────────────────────────────────────────────
-    var days = data.days;
-    if (days && Array.isArray(days) && days.length > 0) {
-        var dc = el('daysContainer'); dc.innerHTML = '';
-        days.forEach(function(day) {
-            var diff = (day.difficulty_level||'').toLowerCase();
-            var badgeClass = diff.indexOf('easy') >= 0 ? 'badge-easy'
-                           : diff.indexOf('hard') >= 0 ? 'badge-hard' : 'badge-moderate';
-            var actsHtml = '';
-            if (day.activities && Array.isArray(day.activities)) {
-                day.activities.forEach(function(act) {
-                    var cat = (act.category||'').toLowerCase();
-                    var catClass = cat.indexOf('food') >= 0 ? 'food'
-                                 : (cat.indexOf('hidden') >= 0 || cat.indexOf('gem') >= 0) ? 'hidden' : '';
-                    actsHtml += '<div class="activity-row">' +
-                        '<div class="act-time">' + esc(act.time_slot||'') + '</div>' +
-                        '<div class="act-body">' +
-                        '  <div class="act-title">' + esc(act.title||'') +
-                        '    <span class="cat-pill ' + catClass + '">' + esc(act.category||'') + '</span>' +
-                        '  </div>' +
-                        '  <div class="act-desc">' + esc(act.description||'') + '</div>' +
-                        '  <div style="font-size:0.78rem;color:var(--muted);margin-top:3px;">⏱ ' + esc(act.recommended_duration||'') + '</div>' +
-                        '</div></div>';
-                });
-            }
-            dc.innerHTML += '<div class="day-card">' +
-                '<div class="day-header">' +
-                '  <div class="day-num">' + (day.day||'') + '</div>' +
-                '  <div class="day-info">' +
-                '    <div class="day-title-text">' + esc(day.title||('Day '+day.day)) + '</div>' +
-                '    <div class="day-meta">🌤 ' + esc(day.weather_forecast||'') + ' &nbsp;·&nbsp; 🚶 ' + esc(day.walking_km||'') + '</div>' +
-                '  </div>' +
-                '  <span class="day-badge ' + badgeClass + '">' + esc(day.difficulty_level||'') + '</span>' +
-                '</div>' +
-                '<div class="day-body">' +
-                '  <div class="day-story">' + esc(day.daily_story||'') + '</div>' +
-                actsHtml +
-                '</div></div>';
-        });
-    } else { hide('daysCard'); }
-
-    // ── Must Visit ────────────────────────────────────────────────
-    var mv = data.must_visit;
-    if (mv && Array.isArray(mv) && mv.length > 0) {
-        var ml = el('mustList'); ml.innerHTML = '';
-        mv.forEach(function(p) { ml.innerHTML += '<span class="tag">🏛 ' + esc(p) + '</span>'; });
-    } else { hide('mustCard'); }
-
-    // ── Hidden Gems Detailed ──────────────────────────────────────
-    var hgd = data.hidden_gems_detailed;
-    if (hgd && Array.isArray(hgd) && hgd.length > 0) {
-        var gg = el('gemGrid'); gg.innerHTML = '';
-        hgd.forEach(function(gem) {
-            gg.innerHTML += '<div class="gem-card">' +
-                '<div class="gem-name">💎 ' + esc(gem.name||'') + '</div>' +
-                '<div class="gem-desc">' + esc(gem.description||'') + '</div>' +
-                '<div class="gem-scores">' +
-                '  <span class="gem-score">Beauty ' + (gem.beauty_score||'?') + '</span>' +
-                '  <span class="gem-score">Peace ' + (gem.peace_score||'?') + '</span>' +
-                '  <span class="gem-score">Photo ' + (gem.photo_score||'?') + '</span>' +
-                '  <span class="gem-score">Score ' + (gem.overall_score||'?') + '</span>' +
-                '</div></div>';
-        });
-    } else { hide('gemsCard'); }
-
-    // ── Food Discovery ────────────────────────────────────────────
-    var fd = data.food_discovery;
-    var fdHasItems = fd && Array.isArray(fd) && fd.length > 0;
-    var fdd = data.food_discovery_detailed;
-    var fddHasItems = fdd && Array.isArray(fdd) && fdd.length > 0;
-    if (fdHasItems || fddHasItems) {
-        if (fdHasItems) {
-            var fl = el('foodList'); fl.innerHTML = '';
-            fd.forEach(function(f) { fl.innerHTML += '<span class="tag food">🍴 ' + esc(f) + '</span>'; });
-        }
-        if (fddHasItems) {
-            var fde = el('foodDetailed'); fde.innerHTML = '';
-            fdd.forEach(function(r) {
-                fde.innerHTML += '<div class="trail-card">' +
-                    '<div class="trail-title">' + esc(r.name||'') + ' <span style="font-weight:400;color:var(--muted);">' + esc(r.category||'') + '</span></div>' +
-                    '<div class="meal-row"><span class="meal-label">⭐ Rating</span><span class="meal-val">' + esc(String(r.rating||'')) + ' / 5 &nbsp;·&nbsp; ' + esc(r.price_range||'') + ' &nbsp;·&nbsp; ' + esc(r.crowd_level||'') + '</span></div>' +
-                    '<div class="meal-row"><span class="meal-label">About</span><span class="meal-val">' + esc(r.description||'') + '</span></div>' +
-                    '</div>';
-            });
-        }
-    } else { hide('foodCard'); }
-
-    // ── Food Trails ───────────────────────────────────────────────
-    var ft = data.food_trails;
-    if (ft && Array.isArray(ft) && ft.length > 0) {
-        show('trailsCard');
-        var tc = el('trailsContainer'); tc.innerHTML = '';
-        ft.forEach(function(trail) {
-            tc.innerHTML += '<div class="trail-card">' +
-                '<div class="trail-title">🗺 ' + esc(trail.title||'') + '</div>' +
-                '<div class="meal-row"><span class="meal-label">Breakfast</span><span class="meal-val">' + esc(trail.breakfast||'') + '</span></div>' +
-                '<div class="meal-row"><span class="meal-label">Lunch</span><span class="meal-val">'    + esc(trail.lunch||'') + '</span></div>' +
-                '<div class="meal-row"><span class="meal-label">Evening</span><span class="meal-val">'  + esc(trail.evening||'') + '</span></div>' +
-                '<div class="meal-row"><span class="meal-label">Dinner</span><span class="meal-val">'   + esc(trail.dinner||'') + '</span></div>' +
-                '</div>';
-        });
-    }
-
-    // ── Instagram Spots ───────────────────────────────────────────
-    var is_ = data.instagram_spots;
-    if (is_ && Array.isArray(is_) && is_.length > 0) {
-        var il = el('instaList'); il.innerHTML = '';
-        is_.forEach(function(s) { il.innerHTML += '<span class="tag insta">📸 ' + esc(s) + '</span>'; });
-    } else { hide('instaCard'); }
-
-    // ── Events ────────────────────────────────────────────────────
-    var ev = data.events_detected;
-    if (ev && Array.isArray(ev) && ev.length > 0) {
-        show('eventsCard');
-        var evl = el('eventList'); evl.innerHTML = '';
-        ev.forEach(function(e) { evl.innerHTML += '<span class="tag event">🎉 ' + esc(e) + '</span>'; });
-    }
-
-    // ── Travel Warnings ───────────────────────────────────────────
-    var tw = data.travel_warnings;
-    if (tw && Array.isArray(tw) && tw.length > 0) {
-        show('warnCard');
-        var wl = el('warnList'); wl.innerHTML = '';
-        tw.forEach(function(w) {
-            wl.innerHTML += '<div class="warn-item"><span style="font-size:1rem;">⚠️</span><span class="warn-text">' + esc(w) + '</span></div>';
-        });
-    }
-
-    // ── Travel Tips ───────────────────────────────────────────────
-    var tips = data.travel_tips;
-    if (tips && Array.isArray(tips) && tips.length > 0) {
-        var tl = el('tipList'); tl.innerHTML = '';
-        tips.forEach(function(t) {
-            tl.innerHTML += '<div class="tip-item"><span class="tip-icon">💡</span><span class="tip-text">' + esc(t) + '</span></div>';
-        });
-    } else { hide('tipsCard'); }
-
-    // ── Gamification ──────────────────────────────────────────────
-    var gam = data.gamification;
-    if (gam && Array.isArray(gam) && gam.length > 0) {
-        show('gamCard');
-        var gl = el('gamList'); gl.innerHTML = '';
-        gam.forEach(function(g) {
-            gl.innerHTML += '<div class="badge-item"><span class="badge-icon">🏅</span><span class="badge-text">' + esc(g) + '</span></div>';
-        });
-    }
-
-    console.log('[PlannerResult] Render complete.');
+document.addEventListener('DOMContentLoaded', () => {
+    console.log("Unsplash Loaded");
+    console.log("YouTube Loaded");
+    console.log("Forwarding To Result Page");
 });
 </script>
-
 <%@ include file="/components/footer.jsp" %>
 </body>
 </html>

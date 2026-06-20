@@ -31,6 +31,7 @@ public class PlannerDebugService {
         Gson gson = new Gson();
         Map<String, Object> response = new java.util.HashMap<>();
         response.put("logs", sessionLogs);
+        response.put("diagnosticStatus", com.voyastra.util.DiagnosticManager.getStatus(sessionId).toString());
         
         try {
             response.put("ai_output", com.google.gson.JsonParser.parseString(aiOutput).getAsJsonObject());

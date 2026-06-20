@@ -9,6 +9,9 @@ import com.voyastra.util.DBConnection;
 import com.voyastra.service.UnsplashService;
 import com.voyastra.service.YouTubeService;
 import com.voyastra.service.BudgetCalculationEngine;
+import com.voyastra.dao.DestinationDAO;
+import com.voyastra.util.DiagnosticManager;
+import com.voyastra.model.PlannerStatus;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -82,6 +85,7 @@ public class PlannerServlet extends HttpServlet {
             throws ServletException, IOException {
         String sessionId = request.getSession().getId();
         PlannerDebugService.clearSession(sessionId);
+        DiagnosticManager.setStatus(sessionId, PlannerStatus.REQUEST_RECEIVED);
 
         String destination = request.getParameter("destination");
         String budget = request.getParameter("budget");
@@ -95,6 +99,7 @@ public class PlannerServlet extends HttpServlet {
         // 1. Input Validation
         String currentStep = "Input Validation";
         try {
+            DiagnosticManager.setStatus(sessionId, PlannerStatus.VALIDATING_INPUT);
             System.out.println("[STEP 1] Input Validation Started");
             PlannerDebugService.log(sessionId, "Input Validation", "STARTED", "Validating inputs", 0);
             
@@ -107,12 +112,43 @@ public class PlannerServlet extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("FAILED STEP: " + currentStep);
+            DiagnosticManager.setStatus(sessionId, PlannerStatus.FAILED);
             PlannerDebugService.log(sessionId, "Input Validation", "ERROR", e.getMessage(), 0);
             request.setAttribute("plannerError", e.getMessage());
             request.setAttribute("error", e.getMessage());
             request.getRequestDispatcher("/pages/planner.jsp").forward(request, response);
             return;
         }
+
+        // 2. Destination Database Lookup
+        boolean dbLookupSuccess = false;
+        try {
+            System.out.println("[Destination] Database lookup started");
+            PlannerDebugService.log(sessionId, "Destination", "STARTED", "Database lookup started", 0);
+            
+            DestinationDAO destinationDAO = new DestinationDAO();
+            java.util.List<com.voyastra.model.Destination> destList = destinationDAO.searchDestinations(destination);
+            
+            System.out.println("[Destination] Database lookup finished");
+            if (destList != null && !destList.isEmpty()) {
+                dbLookupSuccess = true;
+                DiagnosticManager.setStatus(sessionId, PlannerStatus.DESTINATION_SUCCESS);
+                PlannerDebugService.log(sessionId, "Destination", "SUCCESS", "Database lookup finished. Status updated to SUCCESS", 0);
+                System.out.println("[Destination] Status updated to SUCCESS");
+            } else {
+                System.out.println("[Destination] Database lookup failed to find destination: " + destination);
+                PlannerDebugService.log(sessionId, "Destination", "MISS", "Destination not found in database.", 0);
+            }
+        } catch (Exception e) {
+            System.err.println("Destination DB Lookup Failed: " + e.getMessage());
+            PlannerDebugService.log(sessionId, "Destination", "WARNING", "Database lookup failed: " + e.getMessage(), 0);
+        }
+
+        // 3. Database Cache (Not implemented)
+        System.out.println("[Database Cache] Cache not implemented");
+        DiagnosticManager.setStatus(sessionId, PlannerStatus.CACHE_NOT_USED);
+        PlannerDebugService.log(sessionId, "Cache", "NOT USED", "Cache not implemented. Status updated to NOT USED", 0);
+        System.out.println("[Database Cache] Status updated to NOT USED");
 
         Map<String, String> params = new HashMap<>();
         params.put("source", request.getParameter("startLocation"));
@@ -168,6 +204,7 @@ public class PlannerServlet extends HttpServlet {
         currentStep = "Gemini API";
         try {
             System.out.println("[STEP 2] Gemini Request Started");
+            DiagnosticManager.setStatus(sessionId, PlannerStatus.GENERATING_ITINERARY);
             PlannerDebugService.log(sessionId, "Gemini API", "STARTED", "Calling Gemini API", 0);
             long geminiStart = System.currentTimeMillis();
             
@@ -177,9 +214,17 @@ public class PlannerServlet extends HttpServlet {
             PlannerDebugService.log(sessionId, "Gemini API", "SUCCESS", "Gemini response generated successfully", geminiDuration);
             System.out.println("[STEP 3] Gemini Response Received");
             System.out.println(itineraryJson.substring(0, Math.min(500, itineraryJson.length())));
+
+            if (!dbLookupSuccess) {
+                System.out.println("[Destination] Generated using AI fallback");
+                DiagnosticManager.setStatus(sessionId, PlannerStatus.DESTINATION_SUCCESS);
+                PlannerDebugService.log(sessionId, "Destination", "SUCCESS", "Generated using AI fallback. Status updated to SUCCESS", 0);
+                System.out.println("[Destination] Status updated to SUCCESS");
+            }
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("FAILED STEP: " + currentStep);
+            DiagnosticManager.setStatus(sessionId, PlannerStatus.FAILED);
             PlannerDebugService.log(sessionId, "Gemini API", "ERROR", e.getMessage(), 0);
             request.setAttribute("plannerError", e.getMessage());
             request.setAttribute("error", "Gemini Service Failure: " + e.getMessage());
@@ -214,13 +259,16 @@ public class PlannerServlet extends HttpServlet {
         java.util.Map<String, String> calculatedBudget = null;
         currentStep = "Budget Engine";
         try {
+            DiagnosticManager.setStatus(sessionId, PlannerStatus.CALCULATING_BUDGET);
             PlannerDebugService.log(sessionId, "Budget Engine", "STARTED", "Calculating budget breakdown", 0);
             calculatedBudget = BudgetCalculationEngine.calculateDynamicBudget(params);
             PlannerDebugService.log(sessionId, "Budget Engine", "SUCCESS", "Budget breakdown completed", 0);
             System.out.println("[STEP 5] Budget Generated");
+            System.out.println("[TRACE] Budget Calculation Complete");
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("FAILED STEP: " + currentStep);
+            DiagnosticManager.setStatus(sessionId, PlannerStatus.FAILED);
             PlannerDebugService.log(sessionId, "Budget Engine", "ERROR", e.getMessage(), 0);
             request.setAttribute("plannerError", e.getMessage());
             request.setAttribute("error", "Budget Calculation Failure: " + e.getMessage());
@@ -232,6 +280,7 @@ public class PlannerServlet extends HttpServlet {
         java.util.List<java.util.Map<String, String>> images = new java.util.ArrayList<>();
         currentStep = "Unsplash API";
         try {
+            DiagnosticManager.setStatus(sessionId, PlannerStatus.FETCHING_IMAGES);
             PlannerDebugService.log(sessionId, "Unsplash API", "STARTED", "Fetching destination images", 0);
             long unsplashStart = System.currentTimeMillis();
             UnsplashService unsplashService = new UnsplashService();
@@ -276,9 +325,11 @@ public class PlannerServlet extends HttpServlet {
 
             PlannerDebugService.log(sessionId, "Unsplash API", "SUCCESS", "Found " + images.size() + " images", unsplashDuration);
             System.out.println("[STEP 6] Unsplash Images Found = " + images.size());
+            System.out.println("[TRACE] Image Search Complete");
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("FAILED STEP: " + currentStep);
+            DiagnosticManager.setStatus(sessionId, PlannerStatus.FAILED);
             PlannerDebugService.log(sessionId, "Unsplash API", "ERROR", e.getMessage(), 0);
             request.setAttribute("plannerError", e.getMessage());
             request.setAttribute("error", "Unsplash API Failure: " + e.getMessage());
@@ -290,6 +341,7 @@ public class PlannerServlet extends HttpServlet {
         java.util.List<java.util.Map<String, String>> videos = new java.util.ArrayList<>();
         currentStep = "YouTube API";
         try {
+            DiagnosticManager.setStatus(sessionId, PlannerStatus.FETCHING_VIDEOS);
             PlannerDebugService.log(sessionId, "YouTube API", "STARTED", "Fetching travel videos", 0);
             long youtubeStart = System.currentTimeMillis();
             YouTubeService youtubeService = new YouTubeService();
@@ -327,9 +379,11 @@ public class PlannerServlet extends HttpServlet {
 
             PlannerDebugService.log(sessionId, "YouTube API", "SUCCESS", "Found " + videos.size() + " videos", youtubeDuration);
             System.out.println("[STEP 7] YouTube Videos Found = " + videos.size());
+            System.out.println("[TRACE] Video Search Complete");
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("FAILED STEP: " + currentStep);
+            DiagnosticManager.setStatus(sessionId, PlannerStatus.FAILED);
             PlannerDebugService.log(sessionId, "YouTube API", "ERROR", e.getMessage(), 0);
             request.setAttribute("plannerError", e.getMessage());
             request.setAttribute("error", "YouTube API Failure: " + e.getMessage());
@@ -345,6 +399,7 @@ public class PlannerServlet extends HttpServlet {
 
         currentStep = "Itinerary Engine";
         try {
+            DiagnosticManager.setStatus(sessionId, PlannerStatus.BUILDING_ITINERARY);
             PlannerDebugService.log(sessionId, "Itinerary Engine", "STARTED", "Structuring generated itinerary", 0);
             
             restaurants = itinerary.get("food_discovery_detailed");
@@ -365,9 +420,11 @@ public class PlannerServlet extends HttpServlet {
             }
 
             PlannerDebugService.log(sessionId, "Itinerary Engine", "SUCCESS", "Itinerary successfully built", 0);
+            System.out.println("[TRACE] Itinerary Build Complete");
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("FAILED STEP: " + currentStep);
+            DiagnosticManager.setStatus(sessionId, PlannerStatus.FAILED);
             PlannerDebugService.log(sessionId, "Itinerary Engine", "ERROR", e.getMessage(), 0);
             request.setAttribute("plannerError", e.getMessage());
             request.setAttribute("error", "Itinerary Build Failure: " + e.getMessage());
@@ -392,13 +449,17 @@ public class PlannerServlet extends HttpServlet {
             System.out.println("[STEP 13] Forwarding To planner-result.jsp");
             System.out.println("Forward target = /pages/planner-result.jsp");
 
+            DiagnosticManager.setStatus(sessionId, PlannerStatus.RENDERING_PAGE);
             request.getRequestDispatcher("/pages/planner-result.jsp").forward(request, response);
             
+            DiagnosticManager.setStatus(sessionId, PlannerStatus.COMPLETED);
             PlannerDebugService.log(sessionId, "Result Page Forward", "SUCCESS", "Forward completed successfully", 0);
             System.out.println("========== PLANNER END ==========");
+            System.out.println("[TRACE] Page Render Complete");
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("FAILED STEP: " + currentStep);
+            DiagnosticManager.setStatus(sessionId, PlannerStatus.FAILED);
             PlannerDebugService.log(sessionId, "Result Page Forward", "ERROR", e.getMessage(), 0);
             request.setAttribute("plannerError", e.getMessage());
             request.setAttribute("error", "Forward Failure: " + e.getMessage());

@@ -106,14 +106,19 @@
 
         // ── Scroll-fade observer ───────────────────────────────────────
         document.addEventListener('DOMContentLoaded', function () {
-            var fades = document.querySelectorAll('.scroll-fade');
+            var fades = document.querySelectorAll('.scroll-fade, .scroll-reveal');
             if (fades.length && 'IntersectionObserver' in window) {
                 var obs = new IntersectionObserver(function (entries) {
                     entries.forEach(function (entry) {
                         if (entry.isIntersecting) { entry.target.classList.add('visible'); }
                     });
-                }, { threshold: 0.1 });
+                }, { threshold: 0.1, rootMargin: '150px' });
                 fades.forEach(function (el) { obs.observe(el); });
+                
+                // Failsafe: force visibility after 1.5s in case layout calculation fails (e.g. devtools toggle layout shift)
+                setTimeout(function() {
+                    fades.forEach(function(el) { el.classList.add('visible'); });
+                }, 1500);
             }
 
             // ── Theme toggle wiring ──────────────────────────────────

@@ -10,6 +10,7 @@ public class Post {
     private String location;
     private String category;
     private String hashtags;
+    private Integer rating;
     private Timestamp createdAt;
 
     // Joined properties for UI display
@@ -43,6 +44,9 @@ public class Post {
 
     public String getHashtags() { return hashtags; }
     public void setHashtags(String hashtags) { this.hashtags = hashtags; }
+
+    public Integer getRating() { return rating; }
+    public void setRating(Integer rating) { this.rating = rating; }
 
     public Timestamp getCreatedAt() { return createdAt; }
     public void setCreatedAt(Timestamp createdAt) { this.createdAt = createdAt; }

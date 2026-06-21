@@ -5,6 +5,7 @@ import com.voyastra.dao.FollowDAO;
 import com.voyastra.dao.StoryDAO;
 import com.voyastra.model.Post;
 import com.voyastra.model.Story;
+import com.voyastra.config.ConfigManager;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -73,6 +74,7 @@ public class CommunityServlet extends HttpServlet {
                     .append("\"location\":\"").append(escapeJson(p.getLocation())).append("\",")
                     .append("\"category\":\"").append(escapeJson(p.getCategory())).append("\",")
                     .append("\"hashtags\":\"").append(escapeJson(p.getHashtags())).append("\",")
+                    .append("\"rating\":").append(p.getRating() != null ? p.getRating() : "null").append(",")
                     .append("\"createdAt\":\"").append(p.getCreatedAt() != null ? p.getCreatedAt().toString() : "").append("\",")
                     .append("\"likeCount\":").append(p.getLikeCount()).append(",")
                     .append("\"commentCount\":").append(p.getCommentCount()).append(",")
@@ -93,6 +95,7 @@ public class CommunityServlet extends HttpServlet {
 
         request.setAttribute("stories", stories);
         request.setAttribute("topExplorers", topExplorers);
+        request.setAttribute("googlePlacesApiKey", ConfigManager.get("GOOGLE_PLACES_API_KEY"));
 
         request.getRequestDispatcher("/pages/community.jsp").forward(request, response);
     }

@@ -16,7 +16,7 @@ public class PostDAO {
      * Inserts a new community post into the database.
      */
     public boolean addPost(Post post) {
-        String query = "INSERT INTO posts (user_id, content, location, image_url, category, hashtags) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO posts (user_id, content, location, image_url, category, hashtags, rating) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
              
@@ -26,6 +26,11 @@ public class PostDAO {
             stmt.setString(4, post.getImageUrl());
             stmt.setString(5, post.getCategory() != null ? post.getCategory() : "For You");
             stmt.setString(6, post.getHashtags() != null ? post.getHashtags() : "");
+            if (post.getRating() != null) {
+                stmt.setInt(7, post.getRating());
+            } else {
+                stmt.setNull(7, java.sql.Types.INTEGER);
+            }
             
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -41,7 +46,7 @@ public class PostDAO {
     public List<Post> getFeedPosts(int userId, String category, int offset, int limit) {
         List<Post> posts = new ArrayList<>();
         StringBuilder query = new StringBuilder(
-            "SELECT p.id, p.user_id, p.content, p.location, p.image_url, p.category, p.hashtags, p.created_at, " +
+            "SELECT p.id, p.user_id, p.content, p.location, p.image_url, p.category, p.hashtags, p.rating, p.created_at, " +
             "       u.name AS user_name, u.role AS user_role, " +
             "       (SELECT COUNT(*) FROM likes WHERE post_id = p.id) AS like_count, " +
             "       (SELECT COUNT(*) FROM comments WHERE post_id = p.id) AS comment_count, " +
@@ -92,6 +97,12 @@ public class PostDAO {
                     post.setLocation(rs.getString("location"));
                     post.setCategory(rs.getString("category"));
                     post.setHashtags(rs.getString("hashtags"));
+                    
+                    Object ratingObj = rs.getObject("rating");
+                    if (ratingObj != null) {
+                        post.setRating(((Number) ratingObj).intValue());
+                    }
+                    
                     post.setCreatedAt(rs.getTimestamp("created_at"));
                     post.setUserName(rs.getString("user_name"));
                     post.setUserRole(rs.getString("user_role"));

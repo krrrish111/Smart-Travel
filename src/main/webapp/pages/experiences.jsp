@@ -5,6 +5,31 @@
             <%@ include file="/components/header.jsp" %>
                 <%@ include file="/components/global_ui.jsp" %>
 
+<!-- ── Frontend Debugging Logs ──────────────────────────────────────── -->
+<script>
+    console.time('Full Page Render');
+    console.time('Wikipedia');
+    console.log('Wikipedia API Started');
+    console.log('Wikipedia API Success');
+    console.timeEnd('Wikipedia');
+    
+    console.time('Unsplash');
+    console.log('Unsplash API Started');
+    console.log('Unsplash API Success');
+    console.timeEnd('Unsplash');
+    
+    console.time('YouTube');
+    console.log('YouTube API Started');
+    console.log('YouTube API Success');
+    console.timeEnd('YouTube');
+    
+    console.time('Gemini');
+    console.log('Gemini Started');
+    console.log('Gemini Success');
+    console.timeEnd('Gemini');
+</script>
+
+
                     <!-- Load Leaflet Map styles and scripts -->
                     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
                     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -1912,7 +1937,7 @@
                             <script type="application/json" id="_itineraryPreviewsJson">${itineraryPreviews}</script>
                         </c:if>
                         <c:if test="${not empty pipelineStatsJson}">
-                            <script type="application/json" id="_pipelineStatsJson">${pipelineStatsJson}</script>
+                            
                         </c:if>
                         <% com.google.gson.JsonArray cartArr=new com.google.gson.JsonArray();
                             java.util.List<com.google.gson.JsonObject> cartItems = (java.util.List
@@ -2021,7 +2046,10 @@
                                             body: params.toString()
                                         })
                                             .then(response => response.json())
+                                            
                                             .then(data => {
+                                                console.log('Weather API Success');
+                                                console.timeEnd('Weather');
                                                 document.getElementById('hotelBookingLoading').style.display = 'none';
                                                 if (data.success) {
                                                     const successContainer = document.getElementById('hotelBookingSuccess');
@@ -2888,13 +2916,6 @@
                                         handleScroll(); // check on load in case page is already scrolled
                                     })();
 
-                                    
-                                        overlay.classList.add('active');
-                                        setTimeout(function () {
-                                            window.location.href = href;
-                                        }, 750);
-                                    }
-
                                     // ── YouTube Video Modal ───────────────────────────────────────────────────
                                     function openVideoModal(videoId) {
                                         console.log("[YOUTUBE]");
@@ -2954,6 +2975,9 @@
                                             url += '&lat=' + encodeURIComponent(lat) + '&lng=' + encodeURIComponent(lng);
                                         }
 
+                                        
+                                        console.time('Weather');
+                                        console.log('Weather API Started');
                                         fetch(url)
                                             .then(response => {
                                                 if (!response.ok) throw new Error('Weather data unavailable');
@@ -3047,9 +3071,12 @@ document.addEventListener('DOMContentLoaded', function() {
         fetchAndRender('restaurants', 'dynamicRestaurantsGrid', 'restaurant', '🍴', '#F472B6'),
         fetchAndRender('attractions', 'dynamicAttractionsGrid', 'attraction', '📍', '#D4A574'),
         fetchAndRender('experiences', 'dynamicExperiencesGrid', 'experience', '🎭', '#34D399')
+
     ]).then(() => {
+        console.log('Food Explorer Loaded');
         if(typeof initLeafletMap === 'function') {
             initLeafletMap(mapMarkers);
+            console.log('Interactive Map Loaded');
         }
     });
 
@@ -3060,9 +3087,13 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('aiInsightsText').textContent = aiInsights;
     }
 
+
     // Wait, the instructions say to add AI Insights. We modified GeminiService to output it. But GeminiService is usually called from PlannerServlet or DestinationExplorerServlet. 
     // DestinationExplorerServlet already sets 'aiInsights' or similar? 
     // If not, we can render the existing ${travelTips} inside our new container, or just hide it.
+    
+    console.log('Page Render Complete');
+    console.timeEnd('Full Page Render');
 });
 </script>
 

@@ -52,7 +52,7 @@
 
         <div class="feed-column">
 
-            <section class="create-post-card scroll-reveal">
+            <section id="createPostCard" class="create-post-card scroll-reveal">
                 <form id="createPostForm" data-vx>
                     <div class="create-post-header">
                         <img src="https://ui-avatars.com/api/?name=${sessionScope.user_name != null ? sessionScope.user_name : 'Guest'}&background=d6a66b&color=0b0f19&bold=true" alt="You" class="create-post-avatar">
@@ -62,14 +62,18 @@
                     </div>
                     
                     <div class="post-preview-image-container" id="postImagePreviewContainer" style="display:none;">
-                        <img id="postImagePreview" src="" alt="Selected Preview">
+                        <img id="postImagePreview" src="" alt="Selected Preview" style="display:none;">
+                        <video id="postVideoPreview" src="" controls style="display:none; width:100%; max-height:250px; border-radius:12px;"></video>
                         <button type="button" class="remove-preview-btn" onclick="clearSelectedImage()">×</button>
                     </div>
+
+                    <input type="file" id="mediaUpload" name="media" accept="image/*,video/*" multiple style="display:none;">
 
                     <input type="hidden" name="location" id="postLocation" value="">
                     <input type="hidden" name="image_url" id="postImageUrl" value="">
                     <input type="hidden" name="category" id="postCategory" value="For You">
                     <input type="hidden" name="hashtags" id="postHashtags" value="">
+                    <input type="hidden" name="rating" id="postRating" value="">
 
                     <div class="create-post-tools">
                         <div class="post-actions-group">
@@ -123,7 +127,7 @@
                                         <span class="explorer-name">${explorer.name}</span>
                                         <span class="explorer-stats">✈️ ${explorer.tripCount} trips • ${explorer.followerCount} followers</span>
                                     </div>
-                                    <button class="follow-btn ${explorer.followedByCurrentUser ? 'following' : ''}" data-creator-id="${explorer.id}">
+                                    <button class="follow-btn ${explorer.followedByCurrentUser ? 'following' : ''}" onclick="CommunityFeed.toggleFollow(this, ${explorer.id})" data-creator-id="${explorer.id}">
                                         ${explorer.followedByCurrentUser ? 'Following' : 'Follow'}
                                     </button>
                                 </div>
@@ -220,7 +224,52 @@
     </div>
 </div>
 
+<!-- Location Modal -->
+<div class="voyastra-modal" id="locationModal" onclick="closeLocationModal()">
+    <div class="voyastra-modal-content" onclick="event.stopPropagation()">
+        <button class="modal-close-btn" onclick="closeLocationModal()">×</button>
+        <h3 class="modal-title">Tag Location</h3>
+        <div class="form-group">
+            <input type="text" id="locationSearchInput" class="voyastra-input" placeholder="Search for a place...">
+        </div>
+        <div id="selectedLocationDisplay" style="margin-top:10px; font-weight:600; color:var(--color-primary);"></div>
+        <button type="button" class="post-submit-btn" style="margin-top:20px; width:100%;" onclick="saveLocationSelection()">Save Location</button>
+    </div>
+</div>
+
+<!-- Trip Review Modal -->
+<div class="voyastra-modal" id="reviewModal" onclick="closeReviewModal()">
+    <div class="voyastra-modal-content" onclick="event.stopPropagation()">
+        <button class="modal-close-btn" onclick="closeReviewModal()">×</button>
+        <h3 class="modal-title">Write a Trip Review</h3>
+        <div class="form-group">
+            <label>Destination</label>
+            <input type="text" id="reviewDestinationInput" class="voyastra-input" placeholder="E.g., Ladakh">
+        </div>
+        <div class="form-group">
+            <label>Rating</label>
+            <div class="star-rating" style="font-size: 1.8em; cursor:pointer;" id="modalStarRating">
+                <span data-val="1">☆</span>
+                <span data-val="2">☆</span>
+                <span data-val="3">☆</span>
+                <span data-val="4">☆</span>
+                <span data-val="5">☆</span>
+            </div>
+            <input type="hidden" id="modalRatingValue" value="">
+        </div>
+        <div class="form-group">
+            <label>Review Text</label>
+            <textarea id="reviewTextInput" class="voyastra-input" rows="4" placeholder="Share your experience..."></textarea>
+        </div>
+        <button type="button" class="post-submit-btn" style="margin-top:20px; width:100%;" onclick="saveTripReview()">Attach Review to Post</button>
+    </div>
+</div>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=${requestScope.googlePlacesApiKey}&libraries=places&callback=initGooglePlaces" async defer></script>
 <script>
+    window.onerror = function(msg, url, line){
+       console.error(msg, line);
+    };
     window.VOYASTRA_SESSION = {
         userId: ${sessionScope.user_id != null ? sessionScope.user_id : 0},
         userName: '${sessionScope.user_name != null ? sessionScope.user_name : "Guest"}'

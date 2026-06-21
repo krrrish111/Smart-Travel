@@ -53,6 +53,24 @@ const CommunityFeed = {
                 this.submitPost();
             });
         }
+
+        // Star Rating Logic
+        document.querySelectorAll('.star-rating span').forEach(star => {
+            star.addEventListener('click', function() {
+                const val = parseInt(this.getAttribute('data-val'));
+                document.getElementById('postRating').value = val;
+                
+                document.querySelectorAll('.star-rating span').forEach(s => {
+                    if (parseInt(s.getAttribute('data-val')) <= val) {
+                        s.textContent = '★';
+                        s.style.color = 'gold';
+                    } else {
+                        s.textContent = '☆';
+                        s.style.color = '';
+                    }
+                });
+            });
+        });
     },
 
     // ══════════════════════════════════════════════════════
@@ -159,6 +177,7 @@ const CommunityFeed = {
     // FEED LOADER (INFINITE SCROLL)
     // ══════════════════════════════════════════════════════
     loadFeed(isNewRequest = false) {
+        console.log("Feed request started");
         if (isNewRequest) {
             this.offset = 0;
             this.hasMore = true;
@@ -174,6 +193,7 @@ const CommunityFeed = {
         fetch(url)
             .then(res => res.json())
             .then(posts => {
+                console.log("Posts received:", posts);
                 this.removeSkeletons();
                 this.isLoading = false;
                 document.getElementById('feedLoadingIndicator').style.display = 'none';
@@ -195,6 +215,9 @@ const CommunityFeed = {
                 this.removeSkeletons();
                 this.isLoading = false;
                 document.getElementById('feedLoadingIndicator').style.display = 'none';
+                if (isNewRequest) {
+                    document.getElementById('communityFeed').innerHTML = '<div class="error-state">Failed to load feed. Please try again.</div>';
+                }
             });
     },
 
@@ -232,7 +255,7 @@ const CommunityFeed = {
     renderEmptyState() {
         const container = document.getElementById('communityFeed');
         container.innerHTML = `
-            <div class="empty-state scroll-reveal">
+            <div class="empty-state">
                 <div class="empty-state-icon">✈️</div>
                 <h3>No posts yet</h3>
                 <p>Be the first to share your journey in the ${this.currentCategory} category!</p>
@@ -241,6 +264,7 @@ const CommunityFeed = {
     },
 
     renderPosts(posts) {
+        console.log("Rendering feed");
         const container = document.getElementById('communityFeed');
         
         posts.forEach(post => {
@@ -251,14 +275,45 @@ const CommunityFeed = {
             const timeFormatted = this.formatTime(post.createdAt);
             
             const postCard = document.createElement('div');
-            postCard.className = 'social-post-card scroll-reveal';
+            postCard.className = 'social-post-card';
             postCard.id = `post-${post.id}`;
             
             let imageHTML = '';
             if (post.imageUrl && post.imageUrl.trim() !== '') {
-                imageHTML = `
-                    <div class="post-image-wrap">
-                        <img src="${post.imageUrl}" alt="Travel Photo" class="post-img">
+                const isVideo = post.imageUrl.toLowerCase().endsWith('.mp4');
+                if (isVideo) {
+                    imageHTML = `
+                        <div class="post-image-wrap" style="aspect-ratio: auto;">
+                            <video src="${post.imageUrl}" controls class="post-img" style="border-radius:14px;"></video>
+                        </div>
+                    `;
+                } else {
+                    imageHTML = `
+                        <div class="post-image-wrap">
+                            <img src="${post.imageUrl}" alt="Travel Photo" class="post-img">
+                        </div>
+                    `;
+                }
+            }
+            
+            let ratingHTML = '';
+            if (post.rating && post.rating > 0) {
+                let stars = '';
+                for (let i=1; i<=5; i++) {
+                    stars += i <= post.rating ? '<span style="color:gold;">★</span>' : '<span style="color:rgba(255,255,255,0.2);">☆</span>';
+                }
+                ratingHTML = `
+                    <div class="post-review-stars" style="font-size: 1.3em; margin-bottom: 6px;">
+                        ${stars}
+                    </div>
+                `;
+            }
+            
+            let locationBadgeHTML = '';
+            if (post.location && post.location.trim() !== '') {
+                locationBadgeHTML = `
+                    <div class="post-location-badge">
+                        📍 ${post.location}
                     </div>
                 `;
             }
@@ -285,8 +340,6 @@ const CommunityFeed = {
                                 <span class="verified-badge" title="Verified Explorer">✓</span>
                             </div>
                             <div class="post-user-meta">
-                                ${post.location ? `<span class="post-location">📍 ${post.location}</span>` : ''}
-                                <span class="post-meta-dot"></span>
                                 <span class="post-time">${timeFormatted}</span>
                                 ${followBtnHTML}
                             </div>
@@ -295,7 +348,9 @@ const CommunityFeed = {
                 </div>
                 
                 <div class="post-body">
+                    ${ratingHTML}
                     <p class="post-caption">${post.text}</p>
+                    ${locationBadgeHTML}
                     ${imageHTML}
                     ${post.hashtags ? `<div class="post-tags">${post.hashtags}</div>` : ''}
                 </div>
@@ -337,6 +392,7 @@ const CommunityFeed = {
             
             container.appendChild(postCard);
         });
+        console.log("Feed rendered");
     },
 
     formatTime(timeString) {
@@ -436,7 +492,7 @@ const CommunityFeed = {
             })
             .catch(err => {
                 console.error("Load comments error", err);
-                container.innerHTML = '<div style="color:red;font-size:0.85rem;">Failed to load comments.</div>';
+                container.innerHTML = '<div class="error-state">Failed to load comments.</div>';
             });
     },
 
@@ -585,24 +641,47 @@ const CommunityFeed = {
         }
 
         const text = document.getElementById('postTextarea').value.trim();
-        if (text === '') return;
+        const mediaInput = document.getElementById('mediaUpload');
+        const hasMedia = mediaInput && mediaInput.files.length > 0;
+        const hasImageUrl = document.getElementById('postImageUrl').value.trim() !== '';
+        const hasLocation = document.getElementById('postLocation').value.trim() !== '';
+        const hasRating = document.getElementById('postRating').value.trim() !== '';
+
+        if (text === '' && !hasMedia && !hasImageUrl && !hasLocation && !hasRating) {
+            VoyastraToast.show('Please add some content before posting.', 'warning');
+            return;
+        }
+        if (text === '') {
+            VoyastraToast.show('Please add a caption or description to your post.', 'warning');
+            return;
+        }
 
         const submitBtn = document.getElementById('submitPostBtn');
         submitBtn.textContent = 'Posting...';
         submitBtn.disabled = true;
 
         const url = `${window.location.pathname}/post/create`;
-        const params = new URLSearchParams();
-        params.append('text', text);
-        params.append('location', document.getElementById('postLocation').value);
-        params.append('image_url', document.getElementById('postImageUrl').value);
-        params.append('category', document.getElementById('postCategory').value);
-        params.append('hashtags', document.getElementById('postHashtags').value);
+        const formData = new FormData();
+        formData.append('text', text);
+        formData.append('location', document.getElementById('postLocation').value);
+        formData.append('category', document.getElementById('postCategory').value);
+        formData.append('hashtags', document.getElementById('postHashtags').value);
+        
+        const ratingVal = document.getElementById('postRating').value;
+        if (ratingVal && ratingVal !== '') {
+            formData.append('rating', ratingVal);
+        }
+        
+        // Append file if exists, otherwise send existing imageUrl string
+        if (mediaInput && mediaInput.files.length > 0) {
+            formData.append('media', mediaInput.files[0]);
+        } else {
+            formData.append('image_url', document.getElementById('postImageUrl').value);
+        }
 
         fetch(url, {
             method: 'POST',
-            body: params,
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+            body: formData
         })
         .then(res => res.json())
         .then(data => {
@@ -615,8 +694,15 @@ const CommunityFeed = {
                 document.getElementById('createPostForm').reset();
                 clearSelectedImage();
                 document.getElementById('postLocation').value = '';
+                document.getElementById('postImageUrl').value = '';
                 document.getElementById('postHashtags').value = '';
-                
+                document.getElementById('postRating').value = '';
+                // Clear location badge
+                const locBadge = document.getElementById('composerLocationBadge');
+                if (locBadge) locBadge.style.display = 'none';
+                // Clear review badge
+                const reviewBadge = document.getElementById('composerReviewBadge');
+                if (reviewBadge) reviewBadge.style.display = 'none';
                 // Reload feed to display new post immediately
                 this.loadFeed(true);
             } else {
@@ -631,53 +717,227 @@ const CommunityFeed = {
     }
 };
 
+window.CommunityFeed = CommunityFeed;
+
 // ══════════════════════════════════════════════════════
-// QUICK ACTIONS TRIGGER UTILITIES
+// STEP 1: PHOTO & VIDEO UPLOAD
 // ══════════════════════════════════════════════════════
+const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'video/mp4'];
+const MAX_FILE_SIZE_MB = 50;
+
 function triggerImageUpload() {
-    const defaultImages = [
-        'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&width=800&auto=format&fit=crop',
-        'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?q=80&width=800&auto=format&fit=crop',
-        'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?q=80&width=800&auto=format&fit=crop',
-        'https://images.unsplash.com/photo-1472214222541-d510753a4907?q=80&width=800&auto=format&fit=crop'
-    ];
-    const randomDefault = defaultImages[Math.floor(Math.random() * defaultImages.length)];
-    
-    const imageUrl = prompt("Enter travel photo/video URL to attach:", randomDefault);
-    if (imageUrl && imageUrl.trim() !== '') {
-        document.getElementById('postImageUrl').value = imageUrl.trim();
-        const preview = document.getElementById('postImagePreview');
-        const container = document.getElementById('postImagePreviewContainer');
-        preview.src = imageUrl.trim();
-        container.style.display = 'block';
-    }
+    console.log("Opening media picker");
+    const input = document.getElementById('mediaUpload');
+    if (input) input.click();
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    const mediaInput = document.getElementById('mediaUpload');
+    if (!mediaInput) return;
+    mediaInput.addEventListener('change', function() {
+        const file = this.files[0];
+        if (!file) return;
+        console.log("File selected:", file.name);
+
+        // Validate type
+        if (!ALLOWED_TYPES.includes(file.type)) {
+            VoyastraToast.show('Unsupported file type. Use JPG, PNG, WEBP, or MP4.', 'error');
+            this.value = '';
+            return;
+        }
+        // Validate size
+        if (file.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
+            VoyastraToast.show(`File too large. Maximum size is ${MAX_FILE_SIZE_MB}MB.`, 'error');
+            this.value = '';
+            return;
+        }
+
+        const container = document.getElementById('postImagePreviewContainer');
+        const imgPreview = document.getElementById('postImagePreview');
+        const vidPreview = document.getElementById('postVideoPreview');
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+            if (file.type === 'video/mp4') {
+                imgPreview.style.display = 'none';
+                vidPreview.src = e.target.result;
+                vidPreview.style.display = 'block';
+            } else {
+                vidPreview.style.display = 'none';
+                imgPreview.src = e.target.result;
+                imgPreview.style.display = 'block';
+            }
+            container.style.display = 'block';
+            console.log("Upload success");
+            VoyastraToast.show(`Media ready: ${file.name}`, 'success');
+        };
+        reader.readAsDataURL(file);
+    });
+});
 
 function clearSelectedImage() {
+    const mediaInput = document.getElementById('mediaUpload');
+    if (mediaInput) mediaInput.value = '';
     document.getElementById('postImageUrl').value = '';
-    document.getElementById('postImagePreviewContainer').style.display = 'none';
+    const container = document.getElementById('postImagePreviewContainer');
+    if (container) container.style.display = 'none';
+    const imgPreview = document.getElementById('postImagePreview');
+    if (imgPreview) { imgPreview.src = ''; imgPreview.style.display = 'none'; }
+    const vidPreview = document.getElementById('postVideoPreview');
+    if (vidPreview) { vidPreview.src = ''; vidPreview.style.display = 'none'; }
 }
+
+// ══════════════════════════════════════════════════════
+// STEP 2: LOCATION TAGGING
+// ══════════════════════════════════════════════════════
+let _selectedPlace = null;
 
 function triggerTagLocation() {
-    const locations = ['Jaipur, Rajasthan', 'Leh, Ladakh', 'Calangute, Goa', 'Munnar, Kerala', 'Manali, Himachal Pradesh', 'Taj Mahal, Agra'];
-    const randomLoc = locations[Math.floor(Math.random() * locations.length)];
-    const location = prompt("Tag a destination / location:", randomLoc);
-    if (location && location.trim() !== '') {
-        document.getElementById('postLocation').value = location.trim();
-        VoyastraToast.show(`Tagged location: ${location.trim()}`, 'success');
-    }
+    console.log("Location modal opened");
+    const modal = document.getElementById('locationModal');
+    modal.classList.add('show');
+    document.getElementById('locationSearchInput').value = '';
+    document.getElementById('selectedLocationDisplay').textContent = '';
+    _selectedPlace = null;
+    setTimeout(() => document.getElementById('locationSearchInput').focus(), 200);
 }
 
-function triggerTripReview() {
-    const category = prompt("Choose a travel category pill (Adventure, Beaches, Mountains, Luxury, Food, Road Trips, International):", "Adventure");
-    if (category && category.trim() !== '') {
-        document.getElementById('postCategory').value = category.trim();
-        
-        // Let's add some hashtags matching it
-        const tags = `#${category.trim().replace(' ', '')} #VoyastraCommunity #TravelGoals`;
-        document.getElementById('postHashtags').value = tags;
-        VoyastraToast.show(`Tagged review as: ${category.trim()}`, 'success');
+function closeLocationModal() {
+    document.getElementById('locationModal').classList.remove('show');
+}
+
+function saveLocationSelection() {
+    if (!_selectedPlace) {
+        // Fallback: use typed text if no Places result selected
+        const typed = document.getElementById('locationSearchInput').value.trim();
+        if (!typed) {
+            VoyastraToast.show('Please search and select a location first.', 'warning');
+            return;
+        }
+        document.getElementById('postLocation').value = typed;
+        showComposerLocationBadge(typed);
+        VoyastraToast.show(`Location tagged: ${typed}`, 'success');
+        closeLocationModal();
+        return;
     }
+    const name = _selectedPlace.name || _selectedPlace.formatted_address;
+    document.getElementById('postLocation').value = name;
+    console.log("Location selected:", name);
+    showComposerLocationBadge(name);
+    VoyastraToast.show(`Location tagged: ${name}`, 'success');
+    closeLocationModal();
+}
+
+function showComposerLocationBadge(name) {
+    let badge = document.getElementById('composerLocationBadge');
+    if (!badge) {
+        badge = document.createElement('div');
+        badge.id = 'composerLocationBadge';
+        badge.style.cssText = 'display:flex;align-items:center;gap:6px;padding:6px 12px;background:rgba(214,166,107,0.12);border:1px solid rgba(214,166,107,0.3);border-radius:20px;font-size:0.85rem;color:var(--color-primary);margin-bottom:8px;width:fit-content;';
+        const postTools = document.querySelector('.create-post-tools');
+        if (postTools) postTools.parentNode.insertBefore(badge, postTools);
+    }
+    badge.innerHTML = `📍 ${name} <span onclick="clearLocation()" style="cursor:pointer;margin-left:4px;opacity:0.6;">✕</span>`;
+    badge.style.display = 'flex';
+}
+
+function clearLocation() {
+    document.getElementById('postLocation').value = '';
+    const badge = document.getElementById('composerLocationBadge');
+    if (badge) badge.style.display = 'none';
+}
+
+function initGooglePlaces() {
+    const input = document.getElementById('locationSearchInput');
+    if (!input || typeof google === 'undefined') return;
+    const autocomplete = new google.maps.places.Autocomplete(input, {
+        types: ['geocode', 'establishment']
+    });
+    autocomplete.addListener('place_changed', () => {
+        _selectedPlace = autocomplete.getPlace();
+        const name = _selectedPlace.name || _selectedPlace.formatted_address;
+        document.getElementById('selectedLocationDisplay').textContent = '📍 ' + name;
+        console.log("Location selected:", name);
+    });
+}
+
+// ══════════════════════════════════════════════════════
+// STEP 3: TRIP REVIEW MODAL
+// ══════════════════════════════════════════════════════
+function triggerTripReview() {
+    console.log("Review modal opened");
+    const modal = document.getElementById('reviewModal');
+    modal.classList.add('show');
+    // Bind modal star rating
+    document.querySelectorAll('#modalStarRating span').forEach(star => {
+        star.onclick = function() {
+            const val = parseInt(this.getAttribute('data-val'));
+            document.getElementById('modalRatingValue').value = val;
+            document.querySelectorAll('#modalStarRating span').forEach(s => {
+                s.textContent = parseInt(s.getAttribute('data-val')) <= val ? '★' : '☆';
+                s.style.color = parseInt(s.getAttribute('data-val')) <= val ? 'gold' : '';
+            });
+        };
+    });
+}
+
+function closeReviewModal() {
+    document.getElementById('reviewModal').classList.remove('show');
+}
+
+function saveTripReview() {
+    const destination = document.getElementById('reviewDestinationInput').value.trim();
+    const rating = document.getElementById('modalRatingValue').value;
+    const reviewText = document.getElementById('reviewTextInput').value.trim();
+
+    if (!destination) {
+        VoyastraToast.show('Please enter a destination.', 'warning');
+        return;
+    }
+    if (!rating) {
+        VoyastraToast.show('Please select a star rating.', 'warning');
+        return;
+    }
+    if (!reviewText) {
+        VoyastraToast.show('Please write your review text.', 'warning');
+        return;
+    }
+
+    // Populate composer fields
+    document.getElementById('postLocation').value = destination;
+    document.getElementById('postRating').value = rating;
+
+    // Pre-fill textarea with review
+    const stars = '★'.repeat(parseInt(rating)) + '☆'.repeat(5 - parseInt(rating));
+    document.getElementById('postTextarea').value = `${stars}\nDestination: ${destination}\n${reviewText}`;
+
+    // Show badge in composer
+    showComposerLocationBadge(destination);
+    showComposerReviewBadge(rating, destination);
+
+    console.log("Review submitted");
+    VoyastraToast.show('Review attached! Click Post to publish.', 'success');
+    closeReviewModal();
+}
+
+function showComposerReviewBadge(rating, destination) {
+    let badge = document.getElementById('composerReviewBadge');
+    if (!badge) {
+        badge = document.createElement('div');
+        badge.id = 'composerReviewBadge';
+        badge.style.cssText = 'display:flex;align-items:center;gap:6px;padding:6px 12px;background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.3);border-radius:20px;font-size:0.85rem;color:gold;margin-bottom:8px;width:fit-content;';
+        const postTools = document.querySelector('.create-post-tools');
+        if (postTools) postTools.parentNode.insertBefore(badge, postTools);
+    }
+    const stars = '★'.repeat(parseInt(rating)) + '☆'.repeat(5 - parseInt(rating));
+    badge.innerHTML = `${stars} Review: ${destination} <span onclick="clearReview()" style="cursor:pointer;margin-left:4px;opacity:0.6;color:white;">✕</span>`;
+    badge.style.display = 'flex';
+}
+
+function clearReview() {
+    document.getElementById('postRating').value = '';
+    const badge = document.getElementById('composerReviewBadge');
+    if (badge) badge.style.display = 'none';
 }
 
 function triggerCreateStory() {
@@ -721,15 +981,13 @@ function triggerCreateStory() {
 
 function selectTrending(destName) {
     document.getElementById('postLocation').value = destName;
+    showComposerLocationBadge(destName);
     VoyastraToast.show(`Selected trending destination: ${destName}`, 'info');
-    
-    // Auto trigger posting scroll down to post card
     document.getElementById('createPostCard')?.scrollIntoView({ behavior: 'smooth' });
 }
 
 function searchByHashtag(tag) {
     VoyastraToast.show(`Searching feed for ${tag}...`, 'info');
-    // Pre-populate input with hashtag
     document.getElementById('postTextarea').value = tag + " ";
     document.getElementById('postTextarea').focus();
 }
@@ -740,4 +998,8 @@ function joinMeetup(meetupName) {
         return;
     }
     VoyastraToast.show(`Successfully registered for the meetup: "${meetupName}"!`, 'success');
+}
+
+function closeStoryViewer() {
+    CommunityFeed.closeStoryViewer();
 }

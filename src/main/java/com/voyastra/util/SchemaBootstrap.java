@@ -441,6 +441,46 @@ public class SchemaBootstrap implements ServletContextListener {
                     "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
                 );
 
+                try { stmt.execute("ALTER TABLE destination_insights ADD COLUMN wiki_summary TEXT"); } catch (Exception e) {}
+                try { stmt.execute("ALTER TABLE destination_insights ADD COLUMN wiki_url VARCHAR(255)"); } catch (Exception e) {}
+                try { stmt.execute("ALTER TABLE destination_insights ADD COLUMN top_attractions JSON"); } catch (Exception e) {}
+                try { stmt.execute("ALTER TABLE destination_insights ADD COLUMN local_foods JSON"); } catch (Exception e) {}
+                try { stmt.execute("ALTER TABLE destination_insights ADD COLUMN ai_insights TEXT"); } catch (Exception e) {}
+                try { stmt.execute("ALTER TABLE destination_insights ADD COLUMN country VARCHAR(100)"); } catch (Exception e) {}
+                try { stmt.execute("ALTER TABLE destination_insights ADD COLUMN best_time VARCHAR(100)"); } catch (Exception e) {}
+                try { stmt.execute("ALTER TABLE destination_insights ADD COLUMN language VARCHAR(100)"); } catch (Exception e) {}
+                try { stmt.execute("ALTER TABLE destination_insights ADD COLUMN currency VARCHAR(100)"); } catch (Exception e) {}
+                try { stmt.execute("ALTER TABLE destination_insights ADD COLUMN timezone VARCHAR(100)"); } catch (Exception e) {}
+                try { stmt.execute("ALTER TABLE destination_insights ADD COLUMN experiences JSON"); } catch (Exception e) {}
+                try { stmt.execute("ALTER TABLE destination_insights ADD COLUMN hotels JSON"); } catch (Exception e) {}
+                try { stmt.execute("ALTER TABLE destination_insights ADD COLUMN restaurants JSON"); } catch (Exception e) {}
+                try { stmt.execute("ALTER TABLE destination_insights ADD COLUMN travel_tips JSON"); } catch (Exception e) {}
+                try { stmt.execute("ALTER TABLE destination_insights ADD COLUMN itinerary_previews JSON"); } catch (Exception e) {}
+                try { stmt.execute("ALTER TABLE destination_insights ADD COLUMN last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"); } catch (Exception e) {}
+
+                stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS destination_media_cache (" +
+                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "destination VARCHAR(100) NOT NULL, " +
+                    "media_type VARCHAR(20) NOT NULL, " + 
+                    "url VARCHAR(512) NOT NULL, " +
+                    "title VARCHAR(255), " +
+                    "extra_data JSON, " +
+                    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
+                );
+
+                stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS destination_experiences (" +
+                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "destination VARCHAR(100) NOT NULL, " +
+                    "title VARCHAR(255) NOT NULL, " +
+                    "description TEXT, " +
+                    "price DECIMAL(10, 2), " +
+                    "rating DECIMAL(3, 2), " +
+                    "image_url VARCHAR(512), " +
+                    "category VARCHAR(100))"
+                );
+
                 stmt.execute(
                     "CREATE TABLE IF NOT EXISTS event_impacts (" +
                     "id INT AUTO_INCREMENT PRIMARY KEY, " +

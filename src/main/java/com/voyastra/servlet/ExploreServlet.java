@@ -37,6 +37,14 @@ public class ExploreServlet extends HttpServlet {
         List<Destination> destinations = destinationDAO.getAllDestinations();
         List<Plan> plans = planDAO.getPlansWithDestinations();
         
+        String q = request.getParameter("q");
+        if (q == null || q.trim().isEmpty()) {
+            q = request.getParameter("destination");
+        }
+        if (q != null && !q.trim().isEmpty()) {
+            request.setAttribute("prefilledQuery", q.trim());
+        }
+
         // Set as request attributes
         request.setAttribute("destinations", destinations);
         request.setAttribute("plans", plans);

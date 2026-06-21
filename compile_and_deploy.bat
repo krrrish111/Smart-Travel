@@ -44,7 +44,7 @@ if %ERRORLEVEL% == 0 (
     xcopy /S /Y src\main\webapp\admin\*.jsp "%WEBAPP_DIR%\admin\"
     xcopy /S /Y src\main\webapp\admin\css\*.css "%WEBAPP_DIR%\admin\css\"
     xcopy /S /Y src\main\webapp\admin\js\*.js "%WEBAPP_DIR%\admin\js\"
-    xcopy /S /Y src\main\webapp\pages\booking\*.jsp "%WEBAPP_DIR%\pages\booking\"
+    xcopy /S /Y src\main\webapp\pages\*.jsp "%WEBAPP_DIR%\pages\"
     echo Done! Visit http://localhost:8080/voyastra/ to see the live site.
 ) else (
     echo FAILURE: Compilation failed. See errors above.

@@ -2,6 +2,71 @@
 <%@ include file="/components/header.jsp" %>
 <%@ include file="/components/global_ui.jsp" %>
 
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/google-places-autocomplete.css">
+<script src="${pageContext.request.contextPath}/js/google-places-autocomplete.js"></script>
+<%
+    // Capture URL parameters for pre-filling
+    String preDestination = request.getParameter("location");
+    if (preDestination == null) preDestination = request.getParameter("destination");
+    if (preDestination == null) preDestination = "";
+    preDestination = preDestination.trim();
+
+    String preDays = request.getParameter("days");
+    if (preDays == null) preDays = "";
+
+    request.setAttribute("preDestination", preDestination);
+    request.setAttribute("preDays", preDays);
+%>
+
+<style>
+    /* Planner entrance highlight when pre-filled */
+    .prefill-banner {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: linear-gradient(135deg, rgba(212,165,116,0.12), rgba(96,165,250,0.08));
+        border: 1px solid rgba(212,165,116,0.3);
+        border-radius: 14px;
+        padding: 14px 18px;
+        margin-bottom: 24px;
+        animation: prefillFadeIn 0.6s ease both;
+    }
+    @keyframes prefillFadeIn {
+        from { opacity: 0; transform: translateY(-8px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+    .prefill-banner-icon { font-size: 20px; flex-shrink: 0; }
+    .prefill-banner-text { font-size: 12px; color: rgba(255,255,255,0.75); line-height: 1.4; }
+    .prefill-banner-text strong { color: var(--color-primary); font-family: 'Outfit', sans-serif; }
+    .prefill-dest-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        background: rgba(212,165,116,0.15);
+        color: var(--color-primary);
+        font-size: 10px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        padding: 3px 10px;
+        border-radius: 20px;
+        border: 1px solid rgba(212,165,116,0.25);
+        margin-top: 4px;
+        display: inline-block;
+    }
+    /* Highlight the destination input when pre-filled */
+    #routeEnd.prefilled {
+        border-color: rgba(212,165,116,0.5) !important;
+        box-shadow: 0 0 0 3px rgba(212,165,116,0.12);
+        animation: fieldGlow 0.8s ease both;
+    }
+    @keyframes fieldGlow {
+        0%   { box-shadow: 0 0 0 0 rgba(212,165,116,0.4); }
+        50%  { box-shadow: 0 0 0 8px rgba(212,165,116,0.1); }
+        100% { box-shadow: 0 0 0 3px rgba(212,165,116,0.12); }
+    }
+</style>
+
 <main class="container mx-auto px-4 relative" style="padding-top: 100px; padding-bottom: 40px; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
 
     <!-- Loading Overlay -->
@@ -30,6 +95,17 @@
                 </div>
             </c:if>
 
+            <%-- Pre-fill banner: shown only when arriving from Explorer --%>
+            <c:if test="${not empty preDestination}">
+            <div class="prefill-banner">
+                <span class="prefill-banner-icon">🗺️</span>
+                <div class="prefill-banner-text">
+                    Destination pre-filled from your Explorer session.<br>
+                    <span class="prefill-dest-chip">📍 ${preDestination}</span>
+                </div>
+            </div>
+            </c:if>
+
             <!-- Origin & Destination -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div class="form-group">
@@ -38,7 +114,8 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label text-xs uppercase tracking-wider text-muted font-semibold mb-2 block">Destination</label>
-                    <input type="text" id="routeEnd" name="destination" class="form-control" placeholder="e.g. Goa" style="border-radius: 12px; padding: 12px;" required>
+                    <input type="text" id="routeEnd" name="destination" class="form-control" placeholder="e.g. Goa" style="border-radius: 12px; padding: 12px;" required
+                           value="${preDestination}">
                 </div>
             </div>
 
@@ -92,7 +169,7 @@
 
             <!-- Submit Button -->
             <button type="submit" id="btnGenerateAI" class="btn btn-primary w-full" style="padding: 16px; font-size: 1.1rem; border-radius: 50px; font-weight: 700; transition: all 0.3s; box-shadow: 0 4px 15px rgba(214,166,107,0.3);">
-                Generate AI Itinerary
+                🚀 Generate AI Itinerary
             </button>
         </form>
     </div>
@@ -102,6 +179,42 @@
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     console.log("Planner Loaded");
+
+    // ── Pre-fill destination and dates from URL params ──────────────────────
+    const urlParams   = new URLSearchParams(window.location.search);
+    const destParam   = urlParams.get('location') || urlParams.get('destination') || '';
+    const daysParam   = parseInt(urlParams.get('days') || '0', 10);
+
+    const destField = document.getElementById('routeEnd');
+    const depField  = document.getElementById('depDate');
+    const retField  = document.getElementById('retDate');
+
+    // Pre-fill destination field
+    if (destParam && destField) {
+        destField.value = destParam;
+        destField.classList.add('prefilled');
+        // pulse the field briefly to draw attention
+        setTimeout(() => destField.focus(), 400);
+    }
+
+    // Auto-set departure date to tomorrow
+    const today    = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    const fmt = (d) => d.toISOString().split('T')[0];
+    if (depField) depField.value = fmt(tomorrow);
+
+    // Auto-set return date based on days param or default 5 days
+    const tripDays = daysParam > 0 ? daysParam : 5;
+    const returnDate = new Date(tomorrow);
+    returnDate.setDate(returnDate.getDate() + tripDays - 1);
+    if (retField) retField.value = fmt(returnDate);
+
+    if (typeof initGooglePlacesAutocomplete === 'function') {
+        initGooglePlacesAutocomplete('routeStart');
+        initGooglePlacesAutocomplete('routeEnd');
+    }
 });
 
 function showLoading(event) {
@@ -112,14 +225,22 @@ function showLoading(event) {
         event.preventDefault();
         const err = "Departure date cannot be in the past.";
         console.error(err);
-        VoyastraToast.show(err, "error");
+        if (typeof VoyastraToast !== 'undefined') {
+            VoyastraToast.show(err, "error");
+        } else {
+            alert(err);
+        }
         return false;
     }
     if (new Date(retDate) < new Date(depDate)) {
         event.preventDefault();
         const err = "Return date must be after departure date.";
         console.error(err);
-        VoyastraToast.show(err, "error");
+        if (typeof VoyastraToast !== 'undefined') {
+            VoyastraToast.show(err, "error");
+        } else {
+            alert(err);
+        }
         return false;
     }
 

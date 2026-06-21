@@ -122,6 +122,30 @@ public class CommunityServlet extends HttpServlet {
             json.append("]");
             response.getWriter().print(json.toString());
             return;
+        } else if ("stories".equals(action)) {
+            List<Story> stories = storyDAO.getRecentStories();
+            response.setContentType("application/json;charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            
+            StringBuilder json = new StringBuilder("[");
+            for (int i = 0; i < stories.size(); i++) {
+                Story s = stories.get(i);
+                json.append("{")
+                    .append("\"id\":").append(s.getId()).append(",")
+                    .append("\"userId\":").append(s.getUserId()).append(",")
+                    .append("\"userName\":\"").append(escapeJson(s.getUserName())).append("\",")
+                    .append("\"mediaUrl\":\"").append(escapeJson(s.getMediaUrl())).append("\",")
+                    .append("\"mediaType\":\"").append(escapeJson(s.getMediaType())).append("\",")
+                    .append("\"caption\":\"").append(escapeJson(s.getCaption())).append("\",")
+                    .append("\"location\":\"").append(escapeJson(s.getLocation())).append("\",")
+                    .append("\"createdAt\":\"").append(s.getCreatedAt() != null ? s.getCreatedAt().toString() : "").append("\",")
+                    .append("\"expiresAt\":\"").append(s.getExpiresAt() != null ? s.getExpiresAt().toString() : "").append("\"")
+                    .append("}");
+                if (i < stories.size() - 1) json.append(",");
+            }
+            json.append("]");
+            response.getWriter().print(json.toString());
+            return;
         }
 
         // Standard GET: Set up sidebar widgets and stories

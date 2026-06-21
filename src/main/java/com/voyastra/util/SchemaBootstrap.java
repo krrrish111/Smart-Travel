@@ -663,6 +663,22 @@ public class SchemaBootstrap implements ServletContextListener {
                     "FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE)"
                 );
 
+                try { stmt.execute("ALTER TABLE stories ADD COLUMN media_type VARCHAR(20) DEFAULT 'image'"); } catch (Exception e) {}
+                try { stmt.execute("ALTER TABLE stories ADD COLUMN caption VARCHAR(255)"); } catch (Exception e) {}
+                try { stmt.execute("ALTER TABLE stories ADD COLUMN location VARCHAR(100)"); } catch (Exception e) {}
+                try { stmt.execute("ALTER TABLE stories ADD COLUMN expires_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP"); } catch (Exception e) {}
+
+                stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS story_views (" +
+                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "story_id INT NOT NULL, " +
+                    "viewer_id INT NOT NULL, " +
+                    "viewed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
+                    "FOREIGN KEY (story_id) REFERENCES stories(id) ON DELETE CASCADE, " +
+                    "FOREIGN KEY (viewer_id) REFERENCES users(id) ON DELETE CASCADE, " +
+                    "UNIQUE KEY (story_id, viewer_id))"
+                );
+
                 stmt.execute(
                     "CREATE TABLE IF NOT EXISTS saved_posts (" +
                     "user_id INT NOT NULL, " +

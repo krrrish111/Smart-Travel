@@ -88,6 +88,9 @@ public class ProfileServlet extends HttpServlet {
             request.setAttribute("totalTrips", userBookings.size());
             request.setAttribute("savedCount", userPlans.size());
 
+            com.voyastra.dao.StoryDAO storyDAO = new com.voyastra.dao.StoryDAO();
+            request.setAttribute("myStories", storyDAO.getUserStories(userId));
+
             // Add new categorized lists to request
             request.setAttribute("flightBookings", flightBookings);
             request.setAttribute("carBookings", carBookings);

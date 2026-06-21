@@ -383,6 +383,10 @@
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
             My Posts
         </a>
+        <a href="${pageContext.request.contextPath}/profile?tab=my-stories" class="nav-item ${activeTab == 'my-stories' ? 'active' : ''}">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+            My Stories
+        </a>
         <a href="${pageContext.request.contextPath}/travel-center" class="nav-item">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
             Travel Center
@@ -1117,6 +1121,70 @@
             </div>
         </section>
 
+        <!-- My Stories Section -->
+        <section id="my-stories" class="content-section ${activeTab == 'my-stories' ? 'active' : ''}">
+            <h2 class="section-title">My Story Insights</h2>
+            
+            <div style="display: grid; gap: 20px;">
+                <c:choose>
+                    <c:when test="${not empty myStories}">
+                        <c:forEach var="story" items="${myStories}">
+                            <div class="story-insight-card" id="my-story-card-${story.id}" style="background:var(--surface-glass); border:1px solid var(--color-border); border-radius:16px; padding:20px; display:flex; gap:20px; align-items:center;">
+                                <!-- Preview -->
+                                <div style="width:100px; height:100px; border-radius:12px; overflow:hidden; flex-shrink:0;">
+                                    <c:choose>
+                                        <c:when test="${story.mediaType == 'video'}">
+                                            <video src="${story.mediaUrl}" style="width:100%; height:100%; object-fit:cover;"></video>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <img src="${story.mediaUrl}" style="width:100%; height:100%; object-fit:cover;">
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
+                                
+                                <!-- Info -->
+                                <div style="flex:1;">
+                                    <div style="color:var(--text-secondary); font-size:0.9rem; margin-bottom:5px;">
+                                        Uploaded: <fmt:formatDate value="${story.createdAt}" pattern="MMM dd, hh:mm a"/>
+                                    </div>
+                                    <div style="color:var(--text-secondary); font-size:0.9rem; margin-bottom:15px;">
+                                        Expires: <fmt:formatDate value="${story.expiresAt}" pattern="MMM dd, hh:mm a"/>
+                                    </div>
+                                    <div style="display:flex; gap:20px;">
+                                        <div>
+                                            <strong style="font-size:1.2rem; color:var(--color-primary);">${story.viewCount}</strong> Views
+                                        </div>
+                                    </div>
+                                    <c:if test="${not empty story.viewers}">
+                                        <div style="margin-top:10px; font-size:0.85rem; color:var(--text-secondary);">
+                                            Seen by: 
+                                            <c:forEach var="viewer" items="${story.viewers}" varStatus="status">
+                                                ${viewer}${!status.last ? ', ' : ''}
+                                            </c:forEach>
+                                        </div>
+                                    </c:if>
+                                </div>
+                                
+                                <!-- Actions -->
+                                <div>
+                                    <button class="btn btn-danger" onclick="deleteMyStoryProfile(${story.id})" style="padding:8px 16px;">Delete Story</button>
+                                </div>
+                            </div>
+                        </c:forEach>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="empty-state" style="padding: 40px; text-align: center; border: 1px dashed var(--color-border); border-radius: 12px;">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary-faded)" stroke-width="2" style="margin-bottom:15px;">
+                                <circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>
+                            </svg>
+                            <p style="color: var(--text-secondary); font-size: 1.1rem;">You don't have any active stories.</p>
+                            <a href="${pageContext.request.contextPath}/community" class="btn btn-outline" style="margin-top: 15px; display:inline-block;">Upload a Story</a>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
+            </div>
+        </section>
+
     </main>
 </div>
 
@@ -1214,6 +1282,31 @@
             MyPostsModule.loadPosts();
         }
     };
+
+    // Story Deletion
+    function deleteMyStoryProfile(storyId) {
+        if (!confirm("Are you sure you want to delete this story?")) return;
+        
+        fetch(`${pageContext.request.contextPath}/community/story/delete`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `storyId=${storyId}`
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                const card = document.getElementById(`my-story-card-${storyId}`);
+                if (card) {
+                    card.style.transition = 'opacity 0.3s ease';
+                    card.style.opacity = '0';
+                    setTimeout(() => card.remove(), 300);
+                }
+                VoyastraToast.show('Story deleted successfully', 'success');
+            } else {
+                VoyastraToast.show(data.message || 'Failed to delete story', 'error');
+            }
+        });
+    }
 
     // My Posts Module
     const MyPostsModule = {

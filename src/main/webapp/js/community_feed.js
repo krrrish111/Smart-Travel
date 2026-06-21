@@ -17,7 +17,7 @@ const CommunityFeed = {
     stories: [],
     
     init() {
-        this.loadStories();
+        fetchStories();
         this.loadFeed(true);
         this.bindEvents();
     },
@@ -73,105 +73,6 @@ const CommunityFeed = {
         });
     },
 
-    // ══════════════════════════════════════════════════════
-    // STORIES SYSTEM
-    // ══════════════════════════════════════════════════════
-    loadStories() {
-        const url = `${window.location.pathname}/story`;
-        
-        fetch(url)
-            .then(res => res.json())
-            .then(data => {
-                this.stories = data;
-                
-                // If no stories exist, inject high-quality mock stories to ensure beautiful UI
-                if (this.stories.length === 0) {
-                    this.stories = [
-                        { id: 101, userName: 'Sarah J.', mediaUrl: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&width=600&auto=format&fit=crop' },
-                        { id: 102, userName: 'Arjun M.', mediaUrl: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&width=600&auto=format&fit=crop' },
-                        { id: 103, userName: 'Priya K.', mediaUrl: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&width=600&auto=format&fit=crop' },
-                        { id: 104, userName: 'Rahul S.', mediaUrl: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&width=600&auto=format&fit=crop' },
-                        { id: 105, userName: 'Meera R.', mediaUrl: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&width=600&auto=format&fit=crop' },
-                        { id: 106, userName: 'Dev P.', mediaUrl: 'https://images.unsplash.com/photo-1454496522488-7a8e488e8606?q=80&width=600&auto=format&fit=crop' },
-                        { id: 107, userName: 'Nisha T.', mediaUrl: 'https://images.unsplash.com/photo-1530789253388-582c481c54b0?q=80&width=600&auto=format&fit=crop' }
-                    ];
-                }
-                
-                this.renderStories();
-            })
-            .catch(err => {
-                console.error("Failed to load stories from server, loading fallbacks.", err);
-                this.stories = [
-                    { id: 101, userName: 'Sarah J.', mediaUrl: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&width=600&auto=format&fit=crop' },
-                    { id: 102, userName: 'Arjun M.', mediaUrl: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&width=600&auto=format&fit=crop' },
-                    { id: 103, userName: 'Priya K.', mediaUrl: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&width=600&auto=format&fit=crop' },
-                    { id: 104, userName: 'Rahul S.', mediaUrl: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&width=600&auto=format&fit=crop' }
-                ];
-                this.renderStories();
-            });
-    },
-
-    renderStories() {
-        const hContainer = document.getElementById('horizontalStoriesContainer');
-        if (!hContainer) return;
-        
-        let horizontalHTML = '';
-        
-        this.stories.forEach(story => {
-            const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(story.userName)}&background=random&color=ffffff&bold=true`;
-            
-            const itemHTML = `
-                <div class="story-item" onclick="CommunityFeed.openStoryViewer(${story.id})">
-                    <div class="story-avatar-ring">
-                        <img src="${avatarUrl}" alt="${story.userName}" class="story-avatar">
-                    </div>
-                    <span class="story-username">${story.userName}</span>
-                </div>
-            `;
-            
-            horizontalHTML += itemHTML;
-        });
-        
-        hContainer.innerHTML = horizontalHTML;
-    },
-
-    storyTimer: null,
-    openStoryViewer(storyId) {
-        const story = this.stories.find(s => s.id === storyId);
-        if (!story) return;
-
-        const modal = document.getElementById('storyViewerModal');
-        const img = document.getElementById('storyViewerImg');
-        const avatar = document.getElementById('storyViewerAvatar');
-        const username = document.getElementById('storyViewerUsername');
-        const progressFill = document.getElementById('storyProgressFill');
-
-        avatar.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(story.userName)}&background=d6a66b&color=0b0f19&bold=true`;
-        username.textContent = story.userName;
-        img.src = story.mediaUrl;
-
-        modal.classList.add('active');
-        
-        // Progress animation (5 seconds)
-        progressFill.style.width = '0%';
-        if (this.storyTimer) clearInterval(this.storyTimer);
-        
-        let progress = 0;
-        this.storyTimer = setInterval(() => {
-            progress += 2;
-            progressFill.style.width = `${progress}%`;
-            if (progress >= 100) {
-                clearInterval(this.storyTimer);
-                this.closeStoryViewer();
-            }
-        }, 100);
-    },
-
-    closeStoryViewer() {
-        const modal = document.getElementById('storyViewerModal');
-        modal.classList.remove('active');
-        if (this.storyTimer) clearInterval(this.storyTimer);
-    },
 
     // ══════════════════════════════════════════════════════
     // FEED LOADER (INFINITE SCROLL)
@@ -992,44 +893,6 @@ function clearReview() {
     if (badge) badge.style.display = 'none';
 }
 
-function triggerCreateStory() {
-    if (window.VOYASTRA_SESSION.userId === 0) {
-        VoyastraToast.show('Please log in to add a story!', 'warning');
-        return;
-    }
-
-    const defaultImages = [
-        'https://images.unsplash.com/photo-1540200187866-cdff52add3cf?q=80&width=600&auto=format&fit=crop',
-        'https://images.unsplash.com/photo-1472396961693-142e6e269027?q=80&width=600&auto=format&fit=crop',
-        'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&width=600&auto=format&fit=crop'
-    ];
-    const randomImg = defaultImages[Math.floor(Math.random() * defaultImages.length)];
-    
-    const mediaUrl = prompt("Upload your travel story. Enter story image URL:", randomImg);
-    if (mediaUrl && mediaUrl.trim() !== '') {
-        const url = `${window.location.pathname}/story`;
-        const params = new URLSearchParams();
-        params.append('mediaUrl', mediaUrl.trim());
-
-        fetch(url, {
-            method: 'POST',
-            body: params,
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.status === 'success') {
-                VoyastraToast.show('Story published successfully!', 'success');
-                CommunityFeed.loadStories();
-            } else {
-                VoyastraToast.show(data.message || 'Failed to post story.', 'error');
-            }
-        })
-        .catch(err => {
-            console.error("Story creation error", err);
-        });
-    }
-}
 
 function selectTrending(destName) {
     document.getElementById('postLocation').value = destName;
@@ -1217,3 +1080,380 @@ CommunityFeed.pinPost = function(postId) {
     // Trigger pin logic (to be implemented)
     VoyastraToast.show('Post pinned successfully!', 'success');
 };
+
+/* --- Instagram-style Stories Logic --- */
+
+let currentStories = [];
+let currentGroupIndex = 0;
+let currentStoryIndexInGroup = 0;
+let storyTimeout;
+let storyProgressRemaining = 5000;
+let storyProgressStart = 0;
+let isStoryPaused = false;
+
+document.addEventListener('DOMContentLoaded', () => {
+    fetchStories();
+
+    // Setup Upload Form Submission
+    const uploadForm = document.getElementById('storyUploadForm');
+    if (uploadForm) {
+        uploadForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const mediaInput = document.getElementById('storyMediaInput');
+            if (!mediaInput.files || mediaInput.files.length === 0) {
+                VoyastraToast.show('Please select a photo or video', 'error');
+                return;
+            }
+            
+            const file = mediaInput.files[0];
+            if (file.type.startsWith('image/') && file.size > 10 * 1024 * 1024) {
+                VoyastraToast.show('Image must be under 10MB', 'error');
+                return;
+            }
+            if (file.type.startsWith('video/') && file.size > 100 * 1024 * 1024) {
+                VoyastraToast.show('Video must be under 100MB', 'error');
+                return;
+            }
+
+            const formData = new FormData(this);
+            const btn = document.getElementById('storySubmitBtn');
+            btn.textContent = 'Uploading...';
+            btn.disabled = true;
+
+            fetch(`${window.VOYASTRA_SESSION.contextPath}/community/story/upload`, {
+                method: 'POST',
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    VoyastraToast.show('Story uploaded successfully!', 'success');
+                    closeStoryUploadModal();
+                    this.reset();
+                    fetchStories(); // Refresh stories
+                } else {
+                    VoyastraToast.show(data.message || 'Failed to upload story', 'error');
+                }
+            })
+            .catch(err => {
+                VoyastraToast.show('Error uploading story', 'error');
+                console.error(err);
+            })
+            .finally(() => {
+                btn.textContent = 'Upload Story';
+                btn.disabled = false;
+            });
+        });
+    }
+});
+
+function fetchStories() {
+    fetch(`${window.VOYASTRA_SESSION.contextPath}/community/story/list`)
+    .then(res => res.json())
+    .then(data => {
+        currentStories = data;
+        renderStoriesRow(data);
+    })
+    .catch(err => console.error("Failed to load stories:", err));
+}
+
+function renderStoriesRow(groups) {
+    const container = document.getElementById('horizontalStoriesContainer');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    groups.forEach((group, idx) => {
+        const item = document.createElement('div');
+        item.className = 'story-item';
+        item.onclick = () => openStoryViewer(idx, 0);
+
+        const ringClass = 'unread-story-ring'; 
+        
+        const latestStory = group.stories[group.stories.length - 1];
+        let avatarUrl = `https://ui-avatars.com/api/?name=${group.username}&background=d6a66b&color=0b0f19&bold=true`;
+        if (latestStory && latestStory.mediaUrl && latestStory.mediaType === 'image') {
+            avatarUrl = latestStory.mediaUrl;
+        }
+
+        item.innerHTML = `
+            <div class="story-avatar-ring ${ringClass}">
+                <img src="${avatarUrl}" alt="${group.username}" class="story-avatar" style="object-fit:cover;">
+            </div>
+            <span class="story-username">${group.userId === window.VOYASTRA_SESSION.userId ? 'Your Story' : group.username}</span>
+        `;
+        container.appendChild(item);
+    });
+}
+
+function triggerCreateStory() {
+    document.getElementById('storyUploadModal').style.display = 'flex';
+}
+
+function closeStoryUploadModal() {
+    document.getElementById('storyUploadModal').style.display = 'none';
+}
+
+function openStoryViewer(groupIndex, storyIndex) {
+    if (groupIndex < 0 || groupIndex >= currentStories.length) {
+        closeStoryViewer();
+        return;
+    }
+    
+    const group = currentStories[groupIndex];
+    if (!group.stories || group.stories.length === 0) {
+        closeStoryViewer();
+        return;
+    }
+    
+    if (storyIndex < 0) {
+        if (groupIndex > 0) {
+            const prevGroup = currentStories[groupIndex - 1];
+            openStoryViewer(groupIndex - 1, prevGroup.stories.length - 1);
+        } else {
+            openStoryViewer(0, 0);
+        }
+        return;
+    }
+    
+    if (storyIndex >= group.stories.length) {
+        if (groupIndex + 1 < currentStories.length) {
+            openStoryViewer(groupIndex + 1, 0);
+        } else {
+            closeStoryViewer();
+        }
+        return;
+    }
+    
+    currentGroupIndex = groupIndex;
+    currentStoryIndexInGroup = storyIndex;
+    const story = group.stories[storyIndex];
+    
+    const viewer = document.getElementById('storyViewer');
+    viewer.style.display = 'flex';
+
+    document.getElementById('storyViewerName').textContent = group.username;
+    
+    const d = new Date(story.createdAt);
+    let hours = Math.floor((new Date() - d) / 3600000);
+    document.getElementById('storyViewerTime').textContent = hours < 1 ? 'Just now' : `${hours}h ago`;
+    document.getElementById('storyViewerAvatar').src = `https://ui-avatars.com/api/?name=${group.username}&background=d6a66b&color=0b0f19&bold=true`;
+
+    const img = document.getElementById('storyViewerImage');
+    const vid = document.getElementById('storyViewerVideo');
+    const cap = document.getElementById('storyViewerCaption');
+    const loc = document.getElementById('storyViewerLocation');
+    const ownerActions = document.getElementById('storyOwnerActions');
+
+    cap.textContent = story.caption || '';
+    loc.innerHTML = story.location ? `📍 ${story.location}` : '';
+
+    if (story.userId === window.VOYASTRA_SESSION.userId) {
+        ownerActions.style.display = 'block';
+        document.getElementById('showViewersBtn').style.display = 'block';
+        fetchStoryViews(story.id);
+    } else {
+        ownerActions.style.display = 'none';
+        document.getElementById('showViewersBtn').style.display = 'none';
+        fetch(`${window.VOYASTRA_SESSION.contextPath}/community/story/view`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `storyId=${story.id}`
+        });
+    }
+
+    renderProgressBars(group.stories.length, storyIndex);
+
+    clearTimeout(storyTimeout);
+    
+    if (story.mediaType === 'video') {
+        img.style.display = 'none';
+        vid.style.display = 'block';
+        vid.src = story.mediaUrl;
+        vid.play();
+        vid.onended = nextStory;
+        
+        vid.ontimeupdate = () => {
+            if (!isStoryPaused && vid.duration) {
+                const pct = (vid.currentTime / vid.duration) * 100;
+                setProgressFill(storyIndex, pct);
+            }
+        };
+    } else {
+        vid.style.display = 'none';
+        img.style.display = 'block';
+        img.src = story.mediaUrl;
+        
+        storyProgressRemaining = 5000;
+        startImageProgress();
+    }
+}
+
+function renderProgressBars(total, currentIndex) {
+    const container = document.getElementById('storyProgressContainer');
+    if(!container) return;
+    container.innerHTML = '';
+    for (let i = 0; i < total; i++) {
+        const bar = document.createElement('div');
+        bar.className = 'story-progress-bar';
+        bar.style.flex = '1';
+        bar.style.height = '3px';
+        bar.style.background = 'rgba(255, 255, 255, 0.3)';
+        bar.style.borderRadius = '2px';
+        bar.style.overflow = 'hidden';
+        bar.style.position = 'relative';
+        
+        const fill = document.createElement('div');
+        fill.id = `storyProgressFill_${i}`;
+        fill.style.height = '100%';
+        fill.style.background = '#fff';
+        fill.style.width = i < currentIndex ? '100%' : '0%';
+        fill.style.transition = 'none';
+        
+        bar.appendChild(fill);
+        container.appendChild(bar);
+    }
+}
+
+function setProgressFill(index, pct) {
+    const fill = document.getElementById(`storyProgressFill_${index}`);
+    if (fill) fill.style.width = `${pct}%`;
+}
+
+function startImageProgress() {
+    isStoryPaused = false;
+    storyProgressStart = Date.now();
+    const fill = document.getElementById(`storyProgressFill_${currentStoryIndexInGroup}`);
+    if (fill) {
+        fill.style.transition = `width ${storyProgressRemaining}ms linear`;
+        setTimeout(() => { fill.style.width = '100%'; }, 50);
+    }
+    
+    storyTimeout = setTimeout(() => {
+        nextStory();
+    }, storyProgressRemaining);
+}
+
+function pauseStory() {
+    isStoryPaused = true;
+    const group = currentStories[currentGroupIndex];
+    if (!group) return;
+    const story = group.stories[currentStoryIndexInGroup];
+    if (story.mediaType === 'video') {
+        document.getElementById('storyViewerVideo').pause();
+    } else {
+        clearTimeout(storyTimeout);
+        const elapsed = Date.now() - storyProgressStart;
+        storyProgressRemaining -= elapsed;
+        const fill = document.getElementById(`storyProgressFill_${currentStoryIndexInGroup}`);
+        if (fill) {
+            const currentWidth = fill.offsetWidth;
+            const parentWidth = fill.parentElement.offsetWidth;
+            const pct = (currentWidth / parentWidth) * 100;
+            fill.style.transition = 'none';
+            fill.style.width = `${pct}%`;
+        }
+    }
+}
+
+function resumeStory() {
+    if (!isStoryPaused) return;
+    isStoryPaused = false;
+    const group = currentStories[currentGroupIndex];
+    if (!group) return;
+    const story = group.stories[currentStoryIndexInGroup];
+    if (story.mediaType === 'video') {
+        document.getElementById('storyViewerVideo').play();
+    } else {
+        startImageProgress();
+    }
+}
+
+function nextStory(e) {
+    if(e) e.stopPropagation();
+    openStoryViewer(currentGroupIndex, currentStoryIndexInGroup + 1);
+}
+
+function prevStory(e) {
+    if(e) e.stopPropagation();
+    openStoryViewer(currentGroupIndex, currentStoryIndexInGroup - 1);
+}
+
+function closeStoryViewer() {
+    document.getElementById('storyViewer').style.display = 'none';
+    const vid = document.getElementById('storyViewerVideo');
+    if(vid) {
+        vid.pause();
+        vid.src = "";
+    }
+    clearTimeout(storyTimeout);
+    const dropdown = document.getElementById('storyMenuDropdown');
+    if(dropdown) dropdown.style.display = 'none';
+    const viewersList = document.getElementById('storyViewersList');
+    if(viewersList) viewersList.classList.remove('open');
+}
+
+function toggleStoryMenu(e) {
+    e.stopPropagation();
+    const d = document.getElementById('storyMenuDropdown');
+    d.style.display = d.style.display === 'none' ? 'block' : 'none';
+}
+
+function deleteCurrentStory() {
+    if (!confirm('Delete this story?')) return;
+    
+    const group = currentStories[currentGroupIndex];
+    const story = group.stories[currentStoryIndexInGroup];
+    fetch(`${window.VOYASTRA_SESSION.contextPath}/community/story/delete`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `storyId=${story.id}`
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            VoyastraToast.show('Story deleted', 'success');
+            closeStoryViewer();
+            fetchStories();
+        } else {
+            VoyastraToast.show('Failed to delete', 'error');
+        }
+    });
+}
+
+function fetchStoryViews(storyId) {
+    fetch(`${window.VOYASTRA_SESSION.contextPath}/community/story/view?storyId=${storyId}`)
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            document.getElementById('storyViewCount').textContent = data.count;
+            const container = document.getElementById('storyViewersContainer');
+            container.innerHTML = '';
+            if (data.viewers && data.viewers.length > 0) {
+                data.viewers.forEach(name => {
+                    const avatar = `https://ui-avatars.com/api/?name=${name}&background=d6a66b&color=0b0f19&bold=true`;
+                    container.innerHTML += `
+                        <div class="story-viewer-item">
+                            <img src="${avatar}" style="width:30px;height:30px;border-radius:50%;">
+                            <span>${name}</span>
+                        </div>
+                    `;
+                });
+            } else {
+                container.innerHTML = '<div style="text-align:center;color:#888;padding:20px;">No views yet</div>';
+            }
+        }
+    });
+}
+
+function toggleStoryViewers() {
+    const list = document.getElementById('storyViewersList');
+    if (list.classList.contains('open')) {
+        list.classList.remove('open');
+        resumeStory();
+    } else {
+        list.classList.add('open');
+        pauseStory();
+    }
+}

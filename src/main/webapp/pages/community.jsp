@@ -208,21 +208,7 @@
     </div>
 </div>
 
-<div class="story-viewer-modal" id="storyViewerModal" onclick="closeStoryViewer()">
-    <div class="story-viewer-content" onclick="event.stopPropagation()">
-        <button class="story-close-btn" onclick="closeStoryViewer()">×</button>
-        <div class="story-progress-bar">
-            <div class="story-progress-fill" id="storyProgressFill"></div>
-        </div>
-        <div class="story-viewer-header">
-            <img src="" id="storyViewerAvatar" alt="" class="story-viewer-avatar">
-            <span id="storyViewerUsername" class="story-viewer-username"></span>
-        </div>
-        <div class="story-media-container">
-            <img src="" id="storyViewerImg" alt="Story Image">
-        </div>
-    </div>
-</div>
+
 
 <!-- Location Modal -->
 <div class="voyastra-modal" id="locationModal" onclick="closeLocationModal()">
@@ -265,6 +251,77 @@
     </div>
 </div>
 
+<!-- Story Upload Modal -->
+<div id="storyUploadModal" class="voyastra-modal" onclick="closeStoryUploadModal()">
+    <div class="voyastra-modal-content" onclick="event.stopPropagation()" style="max-width: 400px;">
+        <div class="modal-header">
+            <h3>Add to Your Story</h3>
+            <button type="button" class="modal-close-btn" onclick="closeStoryUploadModal()">×</button>
+        </div>
+        <form id="storyUploadForm">
+            <div class="form-group">
+                <label>Media (Image/Video)</label>
+                <input type="file" id="storyMediaUpload" name="storyMedia" accept="image/jpeg, image/png, image/webp, video/mp4, video/webm, video/quicktime" class="voyastra-input" required>
+            </div>
+            <div class="form-group">
+                <label>Caption (Optional)</label>
+                <input type="text" id="storyCaption" name="caption" class="voyastra-input" placeholder="Say something about this..." maxlength="100">
+            </div>
+            <div class="form-group">
+                <label>Location (Optional)</label>
+                <input type="text" id="storyLocation" name="location" class="voyastra-input" placeholder="e.g. Manali, India" maxlength="50">
+            </div>
+            <button type="submit" class="post-submit-btn" style="width:100%; margin-top:15px;" id="storySubmitBtn">Upload Story</button>
+        </form>
+    </div>
+</div>
+
+<!-- Fullscreen Story Viewer -->
+<div id="storyViewer" class="story-viewer-overlay">
+    <div class="story-viewer-header" style="flex-direction: column; align-items: stretch; gap: 10px;">
+        <div id="storyProgressContainer" style="display:flex; gap:4px; width:100%;">
+            <!-- Progress bars will be injected here dynamically -->
+        </div>
+        <div class="story-viewer-top-bar" style="display:flex; justify-content:space-between; align-items:center;">
+            <div class="story-author-info">
+                <div class="story-avatar-container">
+                    <img id="storyViewerAvatar" src="" alt="Avatar">
+                </div>
+                <div style="display: flex; flex-direction: column;">
+                    <span id="storyViewerName" class="story-author-name"></span>
+                    <span id="storyViewerTime" class="story-author-time"></span>
+                </div>
+            </div>
+            <div class="story-viewer-actions">
+                <div id="storyOwnerActions" class="story-owner-actions" style="display:none; position:relative;">
+                    <button class="story-icon-btn" onclick="toggleStoryMenu(event)">⋮</button>
+                    <div id="storyMenuDropdown" class="story-dropdown" style="display:none;">
+                        <button onclick="deleteCurrentStory()" class="story-dropdown-item text-danger">Delete Story</button>
+                    </div>
+                </div>
+                <button class="story-icon-btn" onclick="closeStoryViewer()">×</button>
+            </div>
+        </div>
+    </div>
+    <div class="story-media-container" id="storyMediaContainer" onmousedown="pauseStory()" onmouseup="resumeStory()" ontouchstart="pauseStory()" ontouchend="resumeStory()">
+        <img id="storyViewerImage" style="display:none;">
+        <video id="storyViewerVideo" playsinline style="display:none;"></video>
+        <div id="storyViewerCaption" class="story-viewer-caption"></div>
+        <div id="storyViewerLocation" class="story-viewer-location"></div>
+    </div>
+    <div class="story-nav-area prev-area" onclick="prevStory(event)"></div>
+    <div class="story-nav-area next-area" onclick="nextStory(event)"></div>
+    <div id="storyViewersList" class="story-viewers-list" style="display:none;">
+        <div class="story-viewers-header">
+            👁️ <span id="storyViewCount">0</span> Views
+            <button class="close-viewers-btn" onclick="toggleStoryViewers()">×</button>
+        </div>
+        <div id="storyViewersContainer" class="story-viewers-container"></div>
+    </div>
+    <button id="showViewersBtn" class="show-viewers-btn" style="display:none;" onclick="toggleStoryViewers()">
+        👁️ Views
+    </button>
+</div>
 <script src="https://maps.googleapis.com/maps/api/js?key=${requestScope.googlePlacesApiKey}&libraries=places&callback=initGooglePlaces" async defer></script>
 <script>
     window.onerror = function(msg, url, line){
@@ -273,7 +330,8 @@
     window.VOYASTRA_SESSION = {
         userId: ${sessionScope.user_id != null ? sessionScope.user_id : 0},
         userName: '${sessionScope.user_name != null ? sessionScope.user_name : "Guest"}',
-        isAdmin: ${'admin'.equals(sessionScope.role) ? 'true' : 'false'}
+        isAdmin: ${'admin'.equals(sessionScope.role) ? 'true' : 'false'},
+        contextPath: '${pageContext.request.contextPath}'
     };
 </script>
 <script src="${pageContext.request.contextPath}/js/community_feed.js?v=<%= System.currentTimeMillis() %>"></script>

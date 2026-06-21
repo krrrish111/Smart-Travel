@@ -196,4 +196,81 @@ public class PostDAO {
             return false;
         }
     }
+
+    /**
+     * Fetches posts created by a specific user, with optional category and search filters.
+     */
+    public List<Post> getUserPosts(int targetUserId, int currentUserId, String categoryFilter, String searchQuery) {
+        List<Post> posts = new ArrayList<>();
+        StringBuilder query = new StringBuilder(
+            "SELECT p.id, p.user_id, p.content, p.location, p.image_url, p.category, p.hashtags, p.rating, p.created_at, " +
+            "       u.name AS user_name, u.role AS user_role, " +
+            "       (SELECT COUNT(*) FROM likes WHERE post_id = p.id) AS like_count, " +
+            "       (SELECT COUNT(*) FROM comments WHERE post_id = p.id) AS comment_count, " +
+            "       (SELECT COUNT(*) FROM likes WHERE post_id = p.id AND user_id = ?) AS user_liked, " +
+            "       (SELECT COUNT(*) FROM saved_posts WHERE post_id = p.id AND user_id = ?) AS user_saved, " +
+            "       (SELECT COUNT(*) FROM follows WHERE follower_id = ? AND followed_id = p.user_id) AS is_following " +
+            "FROM posts p " +
+            "JOIN users u ON p.user_id = u.id " +
+            "WHERE p.user_id = ? "
+        );
+
+        List<Object> params = new ArrayList<>();
+        params.add(currentUserId);
+        params.add(currentUserId);
+        params.add(currentUserId);
+        params.add(targetUserId);
+
+        if (categoryFilter != null && !categoryFilter.isEmpty() && !"all".equalsIgnoreCase(categoryFilter)) {
+            query.append("AND p.category = ? ");
+            params.add(categoryFilter);
+        }
+
+        if (searchQuery != null && !searchQuery.trim().isEmpty()) {
+            query.append("AND p.content LIKE ? ");
+            params.add("%" + searchQuery.trim() + "%");
+        }
+
+        query.append("ORDER BY p.created_at DESC");
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query.toString())) {
+
+            for (int i = 0; i < params.size(); i++) {
+                stmt.setObject(i + 1, params.get(i));
+            }
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Post post = new Post();
+                    post.setId(rs.getInt("id"));
+                    post.setUserId(rs.getInt("user_id"));
+                    post.setText(rs.getString("content"));
+                    post.setImageUrl(rs.getString("image_url"));
+                    post.setLocation(rs.getString("location"));
+                    post.setCategory(rs.getString("category"));
+                    post.setHashtags(rs.getString("hashtags"));
+                    
+                    Object ratingObj = rs.getObject("rating");
+                    if (ratingObj != null) {
+                        post.setRating(((Number) ratingObj).intValue());
+                    }
+                    
+                    post.setCreatedAt(rs.getTimestamp("created_at"));
+                    post.setUserName(rs.getString("user_name"));
+                    post.setUserRole(rs.getString("user_role"));
+                    post.setLikeCount(rs.getInt("like_count"));
+                    post.setCommentCount(rs.getInt("comment_count"));
+                    post.setHasLiked(rs.getInt("user_liked") > 0);
+                    post.setHasSaved(rs.getInt("user_saved") > 0);
+                    post.setFollowingCreator(rs.getInt("is_following") > 0);
+                    posts.add(post);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("ERROR: PostDAO.getUserPosts failed.");
+            e.printStackTrace();
+        }
+        return posts;
+    }
 }

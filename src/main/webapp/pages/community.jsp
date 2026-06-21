@@ -272,8 +272,23 @@
     };
     window.VOYASTRA_SESSION = {
         userId: ${sessionScope.user_id != null ? sessionScope.user_id : 0},
-        userName: '${sessionScope.user_name != null ? sessionScope.user_name : "Guest"}'
+        userName: '${sessionScope.user_name != null ? sessionScope.user_name : "Guest"}',
+        isAdmin: ${'admin'.equals(sessionScope.role) ? 'true' : 'false'}
     };
 </script>
 <script src="${pageContext.request.contextPath}/js/community_feed.js?v=<%= System.currentTimeMillis() %>"></script>
+
+<!-- Delete Post Confirmation Modal -->
+<div id="deleteConfirmModal">
+    <div class="delete-modal-box">
+        <div class="delete-modal-icon">🗑️</div>
+        <div class="delete-modal-title">Delete Post?</div>
+        <div class="delete-modal-body">Are you sure you want to delete this post?<br>This action cannot be undone.</div>
+        <div class="delete-modal-actions">
+            <button class="btn-cancel-delete" onclick="CommunityFeed.cancelDeletePost()">Cancel</button>
+            <button class="btn-confirm-delete" id="confirmDeleteBtn" onclick="CommunityFeed.executeDeletePost()">Delete</button>
+        </div>
+    </div>
+</div>
+
 <%@ include file="/components/footer.jsp" %>

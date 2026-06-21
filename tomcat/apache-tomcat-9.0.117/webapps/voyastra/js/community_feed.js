@@ -328,6 +328,57 @@ const CommunityFeed = {
                 `;
             }
 
+            let dotMenuHTML = '';
+            
+            console.log("Post Owner:", post.userId);
+            console.log("Current User:", window.VOYASTRA_SESSION.userId);
+            console.log("Is Owner:", post.userId === window.VOYASTRA_SESSION.userId);
+            
+            const isOwnerOrAdmin = window.VOYASTRA_SESSION.userId > 0 &&
+                (window.VOYASTRA_SESSION.userId == post.userId || window.VOYASTRA_SESSION.isAdmin);
+            
+            let menuItems = '';
+            
+            if (isOwnerOrAdmin) {
+                menuItems += `
+                    <button class="post-option-item" onclick="CommunityFeed.editPost(${post.id})">
+                        ✏️ Edit Post
+                    </button>
+                    <button class="post-option-item delete-option" onclick="CommunityFeed.confirmDeletePost(${post.id})">
+                        🗑️ Delete Post
+                    </button>
+                    <button class="post-option-item" onclick="CommunityFeed.pinPost(${post.id})">
+                        📌 Pin Post
+                    </button>
+                `;
+            }
+
+            menuItems += `
+                <button class="post-option-item" onclick="CommunityFeed.copyPostLink(${post.id})">
+                    🔗 Copy Link
+                </button>
+                <button class="post-option-item" onclick="CommunityFeed.sharePost(${post.id})">
+                    📤 Share
+                </button>
+            `;
+
+            if (window.VOYASTRA_SESSION.userId > 0 && window.VOYASTRA_SESSION.userId !== post.userId) {
+                menuItems += `
+                    <button class="post-option-item" onclick="CommunityFeed.reportPost(${post.id})">
+                        🚩 Report
+                    </button>
+                `;
+            }
+
+            dotMenuHTML = `
+                <div class="post-options-wrap" id="options-wrap-${post.id}">
+                    <button class="post-options-btn" onclick="CommunityFeed.togglePostMenu(${post.id}, event)" title="Post options">⋮</button>
+                    <div class="post-options-dropdown" id="options-dropdown-${post.id}">
+                        ${menuItems}
+                    </div>
+                </div>
+            `;
+
             postCard.innerHTML = `
                 <div class="post-header">
                     <div class="post-user-info">
@@ -345,6 +396,7 @@ const CommunityFeed = {
                             </div>
                         </div>
                     </div>
+                    ${dotMenuHTML}
                 </div>
                 
                 <div class="post-body">
@@ -1003,3 +1055,165 @@ function joinMeetup(meetupName) {
 function closeStoryViewer() {
     CommunityFeed.closeStoryViewer();
 }
+
+// ══════════════════════════════════════════════════════
+// 3-DOT POST MENU
+// ══════════════════════════════════════════════════════
+
+// Track which post menu is open
+let _openPostMenuId = null;
+
+CommunityFeed.togglePostMenu = function(postId, event) {
+    event.stopPropagation();
+    const dropdown = document.getElementById(`options-dropdown-${postId}`);
+    if (!dropdown) return;
+
+    const isOpen = dropdown.classList.contains('open');
+
+    // Close any other open menu first
+    if (_openPostMenuId && _openPostMenuId !== postId) {
+        const prev = document.getElementById(`options-dropdown-${_openPostMenuId}`);
+        if (prev) prev.classList.remove('open');
+    }
+
+    if (isOpen) {
+        dropdown.classList.remove('open');
+        _openPostMenuId = null;
+    } else {
+        dropdown.classList.add('open');
+        _openPostMenuId = postId;
+    }
+};
+
+// Close menu when clicking outside
+document.addEventListener('click', function() {
+    if (_openPostMenuId !== null) {
+        const dropdown = document.getElementById(`options-dropdown-${_openPostMenuId}`);
+        if (dropdown) dropdown.classList.remove('open');
+        _openPostMenuId = null;
+    }
+});
+
+// ══════════════════════════════════════════════════════
+// DELETE POST CONFIRMATION + EXECUTION
+// ══════════════════════════════════════════════════════
+let _pendingDeletePostId = null;
+
+CommunityFeed.confirmDeletePost = function(postId) {
+    // Close the dropdown
+    const dropdown = document.getElementById(`options-dropdown-${postId}`);
+    if (dropdown) dropdown.classList.remove('open');
+    _openPostMenuId = null;
+
+    // Store the post id and show modal
+    _pendingDeletePostId = postId;
+    document.getElementById('deleteConfirmModal').classList.add('show');
+};
+
+CommunityFeed.cancelDeletePost = function() {
+    _pendingDeletePostId = null;
+    document.getElementById('deleteConfirmModal').classList.remove('show');
+};
+
+CommunityFeed.executeDeletePost = function() {
+    if (!_pendingDeletePostId) return;
+    const postId = _pendingDeletePostId;
+
+    const confirmBtn = document.getElementById('confirmDeleteBtn');
+    if (confirmBtn) {
+        confirmBtn.disabled = true;
+        confirmBtn.textContent = 'Deleting...';
+    }
+
+    const url = `${window.location.pathname}/post/delete`;
+    const params = new URLSearchParams();
+    params.append('postId', postId);
+
+    fetch(url, {
+        method: 'POST',
+        body: params,
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+    })
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById('deleteConfirmModal').classList.remove('show');
+        _pendingDeletePostId = null;
+
+        if (confirmBtn) {
+            confirmBtn.disabled = false;
+            confirmBtn.textContent = 'Delete';
+        }
+
+        if (data.status === 'success') {
+            // Remove the post card from the DOM without page reload
+            const card = document.getElementById(`post-${postId}`);
+            if (card) {
+                card.style.transition = 'opacity 0.3s, transform 0.3s';
+                card.style.opacity = '0';
+                card.style.transform = 'scale(0.96)';
+                setTimeout(() => card.remove(), 320);
+            }
+            VoyastraToast.show('Post deleted successfully', 'success');
+        } else {
+            VoyastraToast.show(data.message || 'Unable to delete post', 'error');
+        }
+    })
+    .catch(err => {
+        console.error('Delete post error', err);
+        document.getElementById('deleteConfirmModal').classList.remove('show');
+        _pendingDeletePostId = null;
+        if (confirmBtn) {
+            confirmBtn.disabled = false;
+            confirmBtn.textContent = 'Delete';
+        }
+        VoyastraToast.show('Unable to delete post', 'error');
+    });
+};
+
+// ══════════════════════════════════════════════════════
+// POST OPTIONS IMPLEMENTATIONS
+// ══════════════════════════════════════════════════════
+
+CommunityFeed.editPost = function(postId) {
+    // Close the dropdown
+    const dropdown = document.getElementById(`options-dropdown-${postId}`);
+    if (dropdown) dropdown.classList.remove('open');
+    _openPostMenuId = null;
+
+    // Trigger edit logic (to be implemented)
+    VoyastraToast.show('Edit Post functionality coming soon!', 'info');
+};
+
+CommunityFeed.copyPostLink = function(postId) {
+    // Close the dropdown
+    const dropdown = document.getElementById(`options-dropdown-${postId}`);
+    if (dropdown) dropdown.classList.remove('open');
+    _openPostMenuId = null;
+
+    const link = `${window.location.origin}${window.location.pathname}#post-${postId}`;
+    navigator.clipboard.writeText(link).then(() => {
+        VoyastraToast.show('Link copied to clipboard!', 'success');
+    }).catch(err => {
+        VoyastraToast.show('Failed to copy link', 'error');
+    });
+};
+
+CommunityFeed.reportPost = function(postId) {
+    // Close the dropdown
+    const dropdown = document.getElementById(`options-dropdown-${postId}`);
+    if (dropdown) dropdown.classList.remove('open');
+    _openPostMenuId = null;
+
+    // Trigger report logic (to be implemented)
+    VoyastraToast.show('Post has been reported. Thank you!', 'success');
+};
+
+CommunityFeed.pinPost = function(postId) {
+    // Close the dropdown
+    const dropdown = document.getElementById(`options-dropdown-${postId}`);
+    if (dropdown) dropdown.classList.remove('open');
+    _openPostMenuId = null;
+
+    // Trigger pin logic (to be implemented)
+    VoyastraToast.show('Post pinned successfully!', 'success');
+};

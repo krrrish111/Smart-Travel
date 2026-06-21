@@ -379,6 +379,10 @@
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
             Security
         </a>
+        <a href="${pageContext.request.contextPath}/profile?tab=my-posts" class="nav-item ${activeTab == 'my-posts' ? 'active' : ''}">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            My Posts
+        </a>
         <a href="${pageContext.request.contextPath}/travel-center" class="nav-item">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
             Travel Center
@@ -1091,6 +1095,28 @@
             </div>
         </section>
 
+        <!-- My Posts Section -->
+        <section id="my-posts" class="content-section ${activeTab == 'my-posts' ? 'active' : ''}">
+            <h2 class="section-title">My Posts</h2>
+            
+            <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+                <input type="text" id="myPostsSearchInput" class="form-control" placeholder="Search my posts..." style="flex: 1;" onkeyup="MyPostsModule.handleSearch(event)">
+                <button class="btn btn-primary" onclick="MyPostsModule.loadPosts()">Search</button>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; border-bottom: 1px solid var(--color-border); padding-bottom: 15px;">
+                <button class="type-tab active" data-filter="all" onclick="MyPostsModule.setFilter('all', this)" style="background:none; border:none; color:var(--color-primary); font-weight:bold; font-size:1.1rem; cursor:pointer;">All Posts</button>
+                <button class="type-tab" data-filter="Photos" onclick="MyPostsModule.setFilter('Photos', this)" style="background:none; border:none; color:var(--text-secondary); font-weight:600; font-size:1rem; cursor:pointer;">Photos</button>
+                <button class="type-tab" data-filter="Videos" onclick="MyPostsModule.setFilter('Videos', this)" style="background:none; border:none; color:var(--text-secondary); font-weight:600; font-size:1rem; cursor:pointer;">Videos</button>
+                <button class="type-tab" data-filter="Reviews" onclick="MyPostsModule.setFilter('Reviews', this)" style="background:none; border:none; color:var(--text-secondary); font-weight:600; font-size:1rem; cursor:pointer;">Reviews</button>
+                <button class="type-tab" data-filter="Travel Stories" onclick="MyPostsModule.setFilter('Travel Stories', this)" style="background:none; border:none; color:var(--text-secondary); font-weight:600; font-size:1rem; cursor:pointer;">Travel Stories</button>
+            </div>
+
+            <div id="myPostsContainer" style="display: flex; flex-direction: column; gap: 20px;">
+                <!-- Posts will be injected here via JS -->
+            </div>
+        </section>
+
     </main>
 </div>
 
@@ -1181,6 +1207,168 @@
         }
         if(urlParams.has('error')) {
             showToast('Error: ' + urlParams.get('error').replace(/_/g, ' '), 'error');
+        }
+        
+        // Auto-load posts if my-posts tab is active
+        if (document.getElementById('my-posts').classList.contains('active')) {
+            MyPostsModule.loadPosts();
+        }
+    };
+
+    // My Posts Module
+    const MyPostsModule = {
+        currentFilter: 'all',
+        
+        setFilter(filterType, btnElem) {
+            this.currentFilter = filterType;
+            // Update active state on buttons
+            const btns = btnElem.parentElement.querySelectorAll('.type-tab');
+            btns.forEach(b => {
+                b.classList.remove('active');
+                b.style.color = 'var(--text-secondary)';
+                b.style.fontWeight = '600';
+            });
+            btnElem.classList.add('active');
+            btnElem.style.color = 'var(--color-primary)';
+            btnElem.style.fontWeight = 'bold';
+            
+            this.loadPosts();
+        },
+        
+        handleSearch(event) {
+            if (event.key === 'Enter') {
+                this.loadPosts();
+            }
+        },
+        
+        loadPosts() {
+            const searchInput = document.getElementById('myPostsSearchInput').value;
+            const container = document.getElementById('myPostsContainer');
+            container.innerHTML = '<div style="text-align:center; color:var(--text-secondary); padding:20px;">Loading posts...</div>';
+            
+            fetch(`${pageContext.request.contextPath}/community?action=my_posts&filter=\${encodeURIComponent(this.currentFilter)}&search=\${encodeURIComponent(searchInput)}`)
+                .then(res => res.json())
+                .then(data => {
+                    this.renderPosts(data);
+                })
+                .catch(err => {
+                    console.error("Error loading my posts:", err);
+                    container.innerHTML = '<div style="text-align:center; color:#ff3b30; padding:20px;">Failed to load posts.</div>';
+                });
+        },
+        
+        renderPosts(posts) {
+            const container = document.getElementById('myPostsContainer');
+            if (!posts || posts.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state" style="padding: 40px; text-align: center; border: 1px dashed var(--color-border); border-radius: 12px;">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary-faded)" stroke-width="2" style="margin-bottom:15px;">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                        <p style="color: var(--text-secondary); font-size: 1.1rem;">You haven't shared any travel stories yet.</p>
+                        <a href="${pageContext.request.contextPath}/community" class="btn btn-outline" style="margin-top: 15px; display:inline-block;">Explore Community</a>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = '';
+            posts.forEach(post => {
+                const card = document.createElement('div');
+                card.id = `my-post-card-\${post.id}`;
+                card.style.background = 'var(--surface-glass)';
+                card.style.border = '1px solid var(--color-border)';
+                card.style.borderRadius = '16px';
+                card.style.padding = '20px';
+                card.style.display = 'flex';
+                card.style.gap = '20px';
+                card.style.alignItems = 'flex-start';
+                card.style.position = 'relative';
+                
+                let mediaHtml = '';
+                if (post.imageUrl) {
+                    if (post.imageUrl.match(/\.(mp4|webm|ogg)$/i)) {
+                        mediaHtml = `<video src="\${post.imageUrl}" controls style="width: 150px; height: 150px; object-fit: cover; border-radius: 12px;"></video>`;
+                    } else {
+                        mediaHtml = `<img src="\${post.imageUrl}" style="width: 150px; height: 150px; object-fit: cover; border-radius: 12px;">`;
+                    }
+                } else {
+                    mediaHtml = `<div style="width: 150px; height: 150px; background: rgba(255,107,0,0.1); border-radius: 12px; display:flex; align-items:center; justify-content:center; color:var(--color-primary);">No Media</div>`;
+                }
+                
+                const d = new Date(post.createdAt);
+                const dateStr = d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                
+                let ratingHtml = '';
+                if (post.rating !== null && post.rating > 0) {
+                    ratingHtml = `<div style="color: #FFD700; font-size: 0.9rem; margin-top:5px;">\${'★'.repeat(post.rating)}\${'☆'.repeat(5 - post.rating)}</div>`;
+                }
+
+                card.innerHTML = `
+                    \${mediaHtml}
+                    <div style="flex: 1; display:flex; flex-direction:column; justify-content:space-between;">
+                        <div>
+                            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                                <div>
+                                    <span class="badge" style="margin-bottom:8px; display:inline-block;">\${post.category}</span>
+                                    \${post.location ? `<div style="color:var(--text-secondary); font-size:0.85rem; margin-bottom:5px;">📍 \${post.location}</div>` : ''}
+                                </div>
+                                <div style="color:var(--text-secondary); font-size:0.8rem;">\${dateStr}</div>
+                            </div>
+                            <p style="color:white; margin: 10px 0; font-size: 1rem; line-height:1.5;">\${post.text}</p>
+                            \${post.hashtags ? `<div style="color:var(--color-primary); font-size:0.9rem;">\${post.hashtags}</div>` : ''}
+                            \${ratingHtml}
+                        </div>
+                        
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-top: 15px; border-top: 1px solid var(--color-border); padding-top: 15px;">
+                            <div style="display:flex; gap: 15px; color:var(--text-secondary); font-size:0.9rem;">
+                                <span>❤️ \${post.likeCount} Likes</span>
+                                <span>💬 \${post.commentCount} Comments</span>
+                            </div>
+                            <div style="display:flex; gap: 10px;">
+                                <button class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;" onclick="MyPostsModule.editPost(\${post.id})">Edit</button>
+                                <button class="btn btn-danger" style="padding: 6px 12px; font-size: 0.8rem;" onclick="MyPostsModule.deletePost(\${post.id})">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        },
+        
+        editPost(postId) {
+            showToast('Edit Post functionality coming soon!', 'info');
+        },
+        
+        deletePost(postId) {
+            if (!confirm('Are you sure you want to delete this post? This cannot be undone.')) return;
+            
+            fetch(`${pageContext.request.contextPath}/community/post/delete`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `postId=\${postId}`
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    showToast('Post deleted successfully', 'success');
+                    // Remove from My Posts DOM
+                    const card = document.getElementById(`my-post-card-${postId}`);
+                    if (card) card.remove();
+                    
+                    // If empty, reload to show empty state
+                    const container = document.getElementById('myPostsContainer');
+                    if (container.children.length === 0) {
+                        this.loadPosts();
+                    }
+                } else {
+                    showToast(data.message || 'Failed to delete post', 'error');
+                }
+            })
+            .catch(err => {
+                console.error("Delete post error:", err);
+                showToast('Unable to delete post', 'error');
+            });
         }
     };
 </script>

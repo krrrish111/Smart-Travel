@@ -87,6 +87,41 @@ public class CommunityServlet extends HttpServlet {
             json.append("]");
             response.getWriter().print(json.toString());
             return;
+        } else if ("my_posts".equals(action)) {
+            // AJAX request for Profile page My Posts
+            String filter = request.getParameter("filter");
+            String search = request.getParameter("search");
+            
+            List<Post> posts = postDAO.getUserPosts(currentUserId, currentUserId, filter, search);
+            response.setContentType("application/json;charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            
+            StringBuilder json = new StringBuilder("[");
+            for (int i = 0; i < posts.size(); i++) {
+                Post p = posts.get(i);
+                json.append("{")
+                    .append("\"id\":").append(p.getId()).append(",")
+                    .append("\"userId\":").append(p.getUserId()).append(",")
+                    .append("\"userName\":\"").append(escapeJson(p.getUserName())).append("\",")
+                    .append("\"userRole\":\"").append(escapeJson(p.getUserRole())).append("\",")
+                    .append("\"text\":\"").append(escapeJson(p.getText())).append("\",")
+                    .append("\"imageUrl\":\"").append(escapeJson(p.getImageUrl())).append("\",")
+                    .append("\"location\":\"").append(escapeJson(p.getLocation())).append("\",")
+                    .append("\"category\":\"").append(escapeJson(p.getCategory())).append("\",")
+                    .append("\"hashtags\":\"").append(escapeJson(p.getHashtags())).append("\",")
+                    .append("\"rating\":").append(p.getRating() != null ? p.getRating() : "null").append(",")
+                    .append("\"createdAt\":\"").append(p.getCreatedAt() != null ? p.getCreatedAt().toString() : "").append("\",")
+                    .append("\"likeCount\":").append(p.getLikeCount()).append(",")
+                    .append("\"commentCount\":").append(p.getCommentCount()).append(",")
+                    .append("\"hasLiked\":").append(p.isHasLiked()).append(",")
+                    .append("\"hasSaved\":").append(p.isHasSaved()).append(",")
+                    .append("\"followingCreator\":").append(p.isFollowingCreator())
+                    .append("}");
+                if (i < posts.size() - 1) json.append(",");
+            }
+            json.append("]");
+            response.getWriter().print(json.toString());
+            return;
         }
 
         // Standard GET: Set up sidebar widgets and stories

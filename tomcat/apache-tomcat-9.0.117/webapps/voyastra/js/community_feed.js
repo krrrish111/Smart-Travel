@@ -185,13 +185,13 @@ const CommunityFeed = {
                 if (isVideo) {
                     imageHTML = `
                         <div class="post-image-wrap" style="aspect-ratio: auto;">
-                            <video src="${post.imageUrl}" controls class="post-img" style="border-radius:14px;"></video>
+                            <video src="${post.imageUrl}" class="post-img media-item" data-media="${post.imageUrl}" data-type="video" style="border-radius:14px;" onclick="openMediaViewer('${post.imageUrl}', 'video')"></video>
                         </div>
                     `;
                 } else {
                     imageHTML = `
                         <div class="post-image-wrap">
-                            <img src="${post.imageUrl}" alt="Travel Photo" class="post-img">
+                            <img src="${post.imageUrl}" alt="Travel Photo" class="post-img media-item" data-media="${post.imageUrl}" data-type="image" onclick="openMediaViewer('${post.imageUrl}', 'image')">
                         </div>
                     `;
                 }
@@ -1457,3 +1457,101 @@ function toggleStoryViewers() {
         pauseStory();
     }
 }
+
+// -----------------------------------------------------------------------------
+// MEDIA VIEWER MODAL LOGIC
+// -----------------------------------------------------------------------------
+let currentMediaIndex = -1;
+let mediaItems = [];
+
+function openMediaViewer(url, type) {
+    // Collect all media items currently rendered in the feed to allow navigation
+    const elements = document.querySelectorAll('.media-item');
+    mediaItems = Array.from(elements).map(el => ({
+        url: el.getAttribute('data-media'),
+        type: el.getAttribute('data-type')
+    }));
+
+    // Find index of clicked item
+    currentMediaIndex = mediaItems.findIndex(item => item.url === url);
+    if (currentMediaIndex === -1) {
+        currentMediaIndex = 0;
+        mediaItems = [{url, type}]; // fallback
+    }
+
+    renderMediaViewerContent();
+}
+
+function renderMediaViewerContent() {
+    if (currentMediaIndex < 0 || currentMediaIndex >= mediaItems.length) return;
+    const item = mediaItems[currentMediaIndex];
+
+    const modal = document.getElementById('mediaViewerModal');
+    const imgEl = document.getElementById('mediaViewerImage');
+    const videoEl = document.getElementById('mediaViewerVideo');
+    const dlBtn = document.getElementById('mediaViewerDownload');
+
+    // Reset display
+    imgEl.style.display = 'none';
+    videoEl.style.display = 'none';
+    videoEl.pause();
+    
+    // Set download link
+    dlBtn.href = item.url;
+
+    if (item.type === 'video') {
+        videoEl.src = item.url;
+        videoEl.style.display = 'block';
+        videoEl.play();
+    } else {
+        imgEl.src = item.url;
+        imgEl.style.display = 'block';
+    }
+
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+
+function closeMediaViewer(e) {
+    // Only close if clicking the background or close btn, not the media itself
+    if (e && e.target.closest('.media-viewer-content') && !e.target.classList.contains('media-viewer-content')) {
+        return;
+    }
+    
+    const modal = document.getElementById('mediaViewerModal');
+    const videoEl = document.getElementById('mediaViewerVideo');
+    
+    if(videoEl) videoEl.pause();
+    modal.style.display = 'none';
+    document.body.style.overflow = '';
+}
+
+function navigateMediaViewer(direction, e) {
+    if(e) e.stopPropagation();
+    
+    if (mediaItems.length <= 1) return;
+    
+    currentMediaIndex += direction;
+    
+    if (currentMediaIndex < 0) {
+        currentMediaIndex = mediaItems.length - 1; // loop around
+    } else if (currentMediaIndex >= mediaItems.length) {
+        currentMediaIndex = 0; // loop around
+    }
+    
+    renderMediaViewerContent();
+}
+
+// Add keyboard navigation
+document.addEventListener('keydown', function(e) {
+    const modal = document.getElementById('mediaViewerModal');
+    if (modal && modal.style.display === 'flex') {
+        if (e.key === 'Escape') {
+            closeMediaViewer();
+        } else if (e.key === 'ArrowRight') {
+            navigateMediaViewer(1);
+        } else if (e.key === 'ArrowLeft') {
+            navigateMediaViewer(-1);
+        }
+    }
+});

@@ -155,29 +155,8 @@
                         <textarea name="specialRequests" class="input-field w-full h-32" placeholder="Any special requests? (Optional)"></textarea>
                     </div>
 
-                    <h2 class="text-xl font-medium mb-6 pb-2 border-b border-gray-200 dark:border-gray-700 mt-8">Payment Details</h2>
-                    <div class="p-4 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 mb-8">
-                        <div class="flex items-center gap-3 mb-4 text-gray-500">
-                            <i class="fas fa-lock"></i> Secure Payment
-                        </div>
-                        <div class="mb-4">
-                            <label class="block text-sm font-medium mb-1">Card Number</label>
-                            <input type="text" class="input-field w-full" placeholder="XXXX XXXX XXXX XXXX" required>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium mb-1">Expiry Date</label>
-                                <input type="text" class="input-field w-full" placeholder="MM/YY" required>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium mb-1">CVC</label>
-                                <input type="text" class="input-field w-full" placeholder="XXX" required>
-                            </div>
-                        </div>
-                    </div>
-
                     <button type="submit" class="btn-primary w-full py-4 rounded-xl text-lg font-bold shadow-lg transform transition-transform hover:-translate-y-1">
-                        Confirm & Pay <span id="submitButtonDisplay">$${totalPrice}</span>
+                        Continue to Review <span id="submitButtonDisplay">$${totalPrice}</span>
                     </button>
                     
                     <c:if test="${not empty error}">

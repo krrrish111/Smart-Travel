@@ -349,4 +349,18 @@
     </div>
 </div>
 
+<!-- Fullscreen Media Viewer Modal -->
+<div id="mediaViewerModal" class="media-viewer-modal" onclick="closeMediaViewer(event)">
+    <div class="media-viewer-close" onclick="closeMediaViewer(event)">×</div>
+    <a id="mediaViewerDownload" class="media-viewer-download" href="#" download onclick="event.stopPropagation()">
+        ↓
+    </a>
+    <div class="media-viewer-nav media-viewer-prev" onclick="navigateMediaViewer(-1, event)">‹</div>
+    <div class="media-viewer-nav media-viewer-next" onclick="navigateMediaViewer(1, event)">›</div>
+    <div class="media-viewer-content" onclick="event.stopPropagation()">
+        <img id="mediaViewerImage" src="" style="display:none;">
+        <video id="mediaViewerVideo" src="" controls style="display:none;"></video>
+    </div>
+</div>
+
 <%@ include file="/components/footer.jsp" %>

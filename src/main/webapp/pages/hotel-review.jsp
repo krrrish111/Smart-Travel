@@ -187,7 +187,10 @@
                 </div>
 
                 <!-- Terms & Conditions -->
-                <form action="${pageContext.request.contextPath}/hotel-review" method="POST">
+                <form id="reviewForm" action="${pageContext.request.contextPath}/process-hotel-payment" method="POST">
+                    <input type="hidden" name="razorpay_payment_id" id="rzp_payment_id">
+                    <input type="hidden" name="razorpay_order_id" id="rzp_order_id">
+                    <input type="hidden" name="razorpay_signature" id="rzp_signature">
                     <label class="terms-card">
                         <input type="checkbox" name="termsAccepted" class="mt-0.5 w-5 h-5 rounded text-primary flex-shrink-0" required>
                         <div>
@@ -202,10 +205,10 @@
                         </div>
                     </label>
 
-                    <button type="submit" class="btn-primary w-full py-4 rounded-xl text-lg font-bold shadow-lg
+                    <button type="button" onclick="startRazorpayPayment(event)" id="payBtn" class="btn-primary w-full py-4 rounded-xl text-lg font-bold shadow-lg
                         transform transition-all hover:-translate-y-1 hover:shadow-primary/30 flex items-center justify-center gap-3">
                         <i class="fas fa-lock text-sm"></i>
-                        Proceed to Payment &mdash; $${grandTotal}
+                        Proceed to Payment
                     </button>
                 </form>
 
@@ -267,5 +270,94 @@
         </div>
     </div>
 </main>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    console.log("Review page loaded");
+    window.startRazorpayPayment = async function(event) {
+        event.preventDefault(); // Stop form submission
+
+        const form = document.getElementById('reviewForm');
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+        }
+
+        console.log("Payment button clicked");
+        console.log("Creating order");
+
+        const btn = document.getElementById('payBtn');
+        const amount = '${grandTotal}';
+
+        btn.disabled = true;
+        btn.style.opacity = '0.8';
+
+        try {
+            // Create Razorpay order
+            const formData = new URLSearchParams();
+            formData.append('amount', amount);
+
+            const response = await fetch('${pageContext.request.contextPath}/api/razorpay/create-order', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: formData.toString()
+            });
+            const result = await response.json();
+            
+            if (!response.ok) {
+                throw new Error(result.error || 'Failed to create order');
+            }
+
+            console.log("Launching Razorpay");
+            const options = {
+                "key": "<%= com.voyastra.util.RazorpayConfig.getKeyId() %>",
+                "amount": result.amount,
+                "currency": result.currency,
+                "name": "Voyastra Hotel Booking",
+                "description": "${pending.hotel.name} - ${pending.room.type}",
+                "order_id": result.id,
+                "handler": function (response) {
+                    console.log("PAYMENT SUCCESS", response);
+                    document.getElementById('rzp_payment_id').value = response.razorpay_payment_id;
+                    document.getElementById('rzp_order_id').value = response.razorpay_order_id;
+                    document.getElementById('rzp_signature').value = response.razorpay_signature;
+                    
+                    form.submit();
+                },
+                "prefill": {
+                    "name": "${pending.guestName}",
+                    "email": "${pending.guestEmail}",
+                    "contact": "${pending.guestPhone}"
+                },
+                "theme": {
+                    "color": "#D4A574"
+                },
+                "modal": {
+                    "ondismiss": function() {
+                        btn.disabled = false;
+                        btn.style.opacity = '1';
+                    }
+                }
+            };
+            
+            const rzp1 = new Razorpay(options);
+            rzp1.on('payment.failed', function (response){
+                alert("Payment Failed. Reason: " + response.error.description);
+                btn.disabled = false;
+                btn.style.opacity = '1';
+            });
+
+            rzp1.open();
+
+        } catch (error) {
+            console.error('Payment Error:', error);
+            alert("Failed to initialize payment: " + error.message);
+            btn.disabled = false;
+            btn.style.opacity = '1';
+        }
+    }
+</script>
 
 <%@ include file="/components/footer.jsp" %>

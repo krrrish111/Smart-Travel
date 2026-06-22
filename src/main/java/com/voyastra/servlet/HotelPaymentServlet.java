@@ -26,18 +26,22 @@ public class HotelPaymentServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("HotelPaymentServlet doPost called!");
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("user") == null) {
+            System.out.println("Session or user is null. Redirecting to login.jsp");
             response.sendRedirect("login.jsp");
             return;
         }
 
         HotelBooking pending = (HotelBooking) session.getAttribute("pendingHotelBooking");
         if (pending == null) {
+            System.out.println("pendingHotelBooking is null! Redirecting to hotels");
             response.sendRedirect("hotels");
             return;
         }
 
+        System.out.println("pendingHotelBooking found! ID: " + pending.getId());
         String razorpayPaymentId = request.getParameter("razorpay_payment_id");
         String razorpayOrderId = request.getParameter("razorpay_order_id");
         String razorpaySignature = request.getParameter("razorpay_signature");

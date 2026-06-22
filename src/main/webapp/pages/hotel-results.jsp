@@ -150,6 +150,11 @@
                                     <div class="flex gap-2 w-full sm:w-auto mt-2 sm:mt-0">
                                         <form action="${pageContext.request.contextPath}/hotel-details" method="GET" class="w-1/2 sm:w-auto">
                                             <input type="hidden" name="id" value="${hotel.id}">
+                                            <input type="hidden" name="name" value="${hotel.name}">
+                                            <input type="hidden" name="city" value="${hotel.city}">
+                                            <input type="hidden" name="rating" value="${hotel.rating}">
+                                            <input type="hidden" name="price" value="${hotel.startingPrice}">
+                                            <input type="hidden" name="image" value="${hotel.imageUrl}">
                                             <input type="hidden" name="checkIn" value="${param.checkIn}">
                                             <input type="hidden" name="checkOut" value="${param.checkOut}">
                                             <input type="hidden" name="guests" value="${param.guests}">
@@ -159,6 +164,11 @@
                                         </form>
                                         <form action="${pageContext.request.contextPath}/hotel-details" method="GET" class="w-1/2 sm:w-auto">
                                             <input type="hidden" name="id" value="${hotel.id}">
+                                            <input type="hidden" name="name" value="${hotel.name}">
+                                            <input type="hidden" name="city" value="${hotel.city}">
+                                            <input type="hidden" name="rating" value="${hotel.rating}">
+                                            <input type="hidden" name="price" value="${hotel.startingPrice}">
+                                            <input type="hidden" name="image" value="${hotel.imageUrl}">
                                             <input type="hidden" name="checkIn" value="${param.checkIn}">
                                             <input type="hidden" name="checkOut" value="${param.checkOut}">
                                             <input type="hidden" name="guests" value="${param.guests}">

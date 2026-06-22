@@ -162,6 +162,12 @@
                 <div class="label">Status</div>
                 <div class="value">${booking.bookingStatus}</div>
             </div>
+            <div class="field-group">
+                <div class="label">Scan for Details</div>
+                <div class="value" style="margin-top: 5px;">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=Voyastra_Booking_${booking.bookingCode}" alt="QR Code" style="border-radius: 8px; border: 1px solid #ccc; padding: 5px;">
+                </div>
+            </div>
 
         </div>
         

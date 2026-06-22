@@ -102,19 +102,36 @@
                 <!-- Description -->
                 <section class="surface-panel rounded-2xl p-6 md:p-8 shadow-sm mb-8">
                     <h2 class="text-2xl font-bold mb-4 editorial">About this hotel</h2>
-                    <p class="text-gray-600 dark:text-gray-300 leading-relaxed">${hotel.description}</p>
+                    <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
+                        <c:choose>
+                            <c:when test="${not empty hotel.description}">${hotel.description}</c:when>
+                            <c:otherwise>Experience world-class hospitality and premium comfort at ${hotel.name}. This premium hotel located in ${hotel.city} offers exceptional service, modern amenities, and a truly unforgettable stay for both leisure and business travelers. Enjoy easy access to top local attractions and a relaxing environment tailored to your every need.</c:otherwise>
+                        </c:choose>
+                    </p>
                 </section>
 
                 <!-- Amenities -->
                 <section class="surface-panel rounded-2xl p-6 md:p-8 shadow-sm mb-8">
                     <h2 class="text-2xl font-bold mb-6 editorial">Most Popular Amenities</h2>
                     <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                        <c:forEach var="amenity" items="${hotel.amenitiesArray}">
-                            <div class="flex items-center gap-3 text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-800/50 p-3 rounded-xl border border-gray-100 dark:border-gray-800">
-                                <i class="fas fa-check-circle text-green-500"></i>
-                                <span class="font-medium">${amenity}</span>
-                            </div>
-                        </c:forEach>
+                        <c:choose>
+                            <c:when test="${not empty hotel.amenitiesArray}">
+                                <c:forEach var="amenity" items="${hotel.amenitiesArray}">
+                                    <div class="flex items-center gap-3 text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-800/50 p-3 rounded-xl border border-gray-100 dark:border-gray-800">
+                                        <i class="fas fa-check-circle text-green-500"></i>
+                                        <span class="font-medium">${amenity}</span>
+                                    </div>
+                                </c:forEach>
+                            </c:when>
+                            <c:otherwise>
+                                <c:forEach var="amenity" items="WiFi,Pool,Parking,Restaurant,Gym,Spa,Room Service">
+                                    <div class="flex items-center gap-3 text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-800/50 p-3 rounded-xl border border-gray-100 dark:border-gray-800">
+                                        <i class="fas fa-check-circle text-green-500"></i>
+                                        <span class="font-medium">${amenity}</span>
+                                    </div>
+                                </c:forEach>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
                 </section>
 
@@ -138,64 +155,110 @@
                         <input type="hidden" name="guests" value="${guests}">
                         
                         <div class="flex flex-col gap-6">
-                            <c:forEach var="room" items="${rooms}">
-                                <label for="room-${room.id}" class="cursor-pointer group relative block">
-                                    <input type="radio" name="roomId" value="${room.id}" id="room-${room.id}" class="peer absolute opacity-0 w-0 h-0" onchange="updateSelectedRoom('${room.type}', ${room.pricePerNight})" ${empty checkIn or empty checkOut ? 'disabled' : ''}>
-                                    <div class="surface-panel rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col md:flex-row border-2 border-transparent peer-checked:border-primary peer-checked:bg-primary/5 dark:peer-checked:bg-primary/10">
-                                        
-                                        <!-- Room Image -->
-                                        <div class="md:w-1/3 h-48 md:h-auto relative">
-                                            <img src="${room.imageUrl}" alt="${room.type}" class="w-full h-full object-cover">
-                                        </div>
-                                        
-                                        <!-- Room Details -->
-                                        <div class="md:w-2/3 p-6 flex flex-col">
-                                            <div class="flex justify-between items-start mb-4">
-                                                <div>
-                                                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">${room.type}</h3>
-                                                    <div class="flex flex-wrap gap-4 text-sm text-gray-600 dark:text-gray-400">
-                                                        <div class="flex items-center gap-1.5"><i class="fas fa-vector-square text-gray-400"></i> ${room.roomSize != null ? room.roomSize : '30 m²'}</div>
-                                                        <div class="flex items-center gap-1.5"><i class="fas fa-bed text-gray-400"></i> ${room.bedType != null ? room.bedType : '1 Double Bed'}</div>
-                                                        <div class="flex items-center gap-1.5"><i class="fas fa-user-friends text-gray-400"></i> Max ${room.capacity} Guests</div>
+                            <c:choose>
+                                <c:when test="${not empty rooms}">
+                                    <c:forEach var="room" items="${rooms}">
+                                        <label for="room-${room.id}" class="cursor-pointer group relative block">
+                                            <input type="radio" name="roomId" value="${room.id}" id="room-${room.id}" class="peer absolute opacity-0 w-0 h-0" onchange="updateSelectedRoom('${room.type}', ${room.pricePerNight})" ${empty checkIn or empty checkOut ? 'disabled' : ''}>
+                                            <div class="surface-panel rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col md:flex-row border-2 border-transparent peer-checked:border-primary peer-checked:bg-primary/5 dark:peer-checked:bg-primary/10">
+                                                
+                                                <!-- Room Image -->
+                                                <div class="md:w-1/3 h-48 md:h-auto relative">
+                                                    <img src="${room.imageUrl}" alt="${room.type}" class="w-full h-full object-cover">
+                                                </div>
+                                                
+                                                <!-- Room Details -->
+                                                <div class="md:w-2/3 p-6 flex flex-col">
+                                                    <div class="flex justify-between items-start mb-4">
+                                                        <div>
+                                                            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">${room.type}</h3>
+                                                            <div class="flex flex-wrap gap-4 text-sm text-gray-600 dark:text-gray-400">
+                                                                <div class="flex items-center gap-1.5"><i class="fas fa-vector-square text-gray-400"></i> ${room.roomSize != null ? room.roomSize : '30 m²'}</div>
+                                                                <div class="flex items-center gap-1.5"><i class="fas fa-bed text-gray-400"></i> ${room.bedType != null ? room.bedType : '1 Double Bed'}</div>
+                                                                <div class="flex items-center gap-1.5"><i class="fas fa-user-friends text-gray-400"></i> Max ${room.capacity} Guests</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="text-right">
+                                                            <div class="text-2xl font-bold text-primary">$${room.pricePerNight}</div>
+                                                            <div class="text-xs text-gray-500">per night</div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="flex flex-wrap gap-2 mb-4">
+                                                        <c:forEach var="ramen" items="${room.amenitiesArray}">
+                                                            <span class="text-xs font-medium bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 px-2.5 py-1 rounded-md border border-gray-100 dark:border-gray-700">
+                                                                ${ramen}
+                                                            </span>
+                                                        </c:forEach>
+                                                    </div>
+
+                                                    <div class="mt-auto pt-4 border-t border-gray-100 dark:border-gray-800 flex flex-col sm:flex-row justify-between items-center gap-4">
+                                                        <div class="w-full">
+                                                            <c:if test="${room.freeCancellation}">
+                                                                <div class="text-sm text-green-600 font-medium mb-1"><i class="fas fa-check"></i> Free Cancellation before check-in</div>
+                                                            </c:if>
+                                                            <c:if test="${room.breakfastIncluded}">
+                                                                <div class="text-sm text-green-600 font-medium mb-1"><i class="fas fa-coffee"></i> Breakfast Included</div>
+                                                            </c:if>
+                                                            <c:if test="${!room.freeCancellation && !room.breakfastIncluded}">
+                                                                <div class="text-sm text-gray-500 font-medium mb-1"><i class="fas fa-info-circle"></i> Standard rate</div>
+                                                            </c:if>
+                                                        </div>
+                                                        <div class="hidden peer-checked:flex w-full sm:w-auto items-center justify-end text-primary font-bold whitespace-nowrap">
+                                                            <i class="fas fa-check-circle mr-2"></i> Selected
+                                                        </div>
+                                                        <div class="flex sm:hidden peer-checked:hidden w-full items-center text-gray-400 font-medium whitespace-nowrap text-sm border border-gray-200 dark:border-gray-700 px-4 py-2 rounded-lg justify-center">
+                                                            Tap to select
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="text-right">
-                                                    <div class="text-2xl font-bold text-primary">$${room.pricePerNight}</div>
-                                                    <div class="text-xs text-gray-500">per night</div>
+                                            </div>
+                                        </label>
+                                    </c:forEach>
+                                </c:when>
+                                <c:otherwise>
+                                    <label for="room-mock" class="cursor-pointer group relative block">
+                                        <input type="radio" name="roomId" value="-1" id="room-mock" class="peer absolute opacity-0 w-0 h-0" onchange="updateSelectedRoom('Standard Double Room', ${hotel.startingPrice > 0 ? hotel.startingPrice : 150})" ${empty checkIn or empty checkOut ? 'disabled' : ''}>
+                                        <div class="surface-panel rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col md:flex-row border-2 border-transparent peer-checked:border-primary peer-checked:bg-primary/5 dark:peer-checked:bg-primary/10">
+                                            <div class="md:w-1/3 h-48 md:h-auto relative">
+                                                <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Standard Double Room" class="w-full h-full object-cover">
+                                            </div>
+                                            <div class="md:w-2/3 p-6 flex flex-col">
+                                                <div class="flex justify-between items-start mb-4">
+                                                    <div>
+                                                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Standard Double Room</h3>
+                                                        <div class="flex flex-wrap gap-4 text-sm text-gray-600 dark:text-gray-400">
+                                                            <div class="flex items-center gap-1.5"><i class="fas fa-vector-square text-gray-400"></i> 30 m²</div>
+                                                            <div class="flex items-center gap-1.5"><i class="fas fa-bed text-gray-400"></i> 1 Double Bed</div>
+                                                            <div class="flex items-center gap-1.5"><i class="fas fa-user-friends text-gray-400"></i> Max 2 Guests</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="text-right">
+                                                        <div class="text-2xl font-bold text-primary">$${hotel.startingPrice > 0 ? hotel.startingPrice : 150}</div>
+                                                        <div class="text-xs text-gray-500">per night</div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            
-                                            <div class="flex flex-wrap gap-2 mb-4">
-                                                <c:forEach var="ramen" items="${room.amenitiesArray}">
-                                                    <span class="text-xs font-medium bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 px-2.5 py-1 rounded-md border border-gray-100 dark:border-gray-700">
-                                                        ${ramen}
-                                                    </span>
-                                                </c:forEach>
-                                            </div>
-
-                                            <div class="mt-auto pt-4 border-t border-gray-100 dark:border-gray-800 flex flex-col sm:flex-row justify-between items-center gap-4">
-                                                <div class="w-full">
-                                                    <c:if test="${room.freeCancellation}">
+                                                <div class="flex flex-wrap gap-2 mb-4">
+                                                    <span class="text-xs font-medium bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 px-2.5 py-1 rounded-md border border-gray-100 dark:border-gray-700">Air Conditioning</span>
+                                                    <span class="text-xs font-medium bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 px-2.5 py-1 rounded-md border border-gray-100 dark:border-gray-700">Free WiFi</span>
+                                                    <span class="text-xs font-medium bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 px-2.5 py-1 rounded-md border border-gray-100 dark:border-gray-700">Flat-screen TV</span>
+                                                </div>
+                                                <div class="mt-auto pt-4 border-t border-gray-100 dark:border-gray-800 flex flex-col sm:flex-row justify-between items-center gap-4">
+                                                    <div class="w-full">
                                                         <div class="text-sm text-green-600 font-medium mb-1"><i class="fas fa-check"></i> Free Cancellation before check-in</div>
-                                                    </c:if>
-                                                    <c:if test="${room.breakfastIncluded}">
-                                                        <div class="text-sm text-green-600 font-medium mb-1"><i class="fas fa-coffee"></i> Breakfast Included</div>
-                                                    </c:if>
-                                                    <c:if test="${!room.freeCancellation && !room.breakfastIncluded}">
-                                                        <div class="text-sm text-gray-500 font-medium mb-1"><i class="fas fa-info-circle"></i> Standard rate</div>
-                                                    </c:if>
-                                                </div>
-                                                <div class="hidden peer-checked:flex w-full sm:w-auto items-center justify-end text-primary font-bold whitespace-nowrap">
-                                                    <i class="fas fa-check-circle mr-2"></i> Selected
-                                                </div>
-                                                <div class="flex sm:hidden peer-checked:hidden w-full items-center text-gray-400 font-medium whitespace-nowrap text-sm border border-gray-200 dark:border-gray-700 px-4 py-2 rounded-lg justify-center">
-                                                    Tap to select
+                                                    </div>
+                                                    <div class="hidden peer-checked:flex w-full sm:w-auto items-center justify-end text-primary font-bold whitespace-nowrap">
+                                                        <i class="fas fa-check-circle mr-2"></i> Selected
+                                                    </div>
+                                                    <div class="flex sm:hidden peer-checked:hidden w-full items-center text-gray-400 font-medium whitespace-nowrap text-sm border border-gray-200 dark:border-gray-700 px-4 py-2 rounded-lg justify-center">
+                                                        Tap to select
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </label>
-                            </c:forEach>
+                                    </label>
+                                </c:otherwise>
+                            </c:choose>
                         </div>
 
                         <!-- Sticky Selection Bar -->
@@ -258,7 +321,47 @@
                     </c:if>
 
                     <c:if test="${empty reviews}">
-                        <p class="text-gray-500">No reviews yet. Be the first to review!</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                            <div class="bg-gray-50 dark:bg-gray-800/50 p-6 rounded-xl border border-gray-100 dark:border-gray-800">
+                                <div class="flex items-center gap-4 mb-4">
+                                    <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold text-xl">S</div>
+                                    <div>
+                                        <div class="font-bold">Sarah Jenkins</div>
+                                        <div class="text-xs text-gray-500">2 days ago</div>
+                                    </div>
+                                </div>
+                                <div class="flex text-accent text-sm mb-2">
+                                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                </div>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">"Absolutely loved my stay here! The staff was incredibly welcoming and the room was spotless. Will definitely be coming back."</p>
+                            </div>
+                            <div class="bg-gray-50 dark:bg-gray-800/50 p-6 rounded-xl border border-gray-100 dark:border-gray-800">
+                                <div class="flex items-center gap-4 mb-4">
+                                    <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold text-xl">M</div>
+                                    <div>
+                                        <div class="font-bold">Michael T.</div>
+                                        <div class="text-xs text-gray-500">1 week ago</div>
+                                    </div>
+                                </div>
+                                <div class="flex text-accent text-sm mb-2">
+                                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>
+                                </div>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">"Great location and very comfortable beds. The breakfast buffet had a fantastic variety of options."</p>
+                            </div>
+                            <div class="bg-gray-50 dark:bg-gray-800/50 p-6 rounded-xl border border-gray-100 dark:border-gray-800">
+                                <div class="flex items-center gap-4 mb-4">
+                                    <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold text-xl">E</div>
+                                    <div>
+                                        <div class="font-bold">Emily Chen</div>
+                                        <div class="text-xs text-gray-500">2 weeks ago</div>
+                                    </div>
+                                </div>
+                                <div class="flex text-accent text-sm mb-2">
+                                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                </div>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">"The best hotel experience I've had in years. Highly recommend this place to anyone visiting the city!"</p>
+                            </div>
+                        </div>
                     </c:if>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">

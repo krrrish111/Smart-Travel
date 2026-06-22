@@ -5,7 +5,7 @@
             </jsp:include>
      Steps: 1=Flight, 2=Travellers, 3=Seats, 4=Extras, 5=Review, 6=Payment
 --%>
-<%@ page contentType="text/html;charset=UTF-8" %>
+
 <%
     int step = 1;
     try { step = Integer.parseInt(request.getParameter("step")); } catch(Exception e){}

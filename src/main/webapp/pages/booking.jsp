@@ -1614,8 +1614,14 @@
                             parts.push(adults + ' Adult' + (adults > 1 ? 's' : ''));
                             if (children > 0) parts.push(children + ' Child' + (children > 1 ? 'ren' : ''));
                             if (infants  > 0) parts.push(infants  + ' Infant' + (infants  > 1 ? 's'   : ''));
-                            document.getElementById('travellersDisplay').textContent = parts.join(', ');
-                            document.getElementById('classDisplay').textContent      = selectedClassLabel;
+                            const travellersDisplay = document.getElementById('travellersDisplay');
+                            if (travellersDisplay) {
+                                travellersDisplay.textContent = parts.join(', ');
+                            }
+                            const classDisplay = document.getElementById('classDisplay');
+                            if (classDisplay) {
+                                classDisplay.textContent = selectedClassLabel;
+                            }
                         }
 
                         // Run on page load to restore state

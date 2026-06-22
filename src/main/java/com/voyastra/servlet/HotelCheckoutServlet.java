@@ -147,12 +147,17 @@ public class HotelCheckoutServlet extends HttpServlet {
             HotelBooking pending = new HotelBooking();
             pending.setBookingCode("HB-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
             pending.setUserId(user.getId());
-            pending.setHotelId(Integer.parseInt(request.getParameter("hotelId")));
-            pending.setRoomId(Integer.parseInt(request.getParameter("roomId")));
+            String hotelIdStr = request.getParameter("hotelId");
+            String roomIdStr = request.getParameter("roomId");
+            String guestsStr = request.getParameter("guests");
+            String totalPriceStr = request.getParameter("totalPrice");
+
+            pending.setHotelId(hotelIdStr != null && !hotelIdStr.isEmpty() ? Integer.parseInt(hotelIdStr) : 0);
+            pending.setRoomId(roomIdStr != null && !roomIdStr.isEmpty() ? Integer.parseInt(roomIdStr) : 0);
             pending.setCheckIn(Date.valueOf(request.getParameter("checkIn")));
             pending.setCheckOut(Date.valueOf(request.getParameter("checkOut")));
-            pending.setGuests(Integer.parseInt(request.getParameter("guests")));
-            pending.setTotalPrice(Double.parseDouble(request.getParameter("totalPrice")));
+            pending.setGuests(guestsStr != null && !guestsStr.isEmpty() ? Integer.parseInt(guestsStr) : 1);
+            pending.setTotalPrice(totalPriceStr != null && !totalPriceStr.isEmpty() ? Double.parseDouble(totalPriceStr) : 0.0);
             pending.setGuestName(firstName.trim() + " " + lastName.trim());
             pending.setGuestEmail(guestEmail.trim());
             pending.setGuestPhone(guestPhone.trim());

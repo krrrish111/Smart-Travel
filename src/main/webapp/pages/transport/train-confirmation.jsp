@@ -117,7 +117,7 @@
     </div>
     
     <div class="actions">
-        <button class="btn btn-primary" onclick="window.location.href='${pageContext.request.contextPath}/profile?tab=bookings'">Back to My Bookings</button>
+        <button class="btn btn-primary" onclick="window.location.href='${pageContext.request.contextPath}/my-journey'">View My Journey</button>
     </div>
 </div>
 

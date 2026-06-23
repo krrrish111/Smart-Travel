@@ -106,7 +106,14 @@
     <div class="container">
         <div class="main-content">
             <h2>About this Experience</h2>
-            <p style="font-size: 1.1rem; line-height: 1.6; color: #555; margin-top: 20px;">${experience.description}</p>
+            <div style="display: flex; gap: 20px; margin-top: 15px; color: #555; font-weight: bold; align-items: center;">
+                <span><i class="fas fa-clock text-primary"></i> Duration: ${not empty experience.duration ? experience.duration : '3-4 Hours'}</span>
+                <span><i class="fas fa-user-friends text-primary"></i> Max Group: ${not empty experience.capacity ? experience.capacity : '10'} People</span>
+                <span><i class="fas fa-language text-primary"></i> Languages: English, Hindi</span>
+            </div>
+            <p style="font-size: 1.1rem; line-height: 1.6; color: #555; margin-top: 20px;">
+                ${not empty experience.description ? experience.description : 'Dive into an unforgettable adventure! This experience is carefully crafted to immerse you in local culture and give you hands-on exposure to activities you will cherish for a lifetime. Guided by experts, you are guaranteed a safe and thrilling journey.'}
+            </p>
             
             <div class="score-row">
                 <div class="score-box">
@@ -133,6 +140,39 @@
                     </div>
                 </div>
             </c:if>
+
+            <!-- Photo Gallery -->
+            <h2 style="margin-top: 40px; margin-bottom: 20px;">Experience Gallery</h2>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 30px;">
+                <img src="https://images.unsplash.com/photo-1544644181-1484b3fdfc62?auto=format&fit=crop&w=400&q=75" alt="Gallery 1" style="width: 100%; height: 120px; object-fit: cover; border-radius: 12px; cursor: pointer;">
+                <img src="https://images.unsplash.com/photo-1517400508447-f8dd518b86db?auto=format&fit=crop&w=400&q=75" alt="Gallery 2" style="width: 100%; height: 120px; object-fit: cover; border-radius: 12px; cursor: pointer;">
+                <img src="https://images.unsplash.com/photo-1533692328991-08159ff19fca?auto=format&fit=crop&w=400&q=75" alt="Gallery 3" style="width: 100%; height: 120px; object-fit: cover; border-radius: 12px; cursor: pointer;">
+            </div>
+
+            <!-- Traveler Reviews -->
+            <h2 style="margin-top: 40px; margin-bottom: 20px;">Traveler Reviews</h2>
+            <div style="display: flex; flex-direction: column; gap: 20px; margin-bottom: 40px;">
+                <div style="background: #F8F9FA; padding: 20px; border-radius: 15px; display: flex; gap: 15px;">
+                    <div style="width: 48px; height: 48px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; flex-shrink: 0;">SA</div>
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
+                            <h4 style="margin: 0;">Sarah A.</h4>
+                            <span style="color: #F1C40F; font-size: 0.8rem;">★★★★★</span>
+                        </div>
+                        <p style="color: #666; font-size: 0.95rem; margin: 0;">"An absolute blast! The host was super knowledgeable and the entire experience was so well organized. Highly recommended."</p>
+                    </div>
+                </div>
+                <div style="background: #F8F9FA; padding: 20px; border-radius: 15px; display: flex; gap: 15px;">
+                    <div style="width: 48px; height: 48px; border-radius: 50%; background: #9b59b6; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; flex-shrink: 0;">DJ</div>
+                    <div>
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
+                            <h4 style="margin: 0;">David J.</h4>
+                            <span style="color: #F1C40F; font-size: 0.8rem;">★★★★★</span>
+                        </div>
+                        <p style="color: #666; font-size: 0.95rem; margin: 0;">"Worth every penny. We got to see parts of the city we would never have found on our own. The pictures came out amazing too!"</p>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="booking-sidebar">
@@ -165,7 +205,7 @@
     <jsp:include page="/components/footer.jsp" />
 
     <script>
-        const basePrice = ${experience.price};
+        const basePrice = Number('${not empty experience.price ? experience.price : 0}') || 0;
         const travelersInput = document.getElementById('travelersInput');
         const totalDisplay = document.getElementById('totalDisplay');
         const totalAmountInput = document.getElementById('totalAmountInput');

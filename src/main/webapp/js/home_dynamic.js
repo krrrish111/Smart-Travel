@@ -301,8 +301,66 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initScroller('partnersOuter', 'partnersTrack', 0.6);
     initScroller('testiOuter', 'testiTrack', 0.8);
-    initScroller('mustDoOuter', 'mustDoInner', 0.8);
+    // Removed initScroller('mustDoOuter', 'mustDoInner', 0.8); for custom true infinite implementation
     initScroller('itinStripOuter', 'itinStripInner', 1.0);
+
+    /* --- TRUE INFINITE MUST-DO THINGS CAROUSEL --- */
+    (function() {
+        const container = document.getElementById('mustDoOuter');
+        const inner = document.getElementById('mustDoInner');
+        if (!container || !inner) return;
+
+        // Ensure container can scroll
+        container.style.overflow = 'hidden';
+        
+        // Remove transform transition just in case
+        inner.style.transition = 'none';
+        inner.style.transform = 'none';
+
+        // 1. Get original items
+        const originalItems = Array.from(inner.children);
+        if (originalItems.length === 0) return;
+
+        // 2. Calculate original width
+        // We wait a bit for layout to settle, or compute directly
+        setTimeout(() => {
+            // Re-measure original width
+            let originalWidth = 0;
+            const style = window.getComputedStyle(inner);
+            const gap = parseFloat(style.gap) || 0;
+            
+            originalItems.forEach(item => {
+                originalWidth += item.offsetWidth + gap;
+            });
+            
+            // 3. Duplicate cards dynamically to ensure we have enough to scroll seamlessly
+            // We append the cloned cards to the end
+            originalItems.forEach(item => {
+                const clone = item.cloneNode(true);
+                inner.appendChild(clone);
+            });
+            // And maybe one more set just to be super safe if screen is very wide
+            originalItems.forEach(item => {
+                const clone = item.cloneNode(true);
+                inner.appendChild(clone);
+            });
+
+            // 4. Animate using scrollLeft
+            function animate() {
+                container.scrollLeft += 1.0; // speed
+
+                // When halfway through duplicated content (which is 1 full original width)
+                // instantly move back seamlessly
+                if(container.scrollLeft >= originalWidth){
+                    container.scrollLeft -= originalWidth;
+                }
+
+                requestAnimationFrame(animate);
+            }
+
+            requestAnimationFrame(animate);
+        }, 100);
+    })();
 
     /* --- Custom Cursor --- */
     const cursorDot = document.getElementById('cursorDot');

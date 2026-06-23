@@ -3026,15 +3026,15 @@ document.addEventListener('DOMContentLoaded', function() {
     function renderCard(place, typeLabel, iconUrl) {
         return `
             <div class="discovery-card glass-card p-4 rounded-xl transition-all hover:scale-[1.02] flex flex-col h-full" style="border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.03);">
-                ${place.photo ? `<div class="w-full h-40 rounded-lg bg-cover bg-center mb-3" style="background-image: url('${place.photo}');"></div>` : `<div class="w-full h-40 rounded-lg bg-[var(--color-surface)] mb-3 flex items-center justify-center text-white opacity-50">No Image</div>`}
-                <h5 class="text-white font-bold text-base mb-1 truncate">${place.name}</h5>
+                \${place.photo ? `<div class="w-full h-40 rounded-lg bg-cover bg-center mb-3" style="background-image: url('\${place.photo}');"></div>` : `<div class="w-full h-40 rounded-lg bg-[var(--color-surface)] mb-3 flex items-center justify-center text-white opacity-50">No Image</div>`}
+                <h5 class="text-white font-bold text-base mb-1 truncate">\${place.name}</h5>
                 <div class="flex items-center gap-2 mb-2 text-xs">
-                    <span class="text-yellow-400">⭐ ${place.rating}</span>
-                    <span class="text-white opacity-60 truncate">${place.address}</span>
+                    <span class="text-yellow-400">⭐ \${place.rating}</span>
+                    <span class="text-white opacity-60 truncate">\${place.address}</span>
                 </div>
-                ${place.open_now !== undefined ? `<div class="text-xs mb-3 ${place.open_now ? 'text-green-400' : 'text-red-400'}">${place.open_now ? 'Open Now' : 'Closed'}</div>` : '<div class="text-xs mb-3 text-transparent">Unknown</div>'}
+                \${place.open_now !== undefined ? `<div class="text-xs mb-3 \${place.open_now ? 'text-green-400' : 'text-red-400'}">\${place.open_now ? 'Open Now' : 'Closed'}</div>` : '<div class="text-xs mb-3 text-transparent">Unknown</div>'}
                 <div class="mt-auto pt-2 flex gap-2">
-                    <a href="${place.maps_link}" target="_blank" class="btn btn-secondary flex-1 text-center py-2 text-xs font-bold rounded-lg text-white no-underline" style="border:1px solid rgba(255,255,255,0.2);">🗺️ View Map</a>
+                    <a href="\${place.maps_link}" target="_blank" class="btn btn-secondary flex-1 text-center py-2 text-xs font-bold rounded-lg text-white no-underline" style="border:1px solid rgba(255,255,255,0.2);">🗺️ View Map</a>
                 </div>
             </div>
         `;

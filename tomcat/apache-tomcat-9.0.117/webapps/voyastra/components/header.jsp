@@ -76,7 +76,7 @@
 <body>
     <nav class="navbar">
         <div class="container nav-container">
-            <a href="home" class="nav-brand voyastra-logo">
+            <a href="${pageContext.request.contextPath}/" class="nav-brand voyastra-logo">
                 <svg class="voyastra-icon" viewBox="0 -1 26 26" fill="none" stroke="url(#voyastraGradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <defs>
                         <linearGradient id="voyastraGradient" x1="0%" y1="0%" x2="100%" y2="100%">

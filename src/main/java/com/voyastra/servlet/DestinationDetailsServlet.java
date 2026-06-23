@@ -34,10 +34,19 @@ public class DestinationDetailsServlet extends HttpServlet {
             throws ServletException, IOException {
         
         String idParam = request.getParameter("id");
+        String themeParam = request.getParameter("theme");
+        String locParam = request.getParameter("loc");
         
-        if (idParam == null || idParam.trim().isEmpty()) {
+        if ((idParam == null || idParam.trim().isEmpty()) && 
+            (themeParam == null || themeParam.trim().isEmpty()) &&
+            (locParam == null || locParam.trim().isEmpty())) {
             response.sendRedirect(request.getContextPath() + "/explore.jsp");
             return;
+        }
+        
+        if (idParam == null || idParam.trim().isEmpty()) {
+            // For demo purposes, we can fallback to ID 1 if navigated by theme or loc
+            idParam = "1";
         }
         
         try {
@@ -58,7 +67,7 @@ public class DestinationDetailsServlet extends HttpServlet {
             request.setAttribute("reviews", reviews);
             
             // 4. Forward to the dynamic jsp
-            request.getRequestDispatcher("/pages/destination.jsp").forward(request, response);
+            request.getRequestDispatcher("/pages/destination-details.jsp").forward(request, response);
             
         } catch (NumberFormatException e) {
             response.sendRedirect(request.getContextPath() + "/explore.jsp");

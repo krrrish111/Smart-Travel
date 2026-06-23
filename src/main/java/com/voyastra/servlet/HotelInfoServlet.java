@@ -13,7 +13,6 @@ public class HotelInfoServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            // Read parameters passed from hotel-results.jsp
             String idStr = request.getParameter("id");
             String name = request.getParameter("name");
             String city = request.getParameter("city");
@@ -21,25 +20,41 @@ public class HotelInfoServlet extends HttpServlet {
             String priceStr = request.getParameter("price");
             String image = request.getParameter("image");
 
-            if (idStr != null && name != null) {
-                Hotel hotel = new Hotel();
-                hotel.setId(Integer.parseInt(idStr));
+            if (idStr == null || idStr.trim().isEmpty()) {
+                response.sendRedirect(request.getContextPath() + "/explore.jsp");
+                return;
+            }
+
+            int id = Integer.parseInt(idStr);
+            Hotel hotel = null;
+
+            if (name != null && !name.isEmpty()) {
+                hotel = new Hotel();
+                hotel.setId(id);
                 hotel.setName(name);
                 hotel.setCity(city != null ? city : "Unknown City");
                 hotel.setRating(ratingStr != null && !ratingStr.isEmpty() ? Double.parseDouble(ratingStr) : 4.0);
                 hotel.setStartingPrice(priceStr != null && !priceStr.isEmpty() ? Double.parseDouble(priceStr) : 150.0);
                 hotel.setImageUrl(image != null ? image : "");
                 
-                // Set placeholder values for details page rendering
                 hotel.setAddress(city != null ? city + " Central Area" : "Central Area");
                 hotel.setAmenities("WiFi,Pool,Gym,Parking,Restaurant");
                 hotel.setAvailableRooms(5);
                 hotel.setCancellationPolicy("Free Cancellation");
-
-                request.setAttribute("hotel", hotel);
+            } else {
+                com.voyastra.dao.HotelDAO hotelDAO = new com.voyastra.dao.HotelDAO();
+                hotel = hotelDAO.getHotelById(id);
+                if (hotel == null) {
+                    response.sendRedirect(request.getContextPath() + "/explore.jsp");
+                    return;
+                }
             }
+
+            request.setAttribute("hotel", hotel);
         } catch (Exception e) {
             e.printStackTrace();
+            response.sendRedirect(request.getContextPath() + "/explore.jsp");
+            return;
         }
 
         // Pass along search parameters for checkout

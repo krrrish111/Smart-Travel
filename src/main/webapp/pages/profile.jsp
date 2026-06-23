@@ -995,19 +995,40 @@
 
         <!-- Saved Plans Section -->
         <section id="saved-plans" class="content-section ${activeTab == 'saved-plans' ? 'active' : ''}">
-            <h2 class="section-title">Saved Itineraries</h2>
+            <h2 class="section-title">Saved Trips</h2>
             <div class="stats-grid" style="grid-template-columns: 1fr 1fr;">
                 <c:forEach var="plan" items="${savedPlans}">
-                    <div class="stat-card" style="text-align: left; padding: 20px;">
-                        <h3 style="margin-bottom: 5px;">${plan.title}</h3>
-                        <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 15px;">${plan.destination}</p>
-                        <a href="${pageContext.request.contextPath}/itinerary?id=${plan.id}" class="btn btn-outline btn-sm">View Itinerary</a>
+                    <div class="stat-card" style="text-align: left; padding: 0; overflow: hidden; display: flex; flex-direction: column;">
+                        <img src="${plan.tripImage}" style="width: 100%; height: 150px; object-fit: cover;">
+                        <div style="padding: 20px;">
+                            <h3 style="margin-bottom: 5px;">${plan.tripName}</h3>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 15px;">${plan.destination} | ₹${plan.price}</p>
+                            <div style="display: flex; gap: 10px;">
+                                <a href="${pageContext.request.contextPath}/pages/trip-plan-details.jsp?id=${plan.tripId}" class="btn btn-primary btn-sm" style="flex: 1; text-align: center; font-size: 0.85rem; padding: 8px;">Book Now</a>
+                                <button onclick="removeSavedPlan(${plan.tripId})" class="btn btn-danger btn-sm" style="flex: 1; font-size: 0.85rem; padding: 8px;">Remove</button>
+                            </div>
+                        </div>
                     </div>
                 </c:forEach>
                 <c:if test="${empty savedPlans}">
-                    <p style="color: var(--text-secondary); grid-column: span 2;">No saved itineraries.</p>
+                    <p style="color: var(--text-secondary); grid-column: span 2;">No saved trip plans.</p>
                 </c:if>
             </div>
+            <script>
+                function removeSavedPlan(tripId) {
+                    fetch('${pageContext.request.contextPath}/api/trip/save', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: 'action=remove&tripId=' + tripId
+                    }).then(r => r.json()).then(data => {
+                        if (data.success) {
+                            window.location.reload();
+                        } else {
+                            alert(data.message);
+                        }
+                    });
+                }
+            </script>
         </section>
 
         <!-- Wishlist & History Section -->

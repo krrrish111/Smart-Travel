@@ -165,176 +165,73 @@
                 </div>
             </section>
 
-            <!-- ====== BOOKING SECTION ====== -->
-            <div class="container relative" style="margin-top: -10px;">
-
-                <!-- Booking Search Panel -->
-                <div class="booking-panel glass-panel relative"
-                    style="border-radius: 16px; padding: 32px; box-shadow: var(--shadow-lg); transition: all 0.3s ease; margin-bottom: 80px; z-index: 10;">
-
-                    <!-- Flights Form -->
-                    <div id="tab-flights" class="booking-tab active" style="animation: fadeUp 0.4s ease forwards;">
-                        <div class="flex items-center gap-6 mb-6">
-                            <label class="radio-label"><input type="radio" name="tripType" value="one-way" checked> One
-                                Way</label>
-                            <label class="radio-label"><input type="radio" name="tripType" value="round-trip"> Round
-                                Trip</label>
-                            <label class="radio-label"><input type="radio" name="tripType" value="multi-city">
-                                Multi-City</label>
-                        </div>
-                        <div class="search-fields-row mt-2">
-                            <div class="search-field" style="flex: 1.5;">
-                                <div class="field-label">From</div>
-                                <div class="field-value">Delhi</div>
-                                <div class="field-sub">DEL, Indira Gandhi Intl</div>
-                            </div>
-                            
-                            <!-- Swap Button -->
-                            <div class="swap-btn" title="Swap">â‡„</div>
-                            
-                            <div class="search-field" style="flex: 1.5;">
-                                <div class="field-label">To</div>
-                                <div class="field-value">Mumbai</div>
-                                <div class="field-sub">BOM, Chhatrapati Shivaji Intl</div>
-                            </div>
-                            
-                            <div class="search-field">
-                                <div class="field-label">Departure <span class="text-primary float-right" style="font-size:0.6rem; margin-top:1px;">+ Return</span></div>
-                                <div class="field-value">10 Apr <span style="font-size:1rem; font-weight:600;">'26</span></div>
-                                <div class="field-sub">Friday</div>
-                            </div>
-                            
-                            <div class="search-field" style="border-right: none;">
-                                <div class="field-label">Travellers & Class</div>
-                                <div class="field-value">2 Adults</div>
-                                <div class="field-sub">Economy / Premium</div>
-                            </div>
-                            
-                            <button class="search-cta-btn">Search Flights →</button>
-                        </div>
+            <!-- ====== AI PLANNER WIDGET ====== -->
+            <link rel="stylesheet" href="${pageContext.request.contextPath}/css/home.css">
+            <div class="container relative ai-hero-container">
+                <div class="ai-planner-card glass-panel relative">
+                    <div class="ai-planner-header text-center mb-6">
+                        <h2 class="editorial ai-planner-title">✨ Design Your Perfect Journey</h2>
+                        <p class="text-muted ai-planner-subtitle mt-2">Tell us your preferences and let Voyastra AI build the perfect itinerary.</p>
                     </div>
 
-                    <!-- Hotels Form (Hidden by default) -->
-                    <div id="tab-hotels" class="booking-tab"
-                        style="display: none; animation: fadeUp 0.4s ease forwards;">
-                        <div class="flex items-center gap-6 mb-6">
-                            <label class="radio-label"><input type="radio" name="hotelType" value="up-to-4" checked>
-                                Upto 4 Rooms</label>
-                            <label class="radio-label"><input type="radio" name="hotelType" value="group"> Group
-                                Booking</label>
-                        </div>
-                        <div class="search-fields-row mt-2">
-                            <div class="search-field" style="flex: 2;">
-                                <div class="field-label">City, Property Name Or Location</div>
-                                <div class="field-value">Udaipur</div>
-                                <div class="field-sub">Rajasthan, India</div>
+                    <form id="aiPlannerHeroForm" class="ai-planner-form">
+                        
+                        <div class="ai-planner-grid">
+                            <!-- Destination -->
+                            <div class="ai-field-group">
+                                <label class="ai-field-label">Destination</label>
+                                <div class="ai-input-wrap">
+                                    <span class="ai-input-icon">📍</span>
+                                    <input type="text" id="aiDestInput" placeholder="Where to?" required class="ai-dest-input" autocomplete="off" />
+                                </div>
                             </div>
-                            
-                            <div class="search-field" style="flex: 1.5;">
-                                <div class="field-label">Check-In <span class="mx-2 opacity-50 text-xs">to</span> Check-Out</div>
-                                <div class="field-value">10 Apr - 14 Apr</div>
-                                <div class="field-sub">4 Nights</div>
-                            </div>
-                            
-                            <div class="search-field" style="border-right: none;">
-                                <div class="field-label">Rooms & Guests</div>
-                                <div class="field-value">1 Room</div>
-                                <div class="field-sub">2 Adults</div>
-                            </div>
-                            
-                            <button class="search-cta-btn">Search Hotels →</button>
-                        </div>
-                    </div>
 
-                    <!-- Trains Form (Hidden by default) -->
-                    <div id="tab-trains" class="booking-tab"
-                        style="display: none; animation: fadeUp 0.4s ease forwards;">
-                        <div class="search-fields-row mt-2">
-                            <div class="search-field" style="flex: 1.5;">
-                                <div class="field-label">From</div>
-                                <div class="field-value">NDLS</div>
-                                <div class="field-sub">New Delhi Railway Station</div>
+                            <!-- Duration -->
+                            <div class="ai-field-group">
+                                <label class="ai-field-label">Duration</label>
+                                <div class="ai-chip-group" id="aiDurationGroup">
+                                    <label class="ai-chip"><input type="radio" name="duration" value="Weekend"><span>Weekend</span></label>
+                                    <label class="ai-chip"><input type="radio" name="duration" value="3-5 Days" checked><span>3-5 Days</span></label>
+                                    <label class="ai-chip"><input type="radio" name="duration" value="1 Week"><span>1 Week</span></label>
+                                    <label class="ai-chip"><input type="radio" name="duration" value="Custom"><span>Custom</span></label>
+                                </div>
                             </div>
-                            
-                            <!-- Swap Button -->
-                            <div class="swap-btn" title="Swap">â‡„</div>
-                            
-                            <div class="search-field" style="flex: 1.5;">
-                                <div class="field-label">To</div>
-                                <div class="field-value">BCT</div>
-                                <div class="field-sub">Mumbai Central</div>
-                            </div>
-                            
-                            <div class="search-field" style="border-right: none;">
-                                <div class="field-label">Travel Date</div>
-                                <div class="field-value">12 Apr <span style="font-size:1rem; font-weight:600;">'26</span></div>
-                                <div class="field-sub">Sunday</div>
-                            </div>
-                            
-                            <button class="search-cta-btn">Search Trains →</button>
-                        </div>
-                    </div>
 
+                            <!-- Budget -->
+                            <div class="ai-field-group">
+                                <label class="ai-field-label">Budget</label>
+                                <div class="ai-chip-group" id="aiBudgetGroup">
+                                    <label class="ai-chip"><input type="radio" name="budget" value="10k"><span>₹10K</span></label>
+                                    <label class="ai-chip"><input type="radio" name="budget" value="25k" checked><span>₹25K</span></label>
+                                    <label class="ai-chip"><input type="radio" name="budget" value="50k"><span>₹50K</span></label>
+                                    <label class="ai-chip"><input type="radio" name="budget" value="luxury"><span>Luxury</span></label>
+                                </div>
+                            </div>
+
+                            <!-- Travel Style -->
+                            <div class="ai-field-group">
+                                <label class="ai-field-label">Travel Style</label>
+                                <div class="ai-chip-group" id="aiStyleGroup">
+                                    <label class="ai-chip"><input type="radio" name="style" value="Solo"><span>Solo</span></label>
+                                    <label class="ai-chip"><input type="radio" name="style" value="Couple" checked><span>Couple</span></label>
+                                    <label class="ai-chip"><input type="radio" name="style" value="Family"><span>Family</span></label>
+                                    <label class="ai-chip"><input type="radio" name="style" value="Adventure"><span>Adventure</span></label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ai-cta-row mt-8 flex justify-center">
+                            <button type="button" id="aiGenerateBtn" class="ai-generate-btn">
+                                <span>🚀 Generate My AI Itinerary</span>
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
-
             <script>
-                document.addEventListener('DOMContentLoaded', () => {
-                    const tabs = document.querySelectorAll('.sec-nav-item');
-                    const contents = document.querySelectorAll('.booking-tab');
-
-                    tabs.forEach(tab => {
-                        tab.addEventListener('click', () => {
-                            const targetId = 'tab-' + tab.getAttribute('data-tab');
-                            const targetElem = document.getElementById(targetId);
-
-                            if (targetElem) {
-                                // Remove active class from all tabs
-                                tabs.forEach(t => t.classList.remove('active'));
-                                tab.classList.add('active');
-
-                                // Hide all contents
-                                contents.forEach(c => c.style.display = 'none');
-                                // Show target
-                                targetElem.style.display = 'block';
-                            } else {
-                                // Fallback purely visual for missing tabs in prototype
-                                tabs.forEach(t => t.classList.remove('active'));
-                                tab.classList.add('active');
-                            }
-                    });
- 
-                     // --- Search Button Logic ---
-                     document.querySelectorAll('.search-cta-btn').forEach(btn => {
-                         btn.addEventListener('click', (e) => {
-                             const isHotel = btn.innerText.toLowerCase().includes('hotel');
-                             const isTrain = btn.innerText.toLowerCase().includes('train');
-                             
-                             let url = '${pageContext.request.contextPath}/search?';
-                             if (isHotel) {
-                                 const city = document.querySelector('#tab-hotels .field-value').innerText;
-                                 url += 'type=hotel&city=' + encodeURIComponent(city);
-                                 VoyastraUI.showLoader('Finding the best stays...');
-                             } else if (isTrain) {
-                                 const from = document.querySelector('#tab-trains .search-field:nth-child(1) .field-value').innerText;
-                                 const to = document.querySelector('#tab-trains .search-field:nth-child(3) .field-value').innerText;
-                                 url += 'type=train&from=' + encodeURIComponent(from) + '&to=' + encodeURIComponent(to);
-                                 VoyastraUI.showLoader('Tracking available trains...');
-                             } else {
-                                 // Default: Flights
-                                 const from = document.querySelector('#tab-flights .search-field:nth-child(1) .field-value').innerText;
-                                 const to = document.querySelector('#tab-flights .search-field:nth-child(3) .field-value').innerText;
-                                 url += 'type=flight&from=' + encodeURIComponent(from) + '&to=' + encodeURIComponent(to);
-                                 VoyastraUI.showLoader('Searching for lowest fares...');
-                             }
-                             
-                             setTimeout(() => {
-                                 location.href = url;
-                             }, 800); // Small delay for visual polish
-                         });
-                     });
-                 });
-             </script>
+                window.CONTEXT_PATH = '${pageContext.request.contextPath}';
+            </script>
+            <script src="${pageContext.request.contextPath}/js/home.js"></script>
 
             <!-- ====== PREMIUM TRIP PLANS CAROUSEL ====== -->
             <section class="premium-carousel-section container scroll-fade">
@@ -388,7 +285,7 @@
                                                 ${trip.duration}
                                             </div>
                                         </div>
-                                        <a href="${pageContext.request.contextPath}/trip?slug=${trip.slug}" class="plan-card-view-btn">View Plan &rarr;</a>
+                                        <a href="${pageContext.request.contextPath}/pages/trip-plan-details.jsp?id=${trip.id}" class="plan-card-view-btn">View Plan &rarr;</a>
                                     </div>
                                 </div>
                             </c:forEach>
@@ -671,7 +568,7 @@
                                             <div class="dest-card-rating">â˜… 4.9</div>
                                         </div>
                                     </div>
-                                    <a href="destination?id=${dest.id}" class="dest-card-link" style="position:absolute; inset:0; z-index:5;"></a>
+                                    <a href="${pageContext.request.contextPath}/pages/destination-details.jsp?city=${dest.name}" class="dest-card-link" style="position:absolute; inset:0; z-index:5;"></a>
                                 </div>
                             </c:forEach>
 
@@ -708,38 +605,38 @@
 
                 <div class="plan-scroll-outer" id="mustDoOuter">
                     <div class="plan-scroll-inner" id="mustDoInner" style="animation: none; transition: transform 0.1s linear; display: flex; gap: 24px;">
-                        <div class="glass-panel flex gap-4 p-4" style="min-width: 320px; border-radius: 16px; cursor: pointer; transition: transform 0.3s ease;">
+                        <a href="${pageContext.request.contextPath}/pages/experience-details.jsp?activity=Rafting" class="glass-panel flex gap-4 p-4" style="min-width: 320px; border-radius: 16px; cursor: pointer; transition: transform 0.3s ease; text-decoration: none; display: flex;">
                             <img src="https://images.unsplash.com/photo-1628126235206-5260b9ea6441?auto=format,compress&fit=crop&w=150&h=150&q=75" alt="Rafting" style="width: 80px; height: 80px; border-radius: 12px; object-fit: cover;" loading="lazy">
                             <div class="flex flex-col justify-center">
                                 <h4 class="font-bold text-main" style="font-size: 1.1rem;">River Rafting</h4>
                                 <p class="text-sm text-muted">Rishikesh, Uttarakhand</p>
                                 <div class="text-primary font-bold mt-1">₹1,500 <span class="text-xs text-muted font-normal block md:inline">/ person</span></div>
                             </div>
-                        </div>
-                        <div class="glass-panel flex gap-4 p-4" style="min-width: 320px; border-radius: 16px; cursor: pointer; transition: transform 0.3s ease;">
+                        </a>
+                        <a href="${pageContext.request.contextPath}/pages/experience-details.jsp?activity=Aarti" class="glass-panel flex gap-4 p-4" style="min-width: 320px; border-radius: 16px; cursor: pointer; transition: transform 0.3s ease; text-decoration: none; display: flex;">
                             <img src="https://images.unsplash.com/photo-1561359313-0639aad073f0?auto=format,compress&fit=crop&w=150&h=150&q=75" alt="Ganga Aarti" style="width: 80px; height: 80px; border-radius: 12px; object-fit: cover;" loading="lazy">
                             <div class="flex flex-col justify-center">
                                 <h4 class="font-bold text-main" style="font-size: 1.1rem;">Ganga Aarti</h4>
                                 <p class="text-sm text-muted">Varanasi, UP</p>
                                 <div class="text-primary font-bold mt-1">Free</div>
                             </div>
-                        </div>
-                        <div class="glass-panel flex gap-4 p-4" style="min-width: 320px; border-radius: 16px; cursor: pointer; transition: transform 0.3s ease;">
+                        </a>
+                        <a href="${pageContext.request.contextPath}/pages/experience-details.jsp?activity=Nightlife" class="glass-panel flex gap-4 p-4" style="min-width: 320px; border-radius: 16px; cursor: pointer; transition: transform 0.3s ease; text-decoration: none; display: flex;">
                             <img src="https://images.unsplash.com/photo-1548013146-72479768bada?auto=format,compress&fit=crop&w=150&h=150&q=75" alt="Scuba" style="width: 80px; height: 80px; border-radius: 12px; object-fit: cover;" loading="lazy">
                             <div class="flex flex-col justify-center">
                                 <h4 class="font-bold text-main" style="font-size: 1.1rem;">Nightlife & Beaches</h4>
                                 <p class="text-sm text-muted">Goa</p>
                                 <div class="text-primary font-bold mt-1">Varies</div>
                             </div>
-                        </div>
-                        <div class="glass-panel flex gap-4 p-4" style="min-width: 320px; border-radius: 16px; cursor: pointer; transition: transform 0.3s ease;">
+                        </a>
+                        <a href="${pageContext.request.contextPath}/pages/experience-details.jsp?activity=TajMahal" class="glass-panel flex gap-4 p-4" style="min-width: 320px; border-radius: 16px; cursor: pointer; transition: transform 0.3s ease; text-decoration: none; display: flex;">
                             <img src="https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format,compress&fit=crop&w=150&h=150&q=75" alt="Taj Mahal" style="width: 80px; height: 80px; border-radius: 12px; object-fit: cover;" loading="lazy">
                             <div class="flex flex-col justify-center">
                                 <h4 class="font-bold text-main" style="font-size: 1.1rem;">Taj Mahal Tour</h4>
                                 <p class="text-sm text-muted">Agra, UP</p>
                                 <div class="text-primary font-bold mt-1">₹1,100 <span class="text-xs text-muted font-normal block md:inline">/ person</span></div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                 </div>
             </section>
@@ -754,7 +651,7 @@
                 <div class="container">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6" data-skeleton="card" data-skeleton-count="3">
                         <!-- Theme 1 -->
-                        <div class="plan-card active" style="max-width: none; flex: unset;">
+                        <a href="${pageContext.request.contextPath}/pages/travel-plan-details.jsp?theme=Budget" class="plan-card active" style="max-width: none; flex: unset; text-decoration: none;">
                             <div class="plan-card-img-wrap" style="height: 160px;">
                                 <img src="https://images.unsplash.com/photo-1626082896492-766af4eb65ed?auto=format,compress&fit=crop&w=800&q=75"
                                     alt="Budget" loading="lazy">
@@ -773,9 +670,9 @@
                                         </svg> 5 Days</div>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                         <!-- Theme 2 -->
-                        <div class="plan-card" style="max-width: none; flex: unset;">
+                        <a href="${pageContext.request.contextPath}/pages/travel-plan-details.jsp?theme=Adventure" class="plan-card" style="max-width: none; flex: unset; text-decoration: none;">
                             <div class="plan-card-img-wrap" style="height: 160px;">
                                 <img src="https://images.unsplash.com/photo-1628126235206-5260b9ea6441?auto=format,compress&fit=crop&w=800&q=75"
                                     alt="Adventure" loading="lazy">
@@ -794,9 +691,9 @@
                                         </svg> 6 Days</div>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                         <!-- Theme 3 -->
-                        <div class="plan-card" style="max-width: none; flex: unset;">
+                        <a href="${pageContext.request.contextPath}/pages/travel-plan-details.jsp?theme=Family" class="plan-card" style="max-width: none; flex: unset; text-decoration: none;">
                             <div class="plan-card-img-wrap" style="height: 160px;">
                                 <img src="https://images.unsplash.com/photo-1542152019-216e257e84cc?auto=format,compress&fit=crop&w=800&q=75"
                                     alt="Family" loading="lazy">
@@ -815,7 +712,7 @@
                                         </svg> 4 Days</div>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                 </div>
             </section>
@@ -829,32 +726,32 @@
                 </div>
 
                 <div class="dest-grid hover-triggers" data-skeleton="card" data-skeleton-count="6">
-                    <a href="${pageContext.request.contextPath}/planner?loc=Jaisalmer" class="dest-item dest-item-1" data-bg-index="2">
+                    <a href="${pageContext.request.contextPath}/pages/destination-details.jsp?city=Jaisalmer" class="dest-item dest-item-1" data-bg-index="2">
                         <img src="https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format,compress&fit=crop&w=800&q=75"
                             alt="Jaisalmer" loading="lazy">
                         <div class="dest-badge">Jaisalmer • 4 Days</div>
                     </a>
-                    <a href="${pageContext.request.contextPath}/planner?loc=Varanasi" class="dest-item dest-item-2" data-bg-index="3">
+                    <a href="${pageContext.request.contextPath}/pages/destination-details.jsp?city=Varanasi" class="dest-item dest-item-2" data-bg-index="3">
                         <img src="https://images.unsplash.com/photo-1561359313-0639aad073f0?auto=format,compress&fit=crop&w=800&q=75"
                             alt="Varanasi" loading="lazy">
                         <div class="dest-badge">Varanasi • 2 Days</div>
                     </a>
-                    <a href="${pageContext.request.contextPath}/planner?loc=Ladakh" class="dest-item dest-item-3" data-bg-index="4">
+                    <a href="${pageContext.request.contextPath}/pages/destination-details.jsp?city=Ladakh" class="dest-item dest-item-3" data-bg-index="4">
                         <img src="https://images.unsplash.com/photo-1626082896492-766af4eb65ed?auto=format,compress&fit=crop&w=800&q=75"
                             alt="Ladakh" loading="lazy">
                         <div class="dest-badge">Ladakh • 7 Days</div>
                     </a>
-                    <a href="${pageContext.request.contextPath}/planner?loc=Kerala" class="dest-item dest-item-4" data-bg-index="1">
+                    <a href="${pageContext.request.contextPath}/pages/destination-details.jsp?city=Kerala" class="dest-item dest-item-4" data-bg-index="1">
                         <img src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format,compress&fit=crop&w=800&q=75"
                             alt="Kerala" loading="lazy">
                         <div class="dest-badge">Kerala • 5 Days</div>
                     </a>
-                    <a href="${pageContext.request.contextPath}/planner?loc=Agra" class="dest-item dest-item-5" data-bg-index="0">
+                    <a href="${pageContext.request.contextPath}/pages/destination-details.jsp?city=Agra" class="dest-item dest-item-5" data-bg-index="0">
                         <img src="https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format,compress&fit=crop&w=800&q=75"
                             alt="Agra" loading="lazy">
                         <div class="dest-badge">Agra • 3 Days</div>
                     </a>
-                    <a href="${pageContext.request.contextPath}/planner?loc=Goa" class="dest-item dest-item-6" data-bg-index="1">
+                    <a href="${pageContext.request.contextPath}/pages/destination-details.jsp?city=Goa" class="dest-item dest-item-6" data-bg-index="1">
                         <img src="https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format,compress&fit=crop&w=800&q=75"
                             alt="Goa" loading="lazy">
                         <div class="dest-badge">Goa • 5 Days</div>
@@ -871,7 +768,7 @@
 
                 <div class="strip-outer" id="itinStripOuter" style="position: relative; overflow: hidden; cursor: grab; padding: 20px 0;">
                     <div class="strip-inner" id="itinStripInner" style="display: flex; gap: 30px; width: max-content; transition: none; will-change: transform;">
-                        <div class="itin-card" style="flex: 0 0 320px;">
+                        <a href="${pageContext.request.contextPath}/pages/itinerary-details.jsp?id=Agra" class="itin-card" style="flex: 0 0 320px; text-decoration: none;">
                             <img class="itin-card-img" src="https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format,compress&fit=crop&w=600&q=75" alt="Agra" loading="lazy">
                             <div class="itin-card-body">
                                 <div class="itin-card-city">Agra</div>
@@ -881,8 +778,8 @@
                                     <span class="itin-card-price">₹12,000</span>
                                 </div>
                             </div>
-                        </div>
-                        <div class="itin-card" style="flex: 0 0 320px;">
+                        </a>
+                        <a href="${pageContext.request.contextPath}/pages/itinerary-details.jsp?id=Kerala" class="itin-card" style="flex: 0 0 320px; text-decoration: none;">
                             <img class="itin-card-img" src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format,compress&fit=crop&w=600&q=75" alt="Kerala" loading="lazy">
                             <div class="itin-card-body">
                                 <div class="itin-card-city">Kerala Backwaters</div>
@@ -892,8 +789,8 @@
                                     <span class="itin-card-price">₹18,000</span>
                                 </div>
                             </div>
-                        </div>
-                        <div class="itin-card" style="flex: 0 0 320px;">
+                        </a>
+                        <a href="${pageContext.request.contextPath}/pages/itinerary-details.jsp?id=Jaisalmer" class="itin-card" style="flex: 0 0 320px; text-decoration: none;">
                             <img class="itin-card-img" src="https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format,compress&fit=crop&w=600&q=75" alt="Jaisalmer" loading="lazy">
                             <div class="itin-card-body">
                                 <div class="itin-card-city">Jaisalmer Fort</div>
@@ -903,8 +800,8 @@
                                     <span class="itin-card-price">₹15,000</span>
                                 </div>
                             </div>
-                        </div>
-                        <div class="itin-card" style="flex: 0 0 320px;">
+                        </a>
+                        <a href="${pageContext.request.contextPath}/pages/itinerary-details.jsp?id=Varanasi" class="itin-card" style="flex: 0 0 320px; text-decoration: none;">
                             <img class="itin-card-img" src="https://images.unsplash.com/photo-1561359313-0639aad073f0?auto=format,compress&fit=crop&w=600&q=75" alt="Varanasi" loading="lazy">
                             <div class="itin-card-body">
                                 <div class="itin-card-city">Varanasi Ghats</div>
@@ -914,7 +811,7 @@
                                     <span class="itin-card-price">₹10,500</span>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                 </div>
             </section>
@@ -955,7 +852,7 @@
                 <div class="container">
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                         <c:forEach var="hotel" items="${recommendedHotels}" end="3">
-                            <a href="${pageContext.request.contextPath}/hotel-details?id=${hotel.id}" class="plan-card" style="max-width: none; flex: unset;">
+                            <a href="${pageContext.request.contextPath}/pages/hotel-details.jsp?id=${hotel.id}" class="plan-card" style="max-width: none; flex: unset;">
                                 <div class="plan-card-img-wrap" style="height: 160px;">
                                     <img src="${hotel.imageUrl}" alt="${hotel.name}" loading="lazy">
                                     <div class="plan-card-category" style="background:rgba(139,92,246,0.85);">Recommended</div>
@@ -988,7 +885,7 @@
                 <div class="container">
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                         <c:forEach var="hotel" items="${recentlyViewedHotels}" end="3">
-                            <a href="${pageContext.request.contextPath}/hotel-details?id=${hotel.id}" class="plan-card" style="max-width: none; flex: unset;">
+                            <a href="${pageContext.request.contextPath}/pages/hotel-details.jsp?id=${hotel.id}" class="plan-card" style="max-width: none; flex: unset;">
                                 <div class="plan-card-img-wrap" style="height: 160px;">
                                     <img src="${hotel.imageUrl}" alt="${hotel.name}" loading="lazy">
                                 </div>

@@ -217,15 +217,8 @@
         // No changes needed for Popular Trip Plans.
 
         // ── 2. MUST-DO THINGS SECTION ──
-        VoyastraScroller({
-            outerSelector: '#mustDoOuter',
-            trackSelector: '#mustDoInner',
-            itemSelector: '.glass-panel',
-            speed: -0.8,
-            hoverPause: true,
-            cursorControl: true,
-            cloneSets: 1 // set 2 is already in HTML, we can clones more if needed
-        });
+        // Handled completely by true infinite scroll logic in home_dynamic.js 
+        // to address specific requirements for scrollLeft usage.
 
         // ── 3. POPULAR ITINERARIES STRIP ──
         VoyastraScroller({

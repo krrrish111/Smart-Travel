@@ -63,7 +63,7 @@ public class ProfileServlet extends HttpServlet {
         // 3. Fetch Data based on active tab / Statistics
         try {
             List<Booking> userBookings = bookingDAO.getUserBookings(userId);
-            List<Itinerary> userPlans = itineraryDAO.getSavedPlans(userId);
+            List<com.voyastra.model.SavedTripPlan> userPlans = new com.voyastra.dao.SavedTripPlanDAO().getUserSavedPlans(userId);
             List<HotelBooking> hotelBookings = hotelBookingDAO.getBookingsByUserId(userId);
             
             // New DAOs for separated bookings

@@ -520,18 +520,19 @@
                 <h2><i class="ri-flight-takeoff-line" style="color: var(--primary);"></i> Upcoming Trips</h2>
                 
                 <c:choose>
-                    <c:when test="${not empty upcomingTrips}">
-                        <c:forEach var="trip" items="${upcomingTrips}">
+                    <c:when test="${not empty upcomingTripBookings}">
+                        <c:forEach var="trip" items="${upcomingTripBookings}">
                             <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--color-border); border-radius: 16px; padding: 25px; display: flex; justify-content: space-between; align-items: center; transition: all 0.3s ease; margin-bottom: 20px;" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.03)'">
                                 <div>
                                     <h3 style="font-size: 1.6rem; font-family: 'Clash Display', sans-serif; margin-bottom: 8px;">
-                                        ${not empty trip.planTitle ? trip.planTitle : 'Booking: '.concat(trip.type)}
+                                        ${not empty trip.tripName ? trip.tripName : 'Trip'}
                                     </h3>
                                     <p style="color: var(--text-secondary); font-size: 1rem;"><i class="ri-calendar-event-line"></i> ${trip.travelDate != null ? trip.travelDate : 'Open Date'}</p>
                                 </div>
                                 <div style="text-align: right;">
-                                    <div style="background: rgba(0, 184, 148, 0.2); color: #00b894; padding: 6px 15px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; margin-bottom: 10px; display: inline-block;">${trip.status}</div>
-                                    <p style="color: var(--text-secondary); font-size: 0.9rem;">ID: ${not empty trip.bookingCode ? trip.bookingCode : trip.id}</p>
+                                    <div style="background: rgba(0, 184, 148, 0.2); color: #00b894; padding: 6px 15px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; margin-bottom: 10px; display: inline-block;">${trip.bookingStatus}</div>
+                                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 10px;">ID: ${trip.bookingId}</p>
+                                    <button class="btn btn-primary" style="padding: 5px 15px; font-size: 0.85rem;" onclick="setActiveTrip(${trip.bookingId})">Set Active</button>
                                 </div>
                             </div>
                         </c:forEach>
@@ -544,6 +545,23 @@
                     </c:otherwise>
                 </c:choose>
             </div>
+            <script>
+                function setActiveTrip(bookingId) {
+                    fetch('${pageContext.request.contextPath}/api/trip/set-active', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: 'bookingId=' + bookingId
+                    })
+                    .then(r => r.json())
+                    .then(data => {
+                        if(data.success) {
+                            window.location.reload();
+                        } else {
+                            alert(data.message);
+                        }
+                    });
+                }
+            </script>
         </div>
 
         <!-- TAB: TRAVEL MEMORIES -->

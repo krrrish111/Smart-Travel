@@ -111,7 +111,7 @@
         </div>
 
         <div>
-            <a href="${pageContext.request.contextPath}/home" class="btn">Take Me Home</a>
+            <a href="${pageContext.request.contextPath}/" class="btn">Take Me Home</a>
         </div>
     </div>
 </body>

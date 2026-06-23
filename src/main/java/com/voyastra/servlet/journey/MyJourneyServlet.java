@@ -48,15 +48,43 @@ public class MyJourneyServlet extends HttpServlet {
         }
         request.setAttribute("activeTab", tab);
         
-        // Always fetch active journey
+        // Always fetch active journey (legacy support)
         Journey activeJourney = journeyDAO.getActiveJourneyForUser(String.valueOf(user.getId()));
         request.setAttribute("journey", activeJourney);
         
-        // Fetch upcoming and completed trips if required
+        // Fetch trip bookings
+        com.voyastra.dao.TripBookingDAO tripBookingDAO = new com.voyastra.dao.TripBookingDAO();
+        List<com.voyastra.model.TripBooking> tripBookings = tripBookingDAO.getUserTripBookings(user.getId());
+        com.voyastra.model.TripBooking activeTripBooking = null;
+        List<com.voyastra.model.TripBooking> upcomingTrips = new ArrayList<>();
+        List<com.voyastra.model.TripBooking> completedTrips = new ArrayList<>();
+        List<com.voyastra.model.TripBooking> cancelledTrips = new ArrayList<>();
+
+        for (com.voyastra.model.TripBooking tb : tripBookings) {
+            if ("CANCELLED".equalsIgnoreCase(tb.getBookingStatus())) {
+                cancelledTrips.add(tb);
+            } else if (tb.isActive()) {
+                activeTripBooking = tb;
+            } else {
+                // If it's not active but not cancelled, we check status or just put in upcoming if travel date is future, or completed if past.
+                // For simplicity, if CONFIRMED -> upcoming. if COMPLETED -> completed.
+                // You could also check the travel_date if needed.
+                if ("COMPLETED".equalsIgnoreCase(tb.getBookingStatus())) {
+                    completedTrips.add(tb);
+                } else {
+                    upcomingTrips.add(tb);
+                }
+            }
+        }
+        request.setAttribute("activeTripBooking", activeTripBooking);
+        request.setAttribute("upcomingTripBookings", upcomingTrips);
+        request.setAttribute("completedTripBookings", completedTrips);
+        request.setAttribute("cancelledTripBookings", cancelledTrips);
+
+        // Fetch generic bookings for DNA/Memories backwards compatibility
         if (tab.equals("upcoming") || tab.equals("completed") || tab.equals("memories") || tab.equals("overview") || tab.equals("calendar") || tab.equals("dna") || tab.equals("family") || tab.equals("reports")) {
             List<Booking> allBookings = bookingDAO.getBookingsByUser(user.getId());
-            List<Booking> upcomingTrips = new ArrayList<>();
-            List<Booking> completedTrips = new ArrayList<>();
+            List<Booking> genericCompletedTrips = new ArrayList<>();
             LocalDate today = LocalDate.now();
 
             for (Booking b : allBookings) {
@@ -70,17 +98,14 @@ public class MyJourneyServlet extends HttpServlet {
                             }
                         } catch (Exception e) {}
                     }
-                    if (isUpcoming) {
-                        upcomingTrips.add(b);
-                    } else {
-                        completedTrips.add(b);
+                    if (!isUpcoming) {
+                        genericCompletedTrips.add(b);
                     }
                 } else if ("COMPLETED".equalsIgnoreCase(b.getStatus())) {
-                    completedTrips.add(b);
+                    genericCompletedTrips.add(b);
                 }
             }
-            request.setAttribute("upcomingTrips", upcomingTrips);
-            request.setAttribute("completedTrips", completedTrips);
+            request.setAttribute("completedTrips", genericCompletedTrips);
 
             // If we're on the memories tab, let's also fetch memories for each completed trip
             if (tab.equals("memories")) {

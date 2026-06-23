@@ -114,7 +114,7 @@
     
     <div class="actions">
         <button class="btn btn-primary" style="background:var(--color-primary); color:black; border:none; padding:12px 24px; border-radius:8px; font-weight:bold; cursor:pointer;" onclick="window.location.href='${pageContext.request.contextPath}/hotel/ticket?id=${booking.id}'">View Hotel Ticket</button>
-        <button class="btn btn-outline" style="border:1px solid var(--color-primary); color:var(--color-primary); background:transparent; padding:12px 24px; border-radius:8px; font-weight:bold; cursor:pointer;" onclick="window.location.href='${pageContext.request.contextPath}/'">Back to Home</button>
+        <button class="btn btn-outline" style="border:1px solid var(--color-primary); color:var(--color-primary); background:transparent; padding:12px 24px; border-radius:8px; font-weight:bold; cursor:pointer;" onclick="window.location.href='${pageContext.request.contextPath}/my-journey'">View My Journey</button>
     </div>
 </div>
 

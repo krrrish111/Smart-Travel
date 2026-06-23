@@ -21,7 +21,8 @@ public class SecurityFilter implements Filter {
         "/", "/index", "/home", "/explore", "/login", "/register",
         "/community", "/destination", "/destinations", "/error", 
         "/route", "/logout", "/google-auth", "/google-login",
-        "/getPlans", "/review", "/search", "/trending", "/activities", "/weather", "/test-travelpayouts"
+        "/getPlans", "/review", "/search", "/trending", "/activities", "/weather", "/test-travelpayouts",
+        "/hotel-details", "/experience-details", "/itinerary-details", "/planner", "/experiences"
     );
 
     // Admin-only paths

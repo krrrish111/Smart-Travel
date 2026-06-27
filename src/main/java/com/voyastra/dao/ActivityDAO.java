@@ -87,7 +87,7 @@ public class ActivityDAO {
     public List<Activity> getAllActivities() {
         List<Activity> activities = new ArrayList<>();
         // Optional Left Join for Admin Interface
-        String query = "SELECT a.id, a.destination_id, a.name, a.image_url, a.price, a.rating, a.reviews_count, d.name AS destination_name " +
+        String query = "SELECT a.id, a.destination_id, a.name, a.image_url, a.price, a.rating, a.reviews_count, d.title AS destination_name " +
                        "FROM activities a " +
                        "LEFT JOIN destinations d ON a.destination_id = d.id";
                        

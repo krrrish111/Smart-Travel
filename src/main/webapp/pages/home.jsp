@@ -276,10 +276,10 @@
                                             <span class="plan-tag">${trip.startingCity}</span>
                                         </div>
                                         <div class="plan-itinerary">
-                                            <div class="plan-itinerary-step">${trip.shortDescription}</div>
+                                            <div class="plan-itinerary-step" style="display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${trip.shortDescription}</div>
                                         </div>
                                         <div class="plan-card-footer">
-                                            <div class="plan-price">₹<fmt:formatNumber value="${trip.discountPrice}" type="number" maxFractionDigits="0" /></div>
+                                            <div class="plan-price">₹<fmt:formatNumber value="${trip.discountPrice != null && trip.discountPrice > 0 ? trip.discountPrice : trip.priceInr}" type="number" maxFractionDigits="0" /></div>
                                             <div class="plan-duration">
                                                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> 
                                                 ${trip.duration}
@@ -539,6 +539,8 @@
                     </p>
                 </div>
 
+
+
                 <div class="dest-carousel-wrap" id="destCarouselWrap">
                     <!-- Prev Arrow -->
                     <button class="dest-carousel-ctrl prev" id="destPrev" aria-label="Previous destinations">
@@ -550,29 +552,29 @@
                     <div class="dest-carousel-viewport" id="destViewport">
                         <div class="dest-carousel-track" id="destTrack">
 
-                            <c:forEach var="dest" items="${featuredDestinations}" varStatus="status">
+                            <c:forEach var="dest" items="${trendingDestinations}" varStatus="status">
                                 <div class="dest-card" data-index="${status.index}">
-                                    <img src="${not empty dest.imageUrl ? dest.imageUrl : 'https://images.unsplash.com/photo-1542332213-31f87348057f?auto=format&fit=crop&w=800&q=80'}" alt="${dest.name}">
+                                    <img src="${not empty dest.imageUrl ? dest.imageUrl : 'https://images.unsplash.com/photo-1542332213-31f87348057f?auto=format&fit=crop&w=800&q=80'}" alt="${dest.title}">
                                     <div class="dest-card-overlay"></div>
                                     <div class="dest-card-rank">#${status.index + 1} Trending</div>
-                                    <div class="dest-card-category" style="background: rgba(16,185,129,0.85);">Explore</div>
+                                    <div class="dest-card-category" style="background: rgba(16,185,129,0.85);">${dest.category != null ? dest.category : 'Explore'}</div>
                                     <div class="dest-card-content">
-                                        <div class="dest-card-name">${dest.name}</div>
-                                        <div class="dest-card-sub" style="display: -webkit-box; -webkit-line-clamp: 1; line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;">${dest.description}</div>
+                                        <div class="dest-card-name">${dest.title}</div>
+                                        <div class="dest-card-sub" style="display: -webkit-box; -webkit-line-clamp: 1; line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;">${dest.shortDescription}</div>
                                         <div class="dest-card-meta">
                                             <div class="dest-card-price">Best Value</div>
                                             <div class="dest-card-duration">
                                                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                                                Dynamic
+                                                ${dest.durationDays} Days
                                             </div>
-                                            <div class="dest-card-rating">â˜… 4.9</div>
+                                            <div class="dest-card-rating">★ ${dest.rating}</div>
                                         </div>
                                     </div>
-                                    <a href="${pageContext.request.contextPath}/pages/destination-details.jsp?city=${dest.name}" class="dest-card-link" style="position:absolute; inset:0; z-index:5;"></a>
+                                    <a href="${pageContext.request.contextPath}/destination/details?id=${dest.id}" class="dest-card-link" style="position:absolute; inset:0; z-index:5;"></a>
                                 </div>
                             </c:forEach>
 
-                            <c:if test="${empty featuredDestinations}">
+                            <c:if test="${empty trendingDestinations}">
                                 <div class="dest-card" style="display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.05);">
                                     <p class="text-muted">No trending spots yet.</p>
                                 </div>
@@ -650,69 +652,25 @@
 
                 <div class="container">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6" data-skeleton="card" data-skeleton-count="3">
-                        <!-- Theme 1 -->
-                        <a href="${pageContext.request.contextPath}/pages/travel-plan-details.jsp?theme=Budget" class="plan-card active" style="max-width: none; flex: unset; text-decoration: none;">
+                        <c:forEach var="trip" items="${premiumTrips}">
+                        <a href="${pageContext.request.contextPath}/pages/trip-plan-details.jsp?id=${trip.id}" class="plan-card active" style="max-width: none; flex: unset; text-decoration: none;">
                             <div class="plan-card-img-wrap" style="height: 160px;">
-                                <img src="https://images.unsplash.com/photo-1626082896492-766af4eb65ed?auto=format,compress&fit=crop&w=800&q=75"
-                                    alt="Budget" loading="lazy">
-                                <div class="plan-card-category" style="background:rgba(59,130,246,0.85);">Budget</div>
+                                <img src="${trip.imageUrl}" alt="${trip.title}" loading="lazy">
+                                <div class="plan-card-category" style="background:rgba(59,130,246,0.85);">${trip.category}</div>
                             </div>
                             <div class="plan-card-body">
-                                <div class="plan-card-title">Backpacker's Delight</div>
-                                <p class="text-sm text-muted mt-2 mb-4">Explore North India's mountains under ₹5,000.
-                                    Hostels, street food, and nature trails.</p>
+                                <div class="plan-card-title">${trip.title}</div>
+                                <p class="text-sm text-muted mt-2 mb-4" style="display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${trip.shortDescription}</p>
                                 <div class="plan-card-footer mt-auto">
-                                    <div class="plan-price">₹4,999</div>
-                                    <div class="plan-duration"><svg width="12" height="12" viewBox="0 0 24 24"
-                                            fill="none" stroke="currentColor" stroke-width="2">
+                                    <div class="plan-price">₹<fmt:formatNumber value="${trip.priceInr}" type="number" maxFractionDigits="0"/></div>
+                                    <div class="plan-duration"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                             <circle cx="12" cy="12" r="10"></circle>
                                             <polyline points="12 6 12 12 16 14"></polyline>
-                                        </svg> 5 Days</div>
+                                        </svg> ${trip.duration}</div>
                                 </div>
                             </div>
                         </a>
-                        <!-- Theme 2 -->
-                        <a href="${pageContext.request.contextPath}/pages/travel-plan-details.jsp?theme=Adventure" class="plan-card" style="max-width: none; flex: unset; text-decoration: none;">
-                            <div class="plan-card-img-wrap" style="height: 160px;">
-                                <img src="https://images.unsplash.com/photo-1628126235206-5260b9ea6441?auto=format,compress&fit=crop&w=800&q=75"
-                                    alt="Adventure" loading="lazy">
-                                <div class="plan-card-category" style="background:rgba(239,68,68,0.85);">Adventure</div>
-                            </div>
-                            <div class="plan-card-body">
-                                <div class="plan-card-title">Himalayan Rush</div>
-                                <p class="text-sm text-muted mt-2 mb-4">Trekking, Bungee Jumping, and Rafting for the
-                                    ultimate adrenaline junkie.</p>
-                                <div class="plan-card-footer mt-auto">
-                                    <div class="plan-price">₹18,500</div>
-                                    <div class="plan-duration"><svg width="12" height="12" viewBox="0 0 24 24"
-                                            fill="none" stroke="currentColor" stroke-width="2">
-                                            <circle cx="12" cy="12" r="10"></circle>
-                                            <polyline points="12 6 12 12 16 14"></polyline>
-                                        </svg> 6 Days</div>
-                                </div>
-                            </div>
-                        </a>
-                        <!-- Theme 3 -->
-                        <a href="${pageContext.request.contextPath}/pages/travel-plan-details.jsp?theme=Family" class="plan-card" style="max-width: none; flex: unset; text-decoration: none;">
-                            <div class="plan-card-img-wrap" style="height: 160px;">
-                                <img src="https://images.unsplash.com/photo-1542152019-216e257e84cc?auto=format,compress&fit=crop&w=800&q=75"
-                                    alt="Family" loading="lazy">
-                                <div class="plan-card-category" style="background:rgba(16,185,129,0.85);">Family</div>
-                            </div>
-                            <div class="plan-card-body">
-                                <div class="plan-card-title">Serene Retreat</div>
-                                <p class="text-sm text-muted mt-2 mb-4">A comfortable, fully guided tour through the
-                                    hillsides of Munnar. Perfect for all ages.</p>
-                                <div class="plan-card-footer mt-auto">
-                                    <div class="plan-price">₹32,000</div>
-                                    <div class="plan-duration"><svg width="12" height="12" viewBox="0 0 24 24"
-                                            fill="none" stroke="currentColor" stroke-width="2">
-                                            <circle cx="12" cy="12" r="10"></circle>
-                                            <polyline points="12 6 12 12 16 14"></polyline>
-                                        </svg> 4 Days</div>
-                                </div>
-                            </div>
-                        </a>
+                        </c:forEach>
                     </div>
                 </div>
             </section>

@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/destination")
+@WebServlet("/destination/details")
 public class DestinationDetailsServlet extends HttpServlet {
     private static final Logger logger = Logger.getLogger(DestinationDetailsServlet.class.getName());
 

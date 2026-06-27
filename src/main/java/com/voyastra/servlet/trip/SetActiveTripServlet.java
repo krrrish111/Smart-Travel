@@ -33,8 +33,8 @@ public class SetActiveTripServlet extends HttpServlet {
             int bookingId = Integer.parseInt(request.getParameter("bookingId"));
             User user = (User) session.getAttribute("user");
             
-            TripBookingDAO dao = new TripBookingDAO();
-            boolean success = dao.setActiveTrip(user.getId(), bookingId);
+            com.voyastra.dao.DestinationBookingDAO dao = new com.voyastra.dao.DestinationBookingDAO();
+            boolean success = dao.setActiveBooking(user.getId(), bookingId);
             
             json.addProperty("success", success);
             if (success) {

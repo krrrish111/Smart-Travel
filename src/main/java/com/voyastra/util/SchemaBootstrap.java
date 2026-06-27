@@ -689,6 +689,15 @@ public class SchemaBootstrap implements ServletContextListener {
                     "FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE)"
                 );
 
+                try {
+                    stmt.execute("ALTER TABLE destination_bookings ADD COLUMN travel_date DATE");
+                    System.out.println("[SchemaBootstrap] Added travel_date to destination_bookings.");
+                } catch (Exception e) {}
+                try {
+                    stmt.execute("ALTER TABLE destination_bookings ADD COLUMN guests INT DEFAULT 1");
+                    System.out.println("[SchemaBootstrap] Added guests to destination_bookings.");
+                } catch (Exception e) {}
+
                 System.out.println("[SchemaBootstrap] Schema migration complete.");
 
         } catch (Exception e) {

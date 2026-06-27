@@ -525,14 +525,16 @@
                             <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--color-border); border-radius: 16px; padding: 25px; display: flex; justify-content: space-between; align-items: center; transition: all 0.3s ease; margin-bottom: 20px;" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.03)'">
                                 <div>
                                     <h3 style="font-size: 1.6rem; font-family: 'Clash Display', sans-serif; margin-bottom: 8px;">
-                                        ${not empty trip.tripName ? trip.tripName : 'Trip'}
+                                        ${not empty trip.destination.title ? trip.destination.title : 'Trip'}
                                     </h3>
-                                    <p style="color: var(--text-secondary); font-size: 1rem;"><i class="ri-calendar-event-line"></i> ${trip.travelDate != null ? trip.travelDate : 'Open Date'}</p>
+                                    <p style="color: var(--text-secondary); font-size: 1rem;"><i class="ri-calendar-event-line"></i> ${trip.bookingDate != null ? trip.bookingDate : 'Open Date'}</p>
                                 </div>
                                 <div style="text-align: right;">
-                                    <div style="background: rgba(0, 184, 148, 0.2); color: #00b894; padding: 6px 15px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; margin-bottom: 10px; display: inline-block;">${trip.bookingStatus}</div>
-                                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 10px;">ID: ${trip.bookingId}</p>
-                                    <button class="btn btn-primary" style="padding: 5px 15px; font-size: 0.85rem;" onclick="setActiveTrip(${trip.bookingId})">Set Active</button>
+                                    <div style="background: rgba(0, 184, 148, 0.2); color: #00b894; padding: 6px 15px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; margin-bottom: 10px; display: inline-block;">${trip.status}</div>
+                                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 10px;">ID: ${trip.id}</p>
+                                    <button class="btn btn-outline" style="padding: 5px 15px; font-size: 0.85rem;" onclick="editTrip(${trip.id}, '${trip.travelDate}', ${trip.guests})">Edit</button>
+                                    <button class="btn btn-outline" style="padding: 5px 15px; font-size: 0.85rem; color: #e74c3c; border-color: #e74c3c;" onclick="cancelTrip(${trip.id})">Cancel</button>
+                                    <button class="btn btn-primary" style="padding: 5px 15px; font-size: 0.85rem;" onclick="setActiveTrip(${trip.id})">Set Active</button>
                                 </div>
                             </div>
                         </c:forEach>
@@ -555,6 +557,45 @@
                     .then(r => r.json())
                     .then(data => {
                         if(data.success) {
+                            window.location.reload();
+                        } else {
+                            alert(data.message);
+                        }
+                    });
+                }
+
+                function cancelTrip(bookingId) {
+                    if (confirm("Are you sure you want to cancel this trip?")) {
+                        fetch('${pageContext.request.contextPath}/api/destination/booking/cancel', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                            body: 'booking_id=' + bookingId
+                        })
+                        .then(r => r.json())
+                        .then(data => {
+                            if(data.status === 'success') {
+                                window.location.reload();
+                            } else {
+                                alert(data.message);
+                            }
+                        });
+                    }
+                }
+
+                function editTrip(bookingId, currentDate, currentGuests) {
+                    let newDate = prompt("Enter new travel date (YYYY-MM-DD):", currentDate || '');
+                    if (!newDate) return;
+                    let newGuests = prompt("Enter new number of guests:", currentGuests || '1');
+                    if (!newGuests) return;
+
+                    fetch('${pageContext.request.contextPath}/api/destination/booking/edit', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: 'booking_id=' + bookingId + '&travel_date=' + newDate + '&guests=' + newGuests
+                    })
+                    .then(r => r.json())
+                    .then(data => {
+                        if(data.status === 'success') {
                             window.location.reload();
                         } else {
                             alert(data.message);

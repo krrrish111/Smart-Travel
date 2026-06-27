@@ -997,34 +997,34 @@
         <section id="saved-plans" class="content-section ${activeTab == 'saved-plans' ? 'active' : ''}">
             <h2 class="section-title">Saved Trips</h2>
             <div class="stats-grid" style="grid-template-columns: 1fr 1fr;">
-                <c:forEach var="plan" items="${savedPlans}">
+                <c:forEach var="saved" items="${savedDestinations}">
                     <div class="stat-card" style="text-align: left; padding: 0; overflow: hidden; display: flex; flex-direction: column;">
-                        <img src="${plan.tripImage}" style="width: 100%; height: 150px; object-fit: cover;">
+                        <img src="${saved.destination.imageUrl}" style="width: 100%; height: 150px; object-fit: cover;">
                         <div style="padding: 20px;">
-                            <h3 style="margin-bottom: 5px;">${plan.tripName}</h3>
-                            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 15px;">${plan.destination} | ₹${plan.price}</p>
+                            <h3 style="margin-bottom: 5px;">${saved.destination.title}</h3>
+                            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 15px;">${saved.destination.destination} | ₹${saved.destination.priceInr}</p>
                             <div style="display: flex; gap: 10px;">
-                                <a href="${pageContext.request.contextPath}/pages/trip-plan-details.jsp?id=${plan.tripId}" class="btn btn-primary btn-sm" style="flex: 1; text-align: center; font-size: 0.85rem; padding: 8px;">Book Now</a>
-                                <button onclick="removeSavedPlan(${plan.tripId})" class="btn btn-danger btn-sm" style="flex: 1; font-size: 0.85rem; padding: 8px;">Remove</button>
+                                <a href="${pageContext.request.contextPath}/destination/details?id=${saved.destination.id}" class="btn btn-primary btn-sm" style="flex: 1; text-align: center; font-size: 0.85rem; padding: 8px;">View Details</a>
+                                <button onclick="removeSavedPlan(${saved.destination.id})" class="btn btn-danger btn-sm" style="flex: 1; font-size: 0.85rem; padding: 8px;">Remove</button>
                             </div>
                         </div>
                     </div>
                 </c:forEach>
-                <c:if test="${empty savedPlans}">
+                <c:if test="${empty savedDestinations}">
                     <p style="color: var(--text-secondary); grid-column: span 2;">No saved trip plans.</p>
                 </c:if>
             </div>
             <script>
-                function removeSavedPlan(tripId) {
-                    fetch('${pageContext.request.contextPath}/api/trip/save', {
+                function removeSavedPlan(destId) {
+                    fetch('${pageContext.request.contextPath}/api/destination/save', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                        body: 'action=remove&tripId=' + tripId
+                        body: 'action=remove&destination_id=' + destId
                     }).then(r => r.json()).then(data => {
                         if (data.success) {
                             window.location.reload();
                         } else {
-                            alert(data.message);
+                            toast.error(data.message || 'Error removing saved plan');
                         }
                     });
                 }

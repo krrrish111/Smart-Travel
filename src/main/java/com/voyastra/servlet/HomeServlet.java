@@ -38,20 +38,17 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // Fetch various categories using the new DestinationDAO
+        List<Destination> popularDestinations = destinationDAO.getPopularDestinations();
+        List<Destination> trendingDestinations = destinationDAO.getFeaturedDestinations();
         
-        // Fetch destinations and pick the top 3 as "Featured"
-        List<Destination> allDestinations = destinationDAO.getAllDestinations();
-        List<Destination> featuredDest = allDestinations.stream()
-                .limit(3)
-                .collect(Collectors.toList());
-        
-        // Fetch user plans and pick top 6 for the infinite scroll
-        List<Plan> allPlans = planDAO.getPlansWithDestinations();
-        List<Plan> featuredPlans = allPlans.stream()
-                .limit(6)
-                .collect(Collectors.toList());
+        List<Destination> budgetDestinations = destinationDAO.getDestinationsByCategory("Budget");
+        List<Destination> adventureDestinations = destinationDAO.getDestinationsByCategory("Adventure");
+        List<Destination> familyDestinations = destinationDAO.getDestinationsByCategory("Family");
+        List<Destination> honeymoonDestinations = destinationDAO.getDestinationsByCategory("Honeymoon");
+        List<Destination> luxuryDestinations = destinationDAO.getDestinationsByCategory("Luxury");
 
-        // Fetch premium trip packages from trip_plans table
+        // We will keep the legacy premium trips if needed, but our goal is to replace them.
         List<PremiumTrip> premiumTrips = tripDAO.getAllTrips();
 
         HotelDAO hotelDAO = new HotelDAO();
@@ -63,8 +60,14 @@ public class HomeServlet extends HttpServlet {
             recentlyViewedHotels = hotelDAO.getRecentlyViewed(user.getId());
         }
 
-        request.setAttribute("featuredDestinations", featuredDest);
-        request.setAttribute("featuredPlans", featuredPlans);
+        request.setAttribute("popularDestinations", popularDestinations);
+        request.setAttribute("trendingDestinations", trendingDestinations);
+        request.setAttribute("budgetDestinations", budgetDestinations);
+        request.setAttribute("adventureDestinations", adventureDestinations);
+        request.setAttribute("familyDestinations", familyDestinations);
+        request.setAttribute("honeymoonDestinations", honeymoonDestinations);
+        request.setAttribute("luxuryDestinations", luxuryDestinations);
+
         request.setAttribute("premiumTrips", premiumTrips);
         request.setAttribute("recommendedHotels", recommendedHotels);
         request.setAttribute("recentlyViewedHotels", recentlyViewedHotels);

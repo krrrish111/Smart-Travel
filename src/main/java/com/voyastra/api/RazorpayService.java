@@ -20,7 +20,7 @@ public class RazorpayService {
      * @return the JSON response string from Razorpay
      * @throws Exception if connection fails or API returns an error
      */
-    public static String createOrder(int amountInPaise, String receiptId) throws Exception {
+    public static String createOrder(long amountInPaise, String receiptId) throws Exception {
         System.out.println("[RazorpayService] Initiating order creation for receipt: " + receiptId);
         System.out.println("[RazorpayService] Amount (paise): " + amountInPaise);
 

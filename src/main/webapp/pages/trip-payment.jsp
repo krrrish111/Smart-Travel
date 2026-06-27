@@ -67,7 +67,7 @@
         // Secure Razorpay integration
         var options = {
             "key": "<%= com.voyastra.util.RazorpayConfig.getKeyId() %>", 
-            "amount": parseInt("${totalPrice}") * 100, // Amount is in currency subunits
+            "amount": Math.round(parseFloat("${totalPrice}") * 100), // Amount is in currency subunits
             "currency": "INR",
             "name": "Voyastra Premium Trips",
             "description": "Payment for ${tripTitle}",

@@ -113,7 +113,7 @@ public class ReviewDAO {
 
     public List<Review> getAllReviews() {
         List<Review> list = new ArrayList<>();
-        String query = "SELECT r.id, r.user_id, r.destination_id, r.rating, r.comment, r.created_at, u.name AS user_name, d.name AS destination_name " +
+        String query = "SELECT r.id, r.user_id, r.destination_id, r.rating, r.comment, r.created_at, u.name AS user_name, d.title AS destination_name " +
                        "FROM reviews r " +
                        "JOIN users u ON r.user_id = u.id " +
                        "JOIN destinations d ON r.destination_id = d.id " +

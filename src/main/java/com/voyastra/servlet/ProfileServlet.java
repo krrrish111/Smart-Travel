@@ -63,7 +63,7 @@ public class ProfileServlet extends HttpServlet {
         // 3. Fetch Data based on active tab / Statistics
         try {
             List<Booking> userBookings = bookingDAO.getUserBookings(userId);
-            List<com.voyastra.model.SavedTripPlan> userPlans = new com.voyastra.dao.SavedTripPlanDAO().getUserSavedPlans(userId);
+            List<com.voyastra.model.SavedDestination> savedDestinations = new com.voyastra.dao.SavedDestinationDAO().getSavedDestinationsByUser(userId);
             List<HotelBooking> hotelBookings = hotelBookingDAO.getBookingsByUserId(userId);
             
             // New DAOs for separated bookings
@@ -86,7 +86,7 @@ public class ProfileServlet extends HttpServlet {
             List<com.voyastra.model.HelicopterBooking> heliBookings = heliDAO.getBookingsByUserId(userId);
             
             request.setAttribute("totalTrips", userBookings.size());
-            request.setAttribute("savedCount", userPlans.size());
+            request.setAttribute("savedCount", savedDestinations.size());
 
             com.voyastra.dao.StoryDAO storyDAO = new com.voyastra.dao.StoryDAO();
             request.setAttribute("myStories", storyDAO.getUserStories(userId));
@@ -167,7 +167,7 @@ public class ProfileServlet extends HttpServlet {
             }
             
             if ("overview".equals(tab) || "saved-plans".equals(tab)) {
-                request.setAttribute("savedPlans", userPlans);
+                request.setAttribute("savedDestinations", savedDestinations);
             }
             
             // Add Wishlist and Recently Viewed

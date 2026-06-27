@@ -37,9 +37,9 @@ public class TripBookingDAO {
         List<TripBooking> list = new ArrayList<>();
         // Join with plans to get tripImage if necessary. The schema has trip_name and destination. 
         // We will fetch image from the plans table using trip_id.
-        String query = "SELECT tb.*, p.image AS trip_image " +
+        String query = "SELECT tb.*, p.image_url AS trip_image " +
                        "FROM trip_bookings tb " +
-                       "LEFT JOIN plans p ON tb.trip_id = p.id " +
+                       "LEFT JOIN trip_plans p ON tb.trip_id = p.id " +
                        "WHERE tb.user_id = ? " +
                        "ORDER BY tb.created_at DESC";
                        

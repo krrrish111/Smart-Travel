@@ -52,34 +52,50 @@ public class MyJourneyServlet extends HttpServlet {
         Journey activeJourney = journeyDAO.getActiveJourneyForUser(String.valueOf(user.getId()));
         request.setAttribute("journey", activeJourney);
         
-        // Fetch trip bookings
-        com.voyastra.dao.TripBookingDAO tripBookingDAO = new com.voyastra.dao.TripBookingDAO();
-        List<com.voyastra.model.TripBooking> tripBookings = tripBookingDAO.getUserTripBookings(user.getId());
-        com.voyastra.model.TripBooking activeTripBooking = null;
-        List<com.voyastra.model.TripBooking> upcomingTrips = new ArrayList<>();
-        List<com.voyastra.model.TripBooking> completedTrips = new ArrayList<>();
-        List<com.voyastra.model.TripBooking> cancelledTrips = new ArrayList<>();
+        // Fetch destination bookings
+        com.voyastra.dao.DestinationBookingDAO destBookingDAO = new com.voyastra.dao.DestinationBookingDAO();
+        List<com.voyastra.model.DestinationBooking> destBookings = destBookingDAO.getBookingsByUserId(user.getId());
+        com.voyastra.model.DestinationBooking activeDestBooking = null;
+        List<com.voyastra.model.DestinationBooking> upcomingDests = new ArrayList<>();
+        List<com.voyastra.model.DestinationBooking> completedDests = new ArrayList<>();
+        List<com.voyastra.model.DestinationBooking> cancelledDests = new ArrayList<>();
 
-        for (com.voyastra.model.TripBooking tb : tripBookings) {
-            if ("CANCELLED".equalsIgnoreCase(tb.getBookingStatus())) {
-                cancelledTrips.add(tb);
+        for (com.voyastra.model.DestinationBooking tb : destBookings) {
+            if ("CANCELLED".equalsIgnoreCase(tb.getStatus())) {
+                cancelledDests.add(tb);
             } else if (tb.isActive()) {
-                activeTripBooking = tb;
+                activeDestBooking = tb;
             } else {
-                // If it's not active but not cancelled, we check status or just put in upcoming if travel date is future, or completed if past.
-                // For simplicity, if CONFIRMED -> upcoming. if COMPLETED -> completed.
-                // You could also check the travel_date if needed.
-                if ("COMPLETED".equalsIgnoreCase(tb.getBookingStatus())) {
-                    completedTrips.add(tb);
+                if ("COMPLETED".equalsIgnoreCase(tb.getStatus())) {
+                    completedDests.add(tb);
                 } else {
-                    upcomingTrips.add(tb);
+                    upcomingDests.add(tb);
                 }
             }
         }
-        request.setAttribute("activeTripBooking", activeTripBooking);
-        request.setAttribute("upcomingTripBookings", upcomingTrips);
-        request.setAttribute("completedTripBookings", completedTrips);
-        request.setAttribute("cancelledTripBookings", cancelledTrips);
+        
+        if (activeJourney == null && activeDestBooking != null) {
+            activeJourney = new Journey();
+            activeJourney.setDestination(activeDestBooking.getDestination().getTitle());
+            activeJourney.setStatus(activeDestBooking.getStatus());
+            if (activeDestBooking.getBookingDate() != null) {
+                activeJourney.setStartDate(activeDestBooking.getBookingDate().toString().substring(0, 10));
+            } else {
+                activeJourney.setStartDate("TBD");
+            }
+            activeJourney.setEndDate("TBD");
+            activeJourney.setCurrentDay(1);
+            activeJourney.setTotalDays(5);
+            activeJourney.setProgressPercentage(10);
+            activeJourney.setTemperature(25);
+            activeJourney.setWeatherCondition("Clear");
+            request.setAttribute("journey", activeJourney);
+        }
+        
+        request.setAttribute("activeTripBooking", activeDestBooking);
+        request.setAttribute("upcomingTripBookings", upcomingDests);
+        request.setAttribute("completedTripBookings", completedDests);
+        request.setAttribute("cancelledTripBookings", cancelledDests);
 
         // Fetch generic bookings for DNA/Memories backwards compatibility
         if (tab.equals("upcoming") || tab.equals("completed") || tab.equals("memories") || tab.equals("overview") || tab.equals("calendar") || tab.equals("dna") || tab.equals("family") || tab.equals("reports")) {
@@ -110,14 +126,14 @@ public class MyJourneyServlet extends HttpServlet {
             // If we're on the memories tab, let's also fetch memories for each completed trip
             if (tab.equals("memories")) {
                 java.util.Map<Integer, List<com.voyastra.model.journey.TravelMemory>> memoriesMap = new java.util.HashMap<>();
-                for (Booking t : completedTrips) {
+                for (Booking t : genericCompletedTrips) {
                     memoriesMap.put(t.getId(), ecosystemDAO.getMemoriesForJourney(t.getId()));
                 }
                 request.setAttribute("tripMemoriesMap", memoriesMap);
             }
             
             if (tab.equals("dna")) {
-                request.setAttribute("travelDNA", ecosystemDAO.calculateTravelDNA(user.getId(), completedTrips));
+                request.setAttribute("travelDNA", ecosystemDAO.calculateTravelDNA(user.getId(), genericCompletedTrips));
             }
         }
         

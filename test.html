@@ -1,0 +1,1661 @@
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voyastra - Travel Smarter</title>
+    <link rel="icon" type="image/svg+xml" href="/voyastra/images/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/voyastra/css/style.css">
+    <link rel="stylesheet" href="/voyastra/css/components.css">
+    <link rel="stylesheet" href="/voyastra/css/theme.css">
+    <link rel="stylesheet" href="/voyastra/css/animations.css">
+    <link rel="stylesheet" href="/voyastra/css/responsive.css">
+    <script src="/voyastra/js/loader.js"></script>
+    <script>
+        // Emergency fallback: if loader.js race condition recurs,
+        // force main visible after 2 seconds maximum — no dependencies
+        window.addEventListener('DOMContentLoaded', function () {
+            setTimeout(function () {
+                var main = document.querySelector('main');
+                if (main && parseFloat(main.style.opacity) < 1) {
+                    main.style.transition = 'none';
+                    main.style.opacity    = '1';
+                    console.warn('[Voyastra] loader fallback fired — check loader.js order');
+                }
+            }, 2000);
+        });
+    </script>
+    <script src="/voyastra/js/auth-guard.js"></script>
+    <script src="/voyastra/js/toast.js"></script>
+    <script src="/voyastra/js/validate.js"></script>
+    <!-- Google Auth Script -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script>
+        // Fix for Tomcat dropping JSESSIONID when Google's g_state cookie contains invalid JSON characters
+        document.cookie = 'g_state=; Max-Age=-99999999; path=/;';
+    </script>
+    <script>
+        window.CONTEXT_PATH = "/voyastra";
+        (function(){
+            var t = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', t);
+            /* Also apply to body when it exists — handles selectors targeting body[data-theme] */
+            document.addEventListener('DOMContentLoaded', function() {
+                document.body.setAttribute('data-theme', t);
+            });
+        })();
+        
+        // Expose Java HttpSession state to Frontend JS Context
+        window.javaSession = {
+            userId: "",
+            role: "",
+            name: "",
+            email: ""
+        };
+    </script>
+
+<!-- Configuration File: Stores global variables and API keys centrally -->
+<script>
+    // Maps Configuration
+    // In a production JSP setup, this would be injected via backend property files
+    // Since we are running a lightweight frontend server, we store it securely here.
+    var APP_CONFIG = APP_CONFIG || {
+        googleMapsApiKey: "AIzaSyBkjbg2b3kUoK7srVbIPCeUOPHpTpjyecY"
+    };
+
+    // Helper function to inject Google Maps dynamically
+    function loadGoogleMaps(callbackName) {
+        if (typeof google === 'object' && typeof google.maps === 'object') {
+            // Map already loaded
+            if (window[callbackName]) window[callbackName]();
+            return;
+        }
+
+        // Prevent duplicate script injections
+        if (document.getElementById('googleMapsScript')) return;
+
+        const script = document.createElement('script');
+        script.id = 'googleMapsScript';
+        script.src = `https://maps.googleapis.com/maps/api/js?key=&libraries=places&callback=`;
+        script.async = true;
+        script.defer = true;
+        document.body.appendChild(script);
+    }
+</script>
+    <!-- Tailwind CSS (No Preflight to prevent breaking vanilla CSS) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        corePlugins: {
+          preflight: false,
+        }
+      }
+    </script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="/voyastra/" class="nav-brand voyastra-logo">
+                <svg class="voyastra-icon" viewBox="0 -1 26 26" fill="none" stroke="url(#voyastraGradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <defs>
+                        <linearGradient id="voyastraGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#4f46e5" />
+                            <stop offset="100%" stop-color="#06b6d4" />
+                        </linearGradient>
+                    </defs>
+                    <path class="voyastra-adv-path" d="M 22 2 L 15 22 L 11 13 L 2 9 L 22 2 L 11 13" />
+                    <!-- Moving airplane icon -->
+                    <path class="voyastra-adv-plane" d="M -4 -3 L 5 0 L -4 3 L -2 0 Z" fill="#06b6d4" stroke="none" />
+                </svg>
+                <span class="voyastra-text">Voyastra</span>
+            </a>
+            <div class="nav-actions">
+                <div class="nav-links" id="navLinks">
+                    <!-- Sidebar header: brand label + close button -->
+                    <button class="sidebar-close-btn hide-desktop" id="sidebarCloseBtn" aria-label="Close Menu">
+                        <span class="sidebar-brand-label">Voyastra</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>
+                    <a href="/voyastra/" class="nav-link">Home</a>
+                    <a href="/voyastra/booking" class="nav-link">Booking</a>
+                    <a href="/voyastra/planner" class="nav-link">Planner</a>
+                    <a href="/voyastra/experiences" class="nav-link">Experiences</a>
+                    <a href="/voyastra/community" class="nav-link">Community</a>
+                    <a href="/voyastra/my-journey" class="nav-link">My Journey</a>
+                    <!-- ── Auth widget (Server-side rendering) ── -->
+                    <div class="nav-auth-widget">
+                        
+                            
+                            
+                                <a href="/voyastra/login" class="nav-login-btn">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>Login
+                                </a>
+                            
+                        
+                    </div>
+                </div>
+
+                <!-- Theme toggle -->
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark / light mode" title="Toggle theme">
+                    <span class="theme-toggle-knob">
+                        <!-- Sun icon -->
+                        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="5"/>
+                            <line x1="12" y1="1"  x2="12" y2="3"/>
+                            <line x1="12" y1="21" x2="12" y2="23"/>
+                            <line x1="4.22" y1="4.22"  x2="5.64" y2="5.64"/>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                            <line x1="1"  y1="12" x2="3"  y2="12"/>
+                            <line x1="21" y1="12" x2="23" y2="12"/>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                        </svg>
+                        <!-- Moon icon -->
+                        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                        </svg>
+                    </span>
+                </button>
+
+                <!-- Mobile Menu Hamburger -->
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle navigation">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+    <div class="nav-overlay" id="navOverlay"></div>
+
+    <!-- ══════════════════════════════════════════════════════════
+         NAV AUTH STYLES  (scoped here so they load with the head)
+    ══════════════════════════════════════════════════════════════ -->
+    <style>
+        /* Login button (logged-out state) */
+        .nav-login-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 20px;
+            border-radius: 30px;
+            border: 1.5px solid var(--color-primary);
+            background: transparent;
+            color: var(--color-primary);
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.07em;
+            text-transform: uppercase;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background 0.25s ease, color 0.25s ease,
+                        transform 0.2s cubic-bezier(0.34,1.56,0.64,1),
+                        box-shadow 0.25s ease;
+            white-space: nowrap;
+        }
+        .nav-login-btn:hover {
+            background: var(--color-primary);
+            color: #fff;
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 6px 20px rgba(212,165,116,0.35);
+        }
+
+        /* Avatar trigger button (logged-in state) */
+        .nav-avatar-trigger {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 4px 4px 4px;
+            border-radius: 40px;
+            border: none;
+            background: var(--surface-glass);
+            border: 1px solid var(--color-border);
+            cursor: pointer;
+            transition: background 0.2s ease, box-shadow 0.25s ease,
+                        transform 0.2s cubic-bezier(0.34,1.56,0.64,1);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .nav-avatar-trigger:hover {
+            background: rgba(212,165,116,0.08);
+            box-shadow: 0 4px 16px rgba(212,165,116,0.18);
+            transform: translateY(-1px);
+        }
+
+        .nav-avatar-img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--color-primary);
+            flex-shrink: 0;
+        }
+
+        .nav-avatar-name {
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text-main);
+            max-width: 100px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding-right: 6px;
+        }
+
+        .nav-avatar-chevron {
+            color: var(--text-muted);
+            flex-shrink: 0;
+            margin-right: 4px;
+            transition: transform 0.25s ease;
+        }
+        .nav-avatar-trigger[aria-expanded="true"] .nav-avatar-chevron {
+            transform: rotate(180deg);
+        }
+
+        /* Dropdown menu */
+        .nav-user-dropdown {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            min-width: 220px;
+            background: var(--bg-base);
+            border: 1px solid var(--color-border);
+            border-radius: 14px;
+            padding: 8px;
+            box-shadow: 0 16px 48px rgba(0,0,0,0.22), 0 4px 12px rgba(0,0,0,0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 2000;
+            transform-origin: top right;
+            animation: va-pop 0.25s cubic-bezier(0.34,1.56,0.64,1) both;
+        }
+
+        .nav-dropdown-header {
+            padding: 10px 12px 12px;
+            border-bottom: 1px solid var(--color-border);
+            margin-bottom: 6px;
+        }
+        .nav-dropdown-uname {
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+        .nav-dropdown-email {
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
+            font-size: 0.74rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .nav-dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 12px;
+            border-radius: 9px;
+            text-decoration: none;
+            color: var(--text-main);
+            font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
+            font-size: 0.84rem;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            transition: background 0.18s ease, color 0.18s ease,
+                        transform 0.18s ease;
+        }
+        .nav-dropdown-item:hover {
+            background: rgba(212,165,116,0.08);
+            color: var(--color-primary);
+            transform: translateX(2px);
+        }
+        .nav-dropdown-item svg {
+            flex-shrink: 0;
+            opacity: 0.7;
+        }
+        .nav-dropdown-item:hover svg { opacity: 1; }
+
+        .nav-dropdown-divider {
+            height: 1px;
+            background: var(--color-border);
+            margin: 6px 0;
+        }
+
+        .nav-dropdown-item.logout-item {
+            color: #ef4444;
+        }
+        .nav-dropdown-item.logout-item:hover {
+            background: rgba(239,68,68,0.08);
+            color: #ef4444;
+        }
+
+        /* Wrap for positioning context */
+        .nav-auth-widget { position: relative; }
+
+        /* Mobile: hide name on very small screens */
+        @media (max-width: 480px) {
+            .nav-avatar-name { display: none; }
+        }
+
+        /* Dropdown pop-in animation */
+        @keyframes va-pop {
+            from { opacity: 0; transform: scale(0.92) translateY(-6px); }
+            to   { opacity: 1; transform: scale(1) translateY(0); }
+        }
+    </style>
+
+    <script>
+        /* ════════════════════════════════════════════════════════
+           NAV SCRIPT — runs on every page
+           Depends on VoyastraAuth (loaded in <head>)
+        ════════════════════════════════════════════════════════ */
+        document.addEventListener('DOMContentLoaded', function () {
+
+            /* ── Refs ──────────────────────────────────────────── */
+            var menuBtn    = document.getElementById('mobileMenuBtn');
+            var navLinks   = document.getElementById('navLinks');
+            var navOverlay = document.getElementById('navOverlay');
+            var widget     = document.getElementById('navAuthWidget');
+            var dropdown   = null;   // created on demand
+
+            /* ── Mobile Sidebar (admin-panel style) ────────────── */
+            function openMenu() {
+                if (!navLinks) return;
+                navLinks.classList.add('active');
+                if (navOverlay) navOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+            function closeMenu() {
+                if (!navLinks) return;
+                navLinks.classList.remove('active');
+                if (navOverlay) navOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+            function toggleMenu() {
+                navLinks.classList.contains('active') ? closeMenu() : openMenu();
+            }
+
+            if (menuBtn && navLinks) {
+                menuBtn.addEventListener('click', toggleMenu);
+            }
+
+            /* Click outside (overlay) closes sidebar */
+            if (navOverlay) navOverlay.addEventListener('click', closeMenu);
+
+            /* Close via sidebar ✕ button */
+            var sidebarClose = document.getElementById('sidebarCloseBtn');
+            if (sidebarClose) sidebarClose.addEventListener('click', closeMenu);
+
+            /* Close on any nav link click (auto-navigate) */
+            if (navLinks) {
+                navLinks.querySelectorAll('.nav-link').forEach(function(link) {
+                    link.addEventListener('click', closeMenu);
+                });
+            }
+
+            /* Close with Escape key */
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') closeMenu();
+            });
+
+            /* ── Dropdown Toggle Logic for JSP rendered widget ── */
+            var trigger = document.getElementById('navAvatarTrigger');
+            var dropdown = document.getElementById('navUserDropdown');
+            if (trigger && dropdown) {
+                function closeDropdown() {
+                    trigger.setAttribute('aria-expanded', 'false');
+                    dropdown.style.display = 'none';
+                }
+
+                trigger.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    var isExpanded = trigger.getAttribute('aria-expanded') === 'true';
+                    if (isExpanded) {
+                        closeDropdown();
+                    } else {
+                        trigger.setAttribute('aria-expanded', 'true');
+                        dropdown.style.display = 'block';
+                    }
+                });
+
+                document.addEventListener('click', function(e) {
+                    if (!trigger.contains(e.target) && !dropdown.contains(e.target)) {
+                        closeDropdown();
+                    }
+                });
+
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && trigger.getAttribute('aria-expanded') === 'true') {
+                        closeDropdown();
+                    }
+                });
+            }
+
+            /* ── Active Nav Highlight ──────────────────────────── */
+            var currentPath = window.location.pathname;
+            var pageName = currentPath.split('/').pop() || 'home';
+            if (pageName.endsWith('.jsp')) pageName = pageName.substring(0, pageName.length - 4);
+            
+            document.querySelectorAll('.nav-link').forEach(function (link) {
+                var href = link.getAttribute('href');
+                if (href && (href.endsWith('/' + pageName) || (pageName === 'home' && (href.endsWith('/') || href.endsWith('/home'))))) {
+                    link.classList.add('active');
+                }
+            });
+
+            /* ── Breadcrumbs ───────────────────────────────────── */
+            var mainEl = document.querySelector('main');
+            var skipBC = ['home', 'login', 'register', 'index.jsp', 'login.jsp', ''];
+            if (mainEl && !skipBC.includes(pageName)) {
+                var formatted = pageName.split('-').map(function (w) {
+                    return w.charAt(0).toUpperCase() + w.slice(1);
+                }).join(' ');
+                mainEl.insertAdjacentHTML('afterbegin',
+                    '<div class="container relative z-20 slide-up" style="padding-top:10px;margin-bottom:25px;animation-delay:0.1s;">' +
+                    '<nav aria-label="Breadcrumb"><ol class="flex items-center gap-2 text-sm" style="font-family: Poppins, Inter, Roboto, Arial, sans-serif;">' +
+                    '<li><a href="' + window.CONTEXT_PATH + '/home" class="text-muted breadcrumb-link" style="transition:color 0.2s;">Home</a></li>' +
+                    '<li class="text-muted" style="opacity:0.5;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></li>' +
+                    '<li class="text-primary font-medium" aria-current="page">' + formatted + '</li>' +
+                    '</ol></nav></div>');
+            }
+
+        }); // DOMContentLoaded
+    </script>
+
+
+<!-- ===== BACKGROUND SLIDER ===== -->
+<div class="bg-slider-container" id="bgSliderContainer">
+    <div class="bg-slide active" data-index="0"
+        style="background-image: url('https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format,compress&fit=crop&w=1920&q=70')">
+    </div>
+    <div class="bg-slide" data-index="1"
+        style="background-image: url('https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format,compress&fit=crop&w=1920&q=70')">
+    </div>
+    <div class="bg-slide" data-index="2"
+        style="background-image: url('https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format,compress&fit=crop&w=1920&q=70')">
+    </div>
+    <div class="bg-slide" data-index="3"
+        style="background-image: url('https://images.unsplash.com/photo-1561359313-0639aad073f0?auto=format,compress&fit=crop&w=1920&q=70')">
+    </div>
+    <div class="bg-slide" data-index="4"
+        style="background-image: url('https://images.unsplash.com/photo-1626082896492-766af4eb65ed?auto=format,compress&fit=crop&w=1920&q=70')">
+    </div>
+</div>
+
+
+<!-- Modern Draggable AI Buddy UI -->
+<div id="ai-draggable-container">
+    
+    <!-- The AI Orb -->
+    <div id="ai-buddy-orb" class="ai-orb" title="Voyastra AI Buddy">
+        <div class="orb-core"></div>
+        <div class="orb-pulse"></div>
+        <span class="ai-icon">🤖</span>
+    </div>
+
+    <!-- The Glassmorphic AI Popup -->
+    <div id="ai-smart-popup" class="ai-popup hidden">
+        <div class="ai-popup-header">
+            <div class="popup-title">
+                <i class="fas fa-sparkles"></i> Voyastra AI
+            </div>
+            <div class="popup-controls">
+                <button id="ai-minimize-btn" class="icon-btn" title="Minimize"><i class="fas fa-minus"></i></button>
+            </div>
+        </div>
+        
+        <div class="ai-popup-body">
+            <!-- Context Aware Suggestions Section -->
+            <div class="ai-context-section">
+                <p id="ai-context-message">Loading recommendations...</p>
+                <div class="ai-quick-actions">
+                    <!-- Buttons injected via JS -->
+                </div>
+            </div>
+
+            <!-- Chat History -->
+            <div id="ai-chat-history" class="ai-chat-scroll">
+                <div class="chat-message ai-message">
+                    <div class="message-content">Hello! I'm your AI Travel Buddy. I can help you plan trips, discover hidden gems, or optimize your budget. How can I assist you today?</div>
+                </div>
+                <div id="ai-typing-indicator" class="typing-indicator hidden">
+                    <span></span><span></span><span></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="ai-popup-footer">
+            <div class="chat-input-wrapper">
+                <input type="text" id="ai-chat-input" placeholder="Ask me anything..." />
+                <button id="ai-chat-send" class="icon-btn send-btn"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link rel="stylesheet" href="/voyastra/css/ai-buddy.css">
+<script src="/voyastra/js/ai-buddy.js" defer></script>
+
+
+<!-- ===== SCROLL PROGRESS LINE ===== -->
+<div class="scroll-line-container">
+    <div class="scroll-line-progress" id="scrollProgress"></div>
+</div>
+
+<!-- ===== CUSTOM CURSOR ===== -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-outline" id="cursorOutline"></div>
+
+<script>
+    (function () {
+        // ── Theme persistence ──────────────────────────────────────────
+        var savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            document.body.setAttribute('data-theme', savedTheme);
+        }
+
+        // ── Custom cursor ──────────────────────────────────────────────
+        var dot = document.getElementById('cursorDot');
+        var outline = document.getElementById('cursorOutline');
+        if (dot && outline) {
+            document.addEventListener('mousemove', function (e) {
+                dot.style.left = e.clientX + 'px';
+                dot.style.top = e.clientY + 'px';
+                outline.style.left = e.clientX + 'px';
+                outline.style.top = e.clientY + 'px';
+            });
+            document.addEventListener('mousedown', function () {
+                dot.style.transform = 'translate(-50%,-50%) scale(1.8)';
+                outline.style.transform = 'translate(-50%,-50%) scale(0.8)';
+            });
+            document.addEventListener('mouseup', function () {
+                dot.style.transform = 'translate(-50%,-50%) scale(1)';
+                outline.style.transform = 'translate(-50%,-50%) scale(1)';
+            });
+
+            // Hover scaling effect on buttons and links
+            var addHoverEffects = function() {
+                var interactives = document.querySelectorAll('a, button, .btn, .nav-link, .voyastra-logo, input, select');
+                interactives.forEach(function(el) {
+                    if(el.dataset.cursorBound) return;
+                    el.dataset.cursorBound = "true";
+                    el.addEventListener('mouseenter', function() {
+                        outline.style.transform = 'translate(-50%,-50%) scale(1.5)';
+                        outline.style.backgroundColor = 'rgba(212, 165, 116, 0.15)'; 
+                        outline.style.borderColor = 'transparent';
+                    });
+                    el.addEventListener('mouseleave', function() {
+                        outline.style.transform = 'translate(-50%,-50%) scale(1)';
+                        outline.style.backgroundColor = 'transparent';
+                        outline.style.borderColor = 'var(--color-accent)';
+                    });
+                });
+            };
+            
+            // Run initially and observe DOM for dynamically added elements
+            addHoverEffects();
+            var observer = new MutationObserver(function(mutations) {
+                if(mutations.length) addHoverEffects();
+            });
+            observer.observe(document.body, { childList: true, subtree: true });
+        }
+
+        // ── Scroll progress line ───────────────────────────────────────
+        var prog = document.getElementById('scrollProgress');
+        if (prog) {
+            window.addEventListener('scroll', function () {
+                var pct = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+                prog.style.height = Math.min(pct, 100) + '%';
+            }, { passive: true });
+        }
+
+        // ── Auto-cycling background slides ────────────────────────────
+        var slides = document.querySelectorAll('.bg-slide');
+        if (slides.length > 1) {
+            var currentSlide = 0;
+            setInterval(function () {
+                slides[currentSlide].classList.remove('active');
+                currentSlide = (currentSlide + 1) % slides.length;
+                slides[currentSlide].classList.add('active');
+            }, 5000);
+        }
+
+        // ── Scroll-fade observer ───────────────────────────────────────
+        document.addEventListener('DOMContentLoaded', function () {
+            var fades = document.querySelectorAll('.scroll-fade, .scroll-reveal');
+            if (fades.length && 'IntersectionObserver' in window) {
+                var obs = new IntersectionObserver(function (entries) {
+                    entries.forEach(function (entry) {
+                        if (entry.isIntersecting) { entry.target.classList.add('visible'); }
+                    });
+                }, { threshold: 0.1, rootMargin: '150px' });
+                fades.forEach(function (el) { obs.observe(el); });
+                
+                // Failsafe: force visibility after 1.5s in case layout calculation fails (e.g. devtools toggle layout shift)
+                setTimeout(function() {
+                    fades.forEach(function(el) { el.classList.add('visible'); });
+                }, 1500);
+            }
+
+            // ── Theme toggle wiring ──────────────────────────────────
+            var toggle = document.getElementById('themeToggle');
+            if (toggle) {
+                toggle.addEventListener('click', function () {
+                    var current = document.documentElement.getAttribute('data-theme') || 'dark';
+                    var next = current === 'light' ? 'dark' : 'light';
+                    document.documentElement.setAttribute('data-theme', next);
+                    document.body.setAttribute('data-theme', next);
+                    localStorage.setItem('theme', next);
+                });
+            }
+        });
+    })();
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ===== GLOBAL LOADING OVERLAY ===== -->
+<div id="vx-global-overlay" style="display:none; position:fixed; inset:0; background:rgba(255,255,255,0.7); backdrop-filter:blur(10px); z-index:999999; flex-direction:column; align-items:center; justify-content:center; opacity:0; transition:opacity 0.4s ease;">
+    <div class="vx-loader-spinner" style="width:60px; height:60px; border:4px solid var(--color-border); border-top-color:var(--color-primary); border-radius:50%; animation:vx-spin 1s linear infinite;"></div>
+    <div id="vx-overlay-text" style="margin-top:20px; font-family:'Poppins', sans-serif; font-weight:600; color:var(--text-main); letter-spacing:0.1em; text-transform:uppercase;">Searching...</div>
+</div>
+
+<style>
+@keyframes vx-spin { to { transform: rotate(360deg); } }
+.vx-global-overlay-active { display:flex !important; opacity:1 !important; }
+</style>
+
+<script>
+window.VoyastraUI = {
+    showLoader: function(text) {
+        var el = document.getElementById('vx-global-overlay');
+        var txt = document.getElementById('vx-overlay-text');
+        if (el) {
+            if (text) txt.innerText = text;
+            el.classList.add('vx-global-overlay-active');
+        }
+    },
+    hideLoader: function() {
+        var el = document.getElementById('vx-global-overlay');
+        if (el) el.classList.remove('vx-global-overlay-active');
+    },
+    toast: function(msg, type) {
+        if (window.VoyastraToast) window.VoyastraToast.show(msg, type);
+    }
+};
+</script>
+
+<!-- ===== PREMIUM PRELOADER (index.jsp — first visit only) ===== -->
+<!--
+     CRITICAL: Preloader div starts hidden (opacity:0, pointer-events:none).
+     The inline script below immediately makes it visible only on first visit,
+     BEFORE the rest of the DOM paints — avoiding any flash.
+-->
+<div id="voyastraPreloader" style="
+        display: flex;
+        position: fixed;
+        inset: 0;
+        width: 100vw;
+        height: 100vh;
+        background: #ffffff;
+        z-index: 9999999;
+        align-items: center;
+        justify-content: center;
+        /* Start fully visible and opaque */
+        opacity: 1;
+        pointer-events: all;">
+
+    <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0;">
+        <!-- Animated infinity SVG path -->
+        <svg style="width:300px; height:150px; display:block;" viewBox="0 0 300 150">
+            <defs>
+                <linearGradient id="preloaderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#4f46e5" />
+                    <stop offset="100%" stop-color="#06b6d4" />
+                </linearGradient>
+            </defs>
+            <!-- Draw path -->
+            <path class="preloader-infinity-path"
+                  d="M 150,75 C 200,15 300,15 300,75 C 300,135 200,135 150,75 C 100,15 0,15 0,75 C 0,135 100,135 150,75 Z" />
+            <!-- Airplane following path -->
+            <path class="preloader-plane" d="M -5 -4 L 8 0 L -5 4 L -2 0 Z" fill="#0f0b08" />
+        </svg>
+
+        <!-- Dynamic font text -->
+        <div class="preloader-text-dynamic" style="color: #0f0b08; font-size: 1.5rem; letter-spacing: 0.2em; margin-top: 1rem; font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif; font-weight: 600;">VOYASTRA</div>
+    </div>
+</div>
+
+<script>
+    /* â”€â”€ Preloader: first-visit gate â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+       Runs synchronously right after the div is in the DOM.
+       On RETURN visits â†’ keep opacity 0, replace instantly with display none.
+       On FIRST visit  â†’ show the preloader, then hide after 3.5s minimum OR window.load.
+    â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+    (function () {
+        var el  = document.getElementById('voyastraPreloader');
+        var KEY = 'voyastra_visited';
+
+        if (!el) return;
+
+        if (sessionStorage.getItem(KEY)) {
+            /* â”€â”€ Return visit: never show, hide synchronously before paint â”€â”€ */
+            el.style.display = 'none';
+            // Also removing it to clean up DOM
+            if (el.parentNode) el.parentNode.removeChild(el);
+            return;
+        }
+
+        /* â”€â”€ First visit of the session â”€â”€ */
+        sessionStorage.setItem(KEY, '1');
+
+        var startTime   = Date.now();
+        var MIN_MS      = 3500;   /* minimum visible time in ms */
+        var hideApplied = false;
+
+        function applyHide() {
+            if (hideApplied) return;
+            hideApplied = true;
+            // Add transition effect just before fading out
+            el.style.transition = 'opacity 0.8s ease-in-out';
+            el.style.opacity = '0';
+            setTimeout(function () {
+                el.style.display = 'none';
+                if (el.parentNode) el.parentNode.removeChild(el);
+            }, 820); /* matches transition duration */
+        }
+
+        /* Wait for full page load */
+        window.addEventListener('load', function () {
+            var elapsed = Date.now() - startTime;
+            var wait    = Math.max(0, MIN_MS - elapsed);
+            setTimeout(applyHide, wait);
+        });
+
+        /* Hard fallback: hide no matter what after 6 s */
+        setTimeout(applyHide, 6000);
+    })();
+</script>
+
+
+        <main style="padding-top: 120px; overflow-x: hidden;">
+            <!-- Hero Section -->
+            <section class="container relative parallax-wrapper" style="margin-bottom: 80px;">
+                <div class="flex items-center justify-center h-full" style="min-height: 80vh;">
+
+                    <!-- Hero Content -->
+                    <div class="hero-content parallax-bg text-center max-w-4xl mx-auto" style="position: relative; z-index: 10;" data-speed="0.05">
+                        <div class="mb-3 inline-block slide-up"
+                            style="padding: 6px 16px; background: var(--surface-glass); backdrop-filter: blur(8px); border-radius: 30px; border: 1px solid rgba(255,255,255,0.2); animation-delay: 0.2s;">
+                            <span class="text-primary font-bold text-sm"
+                                style="font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif; color: var(--color-primary); letter-spacing: 0.05em; display: flex; align-items: center; gap: 6px;">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M22 2L11 13"></path><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                                </svg>
+                                VOYASTRA INTELLIGENCE
+                            </span>
+                        </div>
+                        
+                        <h1 class="mb-3 editorial text-on-img p-hide"
+                            style="font-size: 4rem; line-height: 1.1; font-weight: 700; text-shadow: 0 2px 20px rgba(0,0,0,0.8);">
+                            Experience <br>
+                            <!-- Rotator -->
+                            <div class="rotator-container mx-1"
+                                style="margin-top: -10px; text-shadow: 0 2px 20px rgba(0,0,0,0.8); color: var(--color-primary);">
+                                <div class="rotator-track" id="rotatorTrack">
+                                    <div class="rotator-word text-outline">Taj Mahal, Agra</div>
+                                    <div class="rotator-word italic-accent">Kerala Backwaters</div>
+                                    <div class="rotator-word text-outline">Jaisalmer Fort</div>
+                                    <div class="rotator-word italic-accent">Varanasi Ghats</div>
+                                    <div class="rotator-word text-outline">Coorg, Karnataka</div>
+                                    <div class="rotator-word italic-accent">Munnar, Kerala</div>
+                                    <div class="rotator-word text-outline">Leh, Ladakh</div>
+                                </div>
+                            </div>
+                        </h1>
+
+                        <p class="mb-4 mx-auto"
+                            style="color: var(--text-on-img); font-size: 1.25rem; text-shadow: 0 2px 15px rgba(0,0,0,0.7); opacity: 0.95; max-width: 800px;">
+                            Say goodbye to endless research. Our intelligent platform crafts hyper-personalized
+                            itineraries, seamlessly balancing iconic landmarks with undiscovered cultural treasures.
+                        </p>
+                        <div class="flex gap-3 justify-center items-center mb-5">
+                            <a href="/voyastra/planner" id="heroPlanBtn" class="btn btn-primary tilt-card"
+                                style="padding: 14px 28px; font-size: 1.1rem; box-shadow: var(--shadow-lg);"
+                                onclick="event.preventDefault(); VoyastraAuth.requireAuth('/voyastra/planner');">
+                                <div class="tilt-content flex items-center">
+                                    Design My Itinerary
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" style="margin-left: 8px;">
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                        <polyline points="12 5 19 12 12 19"></polyline>
+                                    </svg>
+                                </div>
+                            </a>
+                        </div>
+
+                        <!-- Manual BG Dots -->
+                        <div class="bg-dots flex justify-center" id="bgDots" style="margin-top: 1rem;">
+                            <div class="bg-dot active" data-index="0"></div>
+                            <div class="bg-dot" data-index="1"></div>
+                            <div class="bg-dot" data-index="2"></div>
+                            <div class="bg-dot" data-index="3"></div>
+                            <div class="bg-dot" data-index="4"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ====== AI PLANNER WIDGET ====== -->
+            <link rel="stylesheet" href="/voyastra/css/home.css">
+            <div class="container relative ai-hero-container">
+                <div class="ai-planner-card glass-panel relative">
+                    <div class="ai-planner-header text-center mb-6">
+                        <h2 class="editorial ai-planner-title">✨ Design Your Perfect Journey</h2>
+                        <p class="text-muted ai-planner-subtitle mt-2">Tell us your preferences and let Voyastra AI build the perfect itinerary.</p>
+                    </div>
+
+                    <form id="aiPlannerHeroForm" class="ai-planner-form">
+                        
+                        <div class="ai-planner-grid">
+                            <!-- Destination -->
+                            <div class="ai-field-group">
+                                <label class="ai-field-label">Destination</label>
+                                <div class="ai-input-wrap">
+                                    <span class="ai-input-icon">📍</span>
+                                    <input type="text" id="aiDestInput" placeholder="Where to?" required class="ai-dest-input" autocomplete="off" />
+                                </div>
+                            </div>
+
+                            <!-- Duration -->
+                            <div class="ai-field-group">
+                                <label class="ai-field-label">Duration</label>
+                                <div class="ai-chip-group" id="aiDurationGroup">
+                                    <label class="ai-chip"><input type="radio" name="duration" value="Weekend"><span>Weekend</span></label>
+                                    <label class="ai-chip"><input type="radio" name="duration" value="3-5 Days" checked><span>3-5 Days</span></label>
+                                    <label class="ai-chip"><input type="radio" name="duration" value="1 Week"><span>1 Week</span></label>
+                                    <label class="ai-chip"><input type="radio" name="duration" value="Custom"><span>Custom</span></label>
+                                </div>
+                            </div>
+
+                            <!-- Budget -->
+                            <div class="ai-field-group">
+                                <label class="ai-field-label">Budget</label>
+                                <div class="ai-chip-group" id="aiBudgetGroup">
+                                    <label class="ai-chip"><input type="radio" name="budget" value="10k"><span>₹10K</span></label>
+                                    <label class="ai-chip"><input type="radio" name="budget" value="25k" checked><span>₹25K</span></label>
+                                    <label class="ai-chip"><input type="radio" name="budget" value="50k"><span>₹50K</span></label>
+                                    <label class="ai-chip"><input type="radio" name="budget" value="luxury"><span>Luxury</span></label>
+                                </div>
+                            </div>
+
+                            <!-- Travel Style -->
+                            <div class="ai-field-group">
+                                <label class="ai-field-label">Travel Style</label>
+                                <div class="ai-chip-group" id="aiStyleGroup">
+                                    <label class="ai-chip"><input type="radio" name="style" value="Solo"><span>Solo</span></label>
+                                    <label class="ai-chip"><input type="radio" name="style" value="Couple" checked><span>Couple</span></label>
+                                    <label class="ai-chip"><input type="radio" name="style" value="Family"><span>Family</span></label>
+                                    <label class="ai-chip"><input type="radio" name="style" value="Adventure"><span>Adventure</span></label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ai-cta-row mt-8 flex justify-center">
+                            <button type="button" id="aiGenerateBtn" class="ai-generate-btn">
+                                <span>🚀 Generate My AI Itinerary</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <script>
+                window.CONTEXT_PATH = '/voyastra';
+            </script>
+            <script src="/voyastra/js/home.js"></script>
+
+            <!-- ====== PREMIUM TRIP PLANS CAROUSEL ====== -->
+            <section class="premium-carousel-section container scroll-fade">
+                <div class="carousel-header">
+                    <div>
+                        <h2 class="editorial text-main mb-1" style="font-size: 2.8rem;">Popular Trip Plans</h2>
+                        <p class="text-muted" style="font-size:1rem;">Curated itineraries, ready to personalise.</p>
+                    </div>
+                </div>
+
+                <div class="carousel-viewport-wrapper">
+                    <!-- Left/Right navigation arrows -->
+                    <button class="carousel-nav-btn prev" id="planPrevBtn" aria-label="Previous">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                    </button>
+                    <button class="carousel-nav-btn next" id="planNextBtn" aria-label="Next">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </button>
+
+                    <!-- Edge Fades -->
+                    <div class="carousel-edge-fade left"></div>
+                    <div class="carousel-edge-fade right"></div>
+
+                    <!-- Outer Container -->
+                    <div class="plan-carousel-outer" id="planCarouselOuter">
+                        <!-- Inner Track: Cards are duplicated dynamically in JS for infinite effect -->
+                        <div class="plan-carousel-track" id="planCarouselTrack">
+                            
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ====== DESTINATION CAROUSEL ====== -->
+            <section class="section scroll-fade relative dest-carousel-section" style="background: var(--color-surface); padding-top: 80px; padding-bottom: 80px;">
+
+                <style>
+                /* â”€â”€â”€ Destination Carousel â”€â”€â”€ */
+                .dest-carousel-wrap {
+                    position: relative;
+                    max-width: 1400px;
+                    margin: 0 auto;
+                    padding: 0 24px;
+                }
+                .dest-carousel-viewport {
+                    overflow: hidden;
+                    border-radius: 20px;
+                    position: relative;
+                }
+                .dest-carousel-track {
+                    display: flex;
+                    gap: 24px;
+                    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                    will-change: transform;
+                }
+                /* â”€â”€â”€ Destination Card â”€â”€â”€ */
+                .dest-card {
+                    flex: 0 0 calc(25% - 18px);
+                    min-width: 0;
+                    border-radius: 20px;
+                    overflow: hidden;
+                    position: relative;
+                    height: 360px;
+                    cursor: pointer;
+                    /* 3D perspective origin */
+                    transform-style: preserve-3d;
+                    transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1);
+                    transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1),
+                                box-shadow 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+                    box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+                    background: var(--surface-glass);
+                    border: 1px solid var(--color-border);
+                }
+                .dest-card:hover {
+                    box-shadow: 0 24px 60px rgba(0,0,0,0.45);
+                }
+                .dest-card img {
+                    width: 100%; height: 100%;
+                    object-fit: cover;
+                    display: block;
+                    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+                }
+                .dest-card:hover img { transform: scale(1.07); }
+                /* Gradient overlay */
+                .dest-card-overlay {
+                    position: absolute;
+                    inset: 0;
+                    background: linear-gradient(
+                        to top,
+                        rgba(0,0,0,0.85) 0%,
+                        rgba(0,0,0,0.35) 50%,
+                        rgba(0,0,0,0.05) 100%
+                    );
+                    z-index: 1;
+                    transition: background 0.4s ease;
+                }
+                .dest-card:hover .dest-card-overlay {
+                    background: linear-gradient(
+                        to top,
+                        rgba(0,0,0,0.9) 0%,
+                        rgba(0,0,0,0.45) 55%,
+                        rgba(0,0,0,0.12) 100%
+                    );
+                }
+                /* Rank badge */
+                .dest-card-rank {
+                    position: absolute;
+                    top: 16px; right: 16px;
+                    z-index: 3;
+                    background: var(--color-primary);
+                    color: #fff;
+                    font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
+                    font-weight: 700;
+                    font-size: 0.75rem;
+                    padding: 4px 12px;
+                    border-radius: 30px;
+                    letter-spacing: 0.06em;
+                    text-transform: uppercase;
+                    backdrop-filter: blur(8px);
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                }
+                /* Category chip */
+                .dest-card-category {
+                    position: absolute;
+                    top: 16px; left: 16px;
+                    z-index: 3;
+                    font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
+                    font-size: 0.68rem;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                    letter-spacing: 0.1em;
+                    padding: 4px 12px;
+                    border-radius: 30px;
+                    color: #fff;
+                    backdrop-filter: blur(8px);
+                    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+                }
+                /* Card content */
+                .dest-card-content {
+                    position: absolute;
+                    bottom: 0; left: 0; right: 0;
+                    padding: 24px;
+                    z-index: 2;
+                }
+                .dest-card-name {
+                    font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
+                    font-size: 1.85rem;
+                    font-weight: 700;
+                    color: #fff;
+                    line-height: 1.05;
+                    text-shadow: 0 2px 16px rgba(0,0,0,0.7);
+                    margin-bottom: 5px;
+                    letter-spacing: 0.01em;
+                }
+                .dest-card-sub {
+                    font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
+                    font-size: 0.82rem;
+                    font-weight: 400;
+                    color: rgba(255,255,255,0.72);
+                    margin-bottom: 14px;
+                    text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+                    letter-spacing: 0.01em;
+                }
+                .dest-card-meta {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    background: rgba(255,255,255,0.12);
+                    backdrop-filter: blur(10px);
+                    border: 1px solid rgba(255,255,255,0.15);
+                    border-radius: 12px;
+                    padding: 10px 16px;
+                    transform: translateY(8px);
+                    opacity: 0;
+                    transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1) 0.05s,
+                                opacity 0.4s ease 0.05s;
+                }
+                .dest-card:hover .dest-card-meta {
+                    transform: translateY(0);
+                    opacity: 1;
+                }
+                .dest-card-price {
+                    font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
+                    font-weight: 800;
+                    font-size: 1.15rem;
+                    letter-spacing: -0.02em;
+                    background: linear-gradient(135deg, #f6d365 0%, #d4a574 40%, #e8b86d 70%, #c9943d 100%);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                    filter: drop-shadow(0 0 6px rgba(212,165,116,0.5));
+                    line-height: 1;
+                }
+                .dest-card-duration {
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                    font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
+                    font-size: 0.78rem;
+                    color: rgba(255,255,255,0.82);
+                    font-weight: 500;
+                }
+                .dest-card-rating {
+                    font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
+                    font-size: 0.8rem;
+                    font-weight: 700;
+                    background: linear-gradient(135deg, #f6d365 0%, #d4a574 100%);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                }
+                /* â”€â”€â”€ Carousel Controls â”€â”€â”€ */
+                .dest-carousel-ctrl {
+                    position: absolute;
+                    top: 50%; transform: translateY(-50%);
+                    width: 52px; height: 52px;
+                    border-radius: 50%;
+                    border: none;
+                    cursor: pointer;
+                    display: flex; align-items: center; justify-content: center;
+                    background: var(--color-surface);
+                    backdrop-filter: blur(16px);
+                    border: 1.5px solid var(--color-border);
+                    color: var(--text-main);
+                    box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+                    z-index: 20;
+                    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+                }
+                .dest-carousel-ctrl:hover {
+                    background: var(--color-primary);
+                    border-color: var(--color-primary);
+                    color: #fff;
+                    transform: translateY(-50%) scale(1.1);
+                    box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+                }
+                .dest-carousel-ctrl.prev { left: -26px; }
+                .dest-carousel-ctrl.next { right: -26px; }
+                /* â”€â”€â”€ Dot Indicators â”€â”€â”€ */
+                .dest-carousel-dots {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 10px;
+                    margin-top: 36px;
+                }
+                .dest-dot {
+                    width: 8px; height: 8px;
+                    border-radius: 50%;
+                    background: var(--color-border);
+                    border: none; cursor: pointer;
+                    transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+                    padding: 0;
+                }
+                .dest-dot.active {
+                    width: 28px;
+                    border-radius: 4px;
+                    background: var(--color-primary);
+                }
+                /* â”€â”€â”€ Responsive â”€â”€â”€ */
+                @media (max-width: 1100px) {
+                    .dest-card { flex: 0 0 calc(33.333% - 16px); }
+                }
+                @media (max-width: 768px) {
+                    .dest-card { flex: 0 0 calc(50% - 12px); height: 300px; }
+                    .dest-carousel-ctrl { display: none; }
+                }
+                @media (max-width: 480px) {
+                    .dest-card { flex: 0 0 calc(100% - 0px); height: 280px; }
+                }
+                </style>
+
+                <div class="container text-center mb-5" style="padding: 0 24px;">
+                    <h2 class="editorial text-main mb-2" style="font-size: 3rem;">Top Trending Destinations</h2>
+                    <p class="text-muted mx-auto" style="max-width: 560px; font-size: 1.05rem;">
+                        The most sought-after destinations this season, curated from millions of traveller journeys.
+                    </p>
+                </div>
+
+                <!-- DEBUGGING -->
+                <div style="background: red; color: white; padding: 10px; z-index: 9999; position: relative;">
+                    DEBUG: trendingDestinations size = 
+                </div>
+
+                <div class="dest-carousel-wrap" id="destCarouselWrap">
+                    <!-- Prev Arrow -->
+                    <button class="dest-carousel-ctrl prev" id="destPrev" aria-label="Previous destinations">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="15 18 9 12 15 6"/>
+                        </svg>
+                    </button>
+
+                    <div class="dest-carousel-viewport" id="destViewport">
+                        <div class="dest-carousel-track" id="destTrack">
+
+                            
+
+                            
+                                <div class="dest-card" style="display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.05);">
+                                    <p class="text-muted">No trending spots yet.</p>
+                                </div>
+                            
+
+                        </div><!-- /track -->
+                    </div><!-- /viewport -->
+
+                    <!-- Next Arrow -->
+                    <button class="dest-carousel-ctrl next" id="destNext" aria-label="Next destinations">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                    </button>
+                </div><!-- /wrap -->
+
+                <!-- Dot indicators -->
+                <div class="dest-carousel-dots" id="destDots"></div>
+
+
+            </section>
+
+
+            <!-- ====== MUST-DO THINGS ====== -->
+            <section class="section scroll-fade relative" style="padding-top: 80px;">
+                <div class="container mb-5">
+                    <h2 class="editorial text-main mb-1" style="font-size: 2.5rem;">Must-Do Things</h2>
+                    <p class="text-muted" style="font-size: 1.1rem;">Smart curation for popular cities</p>
+                </div>
+
+                <div class="plan-scroll-outer" id="mustDoOuter">
+                    <div class="plan-scroll-inner" id="mustDoInner" style="animation: none; transition: transform 0.1s linear; display: flex; gap: 24px;">
+                        <a href="/voyastra/pages/experience-details.jsp?activity=Rafting" class="glass-panel flex gap-4 p-4" style="min-width: 320px; border-radius: 16px; cursor: pointer; transition: transform 0.3s ease; text-decoration: none; display: flex;">
+                            <img src="https://images.unsplash.com/photo-1628126235206-5260b9ea6441?auto=format,compress&fit=crop&w=150&h=150&q=75" alt="Rafting" style="width: 80px; height: 80px; border-radius: 12px; object-fit: cover;" loading="lazy">
+                            <div class="flex flex-col justify-center">
+                                <h4 class="font-bold text-main" style="font-size: 1.1rem;">River Rafting</h4>
+                                <p class="text-sm text-muted">Rishikesh, Uttarakhand</p>
+                                <div class="text-primary font-bold mt-1">₹1,500 <span class="text-xs text-muted font-normal block md:inline">/ person</span></div>
+                            </div>
+                        </a>
+                        <a href="/voyastra/pages/experience-details.jsp?activity=Aarti" class="glass-panel flex gap-4 p-4" style="min-width: 320px; border-radius: 16px; cursor: pointer; transition: transform 0.3s ease; text-decoration: none; display: flex;">
+                            <img src="https://images.unsplash.com/photo-1561359313-0639aad073f0?auto=format,compress&fit=crop&w=150&h=150&q=75" alt="Ganga Aarti" style="width: 80px; height: 80px; border-radius: 12px; object-fit: cover;" loading="lazy">
+                            <div class="flex flex-col justify-center">
+                                <h4 class="font-bold text-main" style="font-size: 1.1rem;">Ganga Aarti</h4>
+                                <p class="text-sm text-muted">Varanasi, UP</p>
+                                <div class="text-primary font-bold mt-1">Free</div>
+                            </div>
+                        </a>
+                        <a href="/voyastra/pages/experience-details.jsp?activity=Nightlife" class="glass-panel flex gap-4 p-4" style="min-width: 320px; border-radius: 16px; cursor: pointer; transition: transform 0.3s ease; text-decoration: none; display: flex;">
+                            <img src="https://images.unsplash.com/photo-1548013146-72479768bada?auto=format,compress&fit=crop&w=150&h=150&q=75" alt="Scuba" style="width: 80px; height: 80px; border-radius: 12px; object-fit: cover;" loading="lazy">
+                            <div class="flex flex-col justify-center">
+                                <h4 class="font-bold text-main" style="font-size: 1.1rem;">Nightlife & Beaches</h4>
+                                <p class="text-sm text-muted">Goa</p>
+                                <div class="text-primary font-bold mt-1">Varies</div>
+                            </div>
+                        </a>
+                        <a href="/voyastra/pages/experience-details.jsp?activity=TajMahal" class="glass-panel flex gap-4 p-4" style="min-width: 320px; border-radius: 16px; cursor: pointer; transition: transform 0.3s ease; text-decoration: none; display: flex;">
+                            <img src="https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format,compress&fit=crop&w=150&h=150&q=75" alt="Taj Mahal" style="width: 80px; height: 80px; border-radius: 12px; object-fit: cover;" loading="lazy">
+                            <div class="flex flex-col justify-center">
+                                <h4 class="font-bold text-main" style="font-size: 1.1rem;">Taj Mahal Tour</h4>
+                                <p class="text-sm text-muted">Agra, UP</p>
+                                <div class="text-primary font-bold mt-1">₹1,100 <span class="text-xs text-muted font-normal block md:inline">/ person</span></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ====== TOP TRAVEL PLANS THEMATIC ====== -->
+            <section class="section scroll-fade relative" style="padding-top: 80px;">
+                <div class="container mb-5">
+                    <h2 class="editorial text-main mb-1" style="font-size: 2.5rem;">Top Travel Plans</h2>
+                    <p class="text-muted" style="font-size: 1.1rem;">Pre-built thematic experiences for every vibe.</p>
+                </div>
+
+                <div class="container">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6" data-skeleton="card" data-skeleton-count="3">
+                        <!-- Theme 1: Budget -->
+                        
+                        <!-- Theme 2: Adventure -->
+                        
+                        <!-- Theme 3: Family -->
+                        
+                    </div>
+                </div>
+            </section>
+
+            <!-- Destinations Grid Section -->
+            <section class="section scroll-fade relative" id="destinations">
+                <div class="container text-center mb-5">
+                    <h2 class="editorial text-main mb-2" style="font-size: 3rem;">Iconic Destinations</h2>
+                    <p class="text-muted mx-auto" style="max-width: 600px; font-size: 1.1rem;">Hover over a destination
+                        to immerse yourself.</p>
+                </div>
+
+                <div class="dest-grid hover-triggers" data-skeleton="card" data-skeleton-count="6">
+                    <a href="/voyastra/pages/destination-details.jsp?city=Jaisalmer" class="dest-item dest-item-1" data-bg-index="2">
+                        <img src="https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format,compress&fit=crop&w=800&q=75"
+                            alt="Jaisalmer" loading="lazy">
+                        <div class="dest-badge">Jaisalmer • 4 Days</div>
+                    </a>
+                    <a href="/voyastra/pages/destination-details.jsp?city=Varanasi" class="dest-item dest-item-2" data-bg-index="3">
+                        <img src="https://images.unsplash.com/photo-1561359313-0639aad073f0?auto=format,compress&fit=crop&w=800&q=75"
+                            alt="Varanasi" loading="lazy">
+                        <div class="dest-badge">Varanasi • 2 Days</div>
+                    </a>
+                    <a href="/voyastra/pages/destination-details.jsp?city=Ladakh" class="dest-item dest-item-3" data-bg-index="4">
+                        <img src="https://images.unsplash.com/photo-1626082896492-766af4eb65ed?auto=format,compress&fit=crop&w=800&q=75"
+                            alt="Ladakh" loading="lazy">
+                        <div class="dest-badge">Ladakh • 7 Days</div>
+                    </a>
+                    <a href="/voyastra/pages/destination-details.jsp?city=Kerala" class="dest-item dest-item-4" data-bg-index="1">
+                        <img src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format,compress&fit=crop&w=800&q=75"
+                            alt="Kerala" loading="lazy">
+                        <div class="dest-badge">Kerala • 5 Days</div>
+                    </a>
+                    <a href="/voyastra/pages/destination-details.jsp?city=Agra" class="dest-item dest-item-5" data-bg-index="0">
+                        <img src="https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format,compress&fit=crop&w=800&q=75"
+                            alt="Agra" loading="lazy">
+                        <div class="dest-badge">Agra • 3 Days</div>
+                    </a>
+                    <a href="/voyastra/pages/destination-details.jsp?city=Goa" class="dest-item dest-item-6" data-bg-index="1">
+                        <img src="https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format,compress&fit=crop&w=800&q=75"
+                            alt="Goa" loading="lazy">
+                        <div class="dest-badge">Goa • 5 Days</div>
+                    </a>
+                </div>
+            </section>
+
+            <!-- ========== AUTO-SCROLL ITINERARIES STRIP ========== -->
+            <section class="strip-section scroll-fade">
+                <div class="strip-heading-wrap">
+                    <div class="strip-eyebrow">Handpicked for You</div>
+                    <h2 class="strip-title">Popular Itineraries</h2>
+                </div>
+
+                <div class="strip-outer" id="itinStripOuter" style="position: relative; overflow: hidden; cursor: grab; padding: 20px 0;">
+                    <div class="strip-inner" id="itinStripInner" style="display: flex; gap: 30px; width: max-content; transition: none; will-change: transform;">
+                        <a href="/voyastra/pages/itinerary-details.jsp?id=Agra" class="itin-card" style="flex: 0 0 320px; text-decoration: none;">
+                            <img class="itin-card-img" src="https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format,compress&fit=crop&w=600&q=75" alt="Agra" loading="lazy">
+                            <div class="itin-card-body">
+                                <div class="itin-card-city">Agra</div>
+                                <div class="itin-card-region">Uttar Pradesh</div>
+                                <div class="itin-card-footer">
+                                    <span class="itin-card-duration">3 Days</span>
+                                    <span class="itin-card-price">₹12,000</span>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="/voyastra/pages/itinerary-details.jsp?id=Kerala" class="itin-card" style="flex: 0 0 320px; text-decoration: none;">
+                            <img class="itin-card-img" src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format,compress&fit=crop&w=600&q=75" alt="Kerala" loading="lazy">
+                            <div class="itin-card-body">
+                                <div class="itin-card-city">Kerala Backwaters</div>
+                                <div class="itin-card-region">Kerala</div>
+                                <div class="itin-card-footer">
+                                    <span class="itin-card-duration">5 Days</span>
+                                    <span class="itin-card-price">₹18,000</span>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="/voyastra/pages/itinerary-details.jsp?id=Jaisalmer" class="itin-card" style="flex: 0 0 320px; text-decoration: none;">
+                            <img class="itin-card-img" src="https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format,compress&fit=crop&w=600&q=75" alt="Jaisalmer" loading="lazy">
+                            <div class="itin-card-body">
+                                <div class="itin-card-city">Jaisalmer Fort</div>
+                                <div class="itin-card-region">Rajasthan</div>
+                                <div class="itin-card-footer">
+                                    <span class="itin-card-duration">4 Days</span>
+                                    <span class="itin-card-price">₹15,000</span>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="/voyastra/pages/itinerary-details.jsp?id=Varanasi" class="itin-card" style="flex: 0 0 320px; text-decoration: none;">
+                            <img class="itin-card-img" src="https://images.unsplash.com/photo-1561359313-0639aad073f0?auto=format,compress&fit=crop&w=600&q=75" alt="Varanasi" loading="lazy">
+                            <div class="itin-card-body">
+                                <div class="itin-card-city">Varanasi Ghats</div>
+                                <div class="itin-card-region">Uttar Pradesh</div>
+                                <div class="itin-card-footer">
+                                    <span class="itin-card-duration">3 Days</span>
+                                    <span class="itin-card-price">₹10,500</span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+
+
+        <!-- ===== INTELLIGENT SEARCH MODAL ===== -->
+        <div id="intelligentSearchModal" class="search-dropdown hidden">
+            <div class="dropdown-header">
+                <input type="text" id="intelligentSearchInput" class="search-dropdown-input" placeholder="Search city or airport..." autocomplete="off">
+            </div>
+            <div class="dropdown-body">
+                <!-- Recent searches section -->
+                <div id="searchRecentSection" class="dropdown-section hidden">
+                    <div class="section-title">Recent Searches</div>
+                    <ul class="suggestion-list" id="searchRecentList"></ul>
+                </div>
+                <!-- Popular destinations section -->
+                <div id="searchPopularSection" class="dropdown-section">
+                    <div class="section-title">Popular Destinations</div>
+                    <ul class="suggestion-list" id="searchPopularList"></ul>
+                </div>
+                <!-- Auto-suggestions (Filtered) -->
+                <div id="searchSuggestionsSection" class="dropdown-section hidden">
+                    <ul class="suggestion-list" id="searchSuggestionsList"></ul>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- ====== RECOMMENDED HOTELS ====== -->
+        
+            <section class="section scroll-fade relative" style="padding-top: 80px;">
+                <div class="container mb-5">
+                    <h2 class="editorial text-main mb-1" style="font-size: 2.5rem;">Recommended Stays</h2>
+                    <p class="text-muted" style="font-size: 1.1rem;">Handpicked personalized suggestions based on your search history.</p>
+                </div>
+                <div class="container">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                        
+                            <a href="/voyastra/pages/hotel-details.jsp?id=1" class="plan-card" style="max-width: none; flex: unset;">
+                                <div class="plan-card-img-wrap" style="height: 160px;">
+                                    <img src="images/hotel1.jpg" alt="Ocean View Resort" loading="lazy">
+                                    <div class="plan-card-category" style="background:rgba(139,92,246,0.85);">Recommended</div>
+                                </div>
+                                <div class="plan-card-body p-4">
+                                    <div class="plan-card-title text-lg font-bold truncate">Ocean View Resort</div>
+                                    <div class="text-sm text-gray-500 mb-2"><i class="fas fa-map-marker-alt text-primary"></i> Bali</div>
+                                    <div class="flex items-center gap-1 mb-2">
+                                        <i class="fas fa-star text-accent text-xs"></i><span class="text-sm font-bold">4.8</span>
+                                    </div>
+                                    <div class="plan-card-footer mt-auto pt-3 border-t border-gray-100 dark:border-gray-800">
+                                        <div class="plan-price text-lg font-bold">₹0.0</div>
+                                        <div class="plan-duration text-xs text-gray-500">per night</div>
+                                    </div>
+                                </div>
+                            </a>
+                        
+                            <a href="/voyastra/pages/hotel-details.jsp?id=2" class="plan-card" style="max-width: none; flex: unset;">
+                                <div class="plan-card-img-wrap" style="height: 160px;">
+                                    <img src="images/hotel2.jpg" alt="Mountain Retreat" loading="lazy">
+                                    <div class="plan-card-category" style="background:rgba(139,92,246,0.85);">Recommended</div>
+                                </div>
+                                <div class="plan-card-body p-4">
+                                    <div class="plan-card-title text-lg font-bold truncate">Mountain Retreat</div>
+                                    <div class="text-sm text-gray-500 mb-2"><i class="fas fa-map-marker-alt text-primary"></i> Swiss Alps</div>
+                                    <div class="flex items-center gap-1 mb-2">
+                                        <i class="fas fa-star text-accent text-xs"></i><span class="text-sm font-bold">4.5</span>
+                                    </div>
+                                    <div class="plan-card-footer mt-auto pt-3 border-t border-gray-100 dark:border-gray-800">
+                                        <div class="plan-price text-lg font-bold">₹0.0</div>
+                                        <div class="plan-duration text-xs text-gray-500">per night</div>
+                                    </div>
+                                </div>
+                            </a>
+                        
+                    </div>
+                </div>
+            </section>
+        
+
+        <!-- ====== RECENTLY VIEWED HOTELS ====== -->
+        
+
+        <!-- ====== TRAVEL PARTNERS MARQUEE ====== -->
+        <section class="scroll-fade" style="padding: 60px 0; overflow: hidden;">
+            <div class="container text-center mb-4">
+                <p class="text-muted text-sm uppercase tracking-widest fw-bold" style="letter-spacing:0.15em;">Trusted By Leading Travel Brands</p>
+            </div>
+            <div id="partnersOuter" style="overflow:hidden;position:relative;padding:20px 0;">
+                <div id="partnersTrack" style="display:flex;gap:60px;width:max-content;will-change:transform;transition:transform 0.1s linear;">
+                    <div class="partner-logo" style="display:flex;align-items:center;gap:10px;min-width:160px;opacity:0.5;transition:opacity 0.3s;"><span style="font-size:1.6rem;">✈️</span><span class="text-muted fw-bold" style="font-size:1rem;white-space:nowrap;">Air India</span></div>
+                    <div class="partner-logo" style="display:flex;align-items:center;gap:10px;min-width:160px;opacity:0.5;transition:opacity 0.3s;"><span style="font-size:1.6rem;">🏨</span><span class="text-muted fw-bold" style="font-size:1rem;white-space:nowrap;">Taj Hotels</span></div>
+                    <div class="partner-logo" style="display:flex;align-items:center;gap:10px;min-width:160px;opacity:0.5;transition:opacity 0.3s;"><span style="font-size:1.6rem;">🚂</span><span class="text-muted fw-bold" style="font-size:1rem;white-space:nowrap;">IRCTC</span></div>
+                    <div class="partner-logo" style="display:flex;align-items:center;gap:10px;min-width:160px;opacity:0.5;transition:opacity 0.3s;"><span style="font-size:1.6rem;">🛫</span><span class="text-muted fw-bold" style="font-size:1rem;white-space:nowrap;">IndiGo</span></div>
+                    <div class="partner-logo" style="display:flex;align-items:center;gap:10px;min-width:160px;opacity:0.5;transition:opacity 0.3s;"><span style="font-size:1.6rem;">🏖️</span><span class="text-muted fw-bold" style="font-size:1rem;white-space:nowrap;">Club Mahindra</span></div>
+                    <div class="partner-logo" style="display:flex;align-items:center;gap:10px;min-width:160px;opacity:0.5;transition:opacity 0.3s;"><span style="font-size:1.6rem;">🌍</span><span class="text-muted fw-bold" style="font-size:1rem;white-space:nowrap;">MakeMyTrip</span></div>
+                    <div class="partner-logo" style="display:flex;align-items:center;gap:10px;min-width:160px;opacity:0.5;transition:opacity 0.3s;"><span style="font-size:1.6rem;">🏔️</span><span class="text-muted fw-bold" style="font-size:1rem;white-space:nowrap;">Thomas Cook</span></div>
+                    <div class="partner-logo" style="display:flex;align-items:center;gap:10px;min-width:160px;opacity:0.5;transition:opacity 0.3s;"><span style="font-size:1.6rem;">⛵</span><span class="text-muted fw-bold" style="font-size:1rem;white-space:nowrap;">Cordelia Cruises</span></div>
+                    <div class="partner-logo" style="display:flex;align-items:center;gap:10px;min-width:160px;opacity:0.5;transition:opacity 0.3s;"><span style="font-size:1.6rem;">✨</span><span class="text-muted fw-bold" style="font-size:1rem;white-space:nowrap;">ITC Hotels</span></div>
+                    <div class="partner-logo" style="display:flex;align-items:center;gap:10px;min-width:160px;opacity:0.5;transition:opacity 0.3s;"><span style="font-size:1.6rem;">🛩️</span><span class="text-muted fw-bold" style="font-size:1rem;white-space:nowrap;">Vistara</span></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ====== TESTIMONIALS AUTO-SCROLL ====== -->
+        <section class="scroll-fade testimonials-section" style="padding:60px 0 80px;overflow:hidden;">
+            <div class="container text-center mb-5">
+                <h2 class="editorial text-main mb-2" style="font-size:2.5rem;">What Our Travelers Say</h2>
+                <p class="text-muted" style="font-size:1rem;">Real stories from real adventurers.</p>
+            </div>
+            <div id="testiOuter" style="overflow:hidden;position:relative;cursor:grab;">
+                <div id="testiTrack" style="display:flex;gap:24px;width:max-content;will-change:transform;transition:transform 0.1s linear;">
+                    <!-- Set 1 -->
+                    <div class="testimonial-card glass-panel p-4" style="min-width:340px;max-width:340px;border-radius:16px;">
+                        <div class="flex gap-1 mb-2 text-primary text-xs">★★★★★</div>
+                        <p class="text-main fw-bold text-sm mb-2">"Life-changing experience!"</p>
+                        <p class="text-muted text-xs italic mb-3">"The Kashmir trip was beyond anything I imagined. The houseboat stay on Dal Lake with snow-capped mountains... absolutely magical."</p>
+                        <div class="flex items-center gap-2"><div style="width:32px;height:32px;border-radius:50%;background:var(--color-primary);display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.65rem;font-weight:700;">PR</div><div><span class="text-xs fw-bold">Priya R.</span><div class="text-muted" style="font-size:0.65rem;">Kashmir Trip • Jan 2026</div></div></div>
+                    </div>
+                    <div class="testimonial-card glass-panel p-4" style="min-width:340px;max-width:340px;border-radius:16px;">
+                        <div class="flex gap-1 mb-2 text-primary text-xs">★★★★★</div>
+                        <p class="text-main fw-bold text-sm mb-2">"Perfect honeymoon!"</p>
+                        <p class="text-muted text-xs italic mb-3">"Voyastra made our Maldives honeymoon stress-free. The overwater villa, private dinner on the sandbank — every detail was perfect."</p>
+                        <div class="flex items-center gap-2"><div style="width:32px;height:32px;border-radius:50%;background:var(--color-accent);display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.65rem;font-weight:700;">AM</div><div><span class="text-xs fw-bold">Arjun M.</span><div class="text-muted" style="font-size:0.65rem;">Maldives Trip • Dec 2025</div></div></div>
+                    </div>
+                    <div class="testimonial-card glass-panel p-4" style="min-width:340px;max-width:340px;border-radius:16px;">
+                        <div class="flex gap-1 mb-2 text-primary text-xs">★★★★★</div>
+                        <p class="text-main fw-bold text-sm mb-2">"Best family vacation ever!"</p>
+                        <p class="text-muted text-xs italic mb-3">"Took the kids to Kerala backwaters. The houseboat ride, elephant sanctuary, and tea garden visit — they still talk about it daily!"</p>
+                        <div class="flex items-center gap-2"><div style="width:32px;height:32px;border-radius:50%;background:var(--color-primary);display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.65rem;font-weight:700;">SG</div><div><span class="text-xs fw-bold">Sunita G.</span><div class="text-muted" style="font-size:0.65rem;">Kerala Trip • Feb 2026</div></div></div>
+                    </div>
+                    <div class="testimonial-card glass-panel p-4" style="min-width:340px;max-width:340px;border-radius:16px;">
+                        <div class="flex gap-1 mb-2 text-primary text-xs">★★★★★</div>
+                        <p class="text-main fw-bold text-sm mb-2">"Adventure of a lifetime!"</p>
+                        <p class="text-muted text-xs italic mb-3">"The Ladakh road trip was incredible. Khardung La, Pangong Lake, camping under stars — Voyastra's planning made it seamless."</p>
+                        <div class="flex items-center gap-2"><div style="width:32px;height:32px;border-radius:50%;background:var(--color-accent);display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.65rem;font-weight:700;">RK</div><div><span class="text-xs fw-bold">Rohan K.</span><div class="text-muted" style="font-size:0.65rem;">Ladakh Trip • Mar 2026</div></div></div>
+                    </div>
+                    <div class="testimonial-card glass-panel p-4" style="min-width:340px;max-width:340px;border-radius:16px;">
+                        <div class="flex gap-1 mb-2 text-primary text-xs">★★★★★</div>
+                        <p class="text-main fw-bold text-sm mb-2">"Luxury redefined!"</p>
+                        <p class="text-muted text-xs italic mb-3">"The Rajasthan heritage tour was royal in every sense. Palace stays, desert safaris, folk dance evenings — felt like actual royalty."</p>
+                        <div class="flex items-center gap-2"><div style="width:32px;height:32px;border-radius:50%;background:var(--color-primary);display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.65rem;font-weight:700;">NK</div><div><span class="text-xs fw-bold">Neha K.</span><div class="text-muted" style="font-size:0.65rem;">Rajasthan Trip • Jan 2026</div></div></div>
+                    </div>
+                    <div class="testimonial-card glass-panel p-4" style="min-width:340px;max-width:340px;border-radius:16px;">
+                        <div class="flex gap-1 mb-2 text-primary text-xs">★★★★★</div>
+                        <p class="text-main fw-bold text-sm mb-2">"Solo trip made easy!"</p>
+                        <p class="text-muted text-xs italic mb-3">"As a solo female traveler, safety was my priority. Voyastra's guides and hotels were exceptional. Bali was a dream come true."</p>
+                        <div class="flex items-center gap-2"><div style="width:32px;height:32px;border-radius:50%;background:var(--color-accent);display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.65rem;font-weight:700;">DD</div><div><span class="text-xs fw-bold">Divya D.</span><div class="text-muted" style="font-size:0.65rem;">Bali Trip • Nov 2025</div></div></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        </main>
+
+        <script src="/voyastra/js/home_dynamic.js"></script>
+        
+    <footer class="mt-5 py-4" style="background: var(--surface-light); backdrop-filter: blur(8px); border-top: 1px solid rgba(255,255,255,0.1);">
+        <div class="container text-center text-muted">
+            <div style="margin-bottom: 15px;">
+                <a href="/voyastra/" style="display:inline-flex; align-items:center; gap: 8px; color: var(--color-primary); font-weight: 700; font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif; text-decoration: none; font-size: 1.25rem;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 2L11 13"></path>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                    Voyastra
+                </a>
+                <p style="margin-top: 5px; font-size: 0.9rem; font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif; color: var(--text-muted);">Voyastra – Travel Smarter</p>
+            </div>
+            <p>&copy; 2026 Voyastra. All rights reserved. Made with ❤️ for Travel.</p>
+        </div>
+    </footer>
+    
+<!-- Modern Draggable AI Buddy UI -->
+<div id="ai-draggable-container">
+    
+    <!-- The AI Orb -->
+    <div id="ai-buddy-orb" class="ai-orb" title="Voyastra AI Buddy">
+        <div class="orb-core"></div>
+        <div class="orb-pulse"></div>
+        <span class="ai-icon">🤖</span>
+    </div>
+
+    <!-- The Glassmorphic AI Popup -->
+    <div id="ai-smart-popup" class="ai-popup hidden">
+        <div class="ai-popup-header">
+            <div class="popup-title">
+                <i class="fas fa-sparkles"></i> Voyastra AI
+            </div>
+            <div class="popup-controls">
+                <button id="ai-minimize-btn" class="icon-btn" title="Minimize"><i class="fas fa-minus"></i></button>
+            </div>
+        </div>
+        
+        <div class="ai-popup-body">
+            <!-- Context Aware Suggestions Section -->
+            <div class="ai-context-section">
+                <p id="ai-context-message">Loading recommendations...</p>
+                <div class="ai-quick-actions">
+                    <!-- Buttons injected via JS -->
+                </div>
+            </div>
+
+            <!-- Chat History -->
+            <div id="ai-chat-history" class="ai-chat-scroll">
+                <div class="chat-message ai-message">
+                    <div class="message-content">Hello! I'm your AI Travel Buddy. I can help you plan trips, discover hidden gems, or optimize your budget. How can I assist you today?</div>
+                </div>
+                <div id="ai-typing-indicator" class="typing-indicator hidden">
+                    <span></span><span></span><span></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="ai-popup-footer">
+            <div class="chat-input-wrapper">
+                <input type="text" id="ai-chat-input" placeholder="Ask me anything..." />
+                <button id="ai-chat-send" class="icon-btn send-btn"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link rel="stylesheet" href="/voyastra/css/ai-buddy.css">
+<script src="/voyastra/js/ai-buddy.js" defer></script>
+
+    <script src="/voyastra/js/autoscroll.js"></script>
+    <script src="/voyastra/js/main.js"></script>
+</body>
+</html>
+
+

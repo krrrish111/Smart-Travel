@@ -40,9 +40,9 @@ public class SavedTripPlanDAO {
 
     public List<SavedTripPlan> getUserSavedPlans(int userId) {
         List<SavedTripPlan> list = new ArrayList<>();
-        String query = "SELECT s.*, p.title AS trip_name, p.destination, p.image AS trip_image, p.price " +
+        String query = "SELECT s.*, p.title AS trip_name, p.destination, p.image_url AS trip_image, p.price_inr AS price " +
                        "FROM saved_trip_plans s " +
-                       "JOIN plans p ON s.trip_id = p.id " +
+                       "JOIN trip_plans p ON s.trip_id = p.id " +
                        "WHERE s.user_id = ? " +
                        "ORDER BY s.saved_at DESC";
         try (Connection conn = DBConnection.getConnection();

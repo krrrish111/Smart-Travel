@@ -77,7 +77,7 @@
                 <div class="price-highlight mb-2">
                     <fmt:formatNumber value="${discPriceVal > 0 ? discPriceVal : priceInrVal}" type="currency" currencySymbol="₹" maxFractionDigits="0" />
                 </div>
-                <a href="${pageContext.request.contextPath}/pages/trip-checkout.jsp?id=${empty trip.id ? 1 : trip.id}" class="btn-primary w-full" style="padding: 12px 24px; border-radius: 8px; font-weight: 700;">Book Now →</a>
+                <a href="${pageContext.request.contextPath}/trip/customize?id=${empty trip.id ? 1 : trip.id}" class="btn-primary w-full" style="padding: 12px 24px; border-radius: 8px; font-weight: 700;">Book Now →</a>
             </div>
         </div>
     </section>
@@ -171,7 +171,7 @@
 
                 <!-- Quick Book Button in Sidebar -->
                 <div class="mt-4 pt-4" style="border-top:1px solid var(--color-border); display: flex; flex-direction: column; gap: 10px;">
-                    <a href="${pageContext.request.contextPath}/pages/trip-checkout.jsp?id=${empty trip.id ? 1 : trip.id}" class="btn-primary w-full text-center" style="display:block;padding:12px;border-radius:8px;font-weight:700;text-decoration:none;">
+                    <a href="${pageContext.request.contextPath}/trip/customize?id=${empty trip.id ? 1 : trip.id}" class="btn-primary w-full text-center" style="display:block;padding:12px;border-radius:8px;font-weight:700;text-decoration:none;">
                         Book Now →
                     </a>
                     <button onclick="saveTripPlan(${empty trip.id ? 1 : trip.id})" class="btn-outline w-full text-center" style="display:block;padding:12px;border-radius:8px;font-weight:700; border: 1px solid var(--color-primary); color: var(--color-primary); background: transparent;">

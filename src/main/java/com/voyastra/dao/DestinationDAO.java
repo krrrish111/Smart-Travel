@@ -12,42 +12,65 @@ import java.util.List;
 
 public class DestinationDAO {
 
-    // Helper to map a ResultSet row to a Destination object
     private Destination mapRow(ResultSet rs) throws SQLException {
         Destination d = new Destination();
         d.setId(rs.getInt("id"));
-        d.setName(rs.getString("name"));
-        d.setState(rs.getString("state"));
-        d.setCountry(rs.getString("country"));
+        d.setTitle(rs.getString("title"));
+        d.setDestination(rs.getString("destination"));
         d.setCategory(rs.getString("category"));
-        d.setImage(rs.getString("image"));
-        d.setDescription(rs.getString("description"));
+        d.setShortDescription(rs.getString("short_description"));
+        d.setFullDescription(rs.getString("full_description"));
+        d.setPriceInr(rs.getDouble("price_inr"));
+        d.setDiscountPrice(rs.getDouble("discount_price"));
+        d.setDurationDays(rs.getInt("duration_days"));
+        d.setDurationNights(rs.getInt("duration_nights"));
+        d.setBestSeason(rs.getString("best_season"));
+        d.setStartingCity(rs.getString("starting_city"));
+        d.setImageUrl(rs.getString("image_url"));
         d.setRating(rs.getFloat("rating"));
+        d.setReviewCount(rs.getInt("review_count"));
+        d.setActive(rs.getBoolean("is_active"));
+        d.setFeatured(rs.getBoolean("is_featured"));
         d.setCreatedAt(rs.getTimestamp("created_at"));
+        
+        // Populate legacy aliases for existing JSPs
+        d.setName(rs.getString("title"));
+        d.setCountry(rs.getString("destination"));
+        d.setDescription(rs.getString("short_description"));
+        d.setImage(rs.getString("image_url"));
+
         return d;
     }
 
-    public boolean addDestination(Destination destination) {
-        String query = "INSERT INTO destinations (name, state, country, category, image, description, rating) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    public boolean addDestination(Destination d) {
+        String query = "INSERT INTO destinations (title, destination, category, short_description, full_description, price_inr, discount_price, duration_days, duration_nights, best_season, starting_city, image_url, rating, review_count, is_active, is_featured) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
-            stmt.setString(1, destination.getName());
-            stmt.setString(2, destination.getState());
-            stmt.setString(3, destination.getCountry());
-            stmt.setString(4, destination.getCategory());
-            stmt.setString(5, destination.getImage());
-            stmt.setString(6, destination.getDescription());
-            stmt.setFloat(7, destination.getRating());
+            stmt.setString(1, d.getTitle());
+            stmt.setString(2, d.getDestination());
+            stmt.setString(3, d.getCategory());
+            stmt.setString(4, d.getShortDescription());
+            stmt.setString(5, d.getFullDescription());
+            stmt.setDouble(6, d.getPriceInr());
+            stmt.setDouble(7, d.getDiscountPrice());
+            stmt.setInt(8, d.getDurationDays());
+            stmt.setInt(9, d.getDurationNights());
+            stmt.setString(10, d.getBestSeason());
+            stmt.setString(11, d.getStartingCity());
+            stmt.setString(12, d.getImageUrl());
+            stmt.setFloat(13, d.getRating());
+            stmt.setInt(14, d.getReviewCount());
+            stmt.setBoolean(15, d.isActive());
+            stmt.setBoolean(16, d.isFeatured());
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.err.println("ERROR: DestinationDAO.addDestination failed.");
             e.printStackTrace();
             return false;
         }
     }
 
     public Destination getDestinationById(int id) {
-        String query = "SELECT id, name, state, country, category, image, description, rating, created_at FROM destinations WHERE id = ?";
+        String query = "SELECT * FROM destinations WHERE id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, id);
@@ -55,7 +78,6 @@ public class DestinationDAO {
                 if (rs.next()) return mapRow(rs);
             }
         } catch (SQLException e) {
-            System.err.println("ERROR: DestinationDAO.getDestinationById failed.");
             e.printStackTrace();
         }
         return null;
@@ -63,28 +85,20 @@ public class DestinationDAO {
 
     public List<Destination> getAllDestinations() {
         List<Destination> list = new ArrayList<>();
-        String query = "SELECT id, name, state, country, category, image, description, rating, created_at FROM destinations ORDER BY rating DESC";
-        Connection conn = null;
-        try {
-            conn = DBConnection.getConnection();
-            if (conn == null) return list;
-            
-            try (PreparedStatement stmt = conn.prepareStatement(query);
-                 ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) list.add(mapRow(rs));
-            }
+        String query = "SELECT * FROM destinations ORDER BY id DESC";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) list.add(mapRow(rs));
         } catch (SQLException e) {
-            System.err.println("ERROR: DestinationDAO.getAllDestinations failed.");
             e.printStackTrace();
-        } finally {
-            if (conn != null) try { conn.close(); } catch (SQLException e) { e.printStackTrace(); }
         }
         return list;
     }
 
     public List<Destination> getDestinationsByCategory(String category) {
         List<Destination> list = new ArrayList<>();
-        String query = "SELECT id, name, state, country, category, image, description, rating, created_at FROM destinations WHERE category = ? ORDER BY rating DESC";
+        String query = "SELECT * FROM destinations WHERE category = ? ORDER BY id DESC";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, category);
@@ -92,27 +106,60 @@ public class DestinationDAO {
                 while (rs.next()) list.add(mapRow(rs));
             }
         } catch (SQLException e) {
-            System.err.println("ERROR: DestinationDAO.getDestinationsByCategory failed.");
             e.printStackTrace();
         }
         return list;
     }
 
-    public boolean updateDestination(Destination destination) {
-        String query = "UPDATE destinations SET name = ?, state = ?, country = ?, category = ?, image = ?, description = ?, rating = ? WHERE id = ?";
+    public List<Destination> getFeaturedDestinations() {
+        List<Destination> list = new ArrayList<>();
+        String query = "SELECT * FROM destinations WHERE is_featured = true ORDER BY id DESC LIMIT 6";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) list.add(mapRow(rs));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+    
+    public List<Destination> getPopularDestinations() {
+        List<Destination> list = new ArrayList<>();
+        String query = "SELECT * FROM destinations ORDER BY review_count DESC LIMIT 6";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) list.add(mapRow(rs));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public boolean updateDestination(Destination d) {
+        String query = "UPDATE destinations SET title=?, destination=?, category=?, short_description=?, full_description=?, price_inr=?, discount_price=?, duration_days=?, duration_nights=?, best_season=?, starting_city=?, image_url=?, rating=?, review_count=?, is_active=?, is_featured=? WHERE id=?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
-            stmt.setString(1, destination.getName());
-            stmt.setString(2, destination.getState());
-            stmt.setString(3, destination.getCountry());
-            stmt.setString(4, destination.getCategory());
-            stmt.setString(5, destination.getImage());
-            stmt.setString(6, destination.getDescription());
-            stmt.setFloat(7, destination.getRating());
-            stmt.setInt(8, destination.getId());
+            stmt.setString(1, d.getTitle());
+            stmt.setString(2, d.getDestination());
+            stmt.setString(3, d.getCategory());
+            stmt.setString(4, d.getShortDescription());
+            stmt.setString(5, d.getFullDescription());
+            stmt.setDouble(6, d.getPriceInr());
+            stmt.setDouble(7, d.getDiscountPrice());
+            stmt.setInt(8, d.getDurationDays());
+            stmt.setInt(9, d.getDurationNights());
+            stmt.setString(10, d.getBestSeason());
+            stmt.setString(11, d.getStartingCity());
+            stmt.setString(12, d.getImageUrl());
+            stmt.setFloat(13, d.getRating());
+            stmt.setInt(14, d.getReviewCount());
+            stmt.setBoolean(15, d.isActive());
+            stmt.setBoolean(16, d.isFeatured());
+            stmt.setInt(17, d.getId());
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.err.println("ERROR: DestinationDAO.updateDestination failed.");
             e.printStackTrace();
             return false;
         }
@@ -125,7 +172,6 @@ public class DestinationDAO {
             stmt.setInt(1, id);
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.err.println("ERROR: DestinationDAO.deleteDestination failed.");
             e.printStackTrace();
             return false;
         }
@@ -133,9 +179,7 @@ public class DestinationDAO {
 
     public List<Destination> searchDestinations(String keyword) {
         List<Destination> list = new ArrayList<>();
-        String query = "SELECT id, name, state, country, category, image, description, rating, created_at FROM destinations " +
-                       "WHERE LOWER(name) LIKE LOWER(?) OR LOWER(description) LIKE LOWER(?) OR LOWER(state) LIKE LOWER(?) " +
-                       "ORDER BY rating DESC";
+        String query = "SELECT * FROM destinations WHERE LOWER(title) LIKE LOWER(?) OR LOWER(destination) LIKE LOWER(?) OR LOWER(short_description) LIKE LOWER(?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
             String pattern = "%" + keyword + "%";
@@ -146,7 +190,6 @@ public class DestinationDAO {
                 while (rs.next()) list.add(mapRow(rs));
             }
         } catch (SQLException e) {
-            System.err.println("ERROR: DestinationDAO.searchDestinations failed.");
             e.printStackTrace();
         }
         return list;
@@ -159,9 +202,31 @@ public class DestinationDAO {
              ResultSet rs = stmt.executeQuery()) {
             if (rs.next()) return rs.getInt(1);
         } catch (SQLException e) {
-            System.err.println("ERROR: DestinationDAO.getTotalDestinationCount failed.");
             e.printStackTrace();
         }
         return 0;
+    }
+
+    public List<com.voyastra.model.DestinationItinerary> getItinerariesForDestination(int destId) {
+        List<com.voyastra.model.DestinationItinerary> list = new ArrayList<>();
+        String query = "SELECT * FROM destination_itineraries WHERE destination_id = ? ORDER BY day_number ASC";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, destId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    com.voyastra.model.DestinationItinerary di = new com.voyastra.model.DestinationItinerary();
+                    di.setId(rs.getInt("id"));
+                    di.setDestinationId(rs.getInt("destination_id"));
+                    di.setDayNumber(rs.getInt("day_number"));
+                    di.setTitle(rs.getString("title"));
+                    di.setDetails(rs.getString("details"));
+                    list.add(di);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 }

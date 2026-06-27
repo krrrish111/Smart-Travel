@@ -89,7 +89,7 @@ public class PlanDAO {
      */
     public List<Plan> getPlansWithDestinations() {
         List<Plan> plans = new ArrayList<>();
-        String query = "SELECT p.id, p.title, p.destination_id, d.name AS destination_name, p.price, p.days, p.nights, p.category, p.description, p.image, p.created_at " +
+        String query = "SELECT p.id, p.title, p.destination_id, d.title AS destination_name, p.price, p.days, p.nights, p.category, p.description, p.image, p.created_at " +
                        "FROM plans p " +
                        "LEFT JOIN destinations d ON p.destination_id = d.id " +
                        "ORDER BY p.created_at DESC";
@@ -211,10 +211,10 @@ public class PlanDAO {
      */
     public List<Plan> searchPlans(String keyword) {
         List<Plan> plans = new ArrayList<>();
-        String query = "SELECT p.id, p.title, p.destination_id, d.name AS destination_name, p.price, p.days, p.nights, p.category, p.description, p.image, p.created_at " +
+        String query = "SELECT p.id, p.title, p.destination_id, d.title AS destination_name, p.price, p.days, p.nights, p.category, p.description, p.image, p.created_at " +
                        "FROM plans p " +
                        "LEFT JOIN destinations d ON p.destination_id = d.id " +
-                       "WHERE LOWER(p.title) LIKE LOWER(?) OR LOWER(p.category) LIKE LOWER(?) OR LOWER(p.description) LIKE LOWER(?) OR LOWER(d.name) LIKE LOWER(?) " +
+                       "WHERE LOWER(p.title) LIKE LOWER(?) OR LOWER(p.category) LIKE LOWER(?) OR LOWER(p.description) LIKE LOWER(?) OR LOWER(d.title) LIKE LOWER(?) " +
                        "ORDER BY p.created_at DESC";
 
         try (Connection conn = DBConnection.getConnection();

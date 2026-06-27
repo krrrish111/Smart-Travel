@@ -64,7 +64,7 @@
         <div class="flex flex-col lg:flex-row gap-8">
             <!-- Left Column: Form -->
             <div class="lg:w-2/3">
-                <form action="${pageContext.request.contextPath}/pages/trip-review.jsp" method="POST" class="surface-panel rounded-2xl p-6 md:p-8 shadow-xl" id="checkoutForm">
+                <form action="${pageContext.request.contextPath}/trip/review" method="POST" class="surface-panel rounded-2xl p-6 md:p-8 shadow-xl" id="checkoutForm">
                     <input type="hidden" name="tripId" value="${empty trip.id ? 1 : trip.id}">
                     <input type="hidden" name="tripTitle" value="${tripTitle}">
                     <input type="hidden" name="tripDest" value="${tripDest}">

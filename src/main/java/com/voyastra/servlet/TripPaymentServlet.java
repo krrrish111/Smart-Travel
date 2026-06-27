@@ -35,17 +35,30 @@ public class TripPaymentServlet extends HttpServlet {
             }
 
             double amount = Double.parseDouble(totalPriceStr);
-            int amountInPaise = (int) Math.round(amount * 100.0);
+            if (amount <= 0) {
+                throw new IllegalArgumentException("Amount must be greater than zero.");
+            }
+            long amountInPaise = Math.round(amount * 100.0);
 
             // Generate a unique receipt id
             String receipt = "rcpt_" + UUID.randomUUID().toString().substring(0, 8);
 
+            // LOGGING AUDIT
+            logger.info("========== RAZORPAY PAYMENT AUDIT ==========");
+            logger.info("Original Trip Amount (INR): " + amount);
+            logger.info("Amount Sent to Razorpay (Paise): " + amountInPaise);
+            logger.info("Currency: INR");
+
             // Call Razorpay API to create the order
             String jsonResponse = RazorpayService.createOrder(amountInPaise, receipt);
+            logger.info("Complete Razorpay API Response: " + jsonResponse);
 
             // Extract order_id using Gson
             JsonObject jsonObject = JsonParser.parseString(jsonResponse).getAsJsonObject();
             String orderId = jsonObject.get("id").getAsString();
+            
+            logger.info("Generated Order ID: " + orderId);
+            logger.info("============================================");
 
             // Set all parameters as request attributes to forward them to the payment page
             request.setAttribute("tripId", request.getParameter("tripId"));

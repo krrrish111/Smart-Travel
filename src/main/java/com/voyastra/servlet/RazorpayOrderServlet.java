@@ -54,14 +54,20 @@ public class RazorpayOrderServlet extends HttpServlet {
                 return;
             }
         } else {
-            HotelBooking pending = (HotelBooking) session.getAttribute("pendingHotelBooking");
-            if (pending == null) {
-                response.setStatus(400);
-                response.getWriter().write("{\"error\": \"No pending booking found or amount specified\"}");
-                return;
+            com.voyastra.model.Booking currentBooking = (com.voyastra.model.Booking) session.getAttribute("currentBooking");
+            if (currentBooking != null) {
+                amountInPaise = (int) (currentBooking.getTotalPrice() * 100);
+                receipt = "rcpt_" + UUID.randomUUID().toString().substring(0, 8);
+            } else {
+                HotelBooking pending = (HotelBooking) session.getAttribute("pendingHotelBooking");
+                if (pending == null) {
+                    response.setStatus(400);
+                    response.getWriter().write("{\"error\": \"No pending booking found or amount specified\"}");
+                    return;
+                }
+                amountInPaise = (int) (pending.getTotalPrice() * 100);
+                receipt = "rcpt_" + UUID.randomUUID().toString().substring(0, 8);
             }
-            amountInPaise = (int) (pending.getTotalPrice() * 100);
-            receipt = "rcpt_" + UUID.randomUUID().toString().substring(0, 8);
         }
 
         try {

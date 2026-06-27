@@ -607,38 +607,23 @@
 
                 <div class="plan-scroll-outer" id="mustDoOuter">
                     <div class="plan-scroll-inner" id="mustDoInner" style="animation: none; transition: transform 0.1s linear; display: flex; gap: 24px;">
-                        <a href="${pageContext.request.contextPath}/pages/experience-details.jsp?activity=Rafting" class="glass-panel flex gap-4 p-4" style="min-width: 320px; border-radius: 16px; cursor: pointer; transition: transform 0.3s ease; text-decoration: none; display: flex;">
-                            <img src="https://images.unsplash.com/photo-1628126235206-5260b9ea6441?auto=format,compress&fit=crop&w=150&h=150&q=75" alt="Rafting" style="width: 80px; height: 80px; border-radius: 12px; object-fit: cover;" loading="lazy">
-                            <div class="flex flex-col justify-center">
-                                <h4 class="font-bold text-main" style="font-size: 1.1rem;">River Rafting</h4>
-                                <p class="text-sm text-muted">Rishikesh, Uttarakhand</p>
-                                <div class="text-primary font-bold mt-1">₹1,500 <span class="text-xs text-muted font-normal block md:inline">/ person</span></div>
-                            </div>
-                        </a>
-                        <a href="${pageContext.request.contextPath}/pages/experience-details.jsp?activity=Aarti" class="glass-panel flex gap-4 p-4" style="min-width: 320px; border-radius: 16px; cursor: pointer; transition: transform 0.3s ease; text-decoration: none; display: flex;">
-                            <img src="https://images.unsplash.com/photo-1561359313-0639aad073f0?auto=format,compress&fit=crop&w=150&h=150&q=75" alt="Ganga Aarti" style="width: 80px; height: 80px; border-radius: 12px; object-fit: cover;" loading="lazy">
-                            <div class="flex flex-col justify-center">
-                                <h4 class="font-bold text-main" style="font-size: 1.1rem;">Ganga Aarti</h4>
-                                <p class="text-sm text-muted">Varanasi, UP</p>
-                                <div class="text-primary font-bold mt-1">Free</div>
-                            </div>
-                        </a>
-                        <a href="${pageContext.request.contextPath}/pages/experience-details.jsp?activity=Nightlife" class="glass-panel flex gap-4 p-4" style="min-width: 320px; border-radius: 16px; cursor: pointer; transition: transform 0.3s ease; text-decoration: none; display: flex;">
-                            <img src="https://images.unsplash.com/photo-1548013146-72479768bada?auto=format,compress&fit=crop&w=150&h=150&q=75" alt="Scuba" style="width: 80px; height: 80px; border-radius: 12px; object-fit: cover;" loading="lazy">
-                            <div class="flex flex-col justify-center">
-                                <h4 class="font-bold text-main" style="font-size: 1.1rem;">Nightlife & Beaches</h4>
-                                <p class="text-sm text-muted">Goa</p>
-                                <div class="text-primary font-bold mt-1">Varies</div>
-                            </div>
-                        </a>
-                        <a href="${pageContext.request.contextPath}/pages/experience-details.jsp?activity=TajMahal" class="glass-panel flex gap-4 p-4" style="min-width: 320px; border-radius: 16px; cursor: pointer; transition: transform 0.3s ease; text-decoration: none; display: flex;">
-                            <img src="https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format,compress&fit=crop&w=150&h=150&q=75" alt="Taj Mahal" style="width: 80px; height: 80px; border-radius: 12px; object-fit: cover;" loading="lazy">
-                            <div class="flex flex-col justify-center">
-                                <h4 class="font-bold text-main" style="font-size: 1.1rem;">Taj Mahal Tour</h4>
-                                <p class="text-sm text-muted">Agra, UP</p>
-                                <div class="text-primary font-bold mt-1">₹1,100 <span class="text-xs text-muted font-normal block md:inline">/ person</span></div>
-                            </div>
-                        </a>
+                        <c:forEach var="experience" items="${mustDoExperiences}">
+                            <a href="${pageContext.request.contextPath}/experience/details?id=${experience.id}" class="glass-panel flex gap-4 p-4" style="min-width: 320px; border-radius: 16px; cursor: pointer; transition: transform 0.3s ease; text-decoration: none; display: flex;">
+                                <img src="${not empty experience.coverImage ? experience.coverImage : 'https://images.unsplash.com/photo-1628126235206-5260b9ea6441?auto=format,compress&fit=crop&w=150&h=150&q=75'}" alt="${experience.title}" style="width: 80px; height: 80px; border-radius: 12px; object-fit: cover;" loading="lazy">
+                                <div class="flex flex-col justify-center">
+                                    <h4 class="font-bold text-main" style="font-size: 1.1rem;">${experience.title}</h4>
+                                    <p class="text-sm text-muted">${experience.location}</p>
+                                    <div class="text-primary font-bold mt-1">
+                                        <c:choose>
+                                            <c:when test="${experience.price > 0}">
+                                                ₹<fmt:formatNumber value="${experience.price}" pattern="#,###" /> <span class="text-xs text-muted font-normal block md:inline">/ person</span>
+                                            </c:when>
+                                            <c:otherwise>Free</c:otherwise>
+                                        </c:choose>
+                                    </div>
+                                </div>
+                            </a>
+                        </c:forEach>
                     </div>
                 </div>
             </section>

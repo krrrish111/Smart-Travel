@@ -698,6 +698,59 @@ public class SchemaBootstrap implements ServletContextListener {
                     System.out.println("[SchemaBootstrap] Added guests to destination_bookings.");
                 } catch (Exception e) {}
 
+                stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS activities (" +
+                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "title VARCHAR(255) NOT NULL, " +
+                    "hero_image VARCHAR(255), " +
+                    "description TEXT, " +
+                    "highlights TEXT, " +
+                    "duration_minutes INT, " +
+                    "opening_hours VARCHAR(255), " +
+                    "location VARCHAR(255), " +
+                    "price DECIMAL(10,2), " +
+                    "best_time VARCHAR(255), " +
+                    "difficulty VARCHAR(50), " +
+                    "age_limit VARCHAR(50), " +
+                    "inclusions TEXT, " +
+                    "exclusions TEXT, " +
+                    "lat VARCHAR(50), " +
+                    "lng VARCHAR(50), " +
+                    "rating DECIMAL(3,1), " +
+                    "review_count INT DEFAULT 0)"
+                );
+
+                stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS activity_bookings (" +
+                    "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                    "booking_id VARCHAR(50) NOT NULL UNIQUE, " +
+                    "user_id INT NOT NULL, " +
+                    "activity_id INT NOT NULL, " +
+                    "travel_date VARCHAR(50), " +
+                    "travel_time VARCHAR(50), " +
+                    "guests INT DEFAULT 1, " +
+                    "status VARCHAR(50) DEFAULT 'PENDING', " +
+                    "amount DECIMAL(10,2), " +
+                    "is_active BOOLEAN DEFAULT false, " +
+                    "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
+                    "FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE, " +
+                    "FOREIGN KEY (activity_id) REFERENCES activities(id) ON DELETE CASCADE)"
+                );
+
+                // Seed data for the 4 Must-Do activities if activities table is empty
+                try {
+                    var rs = stmt.executeQuery("SELECT COUNT(*) AS c FROM activities");
+                    if (rs.next() && rs.getInt("c") == 0) {
+                        stmt.execute("INSERT INTO activities (title, hero_image, description, location, price, duration_minutes, rating, review_count, highlights) VALUES " +
+                            "('River Rafting', 'https://images.unsplash.com/photo-1628126235206-5260b9ea6441?auto=format,compress&fit=crop&w=800', 'Navigate the thrilling rapids of the Ganges with expert guides.', 'Rishikesh, Uttarakhand', 1500.00, 180, 4.8, 342, 'Grade 3 Rapids|Safety Gear Included|Professional Guide'), " +
+                            "('Ganga Aarti', 'https://images.unsplash.com/photo-1561359313-0639aad073f0?auto=format,compress&fit=crop&w=800', 'Experience the spiritual and mesmerizing Ganga Aarti at Dashashwamedh Ghat.', 'Varanasi, UP', 0.00, 60, 4.9, 1024, 'Spiritual Chants|Evening Views|Cultural Heritage'), " +
+                            "('Nightlife & Beaches', 'https://images.unsplash.com/photo-1548013146-72479768bada?auto=format,compress&fit=crop&w=800', 'Enjoy the vibrant nightlife and pristine sandy beaches of Goa.', 'Goa', 2000.00, 240, 4.7, 512, 'Live Music|Beach Shacks|Fire Shows'), " +
+                            "('Taj Mahal Tour', 'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format,compress&fit=crop&w=800', 'A guided tour of the iconic Taj Mahal, a symbol of eternal love.', 'Agra, UP', 1100.00, 120, 4.9, 2048, 'Skip-the-line Entry|Historical Insights|Photography Spots')"
+                        );
+                        System.out.println("[SchemaBootstrap] Seeded activities table with 4 Must-Do experiences.");
+                    }
+                } catch (Exception e) {}
+
                 System.out.println("[SchemaBootstrap] Schema migration complete.");
 
         } catch (Exception e) {

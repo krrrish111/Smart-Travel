@@ -12,9 +12,24 @@ import java.time.temporal.ChronoUnit;
 public class JourneyDAO {
 
     private BookingDAO bookingDAO = new BookingDAO();
+    private ActivityBookingDAO activityBookingDAO = new ActivityBookingDAO();
 
     public Journey getActiveJourneyForUser(String userId) {
         List<Booking> bookings = bookingDAO.getBookingsByUser(Integer.parseInt(userId));
+        
+        List<com.voyastra.model.ActivityBooking> actBookings = activityBookingDAO.getBookingsByUserId(Integer.parseInt(userId));
+        for (com.voyastra.model.ActivityBooking ab : actBookings) {
+            Booking b = new Booking();
+            b.setId(ab.getId());
+            b.setBookingCode(ab.getBookingId());
+            b.setUserId(ab.getUserId());
+            b.setType("experience");
+            b.setPlanTitle(ab.getActivityName());
+            b.setTravelDate(ab.getTravelDate());
+            b.setTotalPrice(ab.getAmount());
+            b.setStatus(ab.getStatus());
+            bookings.add(b);
+        }
         
         // Find the closest upcoming or active booking
         Booking activeBooking = null;

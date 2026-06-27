@@ -20,9 +20,13 @@ public class Experience {
     private double rating;
     private int reviewCount;
     private Date createdAt;
+    private String highlights;
 
     // Constructors
     public Experience() {}
+
+    public String getHighlights() { return highlights; }
+    public void setHighlights(String highlights) { this.highlights = highlights; }
 
     // Getters and Setters
     public String getId() { return id; }

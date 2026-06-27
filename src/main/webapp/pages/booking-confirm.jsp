@@ -5,10 +5,7 @@
 <%@ include file="/components/header.jsp" %>
 <%@ include file="/components/global_ui.jsp" %>
 
-<c:set var="booking" value="${sessionScope.pendingBooking}" />
-<c:set var="trip" value="${sessionScope.pendingTrip}" />
-<c:set var="subtotal" value="${sessionScope.pendingSubtotal}" />
-<c:set var="tax" value="${sessionScope.pendingTax}" />
+<c:set var="booking" value="${sessionScope.currentBooking}" />
 
 <main style="padding-top: 100px; padding-bottom: 80px;">
     <div class="container" style="max-width: 800px;">
@@ -29,12 +26,9 @@
         <div class="glass-panel p-5 mb-5 slide-up" style="animation-delay:0.1s;">
             <h3 class="fw-bold text-main mb-4"><span class="text-primary mr-2">📦</span> Package Details</h3>
             <div class="flex flex-col sm:flex-row gap-4 items-center">
-                <div style="width:120px;height:80px;border-radius:10px;overflow:hidden;flex-shrink:0;">
-                    <img src="${trip.imageUrl}" style="width:100%;height:100%;object-fit:cover;">
-                </div>
                 <div class="flex-1">
-                    <h4 class="text-main fw-bold" style="font-size:1.2rem;">${trip.title}</h4>
-                    <p class="text-muted text-sm">${trip.destination} • ${trip.duration} • ${trip.category}</p>
+                    <h4 class="text-main fw-bold" style="font-size:1.2rem;">${booking.planTitle}</h4>
+                    <p class="text-muted text-sm">${booking.type}</p>
                 </div>
             </div>
         </div>
@@ -45,14 +39,9 @@
             <div class="grid sm:grid-cols-2 gap-4">
                 <div><span class="text-muted text-xs uppercase">Full Name</span><p class="text-main fw-bold">${booking.customerName}</p></div>
                 <div><span class="text-muted text-xs uppercase">Email</span><p class="text-main fw-bold">${booking.customerEmail}</p></div>
-                <div><span class="text-muted text-xs uppercase">Phone</span><p class="text-main fw-bold">${booking.customerPhone}</p></div>
-                <div><span class="text-muted text-xs uppercase">Pickup City</span><p class="text-main fw-bold">${booking.pickupCity}</p></div>
                 <div><span class="text-muted text-xs uppercase">Travel Date</span><p class="text-main fw-bold">${booking.travelDate}</p></div>
-                <div><span class="text-muted text-xs uppercase">Travelers</span><p class="text-main fw-bold">${booking.numAdults} Adults, ${booking.numChildren} Children</p></div>
-                <div><span class="text-muted text-xs uppercase">Room Type</span><p class="text-main fw-bold">${booking.roomType}</p></div>
-                <c:if test="${not empty booking.specialRequests}">
-                    <div class="sm:col-span-2"><span class="text-muted text-xs uppercase">Special Requests</span><p class="text-main">${booking.specialRequests}</p></div>
-                </c:if>
+                <div><span class="text-muted text-xs uppercase">Travel Time</span><p class="text-main fw-bold">${booking.roomType}</p></div>
+                <div><span class="text-muted text-xs uppercase">Travelers</span><p class="text-main fw-bold">${booking.numAdults} Guests</p></div>
             </div>
         </div>
 
@@ -77,12 +66,14 @@
 
         <!-- Actions -->
         <div class="flex flex-col sm:flex-row gap-4 slide-up" style="animation-delay:0.25s;">
-            <a href="${pageContext.request.contextPath}/booking?action=tripBooking&tripId=${trip.id}" class="btn-secondary flex-1 text-center" style="padding:14px;border-radius:8px;font-weight:700;text-decoration:none;">
+            <button onclick="history.back()" class="btn-secondary flex-1 text-center" style="padding:14px;border-radius:8px;font-weight:700;text-decoration:none;background:transparent;border:1px solid rgba(255,255,255,0.2);color:white;">
                 ← Edit Details
-            </a>
-            <a href="${pageContext.request.contextPath}/payment?action=checkout" class="btn-primary flex-1 text-center" style="padding:14px;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer;text-decoration:none;display:block;">
-                ✓ Secure Checkout (Pay ₹<fmt:formatNumber value="${booking.totalPrice}" type="number" maxFractionDigits="0"/>)
-            </a>
+            </button>
+            <form action="${pageContext.request.contextPath}/confirm-booking" method="post" class="flex-1 m-0">
+                <button type="submit" class="btn-primary w-full text-center" style="padding:14px;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer;">
+                    ✓ Secure Checkout (Pay ₹<fmt:formatNumber value="${booking.totalPrice}" type="number" maxFractionDigits="0"/>)
+                </button>
+            </form>
         </div>
 
         <div class="text-center mt-4">

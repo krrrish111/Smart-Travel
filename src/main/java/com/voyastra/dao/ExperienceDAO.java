@@ -1,22 +1,40 @@
 package com.voyastra.dao;
 
 import com.voyastra.model.Experience;
+import com.voyastra.util.DBConnection;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ExperienceDAO {
 
     public List<Experience> getAllExperiences() {
-        return getMockExperiences();
+        List<Experience> list = new ArrayList<>();
+        String sql = "SELECT * FROM activities LIMIT 10"; // Fetch Must-Do things
+        
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+             
+             while (rs.next()) {
+                 list.add(mapToExperience(rs));
+             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return getMockExperiences(); // fallback
+        }
+        return list.isEmpty() ? getMockExperiences() : list;
     }
 
     public List<Experience> getExperiencesByCategory(String category) {
-        List<Experience> all = getMockExperiences();
+        List<Experience> all = getAllExperiences();
         if (category == null || category.equalsIgnoreCase("All")) return all;
 
         List<Experience> filtered = new ArrayList<>();
         for (Experience e : all) {
-            if (e.getCategory().equalsIgnoreCase(category)) {
+            if (e.getCategory() != null && e.getCategory().equalsIgnoreCase(category)) {
                 filtered.add(e);
             }
         }
@@ -24,10 +42,50 @@ public class ExperienceDAO {
     }
 
     public Experience getExperienceById(String id) {
+        String sql = "SELECT * FROM activities WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             
+             try {
+                 stmt.setInt(1, Integer.parseInt(id));
+             } catch (NumberFormatException ex) {
+                 // Might be a mock ID like EXP-101
+                 for (Experience e : getMockExperiences()) {
+                     if (e.getId().equals(id)) return e;
+                 }
+                 return null;
+             }
+             
+             try (ResultSet rs = stmt.executeQuery()) {
+                 if (rs.next()) {
+                     return mapToExperience(rs);
+                 }
+             }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        // Fallback for mock IDs
         for (Experience e : getMockExperiences()) {
             if (e.getId().equals(id)) return e;
         }
         return null;
+    }
+
+    private Experience mapToExperience(ResultSet rs) throws Exception {
+        Experience e = new Experience();
+        e.setId(String.valueOf(rs.getInt("id")));
+        e.setTitle(rs.getString("title"));
+        e.setCoverImage(rs.getString("hero_image"));
+        e.setDescription(rs.getString("description"));
+        e.setHighlights(rs.getString("highlights"));
+        e.setLocation(rs.getString("location"));
+        e.setPrice(rs.getDouble("price"));
+        e.setDurationMinutes(rs.getInt("duration_minutes"));
+        e.setRating(rs.getDouble("rating"));
+        e.setReviewCount(rs.getInt("review_count"));
+        e.setCategory("Must-Do");
+        return e;
     }
 
     private List<Experience> getMockExperiences() {

@@ -72,6 +72,9 @@ public class HomeServlet extends HttpServlet {
         request.setAttribute("recommendedHotels", recommendedHotels);
         request.setAttribute("recentlyViewedHotels", recentlyViewedHotels);
         
+        com.voyastra.dao.ExperienceDAO experienceDAO = new com.voyastra.dao.ExperienceDAO();
+        request.setAttribute("mustDoExperiences", experienceDAO.getAllExperiences());
+        
         // Forward to the renamed JSP file (home.jsp) to avoid recursion
         request.getRequestDispatcher("/pages/home.jsp").forward(request, response);
     }

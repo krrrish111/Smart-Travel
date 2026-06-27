@@ -44,6 +44,18 @@
             </div>
         </div>
     </div>
+    
+    <form id="successForm" action="${pageContext.request.contextPath}/destination/confirmation" method="POST" style="display:none;">
+        <input type="hidden" name="destinationTitle" value="${destination.title}">
+        <input type="hidden" name="travelDate" value="${travel_date}">
+        <input type="hidden" name="guests" value="${travellers}">
+        <input type="hidden" name="primaryName" value="${primary_name}">
+        <input type="hidden" name="primaryEmail" value="${primary_email}">
+        <input type="hidden" name="primaryPhone" value="${primary_phone}">
+        <input type="hidden" name="finalPrice" value="${final_price}">
+        <input type="hidden" name="paymentId" id="paymentIdInput" value="">
+        <input type="hidden" name="orderId" id="orderIdInput" value="">
+    </form>
 </main>
 
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
@@ -81,7 +93,7 @@ document.getElementById('rzp-button').onclick = async function(e) {
                 "order_id": orderData.id,
                 "handler": async function (response){
                     // 3. Verify Payment
-                    Voyastra.ui.showLoadingOverlay("Verifying payment...");
+                    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verifying payment...';
                     const verifyRes = await fetch('${pageContext.request.contextPath}/api/destination/payment/validate', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -93,9 +105,10 @@ document.getElementById('rzp-button').onclick = async function(e) {
                     });
 
                     if(verifyRes.ok) {
-                        window.location.href = '${pageContext.request.contextPath}/destination/confirmation?order_id=' + response.razorpay_order_id;
+                        document.getElementById('paymentIdInput').value = response.razorpay_payment_id;
+                        document.getElementById('orderIdInput').value = response.razorpay_order_id;
+                        document.getElementById('successForm').submit();
                     } else {
-                        Voyastra.ui.hideLoadingOverlay();
                         toast.error("Payment verification failed. Please contact support.");
                         btn.innerHTML = 'Proceed to Secure Payment';
                         btn.disabled = false;

@@ -39,7 +39,7 @@ public class AuthenticationFilter implements Filter {
         HttpServletResponse res = (HttpServletResponse) response;
         HttpSession session = req.getSession(false);
 
-        boolean loggedIn = session != null && session.getAttribute("userId") != null;
+        boolean loggedIn = session != null && session.getAttribute("user_id") != null;
 
         if (loggedIn) {
             chain.doFilter(request, response);

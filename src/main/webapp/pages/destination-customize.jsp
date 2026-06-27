@@ -108,7 +108,7 @@
                         </label>
                     </div>
 
-                    <button type="button" onclick="VoyastraAuth.requireAuthAndSubmit('customizeForm')" class="btn btn-primary w-full text-lg py-4">Proceed to Review</button>
+                    <button type="submit" class="btn btn-primary w-full text-lg py-4">Proceed to Review</button>
                 </form>
             </div>
         </div>

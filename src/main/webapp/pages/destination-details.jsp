@@ -14,7 +14,7 @@
     background-size: cover;
     background-position: center;
     /* Default background, will be overridden by inline style if dynamic */
-    background-image: url('https://images.unsplash.com/photo-1542332213-31f87348057f?auto=format&fit=crop&w=1920&q=80');
+    background-image: url('${not empty destination.imageUrl ? destination.imageUrl : "https://images.unsplash.com/photo-1542332213-31f87348057f?auto=format&fit=crop&w=1920&q=80"}');
     padding-top: 80px;
 }
 .dest-hero-overlay {
@@ -168,8 +168,8 @@
     <section class="dest-hero-section">
         <div class="dest-hero-overlay"></div>
         <div class="dest-hero-content slide-up">
-            <h1 class="dest-hero-title editorial">Explore Destination</h1>
-            <p class="dest-hero-subtitle">Discover the beauty, culture, and experiences awaiting you.</p>
+            <h1 class="dest-hero-title editorial">${not empty destination.title ? destination.title : "Explore Destination"}</h1>
+            <p class="dest-hero-subtitle">${not empty destination.shortDescription ? destination.shortDescription : "Discover the beauty, culture, and experiences awaiting you."}</p>
         </div>
     </section>
 
@@ -205,7 +205,7 @@
             <div class="action-group-right">
                 <!-- Action: Book This Trip -->
                 <!-- The actual booking page logic requires user to log in -->
-                <a href="${pageContext.request.contextPath}/trip-booking?id=<%= request.getParameter("id") != null ? request.getParameter("id") : "demo" %>" class="dest-btn btn-primary-gold" onclick="event.preventDefault(); VoyastraAuth.requireAuth(this.href);">
+                <a href="${pageContext.request.contextPath}/destination/customize?id=<%= request.getParameter("id") != null ? request.getParameter("id") : "1" %>" class="dest-btn btn-primary-gold">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
                     Book This Trip
                 </a>
@@ -219,9 +219,7 @@
         <div class="dest-content-main">
             <h2 class="dest-section-title editorial">About this Journey</h2>
             <p class="text-muted mb-6" style="font-size: 1.1rem; line-height: 1.7;">
-                Immerse yourself in a curated experience designed to showcase the very best of this location. 
-                From iconic landmarks to hidden gems, every detail has been thoughtfully arranged to ensure an unforgettable journey.
-                Whether you're seeking adventure, relaxation, or cultural immersion, this trip offers a perfect balance.
+                ${not empty destination.fullDescription ? destination.fullDescription : "Immerse yourself in a curated experience designed to showcase the very best of this location. From iconic landmarks to hidden gems, every detail has been thoughtfully arranged to ensure an unforgettable journey. Whether you're seeking adventure, relaxation, or cultural immersion, this trip offers a perfect balance."}
             </p>
 
             <h2 class="dest-section-title editorial mt-8">Highlights</h2>
@@ -297,21 +295,39 @@
                 <div class="stat-grid">
                     <div class="stat-item">
                         <span class="stat-label">Duration</span>
-                        <span class="stat-value">5 Days / 4 Nights</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Starting Price</span>
-                        <span class="stat-value text-accent">₹24,999</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Travel Style</span>
-                        <span class="stat-value">Curated Tour</span>
+                        <span class="stat-value">${destination.durationDays}D / ${destination.durationNights}N</span>
                     </div>
                     <div class="stat-item">
                         <span class="stat-label">Best Time</span>
-                        <span class="stat-value">Oct - Mar</span>
+                        <span class="stat-value">${not empty destination.bestSeason ? destination.bestSeason : "All Year"}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Category</span>
+                        <span class="stat-value">${not empty destination.category ? destination.category : "Premium"}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Starting</span>
+                        <span class="stat-value">${not empty destination.startingCity ? destination.startingCity : "TBD"}</span>
                     </div>
                 </div>
+
+                <hr class="border-border my-6">
+                
+                <div class="price-box mb-6">
+                    <span class="text-sm text-muted line-through mb-1 block">₹<fmt:formatNumber value="${destination.priceInr}" type="number" maxFractionDigits="0"/></span>
+                    <div class="flex items-end gap-2">
+                        <span class="text-3xl font-bold text-primary">₹<fmt:formatNumber value="${destination.discountPrice > 0 ? destination.discountPrice : destination.priceInr}" type="number" maxFractionDigits="0"/></span>
+                        <span class="text-sm text-muted pb-1">/ person</span>
+                    </div>
+                    <p class="text-xs text-primary mt-2 flex items-center gap-1">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                        Taxes & Fees Included
+                    </p>
+                </div>
+                
+                <a href="${pageContext.request.contextPath}/destination/customize?id=<%= request.getParameter("id") != null ? request.getParameter("id") : "1" %>" class="btn btn-primary w-full text-lg py-4 mb-4">
+                    Book This Trip
+                </a>
             </div>
 
             <div class="info-card">

@@ -2,6 +2,44 @@
 <%@ include file="/components/header.jsp" %>
 <%@ include file="/components/global_ui.jsp" %>
 
+<style>
+/* Destination Booking Form Styles */
+main.container form input,
+main.container form textarea,
+main.container form select {
+    background: rgba(255,255,255,.08) !important;
+    color: #ffffff !important;
+    caret-color: #ffffff !important;
+    border: 1px solid rgba(255,255,255,.15) !important;
+    -webkit-text-fill-color: #ffffff !important;
+    opacity: 1 !important;
+}
+
+main.container form input::placeholder,
+main.container form textarea::placeholder {
+    color: rgba(255,255,255,.55) !important;
+    -webkit-text-fill-color: rgba(255,255,255,.55) !important;
+}
+
+main.container form input:focus,
+main.container form textarea:focus,
+main.container form select:focus {
+    color: #ffffff !important;
+    border-color: #D4AF37 !important;
+    box-shadow: 0 0 0 3px rgba(212,175,55,.15) !important;
+    outline: none !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Fix Autofill styling */
+main.container form input:-webkit-autofill,
+main.container form textarea:-webkit-autofill,
+main.container form select:-webkit-autofill {
+    -webkit-text-fill-color: #ffffff !important;
+    transition: background-color 9999s ease-in-out 0s !important;
+}
+</style>
+
 <main class="container my-12 max-w-3xl">
     <div class="glass-panel p-8 rounded-2xl border border-gray-100 dark:border-gray-800">
         <h2 class="text-3xl font-bold text-main editorial mb-6">Traveller Details</h2>

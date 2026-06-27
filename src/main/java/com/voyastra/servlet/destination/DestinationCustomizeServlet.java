@@ -22,8 +22,10 @@ public class DestinationCustomizeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         javax.servlet.http.HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("userId") == null) {
-            response.sendRedirect(request.getContextPath() + "/login?error=session_expired");
+        if (session == null || session.getAttribute("user_id") == null) {
+            String q = request.getQueryString();
+            String redirectUrl = "/destination/customize" + (q != null ? "?" + q : "");
+            response.sendRedirect(request.getContextPath() + "/login?redirect=" + java.net.URLEncoder.encode(redirectUrl, "UTF-8"));
             return;
         }
 

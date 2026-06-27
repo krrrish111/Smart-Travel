@@ -34,7 +34,15 @@ public class LoginServlet extends HttpServlet {
         HttpSession session = request.getSession(false);
         if (session != null && session.getAttribute("user_id") != null) {
             String role = (String) session.getAttribute("role");
-            String redirectTarget = request.getContextPath() + ("admin".equals(role) ? "/admin" : "/user-home");
+            String target = request.getParameter("redirect");
+            String redirectTarget;
+            
+            if (target != null && !target.trim().isEmpty()) {
+                redirectTarget = request.getContextPath() + (target.startsWith("/") ? "" : "/") + target;
+            } else {
+                redirectTarget = request.getContextPath() + ("admin".equals(role) ? "/admin" : "/user-home");
+            }
+            
             System.out.println("REDIRECTING TO: " + redirectTarget);
             response.sendRedirect(redirectTarget);
             return;

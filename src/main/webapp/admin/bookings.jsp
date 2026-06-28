@@ -19,7 +19,10 @@
     
     
     <div class="admin-tabs" style="display: flex; gap: 10px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 10px;">
-        <button class="btn btn-outline active-tab" onclick="changeBookingType('packages', this)" style="white-space: nowrap;">Packages</button>
+        <button class="btn btn-outline active-tab" onclick="changeBookingType('all', this)" style="white-space: nowrap;">All Bookings</button>
+        <button class="btn btn-outline" onclick="changeBookingType('packages', this)" style="white-space: nowrap;">Packages</button>
+        <button class="btn btn-outline" onclick="changeBookingType('flight', this)" style="white-space: nowrap;">Flights</button>
+        <button class="btn btn-outline" onclick="changeBookingType('hotel', this)" style="white-space: nowrap;">Hotels</button>
         <button class="btn btn-outline" onclick="changeBookingType('train', this)" style="white-space: nowrap;">Trains</button>
         <button class="btn btn-outline" onclick="changeBookingType('bus', this)" style="white-space: nowrap;">Buses</button>
         <button class="btn btn-outline" onclick="changeBookingType('cab', this)" style="white-space: nowrap;">Cabs</button>
@@ -41,9 +44,9 @@
                 <tr>
                     <th>ID</th>
                     <th>User</th>
-                    <th>Plan</th>
+                    <th>Details</th>
+                    <th>Price</th>
                     <th>Status</th>
-                    <th>Date</th>
                     <th class="text-right">Actions</th>
                 </tr>
             </thead>

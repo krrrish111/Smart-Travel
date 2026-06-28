@@ -4,11 +4,10 @@ import java.sql.Timestamp;
 
 public class AdminLog {
     private int id;
-    private String adminUsername;  // from session
-    private String action;         // "ADD", "UPDATE", "DELETE"
-    private String entity;         // "Plan", "Destination", "Review", etc.
-    private int entityId;          // the PK of the affected row
-    private String details;        // human-readable summary e.g. "Deleted plan 'Goa Trip'"
+    private int adminId;
+    private String action;
+    private String module;
+    private String details;
     private String ipAddress;
     private Timestamp createdAt;
 
@@ -17,17 +16,14 @@ public class AdminLog {
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
-    public String getAdminUsername() { return adminUsername; }
-    public void setAdminUsername(String adminUsername) { this.adminUsername = adminUsername; }
+    public int getAdminId() { return adminId; }
+    public void setAdminId(int adminId) { this.adminId = adminId; }
 
     public String getAction() { return action; }
     public void setAction(String action) { this.action = action; }
 
-    public String getEntity() { return entity; }
-    public void setEntity(String entity) { this.entity = entity; }
-
-    public int getEntityId() { return entityId; }
-    public void setEntityId(int entityId) { this.entityId = entityId; }
+    public String getModule() { return module; }
+    public void setModule(String module) { this.module = module; }
 
     public String getDetails() { return details; }
     public void setDetails(String details) { this.details = details; }

@@ -71,8 +71,14 @@ public class ReviewDAO {
     /**
      * Deletes a review from the database.
      */
-    public boolean deleteReview(int id) {
-        String query = "DELETE FROM reviews WHERE id = ?";
+    public boolean deleteReview(int id, String type) {
+        String query;
+        if ("hotel".equalsIgnoreCase(type)) {
+            query = "DELETE FROM hotel_reviews WHERE id = ?";
+        } else {
+            query = "DELETE FROM reviews WHERE id = ?";
+        }
+        
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
              
@@ -83,6 +89,26 @@ public class ReviewDAO {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public boolean updateReviewStatus(int id, String type, String status) {
+        String query;
+        if ("hotel".equalsIgnoreCase(type)) {
+            query = "UPDATE hotel_reviews SET status = ? WHERE id = ?";
+        } else {
+            query = "UPDATE reviews SET status = ? WHERE id = ?";
+        }
+        
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, status);
+            stmt.setInt(2, id);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("ERROR: ReviewDAO.updateReviewStatus failed.");
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public Review getReviewById(int id) {
@@ -113,24 +139,31 @@ public class ReviewDAO {
 
     public List<Review> getAllReviews() {
         List<Review> list = new ArrayList<>();
-        String query = "SELECT r.id, r.user_id, r.destination_id, r.rating, r.comment, r.created_at, u.name AS user_name, d.title AS destination_name " +
+        String query = "SELECT 'destination' as type, r.id, r.user_id, r.destination_id as reference_id, r.rating, r.comment, r.created_at, u.name AS user_name, d.title AS reference_name, r.status " +
                        "FROM reviews r " +
                        "JOIN users u ON r.user_id = u.id " +
-                       "JOIN destinations d ON r.destination_id = d.id " +
-                       "ORDER BY r.created_at DESC";
+                       "LEFT JOIN destinations d ON r.destination_id = d.id " +
+                       "UNION ALL " +
+                       "SELECT 'hotel' as type, hr.id, hr.user_id, hr.hotel_id as reference_id, hr.rating, hr.review_text as comment, hr.created_at, u.name AS user_name, h.name AS reference_name, hr.status " +
+                       "FROM hotel_reviews hr " +
+                       "JOIN users u ON hr.user_id = u.id " +
+                       "LEFT JOIN hotels h ON hr.hotel_id = h.id " +
+                       "ORDER BY created_at DESC";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 Review review = new Review();
+                review.setType(rs.getString("type"));
                 review.setId(rs.getInt("id"));
                 review.setUserId(rs.getInt("user_id"));
-                review.setDestinationId(rs.getInt("destination_id"));
+                review.setDestinationId(rs.getInt("reference_id")); // store reference_id here
                 review.setRating(rs.getInt("rating"));
                 review.setComment(rs.getString("comment"));
                 review.setCreatedAt(rs.getTimestamp("created_at"));
                 review.setUserName(rs.getString("user_name"));
-                review.setDestinationName(rs.getString("destination_name"));
+                review.setDestinationName(rs.getString("reference_name")); // store reference_name here
+                review.setStatus(rs.getString("status"));
                 list.add(review);
             }
         } catch (SQLException e) {

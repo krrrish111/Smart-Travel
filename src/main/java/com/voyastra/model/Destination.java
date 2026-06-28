@@ -22,6 +22,14 @@ public class Destination {
     private boolean isActive;
     private boolean isFeatured;
     private Timestamp createdAt;
+    
+    // Phase 2 Fields
+    private Double latitude;
+    private Double longitude;
+    private String highlights;
+    private boolean hasUnesco;
+    private boolean isTrending;
+    private boolean isPopular;
 
     // Backward compatibility aliases if needed
     private String name;
@@ -32,6 +40,7 @@ public class Destination {
     // Related data
     private List<DestinationItinerary> itineraries;
     private List<DestinationActivity> activities;
+    private List<String> galleryImages;
 
     public Destination() {}
 
@@ -106,4 +115,25 @@ public class Destination {
 
     public List<DestinationActivity> getActivities() { return activities; }
     public void setActivities(List<DestinationActivity> activities) { this.activities = activities; }
+
+    public Double getLatitude() { return latitude; }
+    public void setLatitude(Double latitude) { this.latitude = latitude; }
+
+    public Double getLongitude() { return longitude; }
+    public void setLongitude(Double longitude) { this.longitude = longitude; }
+
+    public String getHighlights() { return highlights; }
+    public void setHighlights(String highlights) { this.highlights = highlights; }
+
+    public boolean hasUnesco() { return hasUnesco; }
+    public void setHasUnesco(boolean hasUnesco) { this.hasUnesco = hasUnesco; }
+
+    public boolean isTrending() { return isTrending; }
+    public void setTrending(boolean isTrending) { this.isTrending = isTrending; }
+
+    public boolean isPopular() { return isPopular; }
+    public void setPopular(boolean isPopular) { this.isPopular = isPopular; }
+
+    public List<String> getGalleryImages() { return galleryImages; }
+    public void setGalleryImages(List<String> galleryImages) { this.galleryImages = galleryImages; }
 }

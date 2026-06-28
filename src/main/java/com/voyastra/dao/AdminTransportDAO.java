@@ -19,12 +19,15 @@ public class AdminTransportDAO {
         String amountCol;
         
         switch (type.toLowerCase()) {
-            case "train": tableName = "train_bookings"; titleCol = "train_number"; amountCol = "amount"; break;
-            case "bus": tableName = "bus_bookings"; titleCol = "bus_name"; amountCol = "fare"; break;
-            case "cab": tableName = "cab_bookings"; titleCol = "vehicle_type"; amountCol = "amount"; break;
-            case "car": tableName = "car_bookings"; titleCol = "car_model"; amountCol = "price"; break;
+            case "train": tableName = "train_bookings"; titleCol = "train_number"; amountCol = "total_price"; break;
+            case "bus": tableName = "bus_bookings"; titleCol = "operator_name"; amountCol = "total_price"; break;
+            case "cab": tableName = "cab_bookings"; titleCol = "vehicle_type"; amountCol = "total_price"; break;
+            case "car": tableName = "car_bookings"; titleCol = "car_model"; amountCol = "amount"; break;
             case "cruise": tableName = "cruise_bookings"; titleCol = "ship_name"; amountCol = "total_price"; break;
-            case "helicopter": tableName = "helicopter_bookings"; titleCol = "flight_type"; amountCol = "price"; break;
+            case "helicopter": tableName = "helicopter_bookings"; titleCol = "heli_class"; amountCol = "total_price"; break;
+            case "hotel": tableName = "hotel_bookings"; titleCol = "guest_name"; amountCol = "total_price"; break;
+            case "packages": tableName = "package_bookings"; titleCol = "package_name"; amountCol = "total_price"; break;
+            case "flight": tableName = "flight_bookings"; titleCol = "details"; amountCol = "total_price"; break;
             default: return list;
         }
 
@@ -86,7 +89,7 @@ public class AdminTransportDAO {
 
     public int getTransportBookingCount() {
         int total = 0;
-        String[] tables = {"train_bookings", "bus_bookings", "cab_bookings", "car_bookings", "cruise_bookings", "helicopter_bookings"};
+        String[] tables = {"train_bookings", "bus_bookings", "cab_bookings", "car_bookings", "cruise_bookings", "helicopter_bookings", "hotel_bookings", "package_bookings", "flight_bookings"};
         try (Connection conn = DBConnection.getConnection()) {
             for (String table : tables) {
                 try (PreparedStatement stmt = conn.prepareStatement("SELECT COUNT(*) FROM " + table);
@@ -103,12 +106,15 @@ public class AdminTransportDAO {
     public double getTransportRevenue() {
         double total = 0.0;
         String[][] tableCols = {
-            {"train_bookings", "amount"}, 
-            {"bus_bookings", "fare"}, 
-            {"cab_bookings", "amount"}, 
-            {"car_bookings", "price"}, 
+            {"train_bookings", "total_price"}, 
+            {"bus_bookings", "total_price"}, 
+            {"cab_bookings", "total_price"}, 
+            {"car_bookings", "amount"}, 
             {"cruise_bookings", "total_price"}, 
-            {"helicopter_bookings", "price"}
+            {"helicopter_bookings", "total_price"},
+            {"hotel_bookings", "total_price"},
+            {"package_bookings", "total_price"},
+            {"flight_bookings", "total_price"}
         };
         try (Connection conn = DBConnection.getConnection()) {
             for (String[] tc : tableCols) {
@@ -131,6 +137,9 @@ public class AdminTransportDAO {
             case "car": return "car_bookings";
             case "cruise": return "cruise_bookings";
             case "helicopter": return "helicopter_bookings";
+            case "hotel": return "hotel_bookings";
+            case "packages": return "package_bookings";
+            case "flight": return "flight_bookings";
             default: return null;
         }
     }

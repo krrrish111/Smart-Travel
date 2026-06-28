@@ -5,6 +5,10 @@
          http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
 
+    <listener>
+        <listener-class>com.voyastra.util.ActiveSessionListener</listener-class>
+    </listener>
+
     <filter>
         <filter-name>GlobalExceptionFilter</filter-name>
         <filter-class>com.voyastra.filter.GlobalExceptionFilter</filter-class>
@@ -136,7 +140,23 @@
         <url-pattern>/admin/activities</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>AdminLogs</servlet-name>
+        <jsp-file>/admin/logs.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AdminLogs</servlet-name>
+        <url-pattern>/admin/logs</url-pattern>
+    </servlet-mapping>
 
+    <servlet>
+        <servlet-name>AdminPayments</servlet-name>
+        <jsp-file>/admin/payments.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AdminPayments</servlet-name>
+        <url-pattern>/admin/payments</url-pattern>
+    </servlet-mapping>
 
     <servlet>
         <servlet-name>AdminSettings</servlet-name>

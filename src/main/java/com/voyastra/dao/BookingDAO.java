@@ -210,7 +210,7 @@ public class BookingDAO {
 
     public List<Booking> getAllBookings() {
         List<Booking> list = new ArrayList<>();
-        String query = "SELECT b.id, b.user_id, b.plan_id, b.total_price, b.status, b.created_at, b.type, b.details, p.title AS plan_title, p.image AS plan_image, u.name AS user_name " +
+        String query = "SELECT b.id, b.user_id, b.plan_id, b.total_price, b.status, b.created_at, b.type, b.details, b.booking_code, p.title AS plan_title, p.image AS plan_image, u.name AS user_name " +
                        "FROM bookings b LEFT JOIN plans p ON b.plan_id = p.id JOIN users u ON b.user_id = u.id ORDER BY b.created_at DESC";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query);
@@ -226,10 +226,55 @@ public class BookingDAO {
                 booking.setPlanTitle(rs.getString("plan_title"));
                 booking.setPlanImage(rs.getString("plan_image"));
                 booking.setUserName(rs.getString("user_name"));
+                booking.setType(rs.getString("type"));
+                booking.setDetails(rs.getString("details"));
+                booking.setBookingCode(rs.getString("booking_code"));
                 list.add(booking);
             }
         } catch (SQLException e) {
             System.err.println("ERROR: BookingDAO.getAllBookings failed.");
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public List<Booking> getBookingsByType(String type) {
+        List<Booking> list = new ArrayList<>();
+        // For packages, type is usually null or 'package', but in this system it seems flight and hotel explicitly set the 'type' column.
+        String query = "";
+        if ("packages".equalsIgnoreCase(type)) {
+            query = "SELECT b.id, b.user_id, b.plan_id, b.total_price, b.status, b.created_at, b.type, b.details, b.booking_code, p.title AS plan_title, p.image AS plan_image, u.name AS user_name " +
+                    "FROM bookings b LEFT JOIN plans p ON b.plan_id = p.id JOIN users u ON b.user_id = u.id WHERE b.type IS NULL OR b.type = 'package' OR b.plan_id > 0 ORDER BY b.created_at DESC";
+        } else {
+            query = "SELECT b.id, b.user_id, b.plan_id, b.total_price, b.status, b.created_at, b.type, b.details, b.booking_code, p.title AS plan_title, p.image AS plan_image, u.name AS user_name " +
+                    "FROM bookings b LEFT JOIN plans p ON b.plan_id = p.id JOIN users u ON b.user_id = u.id WHERE b.type = ? ORDER BY b.created_at DESC";
+        }
+        
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            if (!"packages".equalsIgnoreCase(type)) {
+                stmt.setString(1, type);
+            }
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Booking booking = new Booking();
+                    booking.setId(rs.getInt("id"));
+                    booking.setUserId(rs.getInt("user_id"));
+                    booking.setPlanId(rs.getInt("plan_id"));
+                    booking.setTotalPrice(rs.getDouble("total_price"));
+                    booking.setStatus(rs.getString("status"));
+                    booking.setCreatedAt(rs.getTimestamp("created_at"));
+                    booking.setPlanTitle(rs.getString("plan_title"));
+                    booking.setPlanImage(rs.getString("plan_image"));
+                    booking.setUserName(rs.getString("user_name"));
+                    booking.setType(rs.getString("type"));
+                    booking.setDetails(rs.getString("details"));
+                    booking.setBookingCode(rs.getString("booking_code"));
+                    list.add(booking);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("ERROR: BookingDAO.getBookingsByType failed.");
             e.printStackTrace();
         }
         return list;

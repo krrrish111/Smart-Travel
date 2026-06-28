@@ -45,4 +45,39 @@ public class RefundDAO {
         }
         return null;
     }
+
+    public java.util.List<Refund> getAllRefunds() {
+        java.util.List<Refund> refunds = new java.util.ArrayList<>();
+        String sql = "SELECT * FROM refunds ORDER BY created_at DESC";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             java.sql.ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                Refund r = new Refund();
+                r.setId(rs.getInt("id"));
+                r.setBookingId(rs.getInt("booking_id"));
+                r.setAmount(rs.getDouble("amount"));
+                r.setStatus(rs.getString("status"));
+                r.setRefundMethod(rs.getString("refund_method"));
+                r.setCreatedAt(rs.getTimestamp("created_at"));
+                refunds.add(r);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return refunds;
+    }
+
+    public boolean updateRefundStatus(int id, String status) {
+        String sql = "UPDATE refunds SET status = ? WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, status);
+            stmt.setInt(2, id);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

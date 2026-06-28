@@ -52,12 +52,23 @@ public class AdminBookingServlet extends HttpServlet {
 
         String query = request.getParameter("q");
         String type = request.getParameter("type");
-        List<Booking> bookings;
-        if (type != null && !type.isEmpty() && !type.equals("packages")) {
-            bookings = adminTransportDAO.getAllTransportBookings(type);
+        List<Booking> bookings = new java.util.ArrayList<>();
+        
+        if ("all".equalsIgnoreCase(type) || type == null || type.isEmpty()) {
+            bookings.addAll(bookingDAO.getAllBookings());
+            String[] allTypes = {"train", "bus", "cab", "car", "cruise", "helicopter", "hotel", "packages", "flight"};
+            for (String t : allTypes) {
+                bookings.addAll(adminTransportDAO.getAllTransportBookings(t));
+            }
+        } else if (type.equals("packages") || type.equals("flight") || type.equals("hotel")) {
+            bookings.addAll(bookingDAO.getBookingsByType(type));
+            bookings.addAll(adminTransportDAO.getAllTransportBookings(type));
         } else {
-            bookings = bookingDAO.getAllBookings();
+            bookings.addAll(adminTransportDAO.getAllTransportBookings(type));
         }
+
+        // Sort bookings by ID/Date descending
+        bookings.sort((b1, b2) -> Integer.compare(b2.getId(), b1.getId()));
         
         if (query != null && !query.trim().isEmpty()) {
             String lowerQ = query.toLowerCase();
@@ -91,24 +102,29 @@ public class AdminBookingServlet extends HttpServlet {
         
         boolean success = false;
         try {
-            if (type != null && !type.isEmpty() && !type.equals("packages")) {
+            if (type != null && (type.equals("packages") || type.equals("flight") || type.equals("hotel"))) {
+                try {
+                    int bookingId = Integer.parseInt(bookingIdStr);
+                    if ("delete".equals(action)) {
+                        success = bookingDAO.deleteBooking(bookingId);
+                    } else if ("updateStatus".equals(action)) {
+                        String newStatus = request.getParameter("status");
+                        success = bookingDAO.updateBookingStatus(bookingId, newStatus);
+                    }
+                } catch (NumberFormatException ignored) {}
+                
+                if ("delete".equals(action)) {
+                    success = adminTransportDAO.deleteTransportBooking(type, bookingIdStr) || success;
+                } else if ("updateStatus".equals(action)) {
+                    String newStatus = request.getParameter("status");
+                    success = adminTransportDAO.updateTransportStatus(type, bookingIdStr, newStatus) || success;
+                }
+            } else if (type != null && !type.isEmpty() && !type.equals("all")) {
                 if ("delete".equals(action)) {
                     success = adminTransportDAO.deleteTransportBooking(type, bookingIdStr);
                 } else if ("updateStatus".equals(action)) {
                     String newStatus = request.getParameter("status");
                     success = adminTransportDAO.updateTransportStatus(type, bookingIdStr, newStatus);
-                }
-            } else {
-                int bookingId = Integer.parseInt(bookingIdStr);
-                if ("delete".equals(action)) {
-                    success = bookingDAO.deleteBooking(bookingId);
-                } else if ("updateStatus".equals(action)) {
-                    String newStatus = request.getParameter("status");
-                    Booking b = bookingDAO.getBookingById(bookingId);
-                    if (b != null && newStatus != null) {
-                        b.setStatus(newStatus);
-                        success = bookingDAO.updateBooking(b);
-                    }
                 }
             }
             

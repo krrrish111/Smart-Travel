@@ -22,7 +22,7 @@
 
         <div class="stat-card">
             <div style="font-weight: 600; margin-bottom: 20px; font-size: 0.95rem;">Currency</div>
-            <select class="filter-select" id="settingsCurrency" style="width:100%; margin-bottom:12px; border: 1px solid var(--color-border); border-radius: 8px;" onchange="showToast('Currency updated to ' + this.options[this.selectedIndex].text, 'success')">
+            <select class="filter-select" id="settingsCurrency" style="width:100%; margin-bottom:12px; border: 1px solid var(--color-border); border-radius: 8px;" onchange="applyCurrency(this.value)">
                 <option value="USD">USD — US Dollar ($)</option>
                 <option value="EUR">EUR — Euro (€)</option>
                 <option value="GBP">GBP — British Pound (£)</option>
@@ -34,7 +34,7 @@
 
         <div class="stat-card">
             <div style="font-weight: 600; margin-bottom: 20px; font-size: 0.95rem;">Language</div>
-            <select class="filter-select" id="settingsLanguage" style="width:100%; margin-bottom:12px; border: 1px solid var(--color-border); border-radius: 8px;" onchange="showToast('Language set to ' + this.options[this.selectedIndex].text, 'success')">
+            <select class="filter-select" id="settingsLanguage" style="width:100%; margin-bottom:12px; border: 1px solid var(--color-border); border-radius: 8px;" onchange="applyLanguage(this.value)">
                 <option value="en">English</option>
                 <option value="es">Español</option>
                 <option value="fr">Français</option>

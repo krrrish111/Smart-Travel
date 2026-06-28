@@ -97,62 +97,6 @@ public class ReviewServlet extends HttpServlet {
                 response.sendRedirect(request.getContextPath() + "/index.jsp?error=reviewFailed");
             }
 
-        } else if ("delete".equals(action)) {
-            // Filter handles admin check for delete/list implicitly or we keep it here for double-layered protection
-            try {
-                int reviewId = Integer.parseInt(request.getParameter("id"));
-                boolean success = reviewDAO.deleteReview(reviewId);
-                
-                Map<String, String> res = new HashMap<>();
-                if(success) {
-                    AdminLogger.log(request, "DELETE", "Review", reviewId, "Deleted review #" + reviewId);
-                    res.put("status", "success");
-                    res.put("message", "Review deleted successfully.");
-                } else {
-                    res.put("status", "error");
-                    res.put("message", "Failed to delete review.");
-                }
-                
-                response.setContentType("application/json;charset=UTF-8");
-                gson.toJson(res, response.getWriter());
-
-            } catch (Exception e) {
-                logger.log(Level.SEVERE, "Exception occurred", e);
-                response.setContentType("application/json;charset=UTF-8");
-                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                response.getWriter().write("{\"status\":\"error\", \"message\":\"Server error executing operation.\"}");
-            }
-        } else if ("list".equals(action)) {
-            // 3. Auth Check: Admin only
-            if (session == null || !"admin".equals(session.getAttribute("role"))) {
-                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                return;
-            }
-
-            try {
-                List<Review> list = reviewDAO.getAllReviews();
-                
-                // Map to a more JSON-friendly structure for the JS data table
-                List<Map<String, Object>> mappedResults = list.stream().map(r -> {
-                    Map<String, Object> map = new HashMap<>();
-                    map.put("id", r.getId());
-                    map.put("userName", r.getUserName());
-                    map.put("location", r.getDestinationName() != null ? r.getDestinationName() : "Unknown (" + r.getDestinationId() + ")");
-                    map.put("rating", r.getRating());
-                    map.put("comment", r.getComment());
-                    map.put("createdAt", r.getCreatedAt() != null ? r.getCreatedAt().toString() : "");
-                    map.put("approved", true); // All in DB are considered active
-                    return map;
-                }).collect(Collectors.toList());
-                
-                response.setContentType("application/json;charset=UTF-8");
-                response.setCharacterEncoding("UTF-8");
-                gson.toJson(mappedResults, response.getWriter());
-
-            } catch (Exception e) {
-                logger.log(Level.SEVERE, "Exception occurred", e);
-                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            }
         }
     }
 

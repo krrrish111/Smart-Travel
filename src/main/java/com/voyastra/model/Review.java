@@ -13,6 +13,10 @@ public class Review {
     // Joined properties for UI display
     private String userName;
     private String destinationName;
+    
+    // Admin specific properties
+    private String type; // "destination" or "hotel"
+    private String status;
 
     public Review() {}
 
@@ -39,4 +43,10 @@ public class Review {
 
     public String getDestinationName() { return destinationName; }
     public void setDestinationName(String destinationName) { this.destinationName = destinationName; }
+
+    public String getType() { return type; }
+    public void setType(String type) { this.type = type; }
+
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 }

@@ -54,7 +54,8 @@ public class PostDAO {
             "       (SELECT COUNT(*) FROM saved_posts WHERE post_id = p.id AND user_id = ?) AS user_saved, " +
             "       (SELECT COUNT(*) FROM follows WHERE follower_id = ? AND followed_id = p.user_id) AS is_following " +
             "FROM posts p " +
-            "JOIN users u ON p.user_id = u.id "
+            "JOIN users u ON p.user_id = u.id " +
+            "WHERE p.hidden = FALSE "
         );
 
         List<Object> params = new ArrayList<>();
@@ -63,10 +64,10 @@ public class PostDAO {
         params.add(userId);
 
         if ("Following".equalsIgnoreCase(category)) {
-            query.append("WHERE p.user_id IN (SELECT followed_id FROM follows WHERE follower_id = ?) ");
+            query.append("AND p.user_id IN (SELECT followed_id FROM follows WHERE follower_id = ?) ");
             params.add(userId);
         } else if (category != null && !category.isEmpty() && !"For You".equalsIgnoreCase(category) && !"Trending".equalsIgnoreCase(category)) {
-            query.append("WHERE p.category = ? ");
+            query.append("AND p.category = ? ");
             params.add(category);
         }
 
@@ -212,7 +213,7 @@ public class PostDAO {
             "       (SELECT COUNT(*) FROM follows WHERE follower_id = ? AND followed_id = p.user_id) AS is_following " +
             "FROM posts p " +
             "JOIN users u ON p.user_id = u.id " +
-            "WHERE p.user_id = ? "
+            "WHERE p.user_id = ? AND p.hidden = FALSE "
         );
 
         List<Object> params = new ArrayList<>();
@@ -272,5 +273,70 @@ public class PostDAO {
             e.printStackTrace();
         }
         return posts;
+    }
+
+    /**
+     * Fetches all posts for the admin dashboard, including hidden posts.
+     */
+    public List<Post> getAllPostsForAdmin() {
+        List<Post> posts = new ArrayList<>();
+        String query = 
+            "SELECT p.id, p.user_id, p.content, p.location, p.image_url, p.category, p.hashtags, p.rating, p.created_at, p.hidden, " +
+            "       u.name AS user_name, u.role AS user_role, " +
+            "       (SELECT COUNT(*) FROM likes WHERE post_id = p.id) AS like_count, " +
+            "       (SELECT COUNT(*) FROM comments WHERE post_id = p.id) AS comment_count " +
+            "FROM posts p " +
+            "JOIN users u ON p.user_id = u.id " +
+            "ORDER BY p.created_at DESC";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Post post = new Post();
+                post.setId(rs.getInt("id"));
+                post.setUserId(rs.getInt("user_id"));
+                post.setText(rs.getString("content"));
+                post.setImageUrl(rs.getString("image_url"));
+                post.setLocation(rs.getString("location"));
+                post.setCategory(rs.getString("category"));
+                post.setHashtags(rs.getString("hashtags"));
+                
+                Object ratingObj = rs.getObject("rating");
+                if (ratingObj != null) {
+                    post.setRating(((Number) ratingObj).intValue());
+                }
+                
+                post.setCreatedAt(rs.getTimestamp("created_at"));
+                post.setUserName(rs.getString("user_name"));
+                post.setUserRole(rs.getString("user_role"));
+                post.setLikeCount(rs.getInt("like_count"));
+                post.setCommentCount(rs.getInt("comment_count"));
+                post.setHidden(rs.getBoolean("hidden"));
+                posts.add(post);
+            }
+        } catch (SQLException e) {
+            System.err.println("ERROR: PostDAO.getAllPostsForAdmin failed.");
+            e.printStackTrace();
+        }
+        return posts;
+    }
+
+    /**
+     * Toggles the visibility (hidden status) of a post.
+     */
+    public boolean setPostVisibility(int postId, boolean hidden) {
+        String query = "UPDATE posts SET hidden = ? WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setBoolean(1, hidden);
+            stmt.setInt(2, postId);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("ERROR: PostDAO.setPostVisibility failed.");
+            e.printStackTrace();
+            return false;
+        }
     }
 }

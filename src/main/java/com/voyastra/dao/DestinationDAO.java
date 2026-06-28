@@ -33,6 +33,16 @@ public class DestinationDAO {
         d.setFeatured(rs.getBoolean("is_featured"));
         d.setCreatedAt(rs.getTimestamp("created_at"));
         
+        double lat = rs.getDouble("latitude");
+        if (!rs.wasNull()) d.setLatitude(lat);
+        double lng = rs.getDouble("longitude");
+        if (!rs.wasNull()) d.setLongitude(lng);
+        d.setHighlights(rs.getString("highlights"));
+        d.setHasUnesco(rs.getBoolean("has_unesco"));
+        d.setTrending(rs.getBoolean("is_trending"));
+        d.setPopular(rs.getBoolean("is_popular"));
+        
+        // For performance, we won't load gallery here by default unless requested in a specific service.
         // Populate legacy aliases for existing JSPs
         d.setName(rs.getString("title"));
         d.setCountry(rs.getString("destination"));
@@ -43,9 +53,9 @@ public class DestinationDAO {
     }
 
     public boolean addDestination(Destination d) {
-        String query = "INSERT INTO destinations (title, destination, category, short_description, full_description, price_inr, discount_price, duration_days, duration_nights, best_season, starting_city, image_url, rating, review_count, is_active, is_featured) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO destinations (title, destination, category, short_description, full_description, price_inr, discount_price, duration_days, duration_nights, best_season, starting_city, image_url, rating, review_count, is_active, is_featured, latitude, longitude, highlights, has_unesco, is_trending, is_popular) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+             PreparedStatement stmt = conn.prepareStatement(query, java.sql.Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, d.getTitle());
             stmt.setString(2, d.getDestination());
             stmt.setString(3, d.getCategory());
@@ -62,7 +72,21 @@ public class DestinationDAO {
             stmt.setInt(14, d.getReviewCount());
             stmt.setBoolean(15, d.isActive());
             stmt.setBoolean(16, d.isFeatured());
-            return stmt.executeUpdate() > 0;
+            if (d.getLatitude() != null) stmt.setDouble(17, d.getLatitude()); else stmt.setNull(17, java.sql.Types.DOUBLE);
+            if (d.getLongitude() != null) stmt.setDouble(18, d.getLongitude()); else stmt.setNull(18, java.sql.Types.DOUBLE);
+            stmt.setString(19, d.getHighlights());
+            stmt.setBoolean(20, d.hasUnesco());
+            stmt.setBoolean(21, d.isTrending());
+            stmt.setBoolean(22, d.isPopular());
+            
+            int affected = stmt.executeUpdate();
+            if (affected > 0) {
+                try (ResultSet rs = stmt.getGeneratedKeys()) {
+                    if (rs.next()) d.setId(rs.getInt(1));
+                }
+                return true;
+            }
+            return false;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -152,7 +176,7 @@ public class DestinationDAO {
     }
 
     public boolean updateDestination(Destination d) {
-        String query = "UPDATE destinations SET title=?, destination=?, category=?, short_description=?, full_description=?, price_inr=?, discount_price=?, duration_days=?, duration_nights=?, best_season=?, starting_city=?, image_url=?, rating=?, review_count=?, is_active=?, is_featured=? WHERE id=?";
+        String query = "UPDATE destinations SET title=?, destination=?, category=?, short_description=?, full_description=?, price_inr=?, discount_price=?, duration_days=?, duration_nights=?, best_season=?, starting_city=?, image_url=?, rating=?, review_count=?, is_active=?, is_featured=?, latitude=?, longitude=?, highlights=?, has_unesco=?, is_trending=?, is_popular=? WHERE id=?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, d.getTitle());
@@ -171,7 +195,13 @@ public class DestinationDAO {
             stmt.setInt(14, d.getReviewCount());
             stmt.setBoolean(15, d.isActive());
             stmt.setBoolean(16, d.isFeatured());
-            stmt.setInt(17, d.getId());
+            if (d.getLatitude() != null) stmt.setDouble(17, d.getLatitude()); else stmt.setNull(17, java.sql.Types.DOUBLE);
+            if (d.getLongitude() != null) stmt.setDouble(18, d.getLongitude()); else stmt.setNull(18, java.sql.Types.DOUBLE);
+            stmt.setString(19, d.getHighlights());
+            stmt.setBoolean(20, d.hasUnesco());
+            stmt.setBoolean(21, d.isTrending());
+            stmt.setBoolean(22, d.isPopular());
+            stmt.setInt(23, d.getId());
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -242,5 +272,44 @@ public class DestinationDAO {
             e.printStackTrace();
         }
         return list;
+    }
+
+    // Gallery Methods
+    public List<String> getGalleryForDestination(int destId) {
+        List<String> list = new ArrayList<>();
+        String query = "SELECT image_url FROM destination_gallery WHERE destination_id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, destId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) list.add(rs.getString("image_url"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public void clearGalleryImages(int destId) {
+        String query = "DELETE FROM destination_gallery WHERE destination_id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, destId);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addGalleryImage(int destId, String imageUrl) {
+        String query = "INSERT INTO destination_gallery (destination_id, image_url) VALUES (?, ?)";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, destId);
+            stmt.setString(2, imageUrl);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

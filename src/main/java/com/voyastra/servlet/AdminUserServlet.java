@@ -73,27 +73,44 @@ public class AdminUserServlet extends HttpServlet {
 
         String action = request.getParameter("action");
         try {
-            int userId = Integer.parseInt(request.getParameter("userId"));
             boolean success = false;
             
-            if ("delete".equals(action)) {
-                success = userDAO.deleteUser(userId);
-            } else if ("updateRole".equals(action)) {
-                String newRole = request.getParameter("role");
-                User u = userDAO.getUserById(userId);
-                if (u != null && newRole != null) {
-                    u.setRole(newRole);
-                    success = userDAO.updateUser(u);
+            if ("add".equals(action)) {
+                String name = request.getParameter("name");
+                String email = request.getParameter("email");
+                String password = request.getParameter("password");
+                String role = request.getParameter("role");
+                
+                if (name != null && email != null && password != null) {
+                    if (userDAO.emailExists(email)) {
+                        out.print("{\"success\":false, \"message\":\"Email already exists\"}");
+                        out.flush();
+                        return;
+                    }
+                    User user = new User();
+                    user.setName(name);
+                    user.setEmail(email);
+                    user.setPassword(password);
+                    user.setRole(role != null ? role : "user");
+                    user.setVerified(true);
+                    success = userDAO.registerUser(user);
                 }
-            } else if ("toggleActive".equals(action)) {
-                // Assuming is_verified acts as active state, or we could just toggle role.
-                User u = userDAO.getUserById(userId);
-                if (u != null) {
-                    u.setVerified(!u.isVerified());
-                    // In UserDAO update doesn't update is_verified, so let's skip or implement.
-                    // For now we assume role update or user deletion handles admin needs.
-                    // If is_verified update is strictly needed, we should add it to UserDAO.
-                    success = true; // Placeholder if UserDAO doesn't support it directly.
+            } else {
+                int userId = Integer.parseInt(request.getParameter("userId"));
+                
+                if ("delete".equals(action)) {
+                    success = userDAO.deleteUser(userId);
+                } else if ("updateRole".equals(action)) {
+                    String newRole = request.getParameter("role");
+                    if (newRole != null) {
+                        success = userDAO.updateRole(userId, newRole);
+                    }
+                } else if ("toggleActive".equals(action)) {
+                    User u = userDAO.getUserById(userId);
+                    if (u != null) {
+                        u.setVerified(!u.isVerified());
+                        success = true; 
+                    }
                 }
             }
 

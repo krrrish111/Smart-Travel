@@ -75,7 +75,7 @@ function renderCommunityPostsTable() {
             <td style="font-weight:600;">${p.userName}</td>
             <td style="max-width:300px; font-size:0.85rem; color:var(--text-muted); line-height:1.4;">${p.content}</td>
             <td>
-                ${p.imageUrl ? `<img src="${p.imageUrl}" style="width:40px; height:40px; border-radius:4px; object-fit:cover;" onerror="this.src='../assets/placeholder.jpg'">` : '<span style="color:#888;font-size:0.7rem;">No Image</span>'}
+                ${p.imageUrl ? `<img src="${p.imageUrl}" style="width:40px; height:40px; border-radius:4px; object-fit:cover;" onerror="this.style.display='none'">` : '<span style="color:#888;font-size:0.7rem;">No Image</span>'}
             </td>
             <td style="font-size:0.8rem;">${p.location || '—'}</td>
             <td style="font-size:0.75rem; color:var(--text-muted);">${p.createdAt}</td>

@@ -105,6 +105,22 @@ public class PaymentDAO {
         return payments;
     }
 
+    public List<Payment> getAllPayments() {
+        List<Payment> payments = new ArrayList<>();
+        String sql = "SELECT * FROM payments ORDER BY created_at DESC";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            
+            while (rs.next()) {
+                payments.add(extractPayment(rs));
+            }
+        } catch (SQLException e) {
+            System.err.println("Error getting all payments: " + e.getMessage());
+        }
+        return payments;
+    }
+
     private Payment extractPayment(ResultSet rs) throws SQLException {
         Payment p = new Payment();
         p.setId(rs.getInt("id"));

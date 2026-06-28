@@ -5,7 +5,7 @@ let allActivities = [];
 
 async function loadActivities() {
     try {
-        const response = await fetch(CONTEXT_PATH + '/activities?format=json');
+        const response = await fetch(CONTEXT_PATH + '/admin/api/activities?action=list');
         if (!response.ok) throw new Error('Failed to load activities');
         allActivities = await response.json();
         renderActivitiesTable();
@@ -22,8 +22,9 @@ function renderActivitiesTable() {
     let filtered = [...allActivities];
     if (query) {
         filtered = filtered.filter(a => 
-            a.name.toLowerCase().includes(query) || 
-            a.destinationId.toString().includes(query)
+            (a.title && a.title.toLowerCase().includes(query)) || 
+            (a.location && a.location.toLowerCase().includes(query)) ||
+            (a.id && a.id.toString().includes(query))
         );
     }
 
@@ -34,11 +35,11 @@ function renderActivitiesTable() {
 
     tbody.innerHTML = filtered.map(a => `
         <tr>
-            <td style="font-weight:600;">${a.name}</td>
+            <td style="font-weight:600;">${a.title || 'Unknown Activity'}</td>
             <td style="color:var(--text-muted); font-size:0.8rem;">#${a.id}</td>
-            <td><span class="result-badge" style="background:var(--color-primary);">${a.destinationId}</span></td>
-            <td class="font-bold text-primary">₹${a.price}</td>
-            <td>⭐ ${a.rating} <span style="font-size:0.7rem; color:var(--text-muted)">(${a.reviewsCount})</span></td>
+            <td><span class="result-badge" style="background:var(--color-primary);">${a.location || 'Unknown Location'}</span></td>
+            <td class="font-bold text-primary">₹${a.price || 0}</td>
+            <td>⭐ ${a.rating || 0} <span style="font-size:0.7rem; color:var(--text-muted)">(${a.reviewCount || 0})</span></td>
             <td style="text-align: right;">
                 <button type="button" class="action-btn btn-edit" onclick="editActivity(${a.id})">Edit</button>
                 <button type="button" class="action-btn btn-delete" onclick="deleteActivity(${a.id})">Delete</button>
@@ -47,11 +48,32 @@ function renderActivitiesTable() {
     `).join('');
 }
 
-function openActivityModal(mode='add', id=null) {
+let allDestinations = [];
+
+async function fetchDestinationsForDropdown() {
+    try {
+        const response = await fetch(CONTEXT_PATH + '/destinations?action=listNames');
+        allDestinations = await response.json();
+        const select = document.getElementById('activityDestId');
+        if (!allDestinations || allDestinations.length === 0) {
+            select.innerHTML = '<option value="">No destinations available</option>';
+            return;
+        }
+        let html = '<option value="">Select Destination</option>';
+        allDestinations.forEach(d => {
+            html += `<option value="${d.id}">${d.name}</option>`;
+        });
+        select.innerHTML = html;
+    } catch (e) {
+        console.error('Destinations fetch error:', e);
+        document.getElementById('activityDestId').innerHTML = '<option value="">No destinations available</option>';
+    }
+}
+
+async function openActivityModal(mode='add', id=null) {
     const form = document.getElementById('activityForm');
     const title = document.getElementById('activityModalTitle');
     const extra = document.getElementById('activityExtraInfo');
-    const destSelect = document.getElementById('activityDestId');
     
     form.reset();
     document.getElementById('activityId').value = '';
@@ -59,9 +81,7 @@ function openActivityModal(mode='add', id=null) {
     document.getElementById('activityImagePreview').style.display = 'none';
     extra.style.display = 'none';
 
-    // Populate Destinations
-    const dests = typeof getDests === 'function' ? getDests() : []; 
-    destSelect.innerHTML = dests.map(d => `<option value="${d.id}">${d.name} (#${d.id})</option>`).join('');
+    await fetchDestinationsForDropdown();
 
     if (mode === 'edit' && id !== null) {
         title.innerText = 'Edit Activity';
@@ -69,12 +89,22 @@ function openActivityModal(mode='add', id=null) {
         if (act) {
             document.getElementById('activityId').value = act.id;
             document.getElementById('activityAction').value = 'update';
-            document.getElementById('activityName').value = act.name;
-            document.getElementById('activityDestId').value = act.destinationId;
-            document.getElementById('activityPrice').value = act.price;
-            document.getElementById('activityImage').value = act.imageUrl;
-            document.getElementById('activityRating').value = act.rating;
-            document.getElementById('activityReviewsCount').value = act.reviewsCount;
+            document.getElementById('activityName').value = act.title || '';
+            
+            const matchedDest = allDestinations.find(d => d.name === act.location);
+            if (matchedDest) {
+                document.getElementById('activityDestId').value = matchedDest.id;
+            } else {
+                document.getElementById('activityDestId').value = '';
+            }
+            
+            document.getElementById('activityPrice').value = act.price || 0;
+            document.getElementById('activityImage').value = act.heroImage || '';
+            if (document.getElementById('activityDescription')) {
+                document.getElementById('activityDescription').value = act.description || '';
+            }
+            document.getElementById('activityRating').value = act.rating || 4.5;
+            document.getElementById('activityReviewsCount').value = act.reviewCount || 0;
             if (typeof previewImg === 'function') previewImg('activityImage', 'activityImagePreview');
             extra.style.display = 'grid';
         }
@@ -89,6 +119,11 @@ function closeActivityModal() {
     document.getElementById('activityModal').classList.remove('active');
 }
 
+// Ensure editActivity maps to openActivityModal
+window.editActivity = function(id) {
+    openActivityModal('edit', id);
+};
+
 if (document.getElementById('activityForm')) {
     document.getElementById('activityForm').addEventListener('submit', async function(e) {
         e.preventDefault();
@@ -96,17 +131,22 @@ if (document.getElementById('activityForm')) {
         const body = new URLSearchParams(formData);
 
         try {
-            const response = await fetch(CONTEXT_PATH + '/activities', {
+            const response = await fetch(CONTEXT_PATH + '/admin/api/activities', {
                 method: 'POST',
                 body: body
             });
+            const res = await response.json();
             
-            showToast('Activity saved successfully.', 'success');
-            closeActivityModal();
-            loadActivities();
+            if (res.status === 'success') {
+                if (typeof showToast === 'function') showToast('Activity saved successfully.', 'success');
+                closeActivityModal();
+                loadActivities();
+            } else {
+                if (typeof showToast === 'function') showToast(res.message || 'Error saving activity.', 'error');
+            }
         } catch (err) {
             console.error('Save error:', err);
-            showToast('Error saving activity.', 'error');
+            if (typeof showToast === 'function') showToast('Error saving activity.', 'error');
         }
     });
 }
@@ -119,14 +159,20 @@ function deleteActivity(id) {
             body.append('id', id);
 
             try {
-                await fetch(`${CONTEXT_PATH}/activities`, {
+                const response = await fetch(`${CONTEXT_PATH}/admin/api/activities`, {
                     method: 'POST',
                     body: body
                 });
-                showToast('Activity deleted.', 'warning');
-                loadActivities();
+                const res = await response.json();
+                
+                if (res.status === 'success') {
+                    if (typeof showToast === 'function') showToast('Activity deleted.', 'warning');
+                    loadActivities();
+                } else {
+                    if (typeof showToast === 'function') showToast(res.message || 'Failed to delete activity.', 'error');
+                }
             } catch (err) {
-                showToast('Failed to delete activity.', 'error');
+                if (typeof showToast === 'function') showToast('Failed to delete activity.', 'error');
             }
         });
     }

@@ -78,6 +78,11 @@ public class HomeServlet extends HttpServlet {
         com.voyastra.dao.ExperienceDAO experienceDAO = new com.voyastra.dao.ExperienceDAO();
         request.setAttribute("mustDoExperiences", experienceDAO.getAllExperiences());
         
+        // Fetch dynamic site content
+        com.voyastra.dao.SiteContentDAO siteContentDAO = new com.voyastra.dao.SiteContentDAO();
+        request.setAttribute("heroContent", siteContentDAO.getContentByType("hero"));
+        request.setAttribute("promoContent", siteContentDAO.getContentByType("promotion"));
+        
         // Forward to the renamed JSP file (home.jsp) to avoid recursion
         request.getRequestDispatcher("/pages/home.jsp").forward(request, response);
     }

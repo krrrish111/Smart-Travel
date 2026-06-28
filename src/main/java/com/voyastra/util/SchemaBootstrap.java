@@ -621,6 +621,42 @@ public class SchemaBootstrap implements ServletContextListener {
                 try {
                     stmt.execute("ALTER TABLE posts ADD COLUMN hashtags VARCHAR(255) DEFAULT ''");
                 } catch (Exception e) {}
+                try {
+                    stmt.execute("ALTER TABLE posts ADD COLUMN hidden BOOLEAN DEFAULT FALSE");
+                } catch (Exception e) {}
+
+                // site_content extended fields for Admin Content Management
+                try { stmt.execute("ALTER TABLE site_content ADD COLUMN body_text TEXT"); } catch (Exception e) {}
+                try { stmt.execute("ALTER TABLE site_content ADD COLUMN image_url VARCHAR(512)"); } catch (Exception e) {}
+                try { stmt.execute("ALTER TABLE site_content ADD COLUMN button_text VARCHAR(255)"); } catch (Exception e) {}
+                try { stmt.execute("ALTER TABLE site_content ADD COLUMN button_link VARCHAR(512)"); } catch (Exception e) {}
+                try { stmt.execute("ALTER TABLE site_content ADD COLUMN promo_code VARCHAR(100)"); } catch (Exception e) {}
+                // Ensure site_content table exists with all columns
+                try {
+                    stmt.execute("CREATE TABLE IF NOT EXISTS site_content (" +
+                        "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                        "section_type VARCHAR(50) NOT NULL UNIQUE, " +
+                        "title TEXT, " +
+                        "subtitle TEXT, " +
+                        "body_text TEXT, " +
+                        "image_url VARCHAR(512), " +
+                        "button_text VARCHAR(255), " +
+                        "button_link VARCHAR(512), " +
+                        "promo_code VARCHAR(100), " +
+                        "is_active BOOLEAN DEFAULT TRUE, " +
+                        "display_order INT DEFAULT 0)");
+                } catch (Exception e) {}
+                // Seed default content if table is empty
+                try {
+                    stmt.execute("INSERT IGNORE INTO site_content (section_type, title, subtitle, is_active, display_order) " +
+                        "VALUES ('hero', 'Experience Voyastra', 'Say goodbye to endless research. Our intelligent platform crafts hyper-personalized itineraries.', TRUE, 1)");
+                    stmt.execute("INSERT IGNORE INTO site_content (section_type, title, subtitle, is_active, display_order) " +
+                        "VALUES ('promotion', 'Summer Special: 20% Off', 'Use code SUMMER20 for all European trips.', TRUE, 2)");
+                    stmt.execute("INSERT IGNORE INTO site_content (section_type, title, subtitle, is_active, display_order) " +
+                        "VALUES ('announcement', 'New Destinations Added!', 'Explore our latest travel packages now.', TRUE, 3)");
+                } catch (Exception e) {}
+
+
 
                 stmt.execute(
                     "CREATE TABLE IF NOT EXISTS comments (" +
@@ -750,6 +786,24 @@ public class SchemaBootstrap implements ServletContextListener {
                         System.out.println("[SchemaBootstrap] Seeded activities table with 4 Must-Do experiences.");
                     }
                 } catch (Exception e) {}
+
+                try {
+                    stmt.execute("DROP TABLE IF EXISTS admin_logs");
+                    stmt.execute(
+                        "CREATE TABLE admin_logs (" +
+                        "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                        "admin_id INT, " +
+                        "action VARCHAR(255), " +
+                        "module VARCHAR(100), " +
+                        "details TEXT, " +
+                        "ip_address VARCHAR(50), " +
+                        "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP" +
+                        ")"
+                    );
+                    System.out.println("[SchemaBootstrap] Recreated admin_logs table.");
+                } catch (Exception e) {
+                    System.err.println("[SchemaBootstrap] Failed to create admin_logs: " + e.getMessage());
+                }
 
                 System.out.println("[SchemaBootstrap] Schema migration complete.");
 

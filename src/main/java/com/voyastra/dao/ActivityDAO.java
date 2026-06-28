@@ -89,6 +89,38 @@ public class ActivityDAO {
         return new ArrayList<>();
     }
 
-    public void addActivity(Activity a) {}
-    public void updateActivity(Activity a) {}
+    public void addActivity(Activity a) {
+        String query = "INSERT INTO activities (title, hero_image, description, location, price, rating, review_count) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, a.getTitle());
+            stmt.setString(2, a.getHeroImage());
+            stmt.setString(3, a.getDescription());
+            stmt.setString(4, a.getLocation());
+            stmt.setDouble(5, a.getPrice());
+            stmt.setDouble(6, a.getRating());
+            stmt.setInt(7, a.getReviewCount());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateActivity(Activity a) {
+        String query = "UPDATE activities SET title = ?, hero_image = ?, description = ?, location = ?, price = ?, rating = ?, review_count = ? WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, a.getTitle());
+            stmt.setString(2, a.getHeroImage());
+            stmt.setString(3, a.getDescription());
+            stmt.setString(4, a.getLocation());
+            stmt.setDouble(5, a.getPrice());
+            stmt.setDouble(6, a.getRating());
+            stmt.setInt(7, a.getReviewCount());
+            stmt.setInt(8, a.getId());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

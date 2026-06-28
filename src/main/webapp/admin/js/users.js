@@ -24,12 +24,13 @@ function renderUsersTable() {
     if (!tbody) return;
 
     if (!activeUsers || activeUsers.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding: 30px; color:#888;">No users found.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 30px; color:#888;">No users found.</td></tr>';
         return;
     }
 
     tbody.innerHTML = activeUsers.map(u => `
         <tr id="userRow_${u.id}">
+            <td style="font-weight:600;">#${u.id}</td>
             <td style="font-weight:600;">${u.name}</td>
             <td style="color:var(--text-muted);">${u.email}</td>
             <td><span style="padding:4px 8px; border-radius:12px; font-size:0.75rem; background: ${u.role==='admin'?'rgba(251,191,36,0.1)':'rgba(59,130,246,0.1)'}; color: ${u.role==='admin'?'#fbbf24':'#3b82f6'};">${u.role}</span></td>
@@ -88,3 +89,49 @@ function deleteUser(id) {
     })
     .catch(err => console.error('Error deleting user:', err));
 }
+
+function openUserModal() {
+    const modal = document.getElementById('userModal');
+    if(modal) {
+        document.getElementById('userForm').reset();
+        modal.classList.add('active');
+    }
+}
+
+function closeUserModal() {
+    const modal = document.getElementById('userModal');
+    if(modal) modal.classList.remove('active');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const userForm = document.getElementById('userForm');
+    if(userForm) {
+        userForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(userForm);
+            const body = new URLSearchParams();
+            body.append('action', 'add');
+            for(let [key, val] of formData.entries()) {
+                body.append(key, val);
+            }
+            
+            try {
+                const res = await fetch(CONTEXT_PATH + '/AdminUserServlet', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: body.toString()
+                });
+                const data = await res.json();
+                if(data.success) {
+                    typeof showToast === 'function' ? showToast('User created successfully.', 'success') : alert('User created');
+                    closeUserModal();
+                    fetchUsersFromDB();
+                } else {
+                    typeof showToast === 'function' ? showToast(data.message || 'Failed to create user.', 'error') : alert(data.message || 'Error');
+                }
+            } catch (err) {
+                console.error('Error creating user:', err);
+            }
+        });
+    }
+});

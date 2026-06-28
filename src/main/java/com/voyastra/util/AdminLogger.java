@@ -33,14 +33,15 @@ public class AdminLogger {
                            String details) {
         try {
             HttpSession session = request.getSession(false);
-            String adminUser = (session != null && session.getAttribute("username") != null)
-                    ? (String) session.getAttribute("username")
-                    : "unknown";
+            int adminId = 0;
+            if (session != null && session.getAttribute("user_id") != null) {
+                adminId = (Integer) session.getAttribute("user_id");
+            }
 
             String ip = request.getHeader("X-Forwarded-For");
             if (ip == null || ip.isEmpty()) ip = request.getRemoteAddr();
 
-            logDAO.log(adminUser, action, entity, entityId, details, ip);
+            logDAO.log(adminId, action, entity, details, ip);
         } catch (Exception e) {
             // Logging must never crash the primary operation
             System.err.println("WARN: AdminLogger.log failed silently: " + e.getMessage());

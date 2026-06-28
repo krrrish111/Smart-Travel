@@ -24,7 +24,7 @@
                 <tr>
                     <th>Activity Name</th>
                     <th>ID</th>
-                    <th>Dest. ID</th>
+                    <th>Location</th>
                     <th>Price</th>
                     <th>Rating</th>
                     <th style="text-align: right;">Actions</th>

@@ -12,6 +12,7 @@ public class Post {
     private String hashtags;
     private Integer rating;
     private Timestamp createdAt;
+    private boolean hidden;
 
     // Joined properties for UI display
     private String userName;
@@ -71,4 +72,7 @@ public class Post {
 
     public boolean isFollowingCreator() { return followingCreator; }
     public void setFollowingCreator(boolean followingCreator) { this.followingCreator = followingCreator; }
+
+    public boolean isHidden() { return hidden; }
+    public void setHidden(boolean hidden) { this.hidden = hidden; }
 }

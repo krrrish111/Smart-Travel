@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.util.List;
 import com.google.gson.Gson;
 
-@WebServlet("/activities")
+@WebServlet({"/activities", "/admin/api/activities"})
 public class ActivityServlet extends HttpServlet {
 
     private ActivityDAO activityDAO;
@@ -43,45 +43,80 @@ public class ActivityServlet extends HttpServlet {
         // Security Authentication Filter: Only Administrators
         HttpSession session = request.getSession(false);
         if (session == null || !"admin".equals(session.getAttribute("role"))) {
-            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"status\":\"error\",\"message\":\"Unauthorized\"}");
             return;
         }
 
             if ("add".equals(action)) {
                 Activity a = new Activity();
-                a.setDestinationId(Integer.parseInt(request.getParameter("destination_id")));
-                a.setName(request.getParameter("name"));
-                a.setImageUrl(request.getParameter("image_url"));
-                a.setPrice(Double.parseDouble(request.getParameter("price")));
-                // Defaulting new activities to generic rating
+                a.setTitle(request.getParameter("title"));
+                
+                String destIdStr = request.getParameter("destination_id");
+                if (destIdStr != null && !destIdStr.isEmpty()) {
+                    Destination d = destinationDAO.getDestinationById(Integer.parseInt(destIdStr));
+                    if (d != null) {
+                        a.setLocation(d.getName());
+                    } else {
+                        a.setLocation(request.getParameter("location"));
+                    }
+                } else {
+                    a.setLocation(request.getParameter("location"));
+                }
+                
+                a.setHeroImage(request.getParameter("heroImage"));
+                a.setDescription(request.getParameter("description"));
+                a.setPrice(Double.parseDouble(request.getParameter("price") != null ? request.getParameter("price") : "0"));
                 a.setRating(4.5);
-                a.setReviewsCount(0);
+                a.setReviewCount(0);
 
                 activityDAO.addActivity(a);
-                AdminLogger.log(request, "ADD", "Activity", 0, "Added activity '" + a.getName() + "' for destination #" + a.getDestinationId());
-                response.sendRedirect(redirectUrl + "?activityAdded=true");
+                AdminLogger.log(request, "ADD", "Activity", 0, "Added activity '" + a.getTitle() + "' at " + a.getLocation());
+                
+                response.setContentType("application/json;charset=UTF-8");
+                response.getWriter().write("{\"status\":\"success\"}");
 
             } else if ("update".equals(action)) {
                 Activity a = new Activity();
                 a.setId(Integer.parseInt(request.getParameter("id")));
-                a.setDestinationId(Integer.parseInt(request.getParameter("destination_id")));
-                a.setName(request.getParameter("name"));
-                a.setImageUrl(request.getParameter("image_url"));
-                a.setPrice(Double.parseDouble(request.getParameter("price")));
-                a.setRating(Double.parseDouble(request.getParameter("rating")));
-                a.setReviewsCount(Integer.parseInt(request.getParameter("reviews_count")));
+                a.setTitle(request.getParameter("title"));
+                
+                String destIdStr = request.getParameter("destination_id");
+                if (destIdStr != null && !destIdStr.isEmpty()) {
+                    Destination d = destinationDAO.getDestinationById(Integer.parseInt(destIdStr));
+                    if (d != null) {
+                        a.setLocation(d.getName());
+                    } else {
+                        a.setLocation(request.getParameter("location"));
+                    }
+                } else {
+                    a.setLocation(request.getParameter("location"));
+                }
+                
+                a.setHeroImage(request.getParameter("heroImage"));
+                a.setDescription(request.getParameter("description"));
+                a.setPrice(Double.parseDouble(request.getParameter("price") != null ? request.getParameter("price") : "0"));
+                a.setRating(Double.parseDouble(request.getParameter("rating") != null ? request.getParameter("rating") : "4.5"));
+                a.setReviewCount(Integer.parseInt(request.getParameter("reviewCount") != null ? request.getParameter("reviewCount") : "0"));
 
                 activityDAO.updateActivity(a);
-                AdminLogger.log(request, "UPDATE", "Activity", a.getId(), "Updated activity '" + a.getName() + "'");
-                response.sendRedirect(redirectUrl + "?activityUpdated=true");
+                AdminLogger.log(request, "UPDATE", "Activity", a.getId(), "Updated activity '" + a.getTitle() + "'");
+                
+                response.setContentType("application/json;charset=UTF-8");
+                response.getWriter().write("{\"status\":\"success\"}");
 
             } else if ("delete".equals(action)) {
                 int id = Integer.parseInt(request.getParameter("id"));
                 activityDAO.deleteActivity(id);
                 AdminLogger.log(request, "DELETE", "Activity", id, "Deleted activity #" + id);
-                response.sendRedirect(redirectUrl + "?activityDeleted=true");
+                
+                response.setContentType("application/json;charset=UTF-8");
+                response.getWriter().write("{\"status\":\"success\"}");
             } else {
-                response.sendRedirect(redirectUrl);
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                response.setContentType("application/json");
+                response.getWriter().write("{\"status\":\"error\",\"message\":\"Unknown action\"}");
             }
     }
 
@@ -93,6 +128,28 @@ public class ActivityServlet extends HttpServlet {
             throws ServletException, IOException {
             
         String destinationIdParam = request.getParameter("destinationId");
+        
+        // Handle admin request
+        if ("/admin/api/activities".equals(request.getServletPath())) {
+            if ("list".equals(request.getParameter("action"))) {
+                HttpSession session = request.getSession(false);
+                if (session == null || !"admin".equals(session.getAttribute("role"))) {
+                    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                    response.setContentType("application/json");
+                    response.getWriter().write("{\"status\":\"error\",\"message\":\"Unauthorized\"}");
+                    return;
+                }
+                List<Activity> allActivities = activityDAO.getAllActivities();
+                response.setContentType("application/json;charset=UTF-8");
+                response.setCharacterEncoding("UTF-8");
+                new Gson().toJson(allActivities, response.getWriter());
+            } else {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                response.setContentType("application/json");
+                response.getWriter().write("{\"status\":\"error\",\"message\":\"Unknown action\"}");
+            }
+            return;
+        }
         
             if (destinationIdParam != null && !destinationIdParam.isEmpty()) {
                 // Fetch activities strictly for a specific locale

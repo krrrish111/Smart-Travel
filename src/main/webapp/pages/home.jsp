@@ -117,7 +117,7 @@
                         
                         <h1 class="mb-3 editorial text-on-img p-hide"
                             style="font-size: 4rem; line-height: 1.1; font-weight: 700; text-shadow: 0 2px 20px rgba(0,0,0,0.8);">
-                            Experience <br>
+                            ${heroContent != null && heroContent.isActive() ? heroContent.title : 'Experience'} <br>
                             <!-- Rotator -->
                             <div class="rotator-container mx-1"
                                 style="margin-top: -10px; text-shadow: 0 2px 20px rgba(0,0,0,0.8); color: var(--color-primary);">
@@ -135,8 +135,7 @@
 
                         <p class="mb-4 mx-auto"
                             style="color: var(--text-on-img); font-size: 1.25rem; text-shadow: 0 2px 15px rgba(0,0,0,0.7); opacity: 0.95; max-width: 800px;">
-                            Say goodbye to endless research. Our intelligent platform crafts hyper-personalized
-                            itineraries, seamlessly balancing iconic landmarks with undiscovered cultural treasures.
+                            ${heroContent != null && heroContent.isActive() ? heroContent.subtitle : 'Say goodbye to endless research. Our intelligent platform crafts hyper-personalized itineraries, seamlessly balancing iconic landmarks with undiscovered cultural treasures.'}
                         </p>
                         <div class="flex gap-3 justify-center items-center mb-5">
                             <a href="${pageContext.request.contextPath}/planner" id="heroPlanBtn" class="btn btn-primary tilt-card"

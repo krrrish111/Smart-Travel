@@ -13,19 +13,18 @@ public class AdminLogDAO {
      * Inserts a new audit record into admin_logs.
      * Called by the AdminLogger utility from any servlet after a successful operation.
      */
-    public boolean log(String adminUsername, String action, String entity,
-                       int entityId, String details, String ipAddress) {
-        String query = "INSERT INTO admin_logs (admin_username, action, entity, entity_id, details, ip_address) " +
-                       "VALUES (?, ?, ?, ?, ?, ?)";
+    public boolean log(int adminId, String action, String module,
+                       String details, String ipAddress) {
+        String query = "INSERT INTO admin_logs (admin_id, action, module, details, ip_address) " +
+                       "VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
-            stmt.setString(1, adminUsername);
+            stmt.setInt(1, adminId);
             stmt.setString(2, action.toUpperCase());
-            stmt.setString(3, entity);
-            stmt.setInt(4, entityId);
-            stmt.setString(5, details);
-            stmt.setString(6, ipAddress);
+            stmt.setString(3, module);
+            stmt.setString(4, details);
+            stmt.setString(5, ipAddress);
 
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -45,10 +44,10 @@ public class AdminLogDAO {
     /**
      * Fetches logs filtered by a specific admin user.
      */
-    public List<AdminLog> getLogsByAdmin(String adminUsername) {
+    public List<AdminLog> getLogsByAdmin(int adminId) {
         return queryLogs(
-            "SELECT * FROM admin_logs WHERE admin_username = ? ORDER BY created_at DESC",
-            adminUsername
+            "SELECT * FROM admin_logs WHERE admin_id = ? ORDER BY created_at DESC",
+            String.valueOf(adminId)
         );
     }
 
@@ -117,10 +116,9 @@ public class AdminLogDAO {
     private AdminLog extractFromResultSet(ResultSet rs) throws SQLException {
         AdminLog log = new AdminLog();
         log.setId(rs.getInt("id"));
-        log.setAdminUsername(rs.getString("admin_username"));
+        log.setAdminId(rs.getInt("admin_id"));
         log.setAction(rs.getString("action"));
-        log.setEntity(rs.getString("entity"));
-        log.setEntityId(rs.getInt("entity_id"));
+        log.setModule(rs.getString("module"));
         log.setDetails(rs.getString("details"));
         log.setIpAddress(rs.getString("ip_address"));
         log.setCreatedAt(rs.getTimestamp("created_at"));

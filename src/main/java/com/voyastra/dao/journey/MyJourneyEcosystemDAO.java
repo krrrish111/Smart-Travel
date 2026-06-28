@@ -2,10 +2,10 @@ package com.voyastra.dao.journey;
 
 import com.voyastra.model.journey.TravelMemory;
 import com.voyastra.model.journey.FamilyMember;
-import com.voyastra.model.journey.TripReport;
+import com.voyastra.model.planner.TripReport;
 import com.voyastra.model.journey.TravelDNA;
 import com.voyastra.model.journey.AnnualReport;
-import com.voyastra.model.Booking;
+import com.voyastra.model.booking.Booking;
 import com.voyastra.util.DBConnection;
 
 import java.sql.*;

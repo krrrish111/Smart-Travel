@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/components/header.jsp" %>
 <%@ include file="/components/global_ui.jsp" %>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/discover.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/discover.css">
 
 <div class="ai-page">
     

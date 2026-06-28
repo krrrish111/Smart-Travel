@@ -1,6 +1,6 @@
 package com.voyastra.util;
 
-import com.voyastra.model.HotelBooking;
+import com.voyastra.model.booking.HotelBooking;
 import jakarta.mail.*;
 import jakarta.mail.internet.*;
 // import jakarta.activation.DataHandler;

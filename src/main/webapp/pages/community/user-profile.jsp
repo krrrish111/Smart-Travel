@@ -1,9 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/components/header.jsp" %>
 <%@ include file="/components/global_ui.jsp" %>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/community_feed.css">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/creator-hub.css">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/user-profile.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/community_feed.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/creator-hub.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/user-profile.css">
 
 <%
     String profileUsername = (String) request.getAttribute("profileUsername");

@@ -1,6 +1,6 @@
 package com.voyastra.dao;
 
-import com.voyastra.model.TrendingPlace;
+import com.voyastra.model.destination.TrendingPlace;
 import com.voyastra.util.DBConnection;
 
 import java.sql.Connection;

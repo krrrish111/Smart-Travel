@@ -9,7 +9,7 @@ import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.BarcodeQRCode;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.voyastra.model.HotelBooking;
+import com.voyastra.model.booking.HotelBooking;
 
 import java.io.ByteArrayOutputStream;
 

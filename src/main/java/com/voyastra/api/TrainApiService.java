@@ -4,7 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.voyastra.model.Transport;
+import com.voyastra.model.transport.Transport;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

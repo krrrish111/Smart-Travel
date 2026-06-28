@@ -11,8 +11,8 @@ public class RunUpdate {
         try (Connection conn = DBConnection.getConnection();
              Statement stmt = conn.createStatement()) {
              
-            runScript(stmt, "sql/hotels_workflow.sql");
-            runScript(stmt, "sql/database_update_hotels.sql");
+            runScript(stmt, "database/schema/hotels_workflow.sql");
+            runScript(stmt, "database/schema/database_update_hotels.sql");
             
             System.out.println("Database Update Complete!");
         } catch (Exception e) {

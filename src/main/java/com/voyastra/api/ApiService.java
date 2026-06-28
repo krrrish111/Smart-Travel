@@ -1,6 +1,6 @@
 package com.voyastra.api;
 
-import com.voyastra.model.Transport;
+import com.voyastra.model.transport.Transport;
 import com.voyastra.model.Stay;
 
 import com.google.gson.JsonArray;

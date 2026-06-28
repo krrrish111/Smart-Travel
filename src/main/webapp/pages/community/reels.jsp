@@ -8,8 +8,8 @@
     <title>Voyastra Reels</title>
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/theme.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/reels.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/theme.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/reels.css">
 </head>
 <body class="dark-theme">
 
@@ -191,7 +191,7 @@
     </div>
 
     <!-- Main JS (Toast depends on this) -->
-    <script src="${pageContext.request.contextPath}/js/toast.js"></script>
+    <script src="${pageContext.request.contextPath}/assets/js/toast.js"></script>
     <script>
         function toggleLike(btn) {
             const icon = btn.querySelector('i');

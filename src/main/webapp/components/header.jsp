@@ -8,18 +8,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Voyastra - Travel Smarter</title>
-    <link rel="icon" type="image/svg+xml" href="${pageContext.request.contextPath}/images/favicon.svg">
+    <link rel="icon" type="image/svg+xml" href="${pageContext.request.contextPath}/assets/images/favicon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="dns-prefetch" href="https://fonts.googleapis.com">
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/components.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/theme.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/animations.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/responsive.css">
-    <script src="${pageContext.request.contextPath}/js/loader.js"></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/components.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/theme.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/animations.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/responsive.css">
+    <script src="${pageContext.request.contextPath}/assets/js/loader.js"></script>
     <script>
         // Emergency fallback: if loader.js race condition recurs,
         // force main visible after 2 seconds maximum — no dependencies
@@ -34,9 +34,9 @@
             }, 2000);
         });
     </script>
-    <script src="${pageContext.request.contextPath}/js/auth-guard.js"></script>
-    <script src="${pageContext.request.contextPath}/js/toast.js"></script>
-    <script src="${pageContext.request.contextPath}/js/validate.js"></script>
+    <script src="${pageContext.request.contextPath}/assets/js/auth-guard.js"></script>
+    <script src="${pageContext.request.contextPath}/assets/js/toast.js"></script>
+    <script src="${pageContext.request.contextPath}/assets/js/validate.js"></script>
     <!-- Google Auth Script -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script>
@@ -63,15 +63,8 @@
         };
     </script>
 <%@include file="config.jsp"%>
-    <!-- Tailwind CSS (No Preflight to prevent breaking vanilla CSS) -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        corePlugins: {
-          preflight: false,
-        }
-      }
-    </script>
+    <!-- Tailwind CSS: Compiled locally (production-safe, no CDN) -->
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/tailwind.css">
 </head>
 <body>
     <nav class="navbar">

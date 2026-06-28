@@ -1,6 +1,6 @@
 package com.voyastra.util;
 
-import com.voyastra.dao.AdminLogDAO;
+import com.voyastra.dao.admin.AdminLogDAO;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;

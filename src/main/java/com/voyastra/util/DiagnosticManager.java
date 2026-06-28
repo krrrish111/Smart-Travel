@@ -1,6 +1,6 @@
 package com.voyastra.util;
 
-import com.voyastra.model.PlannerStatus;
+import com.voyastra.model.planner.PlannerStatus;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.Map;

@@ -9,9 +9,9 @@
     <title>Booking Details - Voyastra</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/theme.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/components.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/theme.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/components.css">
     <style>
         .timeline-container { max-width: 800px; margin: 40px auto; padding: 20px; }
         .booking-header { background: rgba(255,255,255,0.03); border: 1px solid var(--color-border); border-radius: 16px; padding: 24px; margin-bottom: 40px; display:flex; justify-content:space-between; align-items:center; }

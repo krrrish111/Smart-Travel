@@ -1,6 +1,6 @@
 package com.voyastra.dao;
 
-import com.voyastra.model.HotelSearchHistory;
+import com.voyastra.model.booking.HotelSearchHistory;
 import com.voyastra.util.DBConnection;
 
 import java.sql.Connection;

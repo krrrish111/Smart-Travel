@@ -1,6 +1,10 @@
 package com.voyastra.dao;
 
-import com.voyastra.model.Booking;
+import com.voyastra.dao.booking.ActivityBookingDAO;
+
+import com.voyastra.dao.booking.BookingDAO;
+
+import com.voyastra.model.booking.Booking;
 import com.voyastra.model.Journey;
 
 import java.util.Arrays;
@@ -17,8 +21,8 @@ public class JourneyDAO {
     public Journey getActiveJourneyForUser(String userId) {
         List<Booking> bookings = bookingDAO.getBookingsByUser(Integer.parseInt(userId));
         
-        List<com.voyastra.model.ActivityBooking> actBookings = activityBookingDAO.getBookingsByUserId(Integer.parseInt(userId));
-        for (com.voyastra.model.ActivityBooking ab : actBookings) {
+        List<com.voyastra.model.booking.ActivityBooking> actBookings = activityBookingDAO.getBookingsByUserId(Integer.parseInt(userId));
+        for (com.voyastra.model.booking.ActivityBooking ab : actBookings) {
             Booking b = new Booking();
             b.setId(ab.getId());
             b.setBookingCode(ab.getBookingId());

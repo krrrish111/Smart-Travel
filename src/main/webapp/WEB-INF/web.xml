@@ -169,7 +169,7 @@
 
     <servlet>
         <servlet-name>DashboardServlet</servlet-name>
-        <servlet-class>com.voyastra.servlet.DashboardServlet</servlet-class>
+        <servlet-class>com.voyastra.controller.DashboardServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>DashboardServlet</servlet-name>
@@ -193,7 +193,7 @@
 
     <servlet>
         <servlet-name>Settings</servlet-name>
-        <jsp-file>/pages/settings.jsp</jsp-file>
+        <jsp-file>/pages/profile/settings.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>Settings</servlet-name>
@@ -203,7 +203,7 @@
 
     <servlet>
         <servlet-name>BookingPage</servlet-name>
-        <jsp-file>/pages/booking.jsp</jsp-file>
+        <jsp-file>/pages/booking/booking.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>BookingPage</servlet-name>
@@ -212,7 +212,7 @@
 
     <servlet>
         <servlet-name>PaymentPage</servlet-name>
-        <jsp-file>/pages/payment.jsp</jsp-file>
+        <jsp-file>/pages/payment/payment.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>PaymentPage</servlet-name>
@@ -221,7 +221,7 @@
 
     <servlet>
         <servlet-name>ConfirmationPage</servlet-name>
-        <jsp-file>/pages/confirmation.jsp</jsp-file>
+        <jsp-file>/pages/planner/trip-confirmation.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>ConfirmationPage</servlet-name>
@@ -244,7 +244,7 @@
     <!-- Community Reels -->
     <servlet>
         <servlet-name>ReelsServlet</servlet-name>
-        <servlet-class>com.voyastra.servlet.community.ReelsServlet</servlet-class>
+        <servlet-class>com.voyastra.controller.community.ReelsServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ReelsServlet</servlet-name>
@@ -254,7 +254,7 @@
     <!-- Community Hidden Gems -->
     <servlet>
         <servlet-name>HiddenGemsServlet</servlet-name>
-        <servlet-class>com.voyastra.servlet.community.HiddenGemsServlet</servlet-class>
+        <servlet-class>com.voyastra.controller.community.HiddenGemsServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>HiddenGemsServlet</servlet-name>
@@ -264,7 +264,7 @@
     <!-- Community Food Discovery -->
     <servlet>
         <servlet-name>FoodServlet</servlet-name>
-        <servlet-class>com.voyastra.servlet.community.FoodServlet</servlet-class>
+        <servlet-class>com.voyastra.controller.community.FoodServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>FoodServlet</servlet-name>
@@ -274,7 +274,7 @@
     <!-- Community Guide Marketplace -->
     <servlet>
         <servlet-name>GuidesServlet</servlet-name>
-        <servlet-class>com.voyastra.servlet.community.GuidesServlet</servlet-class>
+        <servlet-class>com.voyastra.controller.community.GuidesServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>GuidesServlet</servlet-name>
@@ -284,7 +284,7 @@
     <!-- Community Challenges -->
     <servlet>
         <servlet-name>ChallengesServlet</servlet-name>
-        <servlet-class>com.voyastra.servlet.community.ChallengesServlet</servlet-class>
+        <servlet-class>com.voyastra.controller.community.ChallengesServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ChallengesServlet</servlet-name>
@@ -294,7 +294,7 @@
     <!-- Community AI Discover Engine -->
     <servlet>
         <servlet-name>DiscoverServlet</servlet-name>
-        <servlet-class>com.voyastra.servlet.community.DiscoverServlet</servlet-class>
+        <servlet-class>com.voyastra.controller.community.DiscoverServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>DiscoverServlet</servlet-name>
@@ -304,7 +304,7 @@
     <!-- Community User Profiles: /community/user/{username} -->
     <servlet>
         <servlet-name>UserProfile</servlet-name>
-        <servlet-class>com.voyastra.servlet.community.UserProfileServlet</servlet-class>
+        <servlet-class>com.voyastra.controller.community.UserProfileServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>UserProfile</servlet-name>

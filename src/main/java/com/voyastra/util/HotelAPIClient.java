@@ -1,6 +1,6 @@
 package com.voyastra.util;
 
-import com.voyastra.model.Hotel;
+import com.voyastra.model.booking.Hotel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;

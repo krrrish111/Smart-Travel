@@ -1,0 +1,356 @@
+package com.voyastra.dao.booking;
+
+import com.voyastra.model.booking.Booking;
+import com.voyastra.util.DBConnection;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class BookingDAO {
+
+    /**
+     * Inserts a new booking request into the database.
+     */
+    public boolean addBooking(Booking booking) {
+        String query = "INSERT INTO bookings (user_id, plan_id, total_price, status) VALUES (?, ?, ?, ?)";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+             
+            stmt.setInt(1, booking.getUserId());
+            stmt.setInt(2, booking.getPlanId());
+            stmt.setDouble(3, booking.getTotalPrice());
+            stmt.setString(4, booking.getStatus() != null ? booking.getStatus() : "PENDING");
+            
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("ERROR: BookingDAO.addBooking failed.");
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
+     * Creates a new flight/hotel booking (Phase 4).
+     * Returns the generated booking ID or -1 on failure.
+     */
+    public int createBooking(com.voyastra.model.booking.Booking b) {
+        String query = "INSERT INTO bookings (user_id, type, details, total_price, status, booking_code, customer_name, customer_email, customer_phone, payment_id, transaction_id, payment_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query, java.sql.Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setInt(1, b.getUserId());
+            stmt.setString(2, b.getType());
+            stmt.setString(3, b.getDetails());
+            stmt.setDouble(4, b.getTotalPrice());
+            stmt.setString(5, b.getStatus() != null ? b.getStatus() : "PENDING");
+            stmt.setString(6, b.getBookingCode());
+            stmt.setString(7, b.getCustomerName());
+            stmt.setString(8, b.getCustomerEmail());
+            stmt.setString(9, b.getCustomerPhone());
+            stmt.setString(10, b.getPaymentId());
+            stmt.setString(11, b.getTransactionId());
+            stmt.setString(12, b.getPaymentStatus());
+            
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows > 0) {
+                try (ResultSet rs = stmt.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        return rs.getInt(1);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("ERROR: BookingDAO.createBooking failed.");
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    /**
+     * Inserts a trip booking with expanded traveler details. Returns the generated booking ID or -1.
+     */
+    public int addTripBooking(Booking b) {
+        String query = "INSERT INTO bookings (user_id, plan_id, total_price, status, travel_date, num_adults, num_children, room_type, pickup_city, customer_name, customer_email, customer_phone, special_requests, booking_code) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
+            stmt.setInt(1, b.getUserId());
+            stmt.setInt(2, b.getPlanId());
+            stmt.setDouble(3, b.getTotalPrice());
+            stmt.setString(4, b.getStatus() != null ? b.getStatus() : "PENDING");
+            stmt.setString(5, b.getTravelDate());
+            stmt.setInt(6, b.getNumAdults());
+            stmt.setInt(7, b.getNumChildren());
+            stmt.setString(8, b.getRoomType());
+            stmt.setString(9, b.getPickupCity());
+            stmt.setString(10, b.getCustomerName());
+            stmt.setString(11, b.getCustomerEmail());
+            stmt.setString(12, b.getCustomerPhone());
+            stmt.setString(13, b.getSpecialRequests());
+            stmt.setString(14, b.getBookingCode());
+            stmt.executeUpdate();
+            ResultSet keys = stmt.getGeneratedKeys();
+            if (keys.next()) return keys.getInt(1);
+        } catch (SQLException e) {
+            System.err.println("ERROR: BookingDAO.addTripBooking failed.");
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    /**
+     * Fetches a booking by its unique booking code (e.g., VYS-2026-XXXXX).
+     */
+    public Booking getBookingByCode(String code) {
+        Booking booking = null;
+        String query = "SELECT * FROM bookings WHERE booking_code = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, code);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    booking = new Booking();
+                    booking.setId(rs.getInt("id"));
+                    booking.setUserId(rs.getInt("user_id"));
+                    booking.setPlanId(rs.getInt("plan_id"));
+                    booking.setTotalPrice(rs.getDouble("total_price"));
+                    booking.setStatus(rs.getString("status"));
+                    booking.setCreatedAt(rs.getTimestamp("created_at"));
+                    booking.setBookingCode(rs.getString("booking_code"));
+                    booking.setTravelDate(rs.getString("travel_date"));
+                    booking.setNumAdults(rs.getInt("num_adults"));
+                    booking.setNumChildren(rs.getInt("num_children"));
+                    booking.setRoomType(rs.getString("room_type"));
+                    booking.setPickupCity(rs.getString("pickup_city"));
+                    booking.setCustomerName(rs.getString("customer_name"));
+                    booking.setCustomerEmail(rs.getString("customer_email"));
+                    booking.setCustomerPhone(rs.getString("customer_phone"));
+                    booking.setSpecialRequests(rs.getString("special_requests"));
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("ERROR: BookingDAO.getBookingByCode failed.");
+            e.printStackTrace();
+        }
+        return booking;
+    }
+
+    public List<Booking> getUserBookings(int userId) {
+        return getBookingsByUser(userId);
+    }
+
+    /**
+     * Fetches all bookings belonging to a specific user, joining with the plans table to get the plan title.
+     */
+    public List<Booking> getBookingsByUser(int userId) {
+        List<Booking> bookings = new ArrayList<>();
+        String query = "SELECT b.id, b.user_id, b.plan_id, b.total_price, b.status, b.created_at, b.type, b.details, b.travel_date, b.booking_code, p.title AS plan_title, p.image AS plan_image " +
+                       "FROM bookings b " +
+                       "LEFT JOIN plans p ON b.plan_id = p.id " +
+                       "WHERE b.user_id = ? " +
+                       "ORDER BY b.created_at DESC";
+                       
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+             
+            stmt.setInt(1, userId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Booking booking = new Booking();
+                    booking.setId(rs.getInt("id"));
+                    booking.setUserId(rs.getInt("user_id"));
+                    booking.setPlanId(rs.getInt("plan_id"));
+                    booking.setTotalPrice(rs.getDouble("total_price"));
+                    booking.setStatus(rs.getString("status"));
+                    booking.setCreatedAt(rs.getTimestamp("created_at"));
+                    booking.setType(rs.getString("type"));
+                    booking.setDetails(rs.getString("details"));
+                    booking.setTravelDate(rs.getString("travel_date"));
+                    booking.setBookingCode(rs.getString("booking_code"));
+                    booking.setPlanTitle(rs.getString("plan_title"));
+                    booking.setPlanImage(rs.getString("plan_image"));
+                    bookings.add(booking);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("ERROR: BookingDAO.getBookingsByUser failed.");
+            e.printStackTrace();
+        }
+        return bookings;
+    }
+
+    public Booking getBookingById(int id) {
+        Booking booking = null;
+        String query = "SELECT b.id, b.user_id, b.plan_id, b.total_price, b.status, b.created_at, b.type, b.details, p.title AS plan_title, p.image AS plan_image " +
+                       "FROM bookings b LEFT JOIN plans p ON b.plan_id = p.id WHERE b.id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    booking = new Booking();
+                    booking.setId(rs.getInt("id"));
+                    booking.setUserId(rs.getInt("user_id"));
+                    booking.setPlanId(rs.getInt("plan_id"));
+                    booking.setTotalPrice(rs.getDouble("total_price"));
+                    booking.setStatus(rs.getString("status"));
+                    booking.setCreatedAt(rs.getTimestamp("created_at"));
+                    booking.setPlanTitle(rs.getString("plan_title"));
+                    booking.setPlanImage(rs.getString("plan_image"));
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("ERROR: BookingDAO.getBookingById failed.");
+            e.printStackTrace();
+        }
+        return booking;
+    }
+
+    public List<Booking> getAllBookings() {
+        List<Booking> list = new ArrayList<>();
+        String query = "SELECT b.id, b.user_id, b.plan_id, b.total_price, b.status, b.created_at, b.type, b.details, b.booking_code, p.title AS plan_title, p.image AS plan_image, u.name AS user_name " +
+                       "FROM bookings b LEFT JOIN plans p ON b.plan_id = p.id JOIN users u ON b.user_id = u.id ORDER BY b.created_at DESC";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                Booking booking = new Booking();
+                booking.setId(rs.getInt("id"));
+                booking.setUserId(rs.getInt("user_id"));
+                booking.setPlanId(rs.getInt("plan_id"));
+                booking.setTotalPrice(rs.getDouble("total_price"));
+                booking.setStatus(rs.getString("status"));
+                booking.setCreatedAt(rs.getTimestamp("created_at"));
+                booking.setPlanTitle(rs.getString("plan_title"));
+                booking.setPlanImage(rs.getString("plan_image"));
+                booking.setUserName(rs.getString("user_name"));
+                booking.setType(rs.getString("type"));
+                booking.setDetails(rs.getString("details"));
+                booking.setBookingCode(rs.getString("booking_code"));
+                list.add(booking);
+            }
+        } catch (SQLException e) {
+            System.err.println("ERROR: BookingDAO.getAllBookings failed.");
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public List<Booking> getBookingsByType(String type) {
+        List<Booking> list = new ArrayList<>();
+        // For packages, type is usually null or 'package', but in this system it seems flight and hotel explicitly set the 'type' column.
+        String query = "";
+        if ("packages".equalsIgnoreCase(type)) {
+            query = "SELECT b.id, b.user_id, b.plan_id, b.total_price, b.status, b.created_at, b.type, b.details, b.booking_code, p.title AS plan_title, p.image AS plan_image, u.name AS user_name " +
+                    "FROM bookings b LEFT JOIN plans p ON b.plan_id = p.id JOIN users u ON b.user_id = u.id WHERE b.type IS NULL OR b.type = 'package' OR b.plan_id > 0 ORDER BY b.created_at DESC";
+        } else {
+            query = "SELECT b.id, b.user_id, b.plan_id, b.total_price, b.status, b.created_at, b.type, b.details, b.booking_code, p.title AS plan_title, p.image AS plan_image, u.name AS user_name " +
+                    "FROM bookings b LEFT JOIN plans p ON b.plan_id = p.id JOIN users u ON b.user_id = u.id WHERE b.type = ? ORDER BY b.created_at DESC";
+        }
+        
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            if (!"packages".equalsIgnoreCase(type)) {
+                stmt.setString(1, type);
+            }
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Booking booking = new Booking();
+                    booking.setId(rs.getInt("id"));
+                    booking.setUserId(rs.getInt("user_id"));
+                    booking.setPlanId(rs.getInt("plan_id"));
+                    booking.setTotalPrice(rs.getDouble("total_price"));
+                    booking.setStatus(rs.getString("status"));
+                    booking.setCreatedAt(rs.getTimestamp("created_at"));
+                    booking.setPlanTitle(rs.getString("plan_title"));
+                    booking.setPlanImage(rs.getString("plan_image"));
+                    booking.setUserName(rs.getString("user_name"));
+                    booking.setType(rs.getString("type"));
+                    booking.setDetails(rs.getString("details"));
+                    booking.setBookingCode(rs.getString("booking_code"));
+                    list.add(booking);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("ERROR: BookingDAO.getBookingsByType failed.");
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public boolean updateBooking(Booking booking) {
+        String query = "UPDATE bookings SET user_id = ?, plan_id = ?, total_price = ?, status = ? WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, booking.getUserId());
+            stmt.setInt(2, booking.getPlanId());
+            stmt.setDouble(3, booking.getTotalPrice());
+            stmt.setString(4, booking.getStatus());
+            stmt.setInt(5, booking.getId());
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("ERROR: BookingDAO.updateBooking failed.");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updateBookingStatus(int id, String status) {
+        String query = "UPDATE bookings SET status = ? WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, status);
+            stmt.setInt(2, id);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("ERROR: BookingDAO.updateBookingStatus failed.");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean deleteBooking(int id) {
+        String query = "DELETE FROM bookings WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, id);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("ERROR: BookingDAO.deleteBooking failed.");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public int getTotalBookingCount() {
+        String query = "SELECT COUNT(*) FROM bookings";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.err.println("ERROR: BookingDAO.getTotalBookingCount failed.");
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public double getTotalRevenue() {
+        String query = "SELECT SUM(total_price) FROM bookings WHERE status = 'CONFIRMED'";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                return rs.getDouble(1);
+            }
+        } catch (SQLException e) {
+            System.err.println("ERROR: BookingDAO.getTotalRevenue failed.");
+            e.printStackTrace();
+        }
+        return 0.0;
+    }
+}

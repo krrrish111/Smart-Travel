@@ -1,9 +1,9 @@
 package com.voyastra.util;
 
 import com.voyastra.dao.NotificationDAO;
-import com.voyastra.dao.UserDAO;
+import com.voyastra.dao.profile.UserDAO;
 import com.voyastra.model.Notification;
-import com.voyastra.model.User;
+import com.voyastra.model.profile.User;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
@@ -26,36 +26,36 @@ public class NotificationManager {
         String title = "";
         String type = "";
 
-        if (bookingObj instanceof com.voyastra.model.TrainBooking) {
-            com.voyastra.model.TrainBooking b = (com.voyastra.model.TrainBooking) bookingObj;
+        if (bookingObj instanceof com.voyastra.model.booking.TrainBooking) {
+            com.voyastra.model.booking.TrainBooking b = (com.voyastra.model.booking.TrainBooking) bookingObj;
             pnr = b.getId();
             title = b.getTrainNumber();
             type = "Train";
-        } else if (bookingObj instanceof com.voyastra.model.BusBooking) {
-            com.voyastra.model.BusBooking b = (com.voyastra.model.BusBooking) bookingObj;
+        } else if (bookingObj instanceof com.voyastra.model.booking.BusBooking) {
+            com.voyastra.model.booking.BusBooking b = (com.voyastra.model.booking.BusBooking) bookingObj;
             pnr = b.getId();
             title = b.getBusName();
             type = "Bus";
-        } else if (bookingObj instanceof com.voyastra.model.CabBooking) {
-            com.voyastra.model.CabBooking b = (com.voyastra.model.CabBooking) bookingObj;
+        } else if (bookingObj instanceof com.voyastra.model.booking.CabBooking) {
+            com.voyastra.model.booking.CabBooking b = (com.voyastra.model.booking.CabBooking) bookingObj;
             pnr = b.getId();
             travelDate = b.getDate();
             title = b.getVehicleType();
             type = "Cab";
-        } else if (bookingObj instanceof com.voyastra.model.CarBooking) {
-            com.voyastra.model.CarBooking b = (com.voyastra.model.CarBooking) bookingObj;
+        } else if (bookingObj instanceof com.voyastra.model.booking.CarBooking) {
+            com.voyastra.model.booking.CarBooking b = (com.voyastra.model.booking.CarBooking) bookingObj;
             pnr = b.getId();
             travelDate = b.getPickupDate();
             title = b.getCarModel();
             type = "Self Drive Car";
-        } else if (bookingObj instanceof com.voyastra.model.CruiseBooking) {
-            com.voyastra.model.CruiseBooking b = (com.voyastra.model.CruiseBooking) bookingObj;
+        } else if (bookingObj instanceof com.voyastra.model.booking.CruiseBooking) {
+            com.voyastra.model.booking.CruiseBooking b = (com.voyastra.model.booking.CruiseBooking) bookingObj;
             pnr = b.getId();
             travelDate = b.getCruiseDate();
             title = b.getShipName();
             type = "Cruise";
-        } else if (bookingObj instanceof com.voyastra.model.HelicopterBooking) {
-            com.voyastra.model.HelicopterBooking b = (com.voyastra.model.HelicopterBooking) bookingObj;
+        } else if (bookingObj instanceof com.voyastra.model.booking.HelicopterBooking) {
+            com.voyastra.model.booking.HelicopterBooking b = (com.voyastra.model.booking.HelicopterBooking) bookingObj;
             pnr = b.getId();
             travelDate = b.getTravelDate();
             title = "Helicopter (" + b.getFlightType() + ")";

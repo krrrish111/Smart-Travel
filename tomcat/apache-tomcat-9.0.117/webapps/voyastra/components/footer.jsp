@@ -15,7 +15,7 @@
         </div>
     </footer>
     <jsp:include page="/components/ai-buddy.jsp" />
-    <script src="${pageContext.request.contextPath}/js/autoscroll.js"></script>
-    <script src="${pageContext.request.contextPath}/js/main.js"></script>
+    <script src="${pageContext.request.contextPath}/assets/js/autoscroll.js"></script>
+    <script src="${pageContext.request.contextPath}/assets/js/main.js"></script>
 </body>
 </html>

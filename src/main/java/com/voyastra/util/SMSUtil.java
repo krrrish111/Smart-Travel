@@ -3,7 +3,7 @@ package com.voyastra.util;
 // import com.twilio.Twilio;
 // import com.twilio.rest.api.v2010.account.Message;
 // import com.twilio.type.PhoneNumber;
-import com.voyastra.model.HotelBooking;
+import com.voyastra.model.booking.HotelBooking;
 
 public class SMSUtil {
 

@@ -2,7 +2,7 @@ package com.voyastra.util;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.voyastra.model.User;
+import com.voyastra.model.profile.User;
 
 import java.io.ByteArrayOutputStream;
 
@@ -59,18 +59,18 @@ public class TransportPdfGenerator {
     }
     
     private static String getPnr(Object bookingObj) {
-        if (bookingObj instanceof com.voyastra.model.TrainBooking) {
-            return ((com.voyastra.model.TrainBooking) bookingObj).getId();
-        } else if (bookingObj instanceof com.voyastra.model.BusBooking) {
-            return ((com.voyastra.model.BusBooking) bookingObj).getId();
-        } else if (bookingObj instanceof com.voyastra.model.CabBooking) {
-            return ((com.voyastra.model.CabBooking) bookingObj).getId();
-        } else if (bookingObj instanceof com.voyastra.model.CarBooking) {
-            return ((com.voyastra.model.CarBooking) bookingObj).getId();
-        } else if (bookingObj instanceof com.voyastra.model.CruiseBooking) {
-            return ((com.voyastra.model.CruiseBooking) bookingObj).getId();
-        } else if (bookingObj instanceof com.voyastra.model.HelicopterBooking) {
-            return ((com.voyastra.model.HelicopterBooking) bookingObj).getId();
+        if (bookingObj instanceof com.voyastra.model.booking.TrainBooking) {
+            return ((com.voyastra.model.booking.TrainBooking) bookingObj).getId();
+        } else if (bookingObj instanceof com.voyastra.model.booking.BusBooking) {
+            return ((com.voyastra.model.booking.BusBooking) bookingObj).getId();
+        } else if (bookingObj instanceof com.voyastra.model.booking.CabBooking) {
+            return ((com.voyastra.model.booking.CabBooking) bookingObj).getId();
+        } else if (bookingObj instanceof com.voyastra.model.booking.CarBooking) {
+            return ((com.voyastra.model.booking.CarBooking) bookingObj).getId();
+        } else if (bookingObj instanceof com.voyastra.model.booking.CruiseBooking) {
+            return ((com.voyastra.model.booking.CruiseBooking) bookingObj).getId();
+        } else if (bookingObj instanceof com.voyastra.model.booking.HelicopterBooking) {
+            return ((com.voyastra.model.booking.HelicopterBooking) bookingObj).getId();
         }
         return "UNKNOWN";
     }

@@ -49,5 +49,5 @@
     </div>
 </div>
 
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/ai-buddy.css">
-<script src="${pageContext.request.contextPath}/js/ai-buddy.js" defer></script>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/ai-buddy.css">
+<script src="${pageContext.request.contextPath}/assets/js/ai-buddy.js" defer></script>

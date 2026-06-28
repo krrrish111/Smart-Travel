@@ -4,7 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.voyastra.model.FlightResult;
+import com.voyastra.model.booking.FlightResult;
 import com.voyastra.util.OAuthConfig;
 
 import java.io.BufferedReader;

@@ -204,8 +204,7 @@
             
             <div class="action-group-right">
                 <!-- Action: Book This Trip -->
-                <!-- The actual booking page logic requires user to log in -->
-                <a href="${pageContext.request.contextPath}/destination/customize?id=<%= request.getParameter("id") != null ? request.getParameter("id") : "1" %>" class="dest-btn btn-primary-gold">
+                <a href="${pageContext.request.contextPath}/destination/customize?id=${destination.id}" class="dest-btn btn-primary-gold">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
                     Book This Trip
                 </a>
@@ -233,22 +232,26 @@
             <!-- Day-wise Itinerary -->
             <h2 class="dest-section-title editorial mt-8">Day-wise Itinerary</h2>
             <div class="itinerary-timeline flex flex-col gap-6 mb-8">
-                <div class="itinerary-day p-6 glass-panel rounded-2xl border border-gray-100 dark:border-gray-800">
-                    <h4 class="font-bold text-lg text-primary mb-2">Day 1: Arrival & Acclimatization</h4>
-                    <p class="text-muted text-sm leading-relaxed">Arrive at the destination. Transfer to your premium hotel. Spend the evening relaxing and enjoying a welcome dinner with local cultural performances.</p>
-                </div>
-                <div class="itinerary-day p-6 glass-panel rounded-2xl border border-gray-100 dark:border-gray-800">
-                    <h4 class="font-bold text-lg text-primary mb-2">Day 2: Historical Landmarks Tour</h4>
-                    <p class="text-muted text-sm leading-relaxed">After breakfast, embark on a guided tour of the iconic landmarks. Explore centuries-old architecture and learn about the rich heritage.</p>
-                </div>
-                <div class="itinerary-day p-6 glass-panel rounded-2xl border border-gray-100 dark:border-gray-800">
-                    <h4 class="font-bold text-lg text-primary mb-2">Day 3: Nature & Leisure</h4>
-                    <p class="text-muted text-sm leading-relaxed">A day dedicated to nature. Visit serene landscapes, take a peaceful boat ride, or hike scenic trails. Evening free for local shopping.</p>
-                </div>
-                <div class="itinerary-day p-6 glass-panel rounded-2xl border border-gray-100 dark:border-gray-800">
-                    <h4 class="font-bold text-lg text-primary mb-2">Day 4: Departure</h4>
-                    <p class="text-muted text-sm leading-relaxed">Enjoy your final morning at leisure. Transfer to the airport/station for your journey back home with beautiful memories.</p>
-                </div>
+                <c:choose>
+                    <c:when test="${not empty itineraries}">
+                        <c:forEach var="itin" items="${itineraries}">
+                            <div class="itinerary-day p-6 glass-panel rounded-2xl border border-gray-100 dark:border-gray-800">
+                                <h4 class="font-bold text-lg text-primary mb-2">Day ${itin.dayNumber}: ${itin.title}</h4>
+                                <p class="text-muted text-sm leading-relaxed">${itin.details}</p>
+                            </div>
+                        </c:forEach>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="itinerary-day p-6 glass-panel rounded-2xl border border-gray-100 dark:border-gray-800">
+                            <h4 class="font-bold text-lg text-primary mb-2">Day 1: Arrival & Acclimatization</h4>
+                            <p class="text-muted text-sm leading-relaxed">Arrive at the destination. Transfer to your premium hotel. Spend the evening relaxing and enjoying a welcome dinner with local cultural performances.</p>
+                        </div>
+                        <div class="itinerary-day p-6 glass-panel rounded-2xl border border-gray-100 dark:border-gray-800">
+                            <h4 class="font-bold text-lg text-primary mb-2">Day 2: Exploration</h4>
+                            <p class="text-muted text-sm leading-relaxed">After breakfast, embark on a guided tour of the iconic landmarks. Explore centuries-old architecture and learn about the rich heritage.</p>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
             </div>
 
             <!-- Photo Gallery -->

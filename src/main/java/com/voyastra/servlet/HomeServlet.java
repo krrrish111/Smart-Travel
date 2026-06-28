@@ -68,6 +68,9 @@ public class HomeServlet extends HttpServlet {
         request.setAttribute("honeymoonDestinations", honeymoonDestinations);
         request.setAttribute("luxuryDestinations", luxuryDestinations);
 
+        List<Destination> iconicDestinations = destinationDAO.getIconicDestinations();
+        request.setAttribute("iconicDestinations", iconicDestinations);
+
         request.setAttribute("premiumTrips", premiumTrips);
         request.setAttribute("recommendedHotels", recommendedHotels);
         request.setAttribute("recentlyViewedHotels", recentlyViewedHotels);

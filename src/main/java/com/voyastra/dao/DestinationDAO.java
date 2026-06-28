@@ -137,6 +137,20 @@ public class DestinationDAO {
         return list;
     }
 
+    public List<Destination> getIconicDestinations() {
+        List<Destination> list = new ArrayList<>();
+        // Fetch a larger set of destinations to populate the Iconic Destinations grid
+        String query = "SELECT * FROM destinations WHERE title IN ('Taj Mahal', 'Jaipur', 'Jaisalmer', 'Ladakh', 'Kerala', 'Goa', 'Varanasi', 'Hampi', 'Mysore Palace', 'Rann of Kutch', 'Khajuraho', 'Konark Sun Temple', 'Darjeeling', 'Andaman', 'Coorg', 'Udaipur') LIMIT 17";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) list.add(mapRow(rs));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
     public boolean updateDestination(Destination d) {
         String query = "UPDATE destinations SET title=?, destination=?, category=?, short_description=?, full_description=?, price_inr=?, discount_price=?, duration_days=?, duration_nights=?, best_season=?, starting_city=?, image_url=?, rating=?, review_count=?, is_active=?, is_featured=? WHERE id=?";
         try (Connection conn = DBConnection.getConnection();

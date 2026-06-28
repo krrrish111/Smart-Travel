@@ -62,9 +62,13 @@ public class DestinationDetailsServlet extends HttpServlet {
             // 2. Fetch all reviews for this specific destination
             List<Review> reviews = reviewDAO.getReviewsByDestination(id);
             
+            // Fetch itineraries
+            List<com.voyastra.model.DestinationItinerary> itineraries = destinationDAO.getItinerariesForDestination(id);
+            
             // 3. Set Attributes
             request.setAttribute("destination", dest);
             request.setAttribute("reviews", reviews);
+            request.setAttribute("itineraries", itineraries);
             
             // 4. Forward to the dynamic jsp
             request.getRequestDispatcher("/pages/destination-details.jsp").forward(request, response);

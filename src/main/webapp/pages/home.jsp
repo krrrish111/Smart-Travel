@@ -662,43 +662,108 @@
 
             <!-- Destinations Grid Section -->
             <section class="section scroll-fade relative" id="destinations">
-                <div class="container text-center mb-5">
-                    <h2 class="editorial text-main mb-2" style="font-size: 3rem;">Iconic Destinations</h2>
-                    <p class="text-muted mx-auto" style="max-width: 600px; font-size: 1.1rem;">Hover over a destination
-                        to immerse yourself.</p>
-                </div>
+                <div class="container mb-12">
+                    <div class="flex flex-col items-center text-center mb-8">
+                        <h2 class="text-xs tracking-[0.2em] text-yellow-500 uppercase font-bold mb-2">Iconic Destinations</h2>
+                        <h3 class="editorial text-main mb-2 text-4xl md:text-5xl lg:text-6xl text-white">Explore India's timeless wonders</h3>
+                        <div class="h-[1px] w-24 bg-gradient-to-r from-transparent via-yellow-500 to-transparent mt-4"></div>
+                    </div>
+                    
+                    <c:if test="${not empty iconicDestinations}">
+                        <!-- Hero Showcase -->
+                        <c:set var="heroDest" value="${iconicDestinations[0]}" />
+                        <div class="iconic-hero relative overflow-hidden rounded-3xl mb-12 shadow-2xl group">
+                            <img src="${heroDest.imageUrl}" alt="${heroDest.title}" class="w-full h-[600px] object-cover transition-transform duration-700 group-hover:scale-105">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
+                            
+                            <div class="absolute bottom-0 left-0 p-8 md:p-16 w-full">
+                                <div class="flex items-center gap-3 mb-4">
+                                    <c:if test="${heroDest.reviewCount > 100}">
+                                        <span class="px-3 py-1 bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 rounded-full text-xs font-bold tracking-widest uppercase backdrop-blur-md">
+                                            UNESCO World Heritage
+                                        </span>
+                                    </c:if>
+                                    <span class="flex items-center gap-1 text-white font-medium">
+                                        <span class="text-yellow-400">★</span> ${heroDest.rating}
+                                    </span>
+                                </div>
+                                
+                                <h3 class="text-5xl md:text-7xl font-bold text-white mb-4 editorial drop-shadow-lg">${heroDest.title}</h3>
+                                <p class="text-xl text-gray-200 mb-8 max-w-2xl font-light italic">"${heroDest.shortDescription}"</p>
+                                
+                                <div class="flex flex-wrap gap-4">
+                                    <a href="${pageContext.request.contextPath}/destination/details?id=${heroDest.id}" class="px-8 py-4 bg-white text-black rounded-full font-bold hover:bg-gray-100 transition-colors shadow-[0_0_20px_rgba(255,255,255,0.3)] no-underline">
+                                        Explore ${heroDest.title}
+                                    </a>
+                                    <a href="${pageContext.request.contextPath}/destination/customize?id=${heroDest.id}" class="px-8 py-4 bg-transparent border border-white/30 text-white rounded-full font-bold hover:bg-white/10 backdrop-blur-sm transition-colors no-underline">
+                                        Book Journey
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
 
-                <div class="dest-grid hover-triggers" data-skeleton="card" data-skeleton-count="6">
-                    <a href="${pageContext.request.contextPath}/pages/destination-details.jsp?city=Jaisalmer" class="dest-item dest-item-1" data-bg-index="2">
-                        <img src="https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format,compress&fit=crop&w=800&q=75"
-                            alt="Jaisalmer" loading="lazy">
-                        <div class="dest-badge">Jaisalmer • 4 Days</div>
-                    </a>
-                    <a href="${pageContext.request.contextPath}/pages/destination-details.jsp?city=Varanasi" class="dest-item dest-item-2" data-bg-index="3">
-                        <img src="https://images.unsplash.com/photo-1561359313-0639aad073f0?auto=format,compress&fit=crop&w=800&q=75"
-                            alt="Varanasi" loading="lazy">
-                        <div class="dest-badge">Varanasi • 2 Days</div>
-                    </a>
-                    <a href="${pageContext.request.contextPath}/pages/destination-details.jsp?city=Ladakh" class="dest-item dest-item-3" data-bg-index="4">
-                        <img src="https://images.unsplash.com/photo-1626082896492-766af4eb65ed?auto=format,compress&fit=crop&w=800&q=75"
-                            alt="Ladakh" loading="lazy">
-                        <div class="dest-badge">Ladakh • 7 Days</div>
-                    </a>
-                    <a href="${pageContext.request.contextPath}/pages/destination-details.jsp?city=Kerala" class="dest-item dest-item-4" data-bg-index="1">
-                        <img src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format,compress&fit=crop&w=800&q=75"
-                            alt="Kerala" loading="lazy">
-                        <div class="dest-badge">Kerala • 5 Days</div>
-                    </a>
-                    <a href="${pageContext.request.contextPath}/pages/destination-details.jsp?city=Agra" class="dest-item dest-item-5" data-bg-index="0">
-                        <img src="https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format,compress&fit=crop&w=800&q=75"
-                            alt="Agra" loading="lazy">
-                        <div class="dest-badge">Agra • 3 Days</div>
-                    </a>
-                    <a href="${pageContext.request.contextPath}/pages/destination-details.jsp?city=Goa" class="dest-item dest-item-6" data-bg-index="1">
-                        <img src="https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format,compress&fit=crop&w=800&q=75"
-                            alt="Goa" loading="lazy">
-                        <div class="dest-badge">Goa • 5 Days</div>
-                    </a>
+                        <!-- Thumbnail Grid -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            <c:forEach var="dest" items="${iconicDestinations}" begin="1">
+                                <div class="iconic-card group relative bg-black/40 border border-white/10 rounded-2xl overflow-hidden hover:border-yellow-500/50 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_10px_40px_-10px_rgba(234,179,8,0.3)] backdrop-blur-xl flex flex-col">
+                                    <div class="relative h-64 overflow-hidden shrink-0">
+                                        <img src="${dest.imageUrl}" alt="${dest.title}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent"></div>
+                                        <div class="absolute top-4 right-4 bg-black/50 backdrop-blur-md px-2 py-1 rounded border border-white/20 text-xs font-bold text-white flex items-center gap-1">
+                                            <span class="text-yellow-400">★</span> ${dest.rating}
+                                        </div>
+                                        <c:if test="${dest.reviewCount > 100}">
+                                            <div class="absolute top-4 left-4 bg-yellow-500/90 text-black px-2 py-1 rounded text-xs font-bold">
+                                                UNESCO
+                                            </div>
+                                        </c:if>
+                                    </div>
+                                    
+                                    <div class="p-6 relative flex-grow flex flex-col">
+                                        <!-- Gold accent line -->
+                                        <div class="absolute top-0 left-6 right-6 h-[1px] bg-gradient-to-r from-transparent via-yellow-500/50 to-transparent"></div>
+                                        
+                                        <div class="flex justify-between items-start mb-2">
+                                            <div>
+                                                <div class="text-xs text-yellow-500 font-bold tracking-wider uppercase mb-1">${not empty dest.startingCity ? dest.startingCity : dest.category}</div>
+                                                <h4 class="text-2xl font-bold text-white editorial">${dest.title}</h4>
+                                            </div>
+                                            <div class="text-right">
+                                                <div class="text-xs text-gray-400 mb-1">Starting from</div>
+                                                <div class="text-lg font-bold text-white">₹<fmt:formatNumber value="${dest.priceInr}" type="number" maxFractionDigits="0"/></div>
+                                            </div>
+                                        </div>
+                                        
+                                        <p class="text-sm text-gray-400 mb-6 line-clamp-2 flex-grow">${dest.shortDescription}</p>
+                                        
+                                        <div class="grid grid-cols-2 gap-y-3 gap-x-4 mb-6 text-xs text-gray-300">
+                                            <div class="flex items-center gap-2">
+                                                <span class="text-yellow-500">⏱</span> ${dest.durationDays}D / ${dest.durationNights}N
+                                            </div>
+                                            <div class="flex items-center gap-2">
+                                                <span class="text-yellow-500">🌤</span> ${not empty dest.bestSeason ? dest.bestSeason : 'All Year'}
+                                            </div>
+                                            <div class="flex items-center gap-2">
+                                                <span class="text-yellow-500">🏷</span> ${not empty dest.category ? dest.category : 'Premium'}
+                                            </div>
+                                            <div class="flex items-center gap-2">
+                                                <span class="text-yellow-500">👥</span> ${dest.reviewCount}+ Visitors
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="flex gap-3 mt-auto">
+                                            <a href="${pageContext.request.contextPath}/destination/details?id=${dest.id}" class="flex-1 py-3 px-2 text-center text-sm font-bold text-white bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-colors no-underline">
+                                                Explore
+                                            </a>
+                                            <a href="${pageContext.request.contextPath}/destination/customize?id=${dest.id}" class="flex-1 py-3 px-2 text-center text-sm font-bold text-black bg-yellow-500 rounded-xl hover:bg-yellow-400 transition-colors shadow-[0_0_15px_rgba(234,179,8,0.2)] hover:shadow-[0_0_20px_rgba(234,179,8,0.4)] no-underline">
+                                                Book Journey
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </c:forEach>
+                        </div>
+                    </c:if>
                 </div>
             </section>
 
@@ -797,7 +862,14 @@
                         <c:forEach var="hotel" items="${recommendedHotels}" end="3">
                             <a href="${pageContext.request.contextPath}/pages/hotel-details.jsp?id=${hotel.id}" class="plan-card" style="max-width: none; flex: unset;">
                                 <div class="plan-card-img-wrap" style="height: 160px;">
-                                    <img src="${hotel.imageUrl}" alt="${hotel.name}" loading="lazy">
+                                    <c:choose>
+                                        <c:when test="${fn:startsWith(hotel.imageUrl, 'http')}">
+                                            <img src="${hotel.imageUrl}" alt="${hotel.name}" loading="lazy">
+                                        </c:when>
+                                        <c:otherwise>
+                                            <img src="${pageContext.request.contextPath}/${hotel.imageUrl}" alt="${hotel.name}" loading="lazy">
+                                        </c:otherwise>
+                                    </c:choose>
                                     <div class="plan-card-category" style="background:rgba(139,92,246,0.85);">Recommended</div>
                                 </div>
                                 <div class="plan-card-body p-4">
@@ -830,7 +902,14 @@
                         <c:forEach var="hotel" items="${recentlyViewedHotels}" end="3">
                             <a href="${pageContext.request.contextPath}/pages/hotel-details.jsp?id=${hotel.id}" class="plan-card" style="max-width: none; flex: unset;">
                                 <div class="plan-card-img-wrap" style="height: 160px;">
-                                    <img src="${hotel.imageUrl}" alt="${hotel.name}" loading="lazy">
+                                    <c:choose>
+                                        <c:when test="${fn:startsWith(hotel.imageUrl, 'http')}">
+                                            <img src="${hotel.imageUrl}" alt="${hotel.name}" loading="lazy">
+                                        </c:when>
+                                        <c:otherwise>
+                                            <img src="${pageContext.request.contextPath}/${hotel.imageUrl}" alt="${hotel.name}" loading="lazy">
+                                        </c:otherwise>
+                                    </c:choose>
                                 </div>
                                 <div class="plan-card-body p-4">
                                     <div class="plan-card-title text-lg font-bold truncate">${hotel.name}</div>

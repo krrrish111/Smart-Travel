@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('scroll', () => {
         const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
         if (scrollProgress) scrollProgress.style.height = scrolled + '%';
-    });
+    }, { passive: true });
 
     /* --- Intelligent Search Modal --- */
     const SEARCH_DB = [

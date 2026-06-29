@@ -109,11 +109,11 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div class="form-group">
                     <label class="form-label text-xs uppercase tracking-wider text-muted font-semibold mb-2 block">Origin</label>
-                    <input type="text" id="routeStart" name="startLocation" class="form-control" placeholder="e.g. Delhi" style="border-radius: 12px; padding: 12px;" required>
+                    <input type="text" id="routeStart" name="startLocation" class="form-control voyastra-autocomplete" placeholder="e.g. Delhi" style="border-radius: 12px; padding: 12px;" required>
                 </div>
                 <div class="form-group">
                     <label class="form-label text-xs uppercase tracking-wider text-muted font-semibold mb-2 block">Destination</label>
-                    <input type="text" id="routeEnd" name="destination" class="form-control" placeholder="e.g. Goa" style="border-radius: 12px; padding: 12px;" required
+                    <input type="text" id="routeEnd" name="destination" class="form-control voyastra-autocomplete" placeholder="e.g. Goa" style="border-radius: 12px; padding: 12px;" required
                            value="${preDestination}">
                 </div>
             </div>
@@ -192,8 +192,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (destParam && destField) {
         destField.value = destParam;
         destField.classList.add('prefilled');
-        // pulse the field briefly to draw attention
-        setTimeout(() => destField.focus(), 400);
+        if ('requestIdleCallback' in window) {
+            requestIdleCallback(() => {
+                requestAnimationFrame(() => destField.focus());
+            }, { timeout: 400 });
+        } else {
+            setTimeout(() => {
+                requestAnimationFrame(() => destField.focus());
+            }, 400);
+        }
     }
 
     // Auto-set departure date to tomorrow
@@ -210,50 +217,8 @@ document.addEventListener('DOMContentLoaded', () => {
     returnDate.setDate(returnDate.getDate() + tripDays - 1);
     if (retField) retField.value = fmt(returnDate);
 
-    if (typeof loadGoogleMaps === 'function') {
-        loadGoogleMaps('initOfficialGooglePlaces');
-    }
+    // Initialization is now handled automatically by GooglePlacesService.js
 });
-
-function initOfficialGooglePlaces() {
-    if (typeof google === 'undefined' || !google.maps || !google.maps.places) return;
-
-    // Modern API: PlaceAutocompleteElement (replaces deprecated Autocomplete)
-    if (google.maps.places.PlaceAutocompleteElement) {
-        ['routeStart', 'routeEnd'].forEach(function(id) {
-            const oldInput = document.getElementById(id);
-            if (!oldInput) return;
-            const parent = oldInput.parentNode;
-            const pac = new google.maps.places.PlaceAutocompleteElement({ types: ['(cities)'] });
-            pac.id = id;
-            pac.setAttribute('placeholder', oldInput.getAttribute('placeholder') || '');
-            pac.className = oldInput.className;
-            pac.style.cssText = 'width:100%;display:block;';
-            parent.replaceChild(pac, oldInput);
-            pac.addEventListener('gmp-placeselect', async (event) => {
-                const place = event.place;
-                await place.fetchFields({ fields: ['displayName', 'formattedAddress'] });
-                // Store in a hidden input so the form can submit the text value
-                let hidden = document.getElementById(id + '_val');
-                if (!hidden) {
-                    hidden = document.createElement('input');
-                    hidden.type = 'hidden';
-                    hidden.id = id + '_val';
-                    hidden.name = id;
-                    parent.appendChild(hidden);
-                }
-                hidden.value = place.displayName || place.formattedAddress;
-            });
-        });
-        return;
-    }
-
-    // Legacy Fallback for older Maps API versions
-    const routeStart = document.getElementById('routeStart');
-    const routeEnd = document.getElementById('routeEnd');
-    if (routeStart) new google.maps.places.Autocomplete(routeStart, { types: ['(cities)'] });
-    if (routeEnd) new google.maps.places.Autocomplete(routeEnd, { types: ['(cities)'] });
-}
 
 function showLoading(event) {
     console.log("Generate Clicked");

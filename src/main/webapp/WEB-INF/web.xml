@@ -210,23 +210,7 @@
         <url-pattern>/booking</url-pattern>
     </servlet-mapping>
 
-    <servlet>
-        <servlet-name>PaymentPage</servlet-name>
-        <jsp-file>/pages/payment/payment.jsp</jsp-file>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>PaymentPage</servlet-name>
-        <url-pattern>/payment</url-pattern>
-    </servlet-mapping>
 
-    <servlet>
-        <servlet-name>ConfirmationPage</servlet-name>
-        <jsp-file>/pages/planner/trip-confirmation.jsp</jsp-file>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>ConfirmationPage</servlet-name>
-        <url-pattern>/confirmation</url-pattern>
-    </servlet-mapping>
 
 
 

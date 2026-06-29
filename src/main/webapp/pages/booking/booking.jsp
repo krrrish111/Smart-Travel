@@ -424,7 +424,7 @@
                                                     </div>
                                                     <div class="search-field" style="flex: 2;">
                                                         <div class="field-label">Destination</div>
-                                                        <input type="text" name="destination" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="Lakshadweep, Goa...">
+                                                        <input type="text" name="destination" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full voyastra-autocomplete" placeholder="Lakshadweep, Goa...">
                                                     </div>
                                                     <div class="search-field">
                                                         <div class="field-label">Date</div>
@@ -455,7 +455,7 @@
                                                     </div>
                                                     <div class="search-field" style="flex: 2;">
                                                         <div class="field-label">Destination</div>
-                                                        <input type="text" name="destination" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="Kedarnath / Pune">
+                                                        <input type="text" name="destination" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full voyastra-autocomplete" placeholder="Kedarnath / Pune">
                                                     </div>
                                                     <div class="search-field">
                                                         <div class="field-label">Date</div>

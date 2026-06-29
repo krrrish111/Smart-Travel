@@ -46,6 +46,6 @@ public class TripDetailServlet extends HttpServlet {
             }
         
         // Redirect to explore if not found
-        response.sendRedirect("explore.jsp");
+        response.sendRedirect(request.getContextPath() + "/explore");
     }
 }

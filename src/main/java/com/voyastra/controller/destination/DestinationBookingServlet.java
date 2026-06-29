@@ -41,7 +41,7 @@ public class DestinationBookingServlet extends HttpServlet {
         
         if ("/destination/booking".equals(path)) {
             // Should be accessed via POST from customize
-            response.sendRedirect(request.getContextPath() + "/explore.jsp");
+            response.sendRedirect(request.getContextPath() + "/explore");
         }
     }
 
@@ -72,7 +72,7 @@ public class DestinationBookingServlet extends HttpServlet {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect(request.getContextPath() + "/explore.jsp?error=invalidRequest");
+            response.sendRedirect(request.getContextPath() + "/explore?error=invalidRequest");
         }
     }
 }

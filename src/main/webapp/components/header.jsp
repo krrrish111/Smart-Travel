@@ -37,6 +37,10 @@
     <script src="${pageContext.request.contextPath}/assets/js/auth-guard.js"></script>
     <script src="${pageContext.request.contextPath}/assets/js/toast.js"></script>
     <script src="${pageContext.request.contextPath}/assets/js/validate.js"></script>
+    
+    <!-- Google Maps API with Places Library -->
+    <script src="${pageContext.request.contextPath}/assets/js/GooglePlacesService.js"></script>
+
     <!-- Google Auth Script -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script>

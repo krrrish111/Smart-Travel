@@ -320,7 +320,7 @@ if (request.getAttribute("destination") == null || request.getAttribute("itinera
         <div id="daysContainer">
             <c:forEach items="${itinerary.days}" var="day">
                 <div class="day-card">
-                    <div class="day-header" onclick="var body = this.nextElementSibling; body.style.display = body.style.display === 'none' ? 'block' : 'none';">
+                    <div class="day-header" onclick="var body = this.nextElementSibling; requestAnimationFrame(function() { body.style.display = body.style.display === 'none' ? 'block' : 'none'; });">
                         <div class="day-num">${day.day}</div>
                         <div class="day-info">
                             <div class="day-title-text"><c:out value="${day.title}"/></div>
@@ -355,7 +355,7 @@ if (request.getAttribute("destination") == null || request.getAttribute("itinera
         <div class="media-grid">
             <c:forEach items="${images}" var="img">
                 <div class="media-item">
-                    <img src="${img.imageUrl}" alt="${img.description}">
+                    <img src="${img.imageUrl}" alt="${img.description}" loading="lazy" decoding="async">
                     <div class="media-caption"><c:out value="${img.description}"/></div>
                 </div>
             </c:forEach>
@@ -368,7 +368,7 @@ if (request.getAttribute("destination") == null || request.getAttribute("itinera
         <div class="media-grid">
             <c:forEach items="${videos}" var="vid">
                 <div class="media-item">
-                    <iframe src="https://www.youtube.com/embed/${vid.videoId}" allowfullscreen></iframe>
+                    <iframe src="https://www.youtube.com/embed/${vid.videoId}" allowfullscreen loading="lazy"></iframe>
                     <div class="media-caption"><c:out value="${vid.title}"/></div>
                 </div>
             </c:forEach>
@@ -479,7 +479,7 @@ if (request.getAttribute("destination") == null || request.getAttribute("itinera
         <span style="font-size: 3rem; display: block; margin-bottom: 15px;">🏨</span>
         <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.5rem; margin-bottom: 10px; color: var(--accent);">Find Luxury Stays in <c:out value="${destination}"/></h3>
         <p style="color: var(--muted); font-size: 0.9rem; max-width: 500px; margin: 0 auto 20px;">Compare top-rated premium hotels and deals matching your budget.</p>
-        <a href="${pageContext.request.contextPath}/hotel/search?destination=${destination}" class="btn btn-primary">Book Hotels Now</a>
+        <a href="${pageContext.request.contextPath}/hotels?q=${destination}" class="btn btn-primary">Book Hotels Now</a>
     </div>
 
     <!-- SECTION 12: Book Flights -->
@@ -487,7 +487,7 @@ if (request.getAttribute("destination") == null || request.getAttribute("itinera
         <span style="font-size: 3rem; display: block; margin-bottom: 15px;">✈️</span>
         <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.5rem; margin-bottom: 10px; color: var(--accent);">Book Flights to <c:out value="${destination}"/></h3>
         <p style="color: var(--muted); font-size: 0.9rem; max-width: 500px; margin: 0 auto 20px;">Get real-time airfares and exclusive flight packages for your dates.</p>
-        <a href="${pageContext.request.contextPath}/flight/search" class="btn btn-primary">Search Flights</a>
+        <a href="${pageContext.request.contextPath}/search?type=flight&to=${destination}" class="btn btn-primary">Search Flights</a>
     </div>
 
     <!-- SECTION 13: Save Itinerary -->

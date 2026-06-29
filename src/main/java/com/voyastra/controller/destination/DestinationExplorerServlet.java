@@ -12,6 +12,13 @@ import com.voyastra.service.ExperiencesDebugService;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonArray;
+import com.voyastra.service.destination.GooglePlacesService;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 import com.voyastra.api.BookingIntegrationService;
 import javax.servlet.ServletException;
@@ -39,6 +46,7 @@ public class DestinationExplorerServlet extends HttpServlet {
     private YouTubeExplorerService youtubeExplorerService;
     private BookingIntegrationService bookingIntegrationService;
     private DestinationMapService destinationMapService;
+    private GooglePlacesService googlePlacesService;
 
     // Alphanumeric, spaces, commas, hyphens, and periods allowed
     private static final Pattern VALID_CHARS = Pattern.compile("^[a-zA-Z0-9\\s,.-]+$");
@@ -52,6 +60,7 @@ public class DestinationExplorerServlet extends HttpServlet {
         youtubeExplorerService = new YouTubeExplorerService();
         bookingIntegrationService = new BookingIntegrationService();
         destinationMapService = new DestinationMapService();
+        googlePlacesService = new GooglePlacesService();
     }
 
     @Override
@@ -88,6 +97,44 @@ public class DestinationExplorerServlet extends HttpServlet {
                 trimmedQuery = placeName.trim() + (country != null && !country.trim().isEmpty() ? ", " + country.trim() : "");
             }
             
+            if (lat == null || lng == null || lat.isEmpty() || lng.isEmpty()) {
+                // Try to resolve using Google Places API
+                JsonObject autocomplete = googlePlacesService.getAutocompleteSuggestions(trimmedQuery);
+                if (autocomplete.has("success") && autocomplete.get("success").getAsBoolean()) {
+                    JsonArray predictions = autocomplete.getAsJsonArray("predictions");
+                    if (predictions.size() > 0) {
+                        String placeId = predictions.get(0).getAsJsonObject().get("placeId").getAsString();
+                        JsonObject details = googlePlacesService.getPlaceDetails(placeId);
+                        if (details.has("success") && details.get("success").getAsBoolean()) {
+                            lat = details.get("lat").getAsString();
+                            lng = details.get("lng").getAsString();
+                        }
+                    }
+                }
+                
+                // Fallback to Nominatim (OpenStreetMap) if Google fails or is missing key
+                if (lat == null || lng == null || lat.isEmpty() || lng.isEmpty()) {
+                    try {
+                        String encodedQuery = URLEncoder.encode(trimmedQuery, StandardCharsets.UTF_8.toString());
+                        HttpRequest geoRequest = HttpRequest.newBuilder()
+                                .uri(URI.create("https://nominatim.openstreetmap.org/search?format=json&q=" + encodedQuery))
+                                .header("User-Agent", "VoyastraTravelApp/1.0")
+                                .GET()
+                                .build();
+                        HttpResponse<String> geoResponse = HttpClient.newHttpClient().send(geoRequest, HttpResponse.BodyHandlers.ofString());
+                        if (geoResponse.statusCode() == 200) {
+                            JsonArray geoJson = JsonParser.parseString(geoResponse.body()).getAsJsonArray();
+                            if (geoJson.size() > 0) {
+                                lat = geoJson.get(0).getAsJsonObject().get("lat").getAsString();
+                                lng = geoJson.get(0).getAsJsonObject().get("lon").getAsString();
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
             if (lat != null && lng != null && !lat.isEmpty() && !lng.isEmpty()) {
                 request.setAttribute("destLat", lat);
                 request.setAttribute("destLng", lng);

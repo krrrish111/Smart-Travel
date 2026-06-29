@@ -53,7 +53,9 @@
             <input type="hidden" name="guestPhone" value="${guestPhone}">
             <input type="hidden" name="guests" value="${guests}">
             <input type="hidden" name="totalPrice" value="${totalPrice}">
-            <input type="hidden" name="paymentId" id="paymentId" value="">
+            <input type="hidden" name="razorpay_payment_id" id="paymentId" value="">
+            <input type="hidden" name="razorpay_order_id" id="orderId" value="">
+            <input type="hidden" name="razorpay_signature" id="signature" value="">
         </form>
 
     </div>
@@ -67,7 +69,7 @@
         // Secure Razorpay integration
         var options = {
             "key": "<%= com.voyastra.util.RazorpayConfig.getKeyId() %>", 
-            "amount": Math.round(parseFloat("${totalPrice}") * 100), // Amount is in currency subunits
+            "amount": "${amountInPaise}", // Exact paise amount provided by backend
             "currency": "INR",
             "name": "Voyastra Premium Trips",
             "description": "Payment for ${tripTitle}",
@@ -76,6 +78,8 @@
             "handler": function (response) {
                 // Payment Success
                 document.getElementById('paymentId').value = response.razorpay_payment_id;
+                document.getElementById('orderId').value = response.razorpay_order_id;
+                document.getElementById('signature').value = response.razorpay_signature;
                 document.getElementById('successForm').submit();
             },
             "prefill": {

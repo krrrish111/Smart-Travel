@@ -181,7 +181,7 @@
                                 <label class="ai-field-label">Destination</label>
                                 <div class="ai-input-wrap">
                                     <span class="ai-input-icon">📍</span>
-                                    <input type="text" id="aiDestInput" placeholder="Where to?" required class="ai-dest-input" autocomplete="off" />
+                                    <input type="text" id="aiDestInput" placeholder="Where to?" required class="ai-dest-input voyastra-autocomplete" autocomplete="off" />
                                 </div>
                             </div>
 

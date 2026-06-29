@@ -39,12 +39,12 @@ public class RazorpayOrderServlet extends HttpServlet {
 
         String amountStr = request.getParameter("amount");
         String receipt = request.getParameter("receipt");
-        int amountInPaise = 0;
+        long amountInPaise = 0;
 
         if (amountStr != null && !amountStr.trim().isEmpty()) {
             try {
                 double amount = Double.parseDouble(amountStr);
-                amountInPaise = (int) Math.round(amount * 100.0);
+                amountInPaise = Math.round(amount * 100.0);
                 if (receipt == null || receipt.trim().isEmpty()) {
                     receipt = "rcpt_" + UUID.randomUUID().toString().substring(0, 8);
                 }
@@ -56,7 +56,7 @@ public class RazorpayOrderServlet extends HttpServlet {
         } else {
             com.voyastra.model.booking.Booking currentBooking = (com.voyastra.model.booking.Booking) session.getAttribute("currentBooking");
             if (currentBooking != null) {
-                amountInPaise = (int) (currentBooking.getTotalPrice() * 100);
+                amountInPaise = Math.round(currentBooking.getTotalPrice() * 100.0);
                 receipt = "rcpt_" + UUID.randomUUID().toString().substring(0, 8);
             } else {
                 HotelBooking pending = (HotelBooking) session.getAttribute("pendingHotelBooking");
@@ -65,7 +65,7 @@ public class RazorpayOrderServlet extends HttpServlet {
                     response.getWriter().write("{\"error\": \"No pending booking found or amount specified\"}");
                     return;
                 }
-                amountInPaise = (int) (pending.getTotalPrice() * 100);
+                amountInPaise = Math.round(pending.getTotalPrice() * 100.0);
                 receipt = "rcpt_" + UUID.randomUUID().toString().substring(0, 8);
             }
         }

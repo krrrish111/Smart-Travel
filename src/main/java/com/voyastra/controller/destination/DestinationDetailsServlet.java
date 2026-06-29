@@ -40,7 +40,7 @@ public class DestinationDetailsServlet extends HttpServlet {
         if ((idParam == null || idParam.trim().isEmpty()) && 
             (themeParam == null || themeParam.trim().isEmpty()) &&
             (locParam == null || locParam.trim().isEmpty())) {
-            response.sendRedirect(request.getContextPath() + "/explore.jsp");
+            response.sendRedirect(request.getContextPath() + "/explore");
             return;
         }
         
@@ -55,7 +55,7 @@ public class DestinationDetailsServlet extends HttpServlet {
             // 1. Fetch Destination
             Destination dest = destinationDAO.getDestinationById(id);
             if (dest == null) {
-                response.sendRedirect(request.getContextPath() + "/explore.jsp?error=notFound");
+                response.sendRedirect(request.getContextPath() + "/explore?error=notFound");
                 return;
             }
             
@@ -74,10 +74,10 @@ public class DestinationDetailsServlet extends HttpServlet {
             request.getRequestDispatcher("/pages/destination/destination-details.jsp").forward(request, response);
             
         } catch (NumberFormatException e) {
-            response.sendRedirect(request.getContextPath() + "/explore.jsp");
+            response.sendRedirect(request.getContextPath() + "/explore");
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Exception occurred", e);
-            response.sendRedirect(request.getContextPath() + "/explore.jsp?error=serverError");
+            response.sendRedirect(request.getContextPath() + "/explore?error=serverError");
         }
     }
 }

@@ -35,7 +35,7 @@ public class CustomizeTripServlet extends HttpServlet {
 
         String idParam = request.getParameter("id");
         if (idParam == null || idParam.trim().isEmpty()) {
-            response.sendRedirect(request.getContextPath() + "/explore.jsp");
+            response.sendRedirect(request.getContextPath() + "/explore");
             return;
         }
 
@@ -43,7 +43,7 @@ public class CustomizeTripServlet extends HttpServlet {
             int id = Integer.parseInt(idParam);
             PremiumTrip trip = tripDAO.getTripById(id);
             if (trip == null) {
-                response.sendRedirect(request.getContextPath() + "/explore.jsp");
+                response.sendRedirect(request.getContextPath() + "/explore");
                 return;
             }
 
@@ -51,7 +51,7 @@ public class CustomizeTripServlet extends HttpServlet {
             request.getRequestDispatcher("/pages/payment/trip-checkout.jsp").forward(request, response);
             
         } catch (NumberFormatException e) {
-            response.sendRedirect(request.getContextPath() + "/explore.jsp");
+            response.sendRedirect(request.getContextPath() + "/explore");
         }
     }
 }

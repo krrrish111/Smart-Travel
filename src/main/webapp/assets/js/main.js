@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 navbar.classList.remove('scrolled');
             }
-        });
+        }, { passive: true });
     }
 
     // ── Mobile Menu: hamburger icon swap (open/close logic lives in header.jsp) ──

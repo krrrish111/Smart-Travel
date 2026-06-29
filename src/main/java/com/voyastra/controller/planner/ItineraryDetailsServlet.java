@@ -17,7 +17,7 @@ public class ItineraryDetailsServlet extends HttpServlet {
         // Pass any parameters straight through to the JSP
         String city = request.getParameter("city");
         if (city == null || city.trim().isEmpty()) {
-            response.sendRedirect(request.getContextPath() + "/explore.jsp");
+            response.sendRedirect(request.getContextPath() + "/explore");
             return;
         }
         request.setAttribute("city", city);

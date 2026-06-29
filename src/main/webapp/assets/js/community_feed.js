@@ -43,7 +43,7 @@ const CommunityFeed = {
             if ((window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight - 200) {
                 this.loadFeed(false);
             }
-        });
+        }, { passive: true });
 
         // Create Post Form Submit
         const createPostForm = document.getElementById('createPostForm');
@@ -834,18 +834,7 @@ function initGooglePlaces() {
         return;
     }
 
-    // Legacy Fallback: classic Autocomplete (for older Maps API versions)
-    const input = document.getElementById('locationSearchInput');
-    if (!input) return;
-    const autocomplete = new google.maps.places.Autocomplete(input, {
-        types: ['geocode', 'establishment']
-    });
-    autocomplete.addListener('place_changed', () => {
-        _selectedPlace = autocomplete.getPlace();
-        const name = _selectedPlace.name || _selectedPlace.formatted_address;
-        const display = document.getElementById('selectedLocationDisplay');
-        if (display) display.textContent = '📍 ' + name;
-    });
+    // The legacy fallback was removed to ensure full compliance with the new API.
 }
 
 // ══════════════════════════════════════════════════════

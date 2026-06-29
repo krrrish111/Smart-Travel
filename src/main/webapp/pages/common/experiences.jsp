@@ -30,9 +30,8 @@
 </script>
 
 
-                    <!-- Load Leaflet Map styles and scripts -->
-                    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-                    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+                    <!-- Load Google Maps helper -->
+                    <script src="${pageContext.request.contextPath}/assets/js/google-map.js"></script>
 
                     <!-- Load custom explorer styles -->
                     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/explore.css">
@@ -1918,24 +1917,23 @@
                         </div>
                     </div>
 
-                    <%-- Hidden JSON data elements for safe JS consumption --%>
-                        <c:if test="${not empty mapMarkers}">
-                            <script type="application/json" id="_mapMarkersJson">${mapMarkers}</script>
+                        <c:if test="${not empty mapMarkersJsonString}">
+                            <script type="application/json" id="_mapMarkersJson">${mapMarkersJsonString}</script>
                         </c:if>
-                        <c:if test="${not empty attractions}">
-                            <script type="application/json" id="_attractionsJsonData">${attractions}</script>
+                        <c:if test="${not empty attractionsJsonString}">
+                            <script type="application/json" id="_attractionsJsonData">${attractionsJsonString}</script>
                         </c:if>
-                        <c:if test="${not empty foods}">
-                            <script type="application/json" id="_foodsJsonData">${foods}</script>
+                        <c:if test="${not empty foodsJsonString}">
+                            <script type="application/json" id="_foodsJsonData">${foodsJsonString}</script>
                         </c:if>
-                        <c:if test="${not empty travelTips}">
-                            <script type="application/json" id="_travelTipsJson">${travelTips}</script>
+                        <c:if test="${not empty travelTipsJsonString}">
+                            <script type="application/json" id="_travelTipsJson">${travelTipsJsonString}</script>
                         </c:if>
-                        <c:if test="${not empty itineraryPreviews}">
-                            <script type="application/json" id="_itineraryPreviewsJson">${itineraryPreviews}</script>
+                        <c:if test="${not empty itineraryPreviewsJsonString}">
+                            <script type="application/json" id="_itineraryPreviewsJson">${itineraryPreviewsJsonString}</script>
                         </c:if>
-                        <c:if test="${not empty pipelineStatsJson}">
-                            
+                        <c:if test="${not empty experiencesJsonString}">
+                            <script type="application/json" id="_experiencesJsonData">${experiencesJsonString}</script>
                         </c:if>
                         <% com.google.gson.JsonArray cartArr=new com.google.gson.JsonArray();
                             java.util.List<com.google.gson.JsonObject> cartItems = (java.util.List
@@ -2301,42 +2299,30 @@
                                             renderAttractionElements(attractionsData);
                                         }
 
-                                        // Initialize unified Leaflet map from mapMarkers
+                                        // Initialize unified Google Map from mapMarkers
                                         let mapMarkersData = [];
                                         try {
                                             const _mapJson = document.getElementById('_mapMarkersJson');
-                                            if (_mapJson && _mapJson.textContent.trim() !== "") mapMarkersData = JSON.parse(_mapJson.textContent);
-                                        } catch (e) { console.warn('Map markers parse error', e); }
+                                            if (_mapJson && _mapJson.textContent.trim() !== "") {
+                                                mapMarkersData = JSON.parse(_mapJson.textContent);
+                                            }
+                                        } catch (e) { 
+                                            console.warn('Map markers parse error', e);
+                                            console.warn('Invalid JSON was:', document.getElementById('_mapMarkersJson')?.textContent);
+                                        }
 
                                         const mapContainer = document.getElementById('leafletMapContainer');
                                         if (mapContainer) {
                                             if (mapMarkersData.length > 0) {
-                                                /* initLeafletMap(mapMarkersData); disabled for dynamic fetch */
+                                                const destLat = parseFloat('${destLat}') || 0;
+                                                const destLng = parseFloat('${destLng}') || 0;
+                                                // Initialize Google Maps integration replacing old Leaflet code
+                                                if (typeof initGoogleMap === 'function') {
+                                                    initGoogleMap('leafletMapContainer', destLat, destLng, mapMarkersData);
+                                                }
                                             } else {
-                                                // Fallback: Fetch destination center
-                                                mapContainer.innerHTML = '<div style="display:flex; justify-content:center; align-items:center; height:100%; min-height:400px; color:white; background:rgba(255,255,255,0.05); border-radius:12px; font-weight:bold;">⏳ Loading Map Data...</div>';
-                                                const destName = encodeURIComponent('${searchQuery}');
-                                                fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + destName)
-                                                    .then(res => { if(!res.ok) throw new Error('HTTP error'); const ct = res.headers.get('content-type'); if(ct && ct.includes('application/json')) return res.json(); return {}; })
-                                                    .then(data => {
-                                                        mapContainer.innerHTML = '';
-                                                        if (data && data.length > 0) {
-                                                            const fallbackMarker = {
-                                                                name: '${searchQuery}',
-                                                                category: 'attraction',
-                                                                lat: parseFloat(data[0].lat),
-                                                                lng: parseFloat(data[0].lon),
-                                                                color: '#D4A574',
-                                                                icon: '📍',
-                                                                desc: 'Destination Center'
-                                                            };
-                                                            initLeafletMap([fallbackMarker]);
-                                                        } else {
-                                                            mapContainer.innerHTML = '<div style="display:flex; justify-content:center; align-items:center; height:100%; min-height:400px; color:white; background:rgba(255,255,255,0.05); border-radius:12px;">Map unavailable for this destination.</div>';
-                                                        }
-                                                    }).catch(err => {
-                                                        mapContainer.innerHTML = '<div style="display:flex; justify-content:center; align-items:center; height:100%; min-height:400px; color:white; background:rgba(255,255,255,0.05); border-radius:12px;">Map unavailable (Network Error).</div>';
-                                                    });
+                                                // Display loading spinner while dynamic fetch runs
+                                                mapContainer.innerHTML = '<div style="display:flex; justify-content:center; align-items:center; height:100%; min-height:400px; color:white; background:rgba(255,255,255,0.05); border-radius:12px; font-weight:bold;"><i class="ri-loader-4-line animate-spin" style="margin-right: 10px; font-size: 24px;"></i> Loading Interactive Map...</div>';
                                             }
                                         }
 
@@ -2382,6 +2368,38 @@
                                         if (itineraryPreviewsData.length > 0) {
                                             renderItineraryPreviews(itineraryPreviewsData, '${searchQuery}');
                                         }
+                                                                   // ── Google Map with multi-category markers ─────────────────────────────
+                                    function initGoogleMapWrapper(markersData) {
+                                        const destLat = parseFloat('${destLat}');
+                                        const destLng = parseFloat('${destLng}');
+                                        
+                                        let centerLat = destLat;
+                                        let centerLng = destLng;
+                                        
+                                        if (isNaN(destLat) || isNaN(destLng)) {
+                                            if (markersData && markersData.length > 0) {
+                                                const centerPoint = markersData.find(m => m.category === 'attraction') || markersData[0];
+                                                centerLat = centerPoint.lat;
+                                                centerLng = centerPoint.lng;
+                                            }
+                                        }
+                                        
+                                        if (typeof initGoogleMap === 'function') {
+                                            initGoogleMap('googleMapContainer', centerLat, centerLng, markersData, 12);
+                                        }
+                                    }
+
+                                    function updateMarkerCount() {
+                                        // Optional: update UI count if needed
+                                    }
+
+                                        // filterMapMarkers moved to google-map.js for global access
+                                    function focusMapOn(lat, lng, idx) {
+                                        if (globalActiveMap) {
+                                            globalActiveMap.panTo({ lat: parseFloat(lat), lng: parseFloat(lng) });
+                                            globalActiveMap.setZoom(14);
+                                        }
+                                    }
 
                                         let initialCart = [];
                                         try {
@@ -2391,189 +2409,6 @@
                                         updateCartUI(initialCart);
                                     });
 
-                                    // ── Leaflet Map with multi-category markers ─────────────────────────────
-                                    let activeMap = null;
-                                    let allMapMarkers = [];   // [{markerObj, category, leafletMarker}, ...]
-                                    let activeFilter = 'all';
-
-                                    function initLeafletMap(markersData) {
-                                        console.log("[MAP]");
-                                        console.log("Initializing");
-
-                                        if (typeof L === 'undefined') return;
-                                        const container = document.getElementById('leafletMapContainer');
-                                        if (!container || markersData.length === 0) return;
-
-                                        console.log("[MAP]");
-                                        console.log("Coordinates Loaded");
-
-                                        const destLat = parseFloat('${destLat}');
-                                        const destLng = parseFloat('${destLng}');
-                                        
-                                        let centerLat, centerLng;
-                                        if (!isNaN(destLat) && !isNaN(destLng)) {
-                                            centerLat = destLat;
-                                            centerLng = destLng;
-                                        } else {
-                                            const centerPoint = markersData.find(m => m.category === 'attraction') || markersData[0];
-                                            centerLat = centerPoint.lat;
-                                            centerLng = centerPoint.lng;
-                                        }
-
-                                        activeMap = L.map(container, {
-                                            zoomControl: true,
-                                            scrollWheelZoom: true
-                                        }).setView([centerLat, centerLng], 12);
-
-                                        if (!isNaN(destLat) && !isNaN(destLng)) {
-                                            L.marker([destLat, destLng], {
-                                                icon: L.divIcon({
-                                                    className: 'custom-map-marker',
-                                                    html: `<div style="background-color: var(--color-primary); width: 14px; height: 14px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 10px rgba(0,0,0,0.5);"></div>`,
-                                                    iconSize: [14, 14],
-                                                    iconAnchor: [7, 7]
-                                                })
-                                            }).addTo(activeMap).bindPopup("<strong>${searchQuery}</strong><br>Destination Center").openPopup();
-                                        }
-
-                                        // Dark CARTO tile
-                                        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-                                            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
-                                            subdomains: 'abcd',
-                                            maxZoom: 20
-                                        }).addTo(activeMap);
-
-                                        // Build all markers
-                                        markersData.forEach(function (m) {
-                                            const leafletMarker = createLeafletMarker(m);
-                                            allMapMarkers.push({ data: m, leafletMarker: leafletMarker, active: true });
-                                        });
-
-                                        console.log("[MAP]");
-                                        console.log("Markers Added");
-
-                                        // Auto-fit bounds
-                                        if (allMapMarkers.length > 1) {
-                                            const group = L.featureGroup(allMapMarkers.map(function (m) { return m.leafletMarker; }));
-                                            try { activeMap.fitBounds(group.getBounds().pad(0.15)); } catch (e) { }
-                                        }
-
-                                        // Open first attraction popup
-                                        const firstAttraction = allMapMarkers.find(function (m) { return m.data.category === 'attraction'; });
-                                        if (firstAttraction) setTimeout(function () { firstAttraction.leafletMarker.openPopup(); }, 600);
-
-                                        updateMarkerCount();
-                                        console.log("[MAP]");
-                                        console.log("Render Complete");
-                                    }
-
-                                    function createLeafletMarker(m) {
-                                        const icon = L.divIcon({
-                                            className: '',
-                                            html: '<div class="voyastra-map-pin" style="background:' + m.color + ';" title="' + m.name + '">' + m.icon + '</div>',
-                                            iconSize: [30, 36],
-                                            iconAnchor: [15, 36],
-                                            popupAnchor: [0, -38]
-                                        });
-
-                                        // Category badge colors
-                                        const catColors = {
-                                            attraction: { bg: 'rgba(212,165,116,0.2)', color: '#D4A574' },
-                                            hotel: { bg: 'rgba(96,165,250,0.2)', color: '#60A5FA' },
-                                            restaurant: { bg: 'rgba(244,114,182,0.2)', color: '#F472B6' },
-                                            experience: { bg: 'rgba(52,211,153,0.2)', color: '#34D399' }
-                                        };
-                                        const cc = catColors[m.category] || { bg: 'rgba(255,255,255,0.1)', color: 'white' };
-
-                                        // Extra meta line
-                                        let metaLine = '';
-                                        if (m.category === 'attraction' && (m.best_time || m.duration)) {
-                                            metaLine = '';
-                                            if (m.best_time) metaLine += '📅 ' + m.best_time + ' &nbsp;';
-                                            if (m.duration) metaLine += '⏱️ ' + m.duration;
-                                        } else if ((m.category === 'hotel' || m.category === 'restaurant') && m.budget) {
-                                            metaLine = '💰 ' + m.budget;
-                                        } else if (m.category === 'experience') {
-                                            if (m.price) metaLine += '💰 ' + m.price + ' &nbsp;';
-                                            if (m.duration) metaLine += '⏱️ ' + m.duration;
-                                        }
-
-                                        const catLabel = m.category.charAt(0).toUpperCase() + m.category.slice(1);
-
-                                        const popupContent =
-                                            '<div class="map-popup">' +
-                                            '<div class="map-popup-header">' +
-                                            '<span class="map-popup-icon">' + m.icon + '</span>' +
-                                            '<h4 class="map-popup-name">' + m.name + '</h4>' +
-                                            '</div>' +
-                                            '<span class="map-popup-category-badge" style="background:' + cc.bg + '; color:' + cc.color + ';">' + catLabel + '</span>' +
-                                            (m.desc ? '<p class="map-popup-desc">' + m.desc + '</p>' : '') +
-                                            (metaLine ? '<p class="map-popup-meta">' + metaLine + '</p>' : '') +
-                                            '<a href="' + m.directionsUrl + '" target="_blank" class="map-popup-directions-btn">' +
-                                            '&#10148; Get Directions' +
-                                            '</a>' +
-                                            '</div>';
-
-                                        return L.marker([m.lat, m.lng], { icon: icon })
-                                            .addTo(activeMap)
-                                            .bindPopup(popupContent, { maxWidth: 280 });
-                                    }
-
-                                    function filterMapMarkers(category) {
-                                        activeFilter = category;
-
-                                        // Update button active states
-                                        ['all', 'attraction', 'hotel', 'restaurant', 'experience'].forEach(function (cat) {
-                                            const btn = document.getElementById('mapFilter-' + cat);
-                                            if (!btn) return;
-                                            btn.className = 'map-filter-btn';
-                                            if (cat === category) {
-                                                btn.className = 'map-filter-btn active-' + cat;
-                                            }
-                                        });
-
-                                        // Show / hide markers
-                                        allMapMarkers.forEach(function (m) {
-                                            const shouldShow = (category === 'all' || m.data.category === category);
-                                            if (shouldShow && !m.active) {
-                                                m.leafletMarker.addTo(activeMap);
-                                                m.active = true;
-                                            } else if (!shouldShow && m.active) {
-                                                m.leafletMarker.remove();
-                                                m.active = false;
-                                            }
-                                        });
-
-                                        // Fit bounds to visible markers
-                                        const visible = allMapMarkers.filter(function (m) { return m.active; });
-                                        if (visible.length > 0 && activeMap) {
-                                            const group = L.featureGroup(visible.map(function (m) { return m.leafletMarker; }));
-                                            try { activeMap.fitBounds(group.getBounds().pad(0.2), { animate: true }); } catch (e) { }
-                                        }
-
-                                        updateMarkerCount();
-                                    }
-
-                                    function updateMarkerCount() {
-                                        const el = document.getElementById('mapMarkerCount');
-                                        if (!el) return;
-                                        const visible = allMapMarkers.filter(function (m) { return m.active; }).length;
-                                        const total = allMapMarkers.length;
-                                        el.textContent = visible + ' of ' + total + ' places shown';
-                                    }
-
-                                    function highlightMarker(idx, lat, lng) {
-                                        if (activeMap) {
-                                            activeMap.setView([lat, lng], 14, { animate: true });
-                                            if (allMapMarkers[idx]) {
-                                                allMapMarkers[idx].leafletMarker.openPopup();
-                                            }
-                                        }
-                                        const cards = document.querySelectorAll('.attraction-list-card');
-                                        cards.forEach(function (card) { card.classList.remove('active'); });
-                                        const activeCard = document.getElementById('serverAttrCard-' + idx);
-                                        if (activeCard) activeCard.classList.add('active');
-                                    }
 
                                     function renderAttractionElements(attractions) {
                                         const list = document.getElementById('attractionCardsList');
@@ -2951,14 +2786,7 @@
                                     </div>
                                 </div>
 
-                                <!-- ── Data Bridges for Javascript Rendering ──────────────────────── -->
-                                <script type="application/json" id="_foodsJsonData">${foodsJsonString}</script>
-                                <script type="application/json" id="_mapMarkersJson">${mapMarkersJsonString}</script>
-                                <script type="application/json" id="_attractionsJsonData">${attractionsJsonString}</script>
-                                <script type="application/json" id="_travelTipsJson">${travelTipsJsonString}</script>
-                                <script type="application/json" id="_itineraryPreviewsJson">${itineraryPreviewsJsonString}</script>
-
-                                
+                                <!-- ── Data Bridges moved to top ──────────────────────── -->
 
                                 <!-- OpenWeather API Integration Script -->
                                 <script>
@@ -3022,43 +2850,86 @@ document.addEventListener('DOMContentLoaded', function() {
     const mapMarkers = [];
 
     function renderCard(place, typeLabel, iconUrl) {
-        return `
-            <div class="discovery-card glass-card p-4 rounded-xl transition-all hover:scale-[1.02] flex flex-col h-full" style="border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.03);">
-                \${place.photo ? `<div class="w-full h-40 rounded-lg bg-cover bg-center mb-3" style="background-image: url('\${place.photo}');"></div>` : `<div class="w-full h-40 rounded-lg bg-[var(--color-surface)] mb-3 flex items-center justify-center text-white opacity-50">No Image</div>`}
-                <h5 class="text-white font-bold text-base mb-1 truncate">\${place.name}</h5>
-                <div class="flex items-center gap-2 mb-2 text-xs">
-                    <span class="text-yellow-400">⭐ \${place.rating}</span>
-                    <span class="text-white opacity-60 truncate">\${place.address}</span>
-                </div>
-                \${place.open_now !== undefined ? `<div class="text-xs mb-3 \${place.open_now ? 'text-green-400' : 'text-red-400'}">\${place.open_now ? 'Open Now' : 'Closed'}</div>` : '<div class="text-xs mb-3 text-transparent">Unknown</div>'}
-                <div class="mt-auto pt-2 flex gap-2">
-                    <a href="\${place.maps_link}" target="_blank" class="btn btn-secondary flex-1 text-center py-2 text-xs font-bold rounded-lg text-white no-underline" style="border:1px solid rgba(255,255,255,0.2);">🗺️ View Map</a>
-                </div>
-            </div>
-        `;
+        let photoHtml = '';
+        if (place.photo) {
+            photoHtml = '<div class="w-full h-40 rounded-lg bg-cover bg-center mb-3" style="background-image: url(\'' + place.photo + '\');"></div>';
+        } else {
+            photoHtml = '<div class="w-full h-40 rounded-lg bg-[var(--color-surface)] mb-3 flex items-center justify-center text-white opacity-50">No Image</div>';
+        }
+
+        let openHtml = '';
+        if (place.open_now !== undefined && place.open_now !== null) {
+            const statusClass = place.open_now ? 'text-green-400' : 'text-red-400';
+            const statusText = place.open_now ? 'Open Now' : 'Closed';
+            openHtml = '<div class="text-xs mb-3 ' + statusClass + '">' + statusText + '</div>';
+        } else {
+            openHtml = '<div class="text-xs mb-3 text-transparent">Unknown</div>';
+        }
+
+        const name = place.name || 'Unknown Location';
+        const rating = place.rating !== undefined ? place.rating : 'N/A';
+        const address = place.address || '';
+        const mapsLink = place.maps_link || '#';
+
+        return '<div class="discovery-card glass-card p-4 rounded-xl transition-all hover:scale-[1.02] flex flex-col h-full" style="border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.03);">' +
+                    photoHtml +
+                    '<h5 class="text-white font-bold text-base mb-1 truncate">' + name + '</h5>' +
+                    '<div class="flex items-center gap-2 mb-2 text-xs">' +
+                        '<span class="text-yellow-400">⭐ ' + rating + '</span>' +
+                        '<span class="text-white opacity-60 truncate">' + address + '</span>' +
+                    '</div>' +
+                    openHtml +
+                    '<div class="mt-auto pt-2 flex gap-2">' +
+                        '<a href="' + mapsLink + '" target="_blank" class="btn btn-secondary flex-1 text-center py-2 text-xs font-bold rounded-lg text-white no-underline" style="border:1px solid rgba(255,255,255,0.2);">🗺️ View Map</a>' +
+                    '</div>' +
+                '</div>';
     }
 
     function fetchAndRender(endpoint, gridId, category, icon, color) {
         return fetch('${pageContext.request.contextPath}/api/nearby/' + endpoint + baseParams)
-            .then(res => { if(!res.ok) throw new Error('HTTP error'); const ct = res.headers.get('content-type'); if(ct && ct.includes('application/json')) return res.json(); return {}; })
+            .then(res => { 
+                if(!res.ok) throw new Error('HTTP error'); 
+                const ct = res.headers.get('content-type'); 
+                if(ct && ct.includes('application/json')) return res.json(); 
+                return {}; 
+            })
             .then(json => {
                 if(json.success && json.data) {
+                    const places = json.data;
+                    console.log("Places API Result [" + category + "]:", places);
+                    
+                    // Specific array logging exactly as requested
+                    if (category === 'hotel') console.log("Hotels:", places);
+                    else if (category === 'restaurant') console.log("Restaurants:", places);
+                    else if (category === 'attraction') console.log("Attractions:", places);
+                    else if (category === 'experience') console.log("Experiences:", places);
+
                     const grid = document.getElementById(gridId);
-                    if(json.data.length === 0) {
-                        grid.innerHTML = '<p class="text-white opacity-50 text-sm">No data found nearby.</p>';
+                    if(places.length === 0) {
+                        grid.innerHTML = '<p class="text-white opacity-50 text-sm">No ' + endpoint + ' found.</p>';
+                        console.log(category.charAt(0).toUpperCase() + category.slice(1) + "s Rendered: 0");
                     } else {
-                        grid.innerHTML = json.data.map(p => renderCard(p, category, icon)).join('');
-                        json.data.forEach(p => {
-                            mapMarkers.push({
-                                name: p.name,
-                                lat: p.lat,
-                                lng: p.lng,
-                                category: category,
-                                icon: icon,
-                                color: color,
-                                desc: p.address
-                            });
+                        let html = '';
+                        let renderedCount = 0;
+                        places.forEach(p => {
+                            try {
+                                html += renderCard(p, category, icon);
+                                renderedCount++;
+                                mapMarkers.push({
+                                    name: p.name || 'Unknown',
+                                    lat: p.lat,
+                                    lng: p.lng,
+                                    category: category,
+                                    icon: icon,
+                                    color: color,
+                                    desc: p.address || ''
+                                });
+                            } catch (e) {
+                                console.error("Error rendering card for place:", p, e);
+                            }
                         });
+                        grid.innerHTML = html;
+                        console.log(category.charAt(0).toUpperCase() + category.slice(1) + "s Rendered: " + renderedCount);
                     }
                 }
             });
@@ -3072,14 +2943,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
     ]).then(() => {
         console.log('Food Explorer Loaded');
-        if(typeof initLeafletMap === 'function') {
-            initLeafletMap(mapMarkers);
+    }).catch(err => {
+        console.error('API Fetch failed, still rendering map', err);
+    }).finally(() => {
+        if(typeof initGoogleMapWrapper === 'function') {
+            initGoogleMapWrapper(mapMarkers);
             console.log('Interactive Map Loaded');
         }
     });
 
     
-    const aiInsights = `${aiInsights}`;
+    const aiInsightsEncoded = '<%= java.net.URLEncoder.encode(pageContext.findAttribute("aiInsights") != null ? pageContext.findAttribute("aiInsights").toString() : "", "UTF-8").replace("+", "%20") %>';
+    const aiInsights = decodeURIComponent(aiInsightsEncoded);
     if (aiInsights && aiInsights.trim().length > 0) {
         document.getElementById('aiInsightsSection').style.display = 'block';
         document.getElementById('aiInsightsText').textContent = aiInsights;

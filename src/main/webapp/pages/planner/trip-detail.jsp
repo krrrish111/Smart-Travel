@@ -11,7 +11,7 @@
     <!-- Premium Hero Section -->
     <section class="trip-hero relative flex items-center justify-center" style="min-height: 70vh; overflow: hidden;">
         <div class="absolute w-full h-full" style="z-index: -1;">
-            <img src="${trip.imageUrl}" alt="${trip.title}" style="width: 100%; height: 100%; object-fit: cover; filter: brightness(0.6);" />
+            <img src="${trip.imageUrl}" alt="${trip.title}" style="width: 100%; height: 100%; object-fit: cover; filter: brightness(0.6);" loading="lazy" decoding="async" />
         </div>
         <div class="container text-center slide-up" style="z-index: 10; margin-top: 80px;">
             <p class="meta-location text-uppercase tracking-widest text-primary fw-bold mb-2">${trip.category} • ${trip.destination}</p>
@@ -61,7 +61,7 @@
                 <div class="price-highlight mb-2">
                     <fmt:formatNumber value="${trip.discountPrice > 0 ? trip.discountPrice : trip.priceInr}" type="currency" currencySymbol="₹" maxFractionDigits="0" />
                 </div>
-                <a href="${pageContext.request.contextPath}/trip/customize?id=${trip.id}" class="btn-primary w-full" style="padding: 12px 24px; border-radius: 8px; font-weight: 700;">Book Now →</a>
+                <a href="${pageContext.request.contextPath}/trip-booking?id=${trip.id}" class="btn-primary w-full" style="padding: 12px 24px; border-radius: 8px; font-weight: 700;">Book Now →</a>
             </div>
         </div>
     </section>
@@ -123,7 +123,7 @@
 
                 <!-- Quick Book Button in Sidebar -->
                 <div class="mt-4 pt-4" style="border-top:1px solid var(--color-border);">
-                    <a href="${pageContext.request.contextPath}/trip/customize?id=${trip.id}" class="btn-primary w-full text-center" style="display:block;padding:12px;border-radius:8px;font-weight:700;text-decoration:none;">
+                    <a href="${pageContext.request.contextPath}/trip-booking?id=${trip.id}" class="btn-primary w-full text-center" style="display:block;padding:12px;border-radius:8px;font-weight:700;text-decoration:none;">
                         Book Now →
                     </a>
                 </div>
@@ -137,7 +137,7 @@
         <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
             <c:forEach var="img" items="${trip.gallery}">
                 <div class="gallery-item relative overflow-hidden rounded-xl" style="height: 250px;">
-                    <img src="${img.imageUrl}" alt="${img.caption}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'"/>
+                    <img src="${img.imageUrl}" alt="${img.caption}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'" loading="lazy" decoding="async" />
                     <div class="absolute w-full p-3" style="bottom: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);">
                         <p class="text-white text-sm fw-bold m-0">${img.caption}</p>
                     </div>

@@ -22,7 +22,7 @@ public class DestinationReviewServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.sendRedirect(request.getContextPath() + "/explore.jsp");
+        response.sendRedirect(request.getContextPath() + "/explore");
     }
 
     @Override
@@ -57,7 +57,7 @@ public class DestinationReviewServlet extends HttpServlet {
             
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect(request.getContextPath() + "/explore.jsp?error=invalidRequest");
+            response.sendRedirect(request.getContextPath() + "/explore?error=invalidRequest");
         }
     }
 }

@@ -1,6 +1,8 @@
 package com.voyastra.api;
 
 import com.voyastra.util.RazorpayConfig;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -11,25 +13,25 @@ import java.nio.charset.StandardCharsets;
 
 public class RazorpayService {
 
-    /**
-     * Creates an order in Razorpay using the provided amount and receipt ID.
-     * Includes detailed logging and error handling.
-     * 
-     * @param amountInPaise the total amount in INR paise
-     * @param receiptId a unique receipt string
-     * @return the JSON response string from Razorpay
-     * @throws Exception if connection fails or API returns an error
-     */
     public static String createOrder(long amountInPaise, String receiptId) throws Exception {
-        System.out.println("[RazorpayService] Initiating order creation for receipt: " + receiptId);
-        System.out.println("[RazorpayService] Amount (paise): " + amountInPaise);
-
+        // Phase 4 — Validate Razorpay Credentials
+        String keyId = RazorpayConfig.getKeyId();
+        if (keyId == null || !keyId.startsWith("rzp_test_")) {
+            throw new IllegalArgumentException("Invalid Razorpay Key: Must start with rzp_test_");
+        }
+        
         String jsonPayload = String.format(
             "{\"amount\": %d, \"currency\": \"INR\", \"receipt\": \"%s\"}",
             amountInPaise, receiptId
         );
 
         URL url = new URL("https://api.razorpay.com/v1/orders");
+        
+        // Phase 2 — Improve RazorpayService Logging
+        System.out.println("POST " + url.toString());
+        System.out.println("Key ID: " + keyId);
+        System.out.println("Payload:\n" + jsonPayload);
+
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
         conn.setRequestProperty("Authorization", RazorpayConfig.getBasicAuthHeader());
@@ -45,7 +47,7 @@ public class RazorpayService {
         }
 
         int responseCode = conn.getResponseCode();
-        System.out.println("[RazorpayService] Razorpay API Response Code: " + responseCode);
+        System.out.println("Response Code: " + responseCode);
 
         BufferedReader br;
         boolean isSuccess = (responseCode >= 200 && responseCode < 300);
@@ -62,18 +64,34 @@ public class RazorpayService {
             responseBody.append(line.trim());
         }
 
-        System.out.println("[RazorpayService] Razorpay API Response Body: " + responseBody.toString());
+        System.out.println("Response:\n" + responseBody.toString());
 
         if (isSuccess) {
             return responseBody.toString();
         } else {
-            if (responseCode == 401) {
-                throw new Exception("Unauthorized. Please check if your Razorpay Key ID and Secret in oauth.properties are correct.");
-            } else if (responseCode == 400) {
-                throw new Exception("Bad Request. The payload sent to Razorpay was invalid: " + responseBody.toString());
-            } else {
-                throw new Exception("Payment gateway returned error (" + responseCode + "): " + responseBody.toString());
+            // Phase 6 — Investigate Razorpay Response
+            try {
+                JsonObject jsonObject = JsonParser.parseString(responseBody.toString()).getAsJsonObject();
+                if (jsonObject.has("error")) {
+                    JsonObject error = jsonObject.getAsJsonObject("error");
+                    String code = error.has("code") ? error.get("code").getAsString() : "N/A";
+                    String description = error.has("description") ? error.get("description").getAsString() : "N/A";
+                    String field = error.has("field") && !error.get("field").isJsonNull() ? error.get("field").getAsString() : "N/A";
+                    String reason = error.has("reason") && !error.get("reason").isJsonNull() ? error.get("reason").getAsString() : "N/A";
+
+                    System.err.println("Razorpay Error Code: " + code);
+                    System.err.println("Razorpay Error Description: " + description);
+                    System.err.println("Razorpay Error Field: " + field);
+                    System.err.println("Razorpay Error Reason: " + reason);
+                    
+                    throw new Exception("Razorpay Error: " + description);
+                }
+            } catch (Exception e) {
+                if (e.getMessage().startsWith("Razorpay Error")) {
+                    throw e;
+                }
             }
+            throw new Exception("Payment gateway returned error (" + responseCode + "): " + responseBody.toString());
         }
     }
 }

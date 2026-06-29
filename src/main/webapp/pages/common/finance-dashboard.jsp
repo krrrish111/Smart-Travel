@@ -27,7 +27,7 @@
                     
                     <div class="form-group mb-4 text-left">
                         <label class="text-xs text-muted font-bold uppercase tracking-wider block mb-2">Destination</label>
-                        <input type="text" name="destination" class="form-control" placeholder="e.g., Goa" required>
+                        <input type="text" name="destination" class="form-control voyastra-autocomplete" placeholder="e.g., Goa" required>
                     </div>
                     
                     <div class="form-group mb-6 text-left">

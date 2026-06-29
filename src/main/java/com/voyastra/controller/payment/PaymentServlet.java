@@ -23,9 +23,20 @@ public class PaymentServlet extends HttpServlet {
             try {
                 int bookingId = Integer.parseInt(idParam);
                 Booking booking = bookingDAO.getBookingById(bookingId);
+                
+                System.out.println("===== PaymentServlet Debug =====");
+                System.out.println("Booking ID : " + bookingId);
+                System.out.println("Booking : " + booking);
                 if (booking != null) {
+                    System.out.println("Booking Status: " + booking.getStatus());
                     request.getSession().setAttribute("currentBooking", booking);
+                } else {
+                    System.out.println("Booking Status: null (Booking not found)");
                 }
+                System.out.println("Session ID: " + request.getSession().getId());
+                System.out.println("CurrentBooking in Session : " + request.getSession().getAttribute("currentBooking"));
+                System.out.println("================================");
+                
             } catch (Exception e) {}
         }
         request.getRequestDispatcher("/pages/payment/payment.jsp").forward(request, response);

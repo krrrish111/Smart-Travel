@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
         container.style.top = newTop + 'px';
         container.style.bottom = 'auto';
         container.style.right = 'auto';
-    });
+    }, { passive: true });
 
     orb.addEventListener('pointerup', (e) => {
         if (window.innerWidth <= 768) return;

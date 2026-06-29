@@ -6,6 +6,10 @@ import com.voyastra.model.booking.Hotel;
 import com.voyastra.model.booking.HotelSearchHistory;
 import com.voyastra.model.profile.User;
 import com.voyastra.util.HotelAPIClient;
+import com.voyastra.service.GoogleMapService;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,6 +26,7 @@ import java.util.List;
 public class HotelSearchServlet extends HttpServlet {
     private HotelDAO hotelDAO = new HotelDAO();
     private SearchHistoryDAO historyDAO = new SearchHistoryDAO();
+    private GoogleMapService googleMapService = new GoogleMapService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -67,8 +72,24 @@ public class HotelSearchServlet extends HttpServlet {
         // Fetch Local Hotels
         List<Hotel> localHotels = hotelDAO.searchHotels(city);
         
-        // Fetch API Dynamic Hotels
-        List<Hotel> apiHotels = HotelAPIClient.fetchHotelsFromAPI(city, hotelType, amenitiesList);
+        // Fetch API Dynamic Hotels using Google Places
+        List<Hotel> apiHotels = new ArrayList<>();
+        if (!city.isEmpty()) {
+            JsonObject googleRes = googleMapService.getHotelsForDestination(city);
+            if ("OK".equals(googleRes.get("status").getAsString())) {
+                JsonArray places = googleRes.getAsJsonArray("hotels");
+                for (JsonElement el : places) {
+                    JsonObject p = el.getAsJsonObject();
+                    Hotel h = new Hotel();
+                    h.setName(p.get("name").getAsString());
+                    h.setAddress(p.get("address").getAsString());
+                    h.setStartingPrice(150.0); // Dummy price
+                    h.setRating(p.get("rating").getAsDouble());
+                    h.setImageUrl(p.get("photo").getAsString());
+                    apiHotels.add(h);
+                }
+            }
+        }
         
         // Merge results
         List<Hotel> allHotels = new ArrayList<>();

@@ -34,13 +34,13 @@ public class AttractionServlet extends HttpServlet {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        ExperiencesDebugService.log(sessionId, "Attractions API", "STARTED", "Fetching nearby attractions", 0);
+        ExperiencesDebugService.log(sessionId, "Places API", "STARTED", "Fetching nearby attractions", 0);
 
         if (lat == null || lng == null || lat.trim().isEmpty() || lng.trim().isEmpty()) {
             JsonObject err = new JsonObject();
             err.addProperty("success", false);
             err.addProperty("error", "Parameters 'lat' and 'lng' are required.");
-            ExperiencesDebugService.log(sessionId, "Attractions API", "FAILED", "Missing coordinates", 0);
+            ExperiencesDebugService.log(sessionId, "Places API", "FAILED", "Missing coordinates", 0);
             response.getWriter().write(err.toString());
             return;
         }
@@ -54,7 +54,7 @@ public class AttractionServlet extends HttpServlet {
         resultObj.add("data", results);
 
         System.out.println("[ATTRACTIONS] Loaded");
-        ExperiencesDebugService.log(sessionId, "Attractions API", "SUCCESS", "Returned " + results.size() + " attractions", duration);
+        ExperiencesDebugService.log(sessionId, "Places API", "SUCCESS", "Returned " + results.size() + " attractions", duration);
 
         response.getWriter().write(resultObj.toString());
     }

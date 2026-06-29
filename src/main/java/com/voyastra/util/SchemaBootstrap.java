@@ -734,6 +734,10 @@ public class SchemaBootstrap implements ServletContextListener {
                     System.out.println("[SchemaBootstrap] Added guests to destination_bookings.");
                 } catch (Exception e) {}
 
+                try {
+                    stmt.execute("ALTER TABLE activities ADD COLUMN hero_image VARCHAR(255) AFTER title");
+                } catch (Exception e) {}
+
                 stmt.execute(
                     "CREATE TABLE IF NOT EXISTS activities (" +
                     "id INT AUTO_INCREMENT PRIMARY KEY, " +

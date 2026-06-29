@@ -30,8 +30,8 @@ public class NearbySearchService {
         JsonArray resultsArray = new JsonArray();
 
         if (this.apiKey == null || this.apiKey.isEmpty() || this.apiKey.equals("YOUR_KEY")) {
-            System.err.println("[NEARBY] Google Places API Key is missing.");
-            return resultsArray;
+            System.err.println("[NEARBY] Google Places API Key is missing. Falling back to Overpass.");
+            return fetchFromOverpass(lat, lng, type, keyword);
         }
 
         try {
@@ -103,6 +103,65 @@ public class NearbySearchService {
             e.printStackTrace();
         }
 
+        if (resultsArray.size() == 0) {
+            System.err.println("[NEARBY] Google Places API returned 0 results. Falling back to Overpass.");
+            return fetchFromOverpass(lat, lng, type, keyword);
+        }
+
+        return resultsArray;
+    }
+
+    private JsonArray fetchFromOverpass(String lat, String lng, String type, String keyword) {
+        JsonArray resultsArray = new JsonArray();
+        try {
+            // Map Google Places types to Overpass tags loosely
+            String overpassTag = "tourism=hotel"; // default
+            if ("lodging".equals(type) || "hotel".equals(type)) overpassTag = "tourism=hotel";
+            else if ("restaurant".equals(type)) overpassTag = "amenity=restaurant";
+            else if ("tourist_attraction".equals(type)) overpassTag = "tourism=attraction";
+            else if ("amusement_park".equals(type) || "experiences".equals(type)) overpassTag = "tourism=theme_park";
+            
+            // Build Overpass QL query: node(around:radius,lat,lon)[tag];out;
+            String query = "[out:json];(node(around:5000," + lat + "," + lng + ")[" + overpassTag + "];);out 10;";
+            String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8.toString());
+            
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://overpass-api.de/api/interpreter?data=" + encodedQuery))
+                    .header("User-Agent", "VoyastraTravelApp/1.0")
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() == 200) {
+                JsonObject jsonResponse = JsonParser.parseString(response.body()).getAsJsonObject();
+                if (jsonResponse.has("elements")) {
+                    JsonArray elements = jsonResponse.getAsJsonArray("elements");
+                    for (int i = 0; i < elements.size(); i++) {
+                        JsonObject el = elements.get(i).getAsJsonObject();
+                        JsonObject place = new JsonObject();
+                        
+                        String name = "Unknown Place";
+                        if (el.has("tags") && el.getAsJsonObject("tags").has("name")) {
+                            name = el.getAsJsonObject("tags").get("name").getAsString();
+                        }
+                        
+                        place.addProperty("placeId", el.get("id").getAsString());
+                        place.addProperty("name", name);
+                        place.addProperty("rating", 4.0); // Dummy rating for fallback
+                        place.addProperty("address", "Local coordinates");
+                        place.addProperty("lat", el.get("lat").getAsDouble());
+                        place.addProperty("lng", el.get("lon").getAsDouble());
+                        place.addProperty("photo", ""); 
+                        place.addProperty("maps_link", "https://www.openstreetmap.org/node/" + el.get("id").getAsString());
+                        place.addProperty("open_now", true);
+                        
+                        resultsArray.add(place);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return resultsArray;
     }
 }

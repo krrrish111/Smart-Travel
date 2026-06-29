@@ -1,0 +1,41 @@
+# IDE and Maven specifics
+.idea/
+.vscode/
+*.iml
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/
+mvnw
+mvnw.cmd
+
+# Git
+.git/
+.gitignore
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Temporary files
+*.log
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.DS_Store
+
+# Scratch files
+scratch/
+
+# Docker related
+Dockerfile
+docker-compose.yml
+.dockerignore

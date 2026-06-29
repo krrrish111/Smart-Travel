@@ -31,7 +31,7 @@ public class DestinationCustomizeServlet extends HttpServlet {
 
         String idParam = request.getParameter("id");
         if (idParam == null || idParam.trim().isEmpty()) {
-            response.sendRedirect(request.getContextPath() + "/explore.jsp");
+            response.sendRedirect(request.getContextPath() + "/explore");
             return;
         }
 
@@ -40,7 +40,7 @@ public class DestinationCustomizeServlet extends HttpServlet {
             Destination dest = destinationDAO.getDestinationById(destId);
             
             if (dest == null) {
-                response.sendRedirect(request.getContextPath() + "/explore.jsp?error=notFound");
+                response.sendRedirect(request.getContextPath() + "/explore?error=notFound");
                 return;
             }
 
@@ -48,7 +48,7 @@ public class DestinationCustomizeServlet extends HttpServlet {
             request.getRequestDispatcher("/pages/destination/destination-customize.jsp").forward(request, response);
             
         } catch (NumberFormatException e) {
-            response.sendRedirect(request.getContextPath() + "/explore.jsp");
+            response.sendRedirect(request.getContextPath() + "/explore");
         }
     }
 }

@@ -117,11 +117,11 @@ public class ReviewServlet extends HttpServlet {
                 
             } catch (Exception e) {
                 logger.log(Level.SEVERE, "Exception occurred", e);
-                response.sendRedirect(request.getContextPath() + "/explore.jsp");
+                response.sendRedirect(request.getContextPath() + "/explore");
+                return;
             }
         } else {
-            response.sendRedirect(request.getContextPath() + "/explore.jsp");
+            response.sendRedirect(request.getContextPath() + "/explore");
         }
     }
 }
-

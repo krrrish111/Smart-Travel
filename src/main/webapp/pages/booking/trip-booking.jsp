@@ -18,9 +18,15 @@
     </div>
 
     <div class="container" style="margin-top:-40px;position:relative;z-index:20;">
-        <form method="POST" action="${pageContext.request.contextPath}/booking" id="bookingForm">
+        <form method="POST" action="${pageContext.request.contextPath}/trip-confirmation" id="bookingForm" onsubmit="return populateHiddenFields()">
             <input type="hidden" name="action" value="submitBooking">
             <input type="hidden" name="tripId" value="${trip.id}">
+            <input type="hidden" name="tripTitle" value="${trip.title}">
+            <input type="hidden" name="tripDest" value="${trip.destination}">
+            <input type="hidden" name="tripDuration" value="${trip.duration}">
+            <input type="hidden" name="basePrice" id="hiddenBasePrice" value="">
+            <input type="hidden" name="totalPrice" id="hiddenTotalPrice" value="">
+            <input type="hidden" name="guests" id="hiddenGuests" value="">
 
             <div class="grid md:grid-cols-3 gap-6">
                 <!-- LEFT: Package Summary + Form -->
@@ -55,8 +61,8 @@
                         </h3>
                         <div class="grid sm:grid-cols-2 gap-4">
                             <div class="form-group">
-                                <label class="form-label">Travel Date *</label>
-                                <input type="date" name="travelDate" required class="form-input" min="2026-05-01">
+                                <label class="form-label">Departure Date *</label>
+                                <input type="date" name="departureDate" required class="form-input" min="2026-05-01">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Pickup City *</label>
@@ -102,16 +108,20 @@
                         </h3>
                         <div class="grid sm:grid-cols-2 gap-4">
                             <div class="form-group">
-                                <label class="form-label">Full Name *</label>
-                                <input type="text" name="customerName" required class="form-input" placeholder="Enter your full name">
+                                <label class="form-label">First Name *</label>
+                                <input type="text" name="firstName" required class="form-input" placeholder="First Name">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Last Name *</label>
+                                <input type="text" name="lastName" required class="form-input" placeholder="Last Name">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Email Address *</label>
-                                <input type="email" name="customerEmail" required class="form-input" placeholder="you@example.com">
+                                <input type="email" name="guestEmail" required class="form-input" placeholder="you@example.com">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Phone Number *</label>
-                                <input type="tel" name="customerPhone" required class="form-input" placeholder="+91 XXXXX XXXXX">
+                                <input type="tel" name="guestPhone" required class="form-input" placeholder="+91 XXXXX XXXXX">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Special Requests</label>
@@ -190,7 +200,9 @@
 </style>
 
 <script>
-    const BASE_PRICE = ${trip.discountPrice > 0 ? trip.discountPrice : trip.priceInr};
+    const BASE_PRICE = Number("${empty trip.discountPrice ? 0 : trip.discountPrice}") > 0 
+        ? Number("${empty trip.discountPrice ? 0 : trip.discountPrice}") 
+        : Number("${empty trip.priceInr ? 0 : trip.priceInr}");
 
     function updatePrice() {
         const adults = parseInt(document.getElementById('numAdults').value) || 1;
@@ -204,14 +216,34 @@
 
         const travelers = adults + children;
         const subtotal = BASE_PRICE * travelers * roomMult;
-        const tax = subtotal * 0.05;
-        const total = subtotal + tax;
+        // Taxes are included in the base price
+        const total = subtotal;
 
         document.getElementById('displayTravelers').textContent = '× ' + travelers;
         document.getElementById('displayRoomUpgrade').textContent = '× ' + roomMult.toFixed(1);
         document.getElementById('displaySubtotal').textContent = '₹' + Math.round(subtotal).toLocaleString('en-IN');
-        document.getElementById('displayTax').textContent = '₹' + Math.round(tax).toLocaleString('en-IN');
+        document.getElementById('displayTax').textContent = 'Included';
         document.getElementById('displayTotal').textContent = '₹' + Math.round(total).toLocaleString('en-IN');
+    }
+
+    function populateHiddenFields() {
+        const adults = parseInt(document.getElementById('numAdults').value) || 1;
+        const children = parseInt(document.getElementById('numChildren').value) || 0;
+        const roomType = document.getElementById('roomType').value;
+
+        let roomMult = 1.0;
+        if (roomType === 'Deluxe') roomMult = 1.3;
+        else if (roomType === 'Suite') roomMult = 1.8;
+        else if (roomType === 'Premium Suite') roomMult = 2.5;
+
+        const travelers = adults + children;
+        const subtotal = BASE_PRICE * travelers * roomMult;
+        const total = subtotal;
+        
+        document.getElementById('hiddenBasePrice').value = BASE_PRICE;
+        document.getElementById('hiddenTotalPrice').value = Math.round(total);
+        document.getElementById('hiddenGuests').value = travelers;
+        return true;
     }
 
     // Initialize on load

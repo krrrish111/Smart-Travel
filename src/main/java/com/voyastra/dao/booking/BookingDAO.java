@@ -183,8 +183,17 @@ public class BookingDAO {
 
     public Booking getBookingById(int id) {
         Booking booking = null;
-        String query = "SELECT b.id, b.user_id, b.plan_id, b.total_price, b.status, b.created_at, b.type, b.details, p.title AS plan_title, p.image AS plan_image " +
+        String query = "SELECT b.id, b.user_id, b.plan_id, b.total_price, b.status, b.created_at, b.type, b.details, b.booking_code, " +
+                       "b.travel_date, b.num_adults, b.num_children, b.room_type, b.pickup_city, " +
+                       "b.customer_name, b.customer_email, b.customer_phone, b.special_requests, " +
+                       "b.payment_id, b.transaction_id, b.payment_status, " +
+                       "p.title AS plan_title, p.image AS plan_image " +
                        "FROM bookings b LEFT JOIN plans p ON b.plan_id = p.id WHERE b.id = ?";
+        
+        System.out.println("===== BookingDAO Debug =====");
+        System.out.println("Executing SQL: " + query);
+        System.out.println("Parameters: id=" + id);
+        
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, id);
@@ -199,12 +208,31 @@ public class BookingDAO {
                     booking.setCreatedAt(rs.getTimestamp("created_at"));
                     booking.setPlanTitle(rs.getString("plan_title"));
                     booking.setPlanImage(rs.getString("plan_image"));
+                    booking.setType(rs.getString("type"));
+                    booking.setDetails(rs.getString("details"));
+                    booking.setTravelDate(rs.getString("travel_date"));
+                    booking.setNumAdults(rs.getInt("num_adults"));
+                    booking.setNumChildren(rs.getInt("num_children"));
+                    booking.setRoomType(rs.getString("room_type"));
+                    booking.setPickupCity(rs.getString("pickup_city"));
+                    booking.setCustomerName(rs.getString("customer_name"));
+                    booking.setCustomerEmail(rs.getString("customer_email"));
+                    booking.setCustomerPhone(rs.getString("customer_phone"));
+                    booking.setSpecialRequests(rs.getString("special_requests"));
+                    booking.setPaymentId(rs.getString("payment_id"));
+                    booking.setTransactionId(rs.getString("transaction_id"));
+                    booking.setPaymentStatus(rs.getString("payment_status"));
+                    try {
+                        booking.setBookingCode(rs.getString("booking_code"));
+                    } catch (Exception e) {}
                 }
             }
+            System.out.println("Result Set parsed, returning Booking: " + (booking != null ? booking.getId() : "null"));
         } catch (SQLException e) {
             System.err.println("ERROR: BookingDAO.getBookingById failed.");
             e.printStackTrace();
         }
+        System.out.println("============================");
         return booking;
     }
 

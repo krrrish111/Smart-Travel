@@ -21,7 +21,7 @@ public class HotelInfoServlet extends HttpServlet {
             String image = request.getParameter("image");
 
             if (idStr == null || idStr.trim().isEmpty()) {
-                response.sendRedirect(request.getContextPath() + "/explore.jsp");
+                response.sendRedirect(request.getContextPath() + "/explore");
                 return;
             }
 
@@ -45,7 +45,7 @@ public class HotelInfoServlet extends HttpServlet {
                 com.voyastra.dao.booking.HotelDAO hotelDAO = new com.voyastra.dao.booking.HotelDAO();
                 hotel = hotelDAO.getHotelById(id);
                 if (hotel == null) {
-                    response.sendRedirect(request.getContextPath() + "/explore.jsp");
+                    response.sendRedirect(request.getContextPath() + "/explore");
                     return;
                 }
             }
@@ -53,7 +53,7 @@ public class HotelInfoServlet extends HttpServlet {
             request.setAttribute("hotel", hotel);
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendRedirect(request.getContextPath() + "/explore.jsp");
+            response.sendRedirect(request.getContextPath() + "/explore");
             return;
         }
 

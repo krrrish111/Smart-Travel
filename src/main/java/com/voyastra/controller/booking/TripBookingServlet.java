@@ -17,9 +17,20 @@ public class TripBookingServlet extends HttpServlet {
         // Pass any parameters straight through to the JSP if needed
         String id = request.getParameter("id");
         if (id == null || id.trim().isEmpty()) {
-            response.sendRedirect(request.getContextPath() + "/explore.jsp");
+            response.sendRedirect(request.getContextPath() + "/explore");
             return;
         }
+        try {
+            int tripId = Integer.parseInt(id);
+            com.voyastra.dao.planner.TripDAO tripDAO = new com.voyastra.dao.planner.TripDAO();
+            com.voyastra.model.planner.PremiumTrip trip = tripDAO.getTripById(tripId);
+            if (trip != null) {
+                request.setAttribute("trip", trip);
+            }
+        } catch (Exception e) {
+            System.err.println("Error fetching trip for booking: " + e.getMessage());
+        }
+        
         request.setAttribute("tripId", id);
         
         request.getRequestDispatcher("/pages/booking/trip-booking.jsp").forward(request, response);

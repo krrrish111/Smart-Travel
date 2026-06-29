@@ -22,12 +22,12 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 relative">
                         <div style="position: relative;">
                             <label class="block text-sm font-medium mb-1 text-white">From Station</label>
-                            <input type="text" name="fromStation" id="fromStation" class="input-field w-full text-black placeholder-gray-500" placeholder="e.g. NDLS (New Delhi)" required>
+                            <input type="text" name="fromStation" id="fromStation" class="input-field w-full text-black placeholder-gray-500 location-autocomplete" placeholder="e.g. NDLS (New Delhi)" required>
                             <button type="button" onclick="swapStations()" style="position: absolute; right: -25px; top: 32px; z-index: 10; background: var(--color-surface); color: var(--color-primary); border-radius: 50%; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 1px solid var(--color-border); cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">⇄</button>
                         </div>
                         <div>
                             <label class="block text-sm font-medium mb-1 text-white" style="padding-left: 10px;">To Station</label>
-                            <input type="text" name="toStation" id="toStation" class="input-field w-full text-black placeholder-gray-500" placeholder="e.g. BCT (Mumbai Central)" style="margin-left: 10px;" required>
+                            <input type="text" name="toStation" id="toStation" class="input-field w-full text-black placeholder-gray-500 location-autocomplete" placeholder="e.g. BCT (Mumbai Central)" style="margin-left: 10px;" required>
                         </div>
                         <div>
                             <label class="block text-sm font-medium mb-1 text-white">Journey Date</label>

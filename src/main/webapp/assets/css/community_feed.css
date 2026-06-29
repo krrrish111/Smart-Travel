@@ -137,7 +137,7 @@ body {
 ══════════════════════════════════════════════════════ */
 .community-layout {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 320px;
+    grid-template-columns: 7fr 3fr;
     gap: 24px;
     width: 100%;
     max-width: 1400px;
@@ -1338,4 +1338,136 @@ video.post-img {
 .media-viewer-download:hover {
     color: var(--bg-color);
     background: var(--accent-color);
+}
+
+/* Premium Community Post Card Styling */
+.community-post-card {
+    background: #181c24;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+    border: 1px solid rgba(214, 166, 107, 0.15);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.community-post-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+}
+
+.community-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+}
+
+.community-user {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.community-avatar-wrap {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    padding: 2px;
+    background: linear-gradient(135deg, #d6a66b, #4da3ff);
+}
+
+.community-avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #181c24;
+}
+
+.community-username {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.community-meta {
+    font-size: 0.85rem;
+    color: #b9b9b9;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.community-body {
+    margin-bottom: 16px;
+}
+
+.community-content {
+    font-size: 0.95rem;
+    color: #ffffff;
+    line-height: 1.6;
+    margin-bottom: 16px;
+}
+
+.community-image-wrap {
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 16px;
+}
+
+.community-image {
+    width: 100%;
+    max-height: 450px;
+    object-fit: cover;
+    border-radius: 12px;
+    display: block;
+}
+
+.community-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid rgba(214, 166, 107, 0.1);
+    padding-top: 16px;
+    margin-top: 16px;
+}
+
+.community-btn {
+    background: transparent;
+    border: none;
+    color: #b9b9b9;
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 8px 12px;
+    border-radius: 8px;
+}
+
+.community-btn svg {
+    transition: transform 0.2s ease;
+}
+
+.community-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #d6a66b;
+}
+
+.community-btn:hover svg {
+    transform: scale(1.1);
+}
+
+.community-btn.liked, .community-btn.saved {
+    color: #d6a66b;
+}
+
+.community-btn.liked svg {
+    fill: #d6a66b;
 }

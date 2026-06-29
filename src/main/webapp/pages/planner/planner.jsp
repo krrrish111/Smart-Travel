@@ -109,11 +109,11 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div class="form-group">
                     <label class="form-label text-xs uppercase tracking-wider text-muted font-semibold mb-2 block">Origin</label>
-                    <input type="text" id="routeStart" name="startLocation" class="form-control voyastra-autocomplete" placeholder="e.g. Delhi" style="border-radius: 12px; padding: 12px;" required>
+                    <input type="text" id="routeStart" name="startLocation" class="form-control voyastra-autocomplete location-autocomplete" placeholder="e.g. Delhi" style="border-radius: 12px; padding: 12px;" required>
                 </div>
                 <div class="form-group">
                     <label class="form-label text-xs uppercase tracking-wider text-muted font-semibold mb-2 block">Destination</label>
-                    <input type="text" id="routeEnd" name="destination" class="form-control voyastra-autocomplete" placeholder="e.g. Goa" style="border-radius: 12px; padding: 12px;" required
+                    <input type="text" id="routeEnd" name="destination" class="form-control voyastra-autocomplete location-autocomplete" placeholder="e.g. Goa" style="border-radius: 12px; padding: 12px;" required
                            value="${preDestination}">
                 </div>
             </div>
@@ -122,7 +122,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div class="form-group">
                     <label class="form-label text-xs uppercase tracking-wider text-muted font-semibold mb-2 block">Departure Date</label>
-                    <input type="date" id="depDate" name="departureDate" class="form-control" style="border-radius: 12px; padding: 12px;" required>
+                    <input type="date" id="depDate" name="departureDate" class="form-control location-autocomplete" style="border-radius: 12px; padding: 12px;" required>
                 </div>
                 <div class="form-group">
                     <label class="form-label text-xs uppercase tracking-wider text-muted font-semibold mb-2 block">Return Date</label>

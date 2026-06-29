@@ -74,12 +74,12 @@
                                                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 relative">
                                                     <div style="position: relative;">
                                                         <label class="block text-sm font-medium mb-1 text-white">From City</label>
-                                                        <input type="text" name="from" id="flightFrom" value="${from != null ? from : 'Delhi'}" class="input-field w-full text-black placeholder-gray-500" placeholder="Origin">
+                                                        <input type="text" name="from" id="flightFrom" value="${from != null ? from : 'Delhi'}" class="input-field w-full text-black placeholder-gray-500 location-autocomplete" placeholder="Origin">
                                                         <button type="button" onclick="swapFlightCities()" style="position: absolute; right: -25px; top: 32px; z-index: 10; background: var(--color-surface); color: var(--color-primary); border-radius: 50%; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 1px solid var(--color-border); cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">⇄</button>
                                                     </div>
                                                     <div>
                                                         <label class="block text-sm font-medium mb-1 text-white" style="padding-left: 10px;">To City</label>
-                                                        <input type="text" name="to" id="flightTo" value="${to != null ? to : 'Mumbai'}" class="input-field w-full text-black placeholder-gray-500" placeholder="Destination" style="margin-left: 10px;">
+                                                        <input type="text" name="to" id="flightTo" value="${to != null ? to : 'Mumbai'}" class="input-field w-full text-black placeholder-gray-500 location-autocomplete" placeholder="Destination" style="margin-left: 10px;">
                                                     </div>
                                                     <div>
                                                         <label class="block text-sm font-medium mb-1 text-white">Departure Date</label>
@@ -259,12 +259,12 @@
                                                 <div class="search-fields-row">
                                                     <div class="search-field" style="flex: 2;">
                                                         <div class="field-label">Pickup City</div>
-                                                        <input type="text" name="pickupCity" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="Enter Pickup City">
+                                                        <input type="text" name="pickupCity" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full location-autocomplete" placeholder="Enter Pickup City">
                                                         <div class="field-sub">City, airport or address</div>
                                                     </div>
                                                     <div class="search-field">
                                                         <div class="field-label">Pickup Date</div>
-                                                        <input type="date" name="pickupDate" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" style="color-scheme: dark;">
+                                                        <input type="date" name="pickupDate" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full location-autocomplete" style="color-scheme: dark;">
                                                     </div>
                                                     <div class="search-field">
                                                         <div class="field-label">Return Date</div>
@@ -299,7 +299,7 @@
                                                 <div class="search-fields-row">
                                                     <div class="search-field" style="flex: 2;">
                                                         <div class="field-label">Destination / Activity</div>
-                                                        <input type="text" name="query" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="Goa, Manali, Safari...">
+                                                        <input type="text" name="query" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full location-autocomplete" placeholder="Goa, Manali, Safari...">
                                                         <div class="field-sub">City, landmark or experience</div>
                                                     </div>
                                                     <div class="search-field">
@@ -327,11 +327,11 @@
                                                 <div class="search-fields-row">
                                                     <div class="search-field" style="flex: 2;">
                                                         <div class="field-label">From Station</div>
-                                                        <input type="text" name="fromStation" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="Delhi (NDLS)">
+                                                        <input type="text" name="fromStation" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full location-autocomplete" placeholder="Delhi (NDLS)">
                                                     </div>
                                                     <div class="search-field" style="flex: 2;">
                                                         <div class="field-label">To Station</div>
-                                                        <input type="text" name="toStation" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="Mumbai (BCT)">
+                                                        <input type="text" name="toStation" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full location-autocomplete" placeholder="Mumbai (BCT)">
                                                     </div>
                                                     <div class="search-field">
                                                         <div class="field-label">Journey Date</div>
@@ -358,11 +358,11 @@
                                                 <div class="search-fields-row">
                                                     <div class="search-field" style="flex: 2;">
                                                         <div class="field-label">From City</div>
-                                                        <input type="text" name="from" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="Delhi">
+                                                        <input type="text" name="from" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full location-autocomplete" placeholder="Delhi">
                                                     </div>
                                                     <div class="search-field" style="flex: 2;">
                                                         <div class="field-label">To City</div>
-                                                        <input type="text" name="to" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="Manali">
+                                                        <input type="text" name="to" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full location-autocomplete" placeholder="Manali">
                                                     </div>
                                                     <div class="search-field">
                                                         <div class="field-label">Travel Date</div>
@@ -389,11 +389,11 @@
                                                 <div class="search-fields-row">
                                                     <div class="search-field" style="flex: 2;">
                                                         <div class="field-label">Pickup Location</div>
-                                                        <input type="text" name="pickup" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="City or Airport">
+                                                        <input type="text" name="pickup" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full location-autocomplete" placeholder="City or Airport">
                                                     </div>
                                                     <div class="search-field" style="flex: 2;">
                                                         <div class="field-label">Drop Location</div>
-                                                        <input type="text" name="drop" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="Destination">
+                                                        <input type="text" name="drop" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full location-autocomplete" placeholder="Destination">
                                                     </div>
                                                     <div class="search-field">
                                                         <div class="field-label">Pickup Date</div>
@@ -420,11 +420,11 @@
                                                 <div class="search-fields-row">
                                                     <div class="search-field" style="flex: 2;">
                                                         <div class="field-label">Departure Port</div>
-                                                        <input type="text" name="departurePort" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="Mumbai / Kochi">
+                                                        <input type="text" name="departurePort" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full location-autocomplete" placeholder="Mumbai / Kochi">
                                                     </div>
                                                     <div class="search-field" style="flex: 2;">
                                                         <div class="field-label">Destination</div>
-                                                        <input type="text" name="destination" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full voyastra-autocomplete" placeholder="Lakshadweep, Goa...">
+                                                        <input type="text" name="destination" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full voyastra-autocomplete location-autocomplete" placeholder="Lakshadweep, Goa...">
                                                     </div>
                                                     <div class="search-field">
                                                         <div class="field-label">Date</div>
@@ -451,11 +451,11 @@
                                                 <div class="search-fields-row">
                                                     <div class="search-field" style="flex: 2;">
                                                         <div class="field-label">Origin</div>
-                                                        <input type="text" name="origin" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="Phata / Mumbai">
+                                                        <input type="text" name="origin" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full location-autocomplete" placeholder="Phata / Mumbai">
                                                     </div>
                                                     <div class="search-field" style="flex: 2;">
                                                         <div class="field-label">Destination</div>
-                                                        <input type="text" name="destination" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full voyastra-autocomplete" placeholder="Kedarnath / Pune">
+                                                        <input type="text" name="destination" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full voyastra-autocomplete location-autocomplete" placeholder="Kedarnath / Pune">
                                                     </div>
                                                     <div class="search-field">
                                                         <div class="field-label">Date</div>
@@ -482,7 +482,7 @@
                                                 <div class="search-fields-row">
                                                     <div class="search-field" style="flex: 3;">
                                                         <div class="field-label">Destination City / Country</div>
-                                                        <input type="text" name="city" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full" placeholder="Bali, Maldives, Kerala...">
+                                                        <input autocomplete="address-level2" type="text" name="city" class="bg-transparent text-white border-none outline-none font-bold text-lg w-full location-autocomplete" placeholder="Bali, Maldives, Kerala...">
                                                     </div>
                                                     <div class="search-field">
                                                         <div class="field-label">Travel Date</div>

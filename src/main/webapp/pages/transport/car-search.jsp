@@ -9,14 +9,14 @@
         <div class="form-group relative">
             <label class="text-sm font-bold text-gray-400 block mb-2">PICKUP CITY</label>
             <input type="text" name="pickupCity" placeholder="Enter City" required 
-                   class="w-full bg-gray-800 text-white rounded-lg border border-gray-600 px-4 py-3 focus:border-purple-500 outline-none transition">
+                   class="w-full bg-gray-800 text-white rounded-lg border border-gray-600 px-4 py-3 focus:border-purple-500 outline-none transition location-autocomplete">
         </div>
 
         <!-- Pickup Date -->
         <div class="form-group relative">
             <label class="text-sm font-bold text-gray-400 block mb-2">PICKUP DATE</label>
             <input type="date" name="pickupDate" required 
-                   class="w-full bg-gray-800 text-white rounded-lg border border-gray-600 px-4 py-3 focus:border-purple-500 outline-none transition">
+                   class="w-full bg-gray-800 text-white rounded-lg border border-gray-600 px-4 py-3 focus:border-purple-500 outline-none transition location-autocomplete">
         </div>
 
         <!-- Return Date -->

@@ -62,7 +62,7 @@
                         <div class="grid sm:grid-cols-2 gap-4">
                             <div class="form-group">
                                 <label class="form-label">Departure Date *</label>
-                                <input type="date" name="departureDate" required class="form-input" min="2026-05-01">
+                                <input type="date" name="departureDate" required class="form-input location-autocomplete" min="2026-05-01">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Pickup City *</label>
@@ -109,11 +109,11 @@
                         <div class="grid sm:grid-cols-2 gap-4">
                             <div class="form-group">
                                 <label class="form-label">First Name *</label>
-                                <input type="text" name="firstName" required class="form-input" placeholder="First Name">
+                                <input autocomplete="given-name" type="text" name="firstName" required class="form-input" placeholder="First Name">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Last Name *</label>
-                                <input type="text" name="lastName" required class="form-input" placeholder="Last Name">
+                                <input autocomplete="family-name" type="text" name="lastName" required class="form-input" placeholder="Last Name">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Email Address *</label>

@@ -12,7 +12,7 @@
         <p class="text-muted mb-8">Real-time Weather Intelligence, Crowd Forecasting & Safety Analysis.</p>
         
         <form action="${pageContext.request.contextPath}/command-center" method="get" class="relative">
-            <input type="text" name="destination" class="form-control text-xl py-4 pl-12 rounded-full text-center voyastra-autocomplete" placeholder="Where are you planning to go?" required>
+            <input type="text" name="destination" class="form-control text-xl py-4 pl-12 rounded-full text-center voyastra-autocomplete location-autocomplete" placeholder="Where are you planning to go?" required>
             <i class="ri-search-2-line absolute left-6 top-1/2 transform -translate-y-1/2 text-muted text-xl"></i>
             <button type="submit" class="btn btn-primary absolute right-2 top-1/2 transform -translate-y-1/2 rounded-full px-6 py-2">Analyze</button>
         </form>

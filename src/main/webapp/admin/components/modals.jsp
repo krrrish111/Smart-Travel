@@ -88,11 +88,11 @@
                 <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
                     <div>
                         <label class="form-label" for="destLocation">Location (State, City)</label>
-                        <input type="text" class="form-control" id="destLocation" name="location" required placeholder="e.g. Cyclades">
+                        <input type="text" class="form-control location-autocomplete" id="destLocation" name="location" required placeholder="e.g. Cyclades">
                     </div>
                     <div>
                         <label class="form-label" for="destCountry">Country</label>
-                        <input type="text" class="form-control" id="destCountry" name="country" required placeholder="e.g. Greece">
+                        <input autocomplete="country" type="text" class="form-control" id="destCountry" name="country" required placeholder="e.g. Greece">
                     </div>
                 </div>
                 

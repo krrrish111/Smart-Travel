@@ -1102,7 +1102,7 @@
                                                 <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                                             </svg>
                                         </div>
-                                        <input id="expSearchInput" type="text" name="q" class="explore-search-input"
+                                        <input id="expSearchInput" type="text" name="q" class="explore-search-input location-autocomplete"
                                             placeholder="Search Any Destination..."
                                             value="${not empty searchQuery ? searchQuery : ''}"
                                             aria-label="Search destinations">
@@ -1787,13 +1787,13 @@
 
                                     <div class="booking-form-group">
                                         <label for="hotelEmail">Email Address</label>
-                                        <input type="email" id="hotelEmail" name="email" class="booking-form-input"
+                                        <input autocomplete="email" type="email" id="hotelEmail" name="email" class="booking-form-input"
                                             required placeholder="john.doe@example.com">
                                     </div>
 
                                     <div class="booking-form-group">
                                         <label for="hotelPhone">Phone Number</label>
-                                        <input type="tel" id="hotelPhone" name="phone" class="booking-form-input"
+                                        <input autocomplete="tel" type="tel" id="hotelPhone" name="phone" class="booking-form-input"
                                             required placeholder="+1 (555) 019-2834">
                                     </div>
 
@@ -1861,7 +1861,7 @@
 
                                     <div class="booking-form-group">
                                         <label for="restEmail">Email Address</label>
-                                        <input type="email" id="restEmail" name="email" class="booking-form-input"
+                                        <input autocomplete="email" type="email" id="restEmail" name="email" class="booking-form-input"
                                             required placeholder="john.doe@example.com">
                                     </div>
 

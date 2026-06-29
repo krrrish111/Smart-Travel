@@ -25,14 +25,14 @@
             <div class="form-group relative md:col-span-2">
                 <label class="text-sm font-bold text-gray-400 block mb-2">PICKUP LOCATION</label>
                 <input type="text" name="pickup" placeholder="Enter Pickup Address" required 
-                       class="w-full bg-gray-800 text-white rounded-lg border border-gray-600 px-4 py-3 focus:border-blue-500 outline-none transition">
+                       class="w-full bg-gray-800 text-white rounded-lg border border-gray-600 px-4 py-3 focus:border-blue-500 outline-none transition location-autocomplete">
             </div>
 
             <!-- Drop (Changes based on Trip Type) -->
             <div class="form-group relative md:col-span-2" id="dropFieldContainer">
                 <label class="text-sm font-bold text-gray-400 block mb-2" id="dropLabel">DROP LOCATION</label>
                 <input type="text" name="drop" id="dropInput" placeholder="Enter Drop Address" required 
-                       class="w-full bg-gray-800 text-white rounded-lg border border-gray-600 px-4 py-3 focus:border-blue-500 outline-none transition">
+                       class="w-full bg-gray-800 text-white rounded-lg border border-gray-600 px-4 py-3 focus:border-blue-500 outline-none transition location-autocomplete">
             </div>
 
             <!-- Vehicle Type -->

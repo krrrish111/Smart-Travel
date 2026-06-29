@@ -10,7 +10,7 @@
             <div class="relative">
                 <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">📍</span>
                 <input type="text" name="from" placeholder="Origin City" required 
-                       class="w-full bg-gray-800 text-white text-lg rounded-lg border border-gray-600 pl-12 pr-4 py-3 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition">
+                       class="w-full bg-gray-800 text-white text-lg rounded-lg border border-gray-600 pl-12 pr-4 py-3 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition location-autocomplete">
             </div>
         </div>
 
@@ -20,7 +20,7 @@
             <div class="relative">
                 <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">📍</span>
                 <input type="text" name="to" placeholder="Destination City" required 
-                       class="w-full bg-gray-800 text-white text-lg rounded-lg border border-gray-600 pl-12 pr-4 py-3 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition">
+                       class="w-full bg-gray-800 text-white text-lg rounded-lg border border-gray-600 pl-12 pr-4 py-3 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition location-autocomplete">
             </div>
         </div>
 

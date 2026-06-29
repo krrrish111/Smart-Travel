@@ -522,15 +522,15 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">Email Address</label>
-                        <input type="email" name="email" class="form-control" value="${user.email}" required>
+                        <input autocomplete="email" type="email" name="email" class="form-control" value="${user.email}" required>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Phone Number</label>
-                        <input type="tel" name="phone" class="form-control" value="${user.phone}">
+                        <input autocomplete="tel" type="tel" name="phone" class="form-control" value="${user.phone}">
                     </div>
                     <div class="form-group">
                         <label class="form-label">Location</label>
-                        <input type="text" name="location" class="form-control" value="${user.location}" placeholder="e.g. New York, USA">
+                        <input type="text" name="location" class="form-control location-autocomplete" value="${user.location}" placeholder="e.g. New York, USA">
                     </div>
                     <div class="form-group full-width">
                         <label class="form-label">Bio / About Me</label>
@@ -1084,15 +1084,15 @@
                 <input type="hidden" name="action" value="changePassword">
                 <div class="form-group">
                     <label class="form-label">Current Password</label>
-                    <input type="password" name="currentPassword" class="form-control" required>
+                    <input autocomplete="current-password" type="password" name="currentPassword" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <label class="form-label">New Password</label>
-                    <input type="password" name="newPassword" class="form-control" required>
+                    <input autocomplete="new-password" type="password" name="newPassword" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Confirm New Password</label>
-                    <input type="password" name="confirmPassword" class="form-control" required>
+                    <input autocomplete="new-password" type="password" name="confirmPassword" class="form-control" required>
                 </div>
                 <button type="submit" class="btn btn-primary">Update Password</button>
             </form>

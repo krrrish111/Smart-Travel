@@ -269,7 +269,7 @@
             </div>
             <div class="form-group">
                 <label>Location (Optional)</label>
-                <input type="text" id="storyLocation" name="location" class="voyastra-input" placeholder="e.g. Manali, India" maxlength="50">
+                <input type="text" id="storyLocation" name="location" class="voyastra-input location-autocomplete" placeholder="e.g. Manali, India" maxlength="50">
             </div>
             <button type="submit" class="post-submit-btn" style="width:100%; margin-top:15px;" id="storySubmitBtn">Upload Story</button>
         </form>

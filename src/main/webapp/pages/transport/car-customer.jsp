@@ -24,11 +24,11 @@
                     </div>
                     <div>
                         <label class="block text-gray-400 text-sm mb-1">Mobile Number</label>
-                        <input type="text" name="phone" required class="w-full bg-gray-900 border border-gray-700 text-white rounded p-3 focus:border-purple-500 outline-none">
+                        <input autocomplete="tel" type="text" name="phone" required class="w-full bg-gray-900 border border-gray-700 text-white rounded p-3 focus:border-purple-500 outline-none">
                     </div>
                     <div>
                         <label class="block text-gray-400 text-sm mb-1">Email ID</label>
-                        <input type="email" name="email" required class="w-full bg-gray-900 border border-gray-700 text-white rounded p-3 focus:border-purple-500 outline-none">
+                        <input autocomplete="email" type="email" name="email" required class="w-full bg-gray-900 border border-gray-700 text-white rounded p-3 focus:border-purple-500 outline-none">
                     </div>
                 </div>
 

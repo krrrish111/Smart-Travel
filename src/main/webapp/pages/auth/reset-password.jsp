@@ -78,12 +78,12 @@
             
             <div class="form-group">
                 <label>New Password</label>
-                <input type="password" name="password" placeholder="Min 6 characters" required>
+                <input autocomplete="current-password" type="password" name="password" placeholder="Min 6 characters" required>
             </div>
 
             <div class="form-group">
                 <label>Confirm Password</label>
-                <input type="password" name="confirm_password" placeholder="Repeat password" required>
+                <input autocomplete="current-password" type="password" name="confirm_password" placeholder="Repeat password" required>
             </div>
 
             <button type="submit" class="btn">Update Password</button>

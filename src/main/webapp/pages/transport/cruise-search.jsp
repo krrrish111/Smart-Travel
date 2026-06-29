@@ -8,13 +8,13 @@
         <div class="form-group relative">
             <label class="text-sm font-bold text-gray-400 block mb-2">DEPARTURE PORT</label>
             <input type="text" name="departurePort" placeholder="e.g. Mumbai" required 
-                   class="w-full bg-gray-800 text-white rounded-lg border border-gray-600 px-4 py-3 focus:border-cyan-500 outline-none transition">
+                   class="w-full bg-gray-800 text-white rounded-lg border border-gray-600 px-4 py-3 focus:border-cyan-500 outline-none transition location-autocomplete">
         </div>
 
         <div class="form-group relative">
             <label class="text-sm font-bold text-gray-400 block mb-2">DESTINATION</label>
             <input type="text" name="destination" placeholder="e.g. Goa" required 
-                   class="w-full bg-gray-800 text-white rounded-lg border border-gray-600 px-4 py-3 focus:border-cyan-500 outline-none transition voyastra-autocomplete">
+                   class="w-full bg-gray-800 text-white rounded-lg border border-gray-600 px-4 py-3 focus:border-cyan-500 outline-none transition voyastra-autocomplete location-autocomplete">
         </div>
 
         <div class="form-group relative">

@@ -114,11 +114,27 @@ h1, h2, h3, h4 {
 
 /* Fix Google Maps Autocomplete overrides */
 .pac-container {
-    z-index: 1050 !important;
-    border-radius: var(--border-radius-md) !important;
-    border: 1px solid var(--color-border) !important;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.3) !important;
+    z-index: 100000 !important;
+    background-color: #181c24 !important;
+    border: 1px solid rgba(214, 166, 107, 0.15) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5) !important;
     font-family: 'Poppins', 'Inter', 'Roboto', 'Arial', sans-serif;
+}
+.pac-item {
+    padding: 10px 16px;
+    color: #b9b9b9;
+    border-top: 1px solid rgba(214, 166, 107, 0.05);
+    cursor: pointer;
+}
+.pac-item:hover, .pac-item-selected {
+    background-color: rgba(214, 166, 107, 0.1) !important;
+    color: #ffffff;
+}
+.pac-item-query {
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 500;
 }
 
 /* Remove "Oops! Something went wrong" Google Maps Error Overlay */

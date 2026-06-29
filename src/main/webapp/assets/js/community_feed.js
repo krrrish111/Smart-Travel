@@ -176,7 +176,7 @@ const CommunityFeed = {
             const timeFormatted = this.formatTime(post.createdAt);
             
             const postCard = document.createElement('div');
-            postCard.className = 'social-post-card';
+            postCard.className = 'community-post-card';
             postCard.id = `post-${post.id}`;
             
             let imageHTML = '';
@@ -184,14 +184,14 @@ const CommunityFeed = {
                 const isVideo = post.imageUrl.toLowerCase().endsWith('.mp4');
                 if (isVideo) {
                     imageHTML = `
-                        <div class="post-image-wrap" style="aspect-ratio: auto;">
-                            <video src="${post.imageUrl}" class="post-img media-item" data-media="${post.imageUrl}" data-type="video" style="border-radius:14px;" onclick="openMediaViewer('${post.imageUrl}', 'video')"></video>
+                        <div class="community-image-wrap" style="aspect-ratio: auto;">
+                            <video src="${post.imageUrl}" class="community-image media-item" data-media="${post.imageUrl}" data-type="video" style="border-radius:14px;" onclick="openMediaViewer('${post.imageUrl}', 'video')"></video>
                         </div>
                     `;
                 } else {
                     imageHTML = `
-                        <div class="post-image-wrap">
-                            <img src="${post.imageUrl}" alt="Travel Photo" class="post-img media-item" data-media="${post.imageUrl}" data-type="image" onclick="openMediaViewer('${post.imageUrl}', 'image')">
+                        <div class="community-image-wrap">
+                            <img src="${post.imageUrl}" alt="Travel Photo" class="community-image media-item" data-media="${post.imageUrl}" data-type="image" onclick="openMediaViewer('${post.imageUrl}', 'image')">
                         </div>
                     `;
                 }
@@ -281,17 +281,17 @@ const CommunityFeed = {
             `;
 
             postCard.innerHTML = `
-                <div class="post-header">
-                    <div class="post-user-info">
-                        <div class="post-avatar-wrap">
-                            <img src="${avatarUrl}" alt="${post.userName}" class="post-avatar">
+                <div class="community-header">
+                    <div class="community-user">
+                        <div class="community-avatar-wrap">
+                            <img src="${avatarUrl}" alt="${post.userName}" class="community-avatar">
                         </div>
                         <div>
-                            <div class="post-user-name">
+                            <div class="community-username">
                                 ${post.userName}
                                 <span class="verified-badge" title="Verified Explorer">✓</span>
                             </div>
-                            <div class="post-user-meta">
+                            <div class="community-meta">
                                 <span class="post-time">${timeFormatted}</span>
                                 ${followBtnHTML}
                             </div>
@@ -300,9 +300,9 @@ const CommunityFeed = {
                     ${dotMenuHTML}
                 </div>
                 
-                <div class="post-body">
+                <div class="community-body">
                     ${ratingHTML}
-                    <p class="post-caption">${post.text}</p>
+                    <p class="community-content">${post.text}</p>
                     ${locationBadgeHTML}
                     ${imageHTML}
                     ${post.hashtags ? `<div class="post-tags">${post.hashtags}</div>` : ''}
@@ -313,20 +313,20 @@ const CommunityFeed = {
                     <span id="comment-count-text-${post.id}">${post.commentCount} Comments</span>
                 </div>
 
-                <div class="post-actions">
-                    <button class="post-action-btn like-btn ${post.hasLiked ? 'liked' : ''}" onclick="CommunityFeed.toggleLike(${post.id}, this)">
+                <div class="community-actions">
+                    <button class="community-btn like-btn ${post.hasLiked ? 'liked' : ''}" onclick="CommunityFeed.toggleLike(${post.id}, this)">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
                         Like
                     </button>
-                    <button class="post-action-btn comment-toggle-btn" onclick="CommunityFeed.toggleComments(${post.id})">
+                    <button class="community-btn comment-toggle-btn" onclick="CommunityFeed.toggleComments(${post.id})">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
                         Comment
                     </button>
-                    <button class="post-action-btn share-btn" onclick="CommunityFeed.sharePost(${post.id})">
+                    <button class="community-btn share-btn" onclick="CommunityFeed.sharePost(${post.id})">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
                         Share
                     </button>
-                    <button class="post-action-btn save-btn ${post.hasSaved ? 'saved' : ''}" onclick="CommunityFeed.toggleSave(${post.id}, this)">
+                    <button class="community-btn save-btn ${post.hasSaved ? 'saved' : ''}" onclick="CommunityFeed.toggleSave(${post.id}, this)">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
                         Save
                     </button>

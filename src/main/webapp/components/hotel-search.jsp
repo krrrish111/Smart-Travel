@@ -11,7 +11,7 @@
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div class="col-span-1 md:col-span-2">
                 <label class="block text-sm font-medium mb-1 text-white">Destination City</label>
-                <input type="text" name="q" class="input-field w-full text-black placeholder-gray-500 voyastra-autocomplete" value="${searchQuery}" placeholder="Where to?">
+                <input type="text" name="q" class="input-field w-full text-black placeholder-gray-500 voyastra-autocomplete location-autocomplete" value="${searchQuery}" placeholder="Where to?">
             </div>
             <div>
                 <label class="block text-sm font-medium mb-1 text-white">Check-in</label>

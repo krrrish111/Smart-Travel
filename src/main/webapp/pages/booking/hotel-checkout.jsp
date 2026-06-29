@@ -54,11 +54,11 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                         <div>
                             <label class="block text-sm font-medium mb-1">First Name <span class="text-red-500">*</span></label>
-                            <input type="text" name="firstName" class="input-field w-full" value="${sessionScope.user.name}" required>
+                            <input autocomplete="given-name" type="text" name="firstName" class="input-field w-full" value="${sessionScope.user.name}" required>
                         </div>
                         <div>
                             <label class="block text-sm font-medium mb-1">Last Name <span class="text-red-500">*</span></label>
-                            <input type="text" name="lastName" class="input-field w-full" required>
+                            <input autocomplete="family-name" type="text" name="lastName" class="input-field w-full" required>
                         </div>
                         <div>
                             <label class="block text-sm font-medium mb-1">Email Address <span class="text-red-500">*</span></label>

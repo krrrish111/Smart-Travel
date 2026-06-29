@@ -27,12 +27,12 @@
                     
                     <div class="form-group mb-4 text-left">
                         <label class="text-xs text-muted font-bold uppercase tracking-wider block mb-2">Destination</label>
-                        <input type="text" name="destination" class="form-control voyastra-autocomplete" placeholder="e.g., Goa" required>
+                        <input type="text" name="destination" class="form-control voyastra-autocomplete location-autocomplete" placeholder="e.g., Goa" required>
                     </div>
                     
                     <div class="form-group mb-6 text-left">
                         <label class="text-xs text-muted font-bold uppercase tracking-wider block mb-2">Total Budget (₹)</label>
-                        <input type="number" name="total_budget" class="form-control text-2xl font-mono" placeholder="50000" required>
+                        <input type="number" name="total_budget" class="form-control text-2xl font-mono location-autocomplete" placeholder="50000" required>
                     </div>
                     
                     <button type="submit" class="btn btn-primary w-full py-3 rounded-full font-bold text-lg"><i class="ri-magic-line mr-2"></i>Generate Smart Plan</button>

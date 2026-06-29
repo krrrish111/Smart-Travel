@@ -123,11 +123,11 @@
                                     </div>
                                     <div class="form-group">
                                         <label>First Name</label>
-                                        <input type="text" name="firstName_${loop.index}" placeholder="First Name" required>
+                                        <input autocomplete="given-name" type="text" name="firstName_${loop.index}" placeholder="First Name" required>
                                     </div>
                                     <div class="form-group">
                                         <label>Last Name</label>
-                                        <input type="text" name="lastName_${loop.index}" placeholder="Last Name" required>
+                                        <input autocomplete="family-name" type="text" name="lastName_${loop.index}" placeholder="Last Name" required>
                                     </div>
                                 </div>
                                 

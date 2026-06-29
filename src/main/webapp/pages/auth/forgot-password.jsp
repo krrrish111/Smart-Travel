@@ -83,7 +83,7 @@
         <form action="forgot-password" method="POST">
             <div class="form-group">
                 <label>Email Address</label>
-                <input type="email" name="email" placeholder="example@gmail.com" required>
+                <input autocomplete="email" type="email" name="email" placeholder="example@gmail.com" required>
             </div>
             <button type="submit" class="btn">Send Link</button>
         </form>

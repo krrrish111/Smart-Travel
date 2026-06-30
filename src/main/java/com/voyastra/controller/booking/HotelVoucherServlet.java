@@ -54,7 +54,7 @@ public class HotelVoucherServlet extends HttpServlet {
             }
 
             response.setContentType("application/pdf");
-            response.setHeader("Content-Disposition", "attachment; filename=\"Hotel_Voucher_" + booking.getBookingCode() + ".pdf\"");
+            response.setHeader("Content-Disposition", "inline; filename=\"Hotel_Voucher_" + booking.getBookingCode() + ".pdf\"");
 
             byte[] pdfBytes = com.voyastra.util.PdfGeneratorUtil.generateHotelVoucherPdf(booking);
             response.getOutputStream().write(pdfBytes);

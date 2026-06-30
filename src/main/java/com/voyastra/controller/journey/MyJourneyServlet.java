@@ -97,55 +97,66 @@ public class MyJourneyServlet extends HttpServlet {
         request.setAttribute("completedTripBookings", completedDests);
         request.setAttribute("cancelledTripBookings", cancelledDests);
 
-        // Fetch generic bookings for DNA/Memories backwards compatibility
-        if (tab.equals("upcoming") || tab.equals("completed") || tab.equals("memories") || tab.equals("overview") || tab.equals("calendar") || tab.equals("dna") || tab.equals("family") || tab.equals("reports")) {
-            List<Booking> allBookings = bookingDAO.getBookingsByUser(user.getId());
-            List<Booking> genericCompletedTrips = new ArrayList<>();
-            LocalDate today = LocalDate.now();
+        // Fetch generic bookings for DNA/Memories backwards compatibility AND active document UI
+        List<Booking> allBookings = bookingDAO.getBookingsByUser(user.getId());
+        
+        Integer activeFlightId = null;
+        Integer activeHotelId = null;
 
-            for (Booking b : allBookings) {
-                if ("CONFIRMED".equalsIgnoreCase(b.getStatus()) || "ACTIVE".equalsIgnoreCase(b.getStatus())) {
-                    boolean isUpcoming = true;
-                    if (b.getTravelDate() != null && !b.getTravelDate().isEmpty()) {
-                        try {
-                            LocalDate travelDate = LocalDate.parse(b.getTravelDate());
-                            if (travelDate.isBefore(today)) {
-                                isUpcoming = false;
-                            }
-                        } catch (Exception e) {}
-                    }
-                    if (!isUpcoming) {
-                        genericCompletedTrips.add(b);
-                    }
-                } else if ("COMPLETED".equalsIgnoreCase(b.getStatus())) {
+        List<Booking> genericCompletedTrips = new ArrayList<>();
+        LocalDate today = LocalDate.now();
+
+        for (Booking b : allBookings) {
+            // Find active/upcoming documents
+            if ("CONFIRMED".equalsIgnoreCase(b.getStatus()) || "ACTIVE".equalsIgnoreCase(b.getStatus())) {
+                if ("flight".equalsIgnoreCase(b.getType())) {
+                    activeFlightId = b.getId();
+                } else if ("hotel".equalsIgnoreCase(b.getType())) {
+                    activeHotelId = b.getId();
+                }
+
+                boolean isUpcoming = true;
+                if (b.getTravelDate() != null && !b.getTravelDate().isEmpty()) {
+                    try {
+                        LocalDate travelDate = LocalDate.parse(b.getTravelDate());
+                        if (travelDate.isBefore(today)) {
+                            isUpcoming = false;
+                        }
+                    } catch (Exception e) {}
+                }
+                if (!isUpcoming) {
                     genericCompletedTrips.add(b);
                 }
-            }
-            request.setAttribute("completedTrips", genericCompletedTrips);
-
-            // If we're on the memories tab, let's also fetch memories for each completed trip
-            if (tab.equals("memories")) {
-                java.util.Map<Integer, List<com.voyastra.model.journey.TravelMemory>> memoriesMap = new java.util.HashMap<>();
-                for (Booking t : genericCompletedTrips) {
-                    memoriesMap.put(t.getId(), ecosystemDAO.getMemoriesForJourney(t.getId()));
-                }
-                request.setAttribute("tripMemoriesMap", memoriesMap);
-            }
-            
-            if (tab.equals("dna")) {
-                request.setAttribute("travelDNA", ecosystemDAO.calculateTravelDNA(user.getId(), genericCompletedTrips));
+            } else if ("COMPLETED".equalsIgnoreCase(b.getStatus())) {
+                genericCompletedTrips.add(b);
             }
         }
+        request.setAttribute("completedTrips", genericCompletedTrips);
+
+        // If we're on the memories tab, let's also fetch memories for each completed trip
+        if (tab.equals("memories")) {
+            java.util.Map<Integer, List<com.voyastra.model.journey.TravelMemory>> memoriesMap = new java.util.HashMap<>();
+            for (Booking t : genericCompletedTrips) {
+                memoriesMap.put(t.getId(), ecosystemDAO.getMemoriesForJourney(t.getId()));
+            }
+            request.setAttribute("tripMemoriesMap", memoriesMap);
+        }
         
+        if (tab.equals("dna")) {
+            request.setAttribute("travelDNA", ecosystemDAO.calculateTravelDNA(user.getId(), genericCompletedTrips));
+        }
+
         // Fetch specific data based on tab
         if (tab.equals("family")) {
             request.setAttribute("familyMembers", ecosystemDAO.getFamilyMembersForUser(user.getId()));
         } else if (tab.equals("reports")) {
             request.setAttribute("tripReports", ecosystemDAO.getTripReportsForUser(user.getId()));
-            List<Booking> completedTrips = (List<Booking>) request.getAttribute("completedTrips");
-            request.setAttribute("annualReport", ecosystemDAO.generateAnnualReport(user.getId(), completedTrips));
+            request.setAttribute("annualReport", ecosystemDAO.generateAnnualReport(user.getId(), genericCompletedTrips));
         }
         
+        request.setAttribute("activeFlightId", activeFlightId);
+        request.setAttribute("activeHotelId", activeHotelId);
+
         // We always go to the main ecosystem dashboard now
         request.getRequestDispatcher("/pages/journey/my-journey.jsp").forward(request, response);
     }

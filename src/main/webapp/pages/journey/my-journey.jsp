@@ -467,11 +467,25 @@
                             <div style="display: flex; flex-direction: column; gap: 10px;">
                                 <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center;">
                                     <div><i class="ri-file-pdf-2-line" style="color: #e74c3c;"></i> E-Ticket.pdf</div>
-                                    <button class="btn btn-outline" style="padding: 5px 10px; font-size: 0.8rem;">View</button>
+                                    <c:choose>
+                                        <c:when test="${not empty activeFlightId}">
+                                            <button class="btn btn-outline" style="padding: 5px 10px; font-size: 0.8rem;" onclick="window.open('${pageContext.request.contextPath}/flight/ticket?id=${activeFlightId}&preview=true', '_blank')">View</button>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <button class="btn btn-outline" style="padding: 5px 10px; font-size: 0.8rem;" onclick="alert('Document not available yet.')">View</button>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </div>
                                 <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center;">
                                     <div><i class="ri-file-pdf-2-line" style="color: #e74c3c;"></i> Hotel_Voucher.pdf</div>
-                                    <button class="btn btn-outline" style="padding: 5px 10px; font-size: 0.8rem;">View</button>
+                                    <c:choose>
+                                        <c:when test="${not empty activeHotelId}">
+                                            <button class="btn btn-outline" style="padding: 5px 10px; font-size: 0.8rem;" onclick="window.open('${pageContext.request.contextPath}/hotel-voucher?id=${activeHotelId}', '_blank')">View</button>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <button class="btn btn-outline" style="padding: 5px 10px; font-size: 0.8rem;" onclick="alert('Document not available yet.')">View</button>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </div>
                             </div>
                         </div>
@@ -611,32 +625,7 @@
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
                     <h2 style="margin: 0;"><i class="ri-gallery-fill" style="color: var(--primary);"></i> Travel Memories</h2>
                 </div>
-
-                <!-- Trip Cards Grid -->
-                <c:choose>
-                    <c:when test="${not empty completedTrips}">
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
-                            <c:forEach var="trip" items="${completedTrips}">
-                                <div class="trip-card" style="background: rgba(255,255,255,0.03); border: 1px solid var(--color-border); border-radius: 16px; overflow: hidden; transition: transform 0.3s ease; cursor: pointer;" onclick="openMemoryModal(${trip.id})">
-                                    <div style="height: 160px; background: url('https://images.unsplash.com/photo-1506929562872-bb421503ef21?q=80&w=600&auto=format&fit=crop') center/cover;"></div>
-                                    <div style="padding: 20px;">
-                                        <h3 style="font-size: 1.4rem; font-family: 'Clash Display', sans-serif; margin-bottom: 5px;">${not empty trip.planTitle ? trip.planTitle : trip.type}</h3>
-                                        <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 15px;"><i class="ri-calendar-event-line"></i> ${trip.travelDate != null ? trip.travelDate : 'Archived'}</p>
-                                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                                            <span style="background: rgba(255,107,0,0.1); color: var(--primary); padding: 4px 10px; border-radius: 12px; font-size: 0.8rem;">View Album <i class="ri-arrow-right-line"></i></span>
-                                            <span style="color: var(--text-secondary); font-size: 0.8rem;">${tripMemoriesMap[trip.id].size()} Memories</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </c:forEach>
-                        </div>
-                    </c:when>
-                    <c:otherwise>
-                        <div style="text-align: center; padding: 40px;">
-                            <p style="color: var(--text-secondary);">You don't have any completed trips to generate memories from yet.</p>
-                        </div>
-                    </c:otherwise>
-                </c:choose>
+                <div id="memories-grid-container"></div>
             </div>
         </div>
 
@@ -805,15 +794,8 @@
         </div>
 
         <script>
-            // Prepare trips data for calendar
-            const allTripsForCalendar = [
-                <c:forEach var="trip" items="${upcomingTrips}">
-                    { title: "${not empty trip.planTitle ? trip.planTitle.replace('\"', '\\\"') : 'Upcoming Trip'}", date: "${trip.travelDate}", status: "UPCOMING" },
-                </c:forEach>
-                <c:forEach var="trip" items="${completedTrips}">
-                    { title: "${not empty trip.planTitle ? trip.planTitle.replace('\"', '\\\"') : 'Past Trip'}", date: "${trip.travelDate}", status: "PAST" },
-                </c:forEach>
-            ];
+            // Prepare trips data for calendar (dynamically updated via JS)
+            window.allTripsForCalendar = [];
 
             // Mocked Holidays / Long Weekends
             const holidays = [
@@ -955,53 +937,7 @@
             <div class="panel">
                 <h2><i class="ri-dna-line" style="color: var(--primary);"></i> Travel DNA</h2>
                 <p style="color: var(--text-secondary); margin-bottom: 30px;">Deep analytics based on your past travels and preferences.</p>
-                
-                <c:choose>
-                    <c:when test="${not empty travelDNA}">
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
-                            <div>
-                                <div class="dna-bar-container">
-                                    <div class="dna-bar-header"><span>Explorer Profile</span> <span style="font-weight:bold; color: var(--primary);">${travelDNA.explorerScore}%</span></div>
-                                    <div class="dna-track"><div class="dna-fill" style="width: ${travelDNA.explorerScore}%; background: var(--primary); box-shadow: 0 0 10px var(--primary);"></div></div>
-                                </div>
-                                <div class="dna-bar-container">
-                                    <div class="dna-bar-header"><span>Foodie Profile</span> <span style="font-weight:bold; color: #e17055;">${travelDNA.foodieScore}%</span></div>
-                                    <div class="dna-track"><div class="dna-fill" style="width: ${travelDNA.foodieScore}%; background: #e17055; box-shadow: 0 0 10px #e17055;"></div></div>
-                                </div>
-                                <div class="dna-bar-container">
-                                    <div class="dna-bar-header"><span>Adventure Profile</span> <span style="font-weight:bold; color: #00b894;">${travelDNA.adventureScore}%</span></div>
-                                    <div class="dna-track"><div class="dna-fill" style="width: ${travelDNA.adventureScore}%; background: #00b894; box-shadow: 0 0 10px #00b894;"></div></div>
-                                </div>
-                                <div class="dna-bar-container">
-                                    <div class="dna-bar-header"><span>Photography Profile</span> <span style="font-weight:bold; color: #fdcb6e;">${travelDNA.photographyScore}%</span></div>
-                                    <div class="dna-track"><div class="dna-fill" style="width: ${travelDNA.photographyScore}%; background: #fdcb6e; box-shadow: 0 0 10px #fdcb6e;"></div></div>
-                                </div>
-                                <div class="dna-bar-container">
-                                    <div class="dna-bar-header"><span>Luxury Profile</span> <span style="font-weight:bold; color: #0984e3;">${travelDNA.luxuryScore}%</span></div>
-                                    <div class="dna-track"><div class="dna-fill" style="width: ${travelDNA.luxuryScore}%; background: #0984e3; box-shadow: 0 0 10px #0984e3;"></div></div>
-                                </div>
-                                <div class="dna-bar-container">
-                                    <div class="dna-bar-header"><span>Budget Profile</span> <span style="font-weight:bold; color: #d63031;">${travelDNA.budgetScore}%</span></div>
-                                    <div class="dna-track"><div class="dna-fill" style="width: ${travelDNA.budgetScore}%; background: #d63031; box-shadow: 0 0 10px #d63031;"></div></div>
-                                </div>
-                            </div>
-                            
-                            <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--color-border); border-radius: 16px; padding: 25px;">
-                                <h4 style="margin-bottom: 15px; color: white; font-size: 1.2rem;">AI Insights</h4>
-                                <ul style="color: var(--text-secondary); padding-left: 20px; line-height: 1.8;">
-                                    <c:forEach var="insight" items="${travelDNA.aiInsights}">
-                                        <li>${insight}</li>
-                                    </c:forEach>
-                                </ul>
-                            </div>
-                        </div>
-                    </c:when>
-                    <c:otherwise>
-                        <div style="text-align: center; padding: 40px;">
-                            <p style="color: var(--text-secondary);">We need more travel data to calculate your Travel DNA. Complete a trip and upload memories to get started!</p>
-                        </div>
-                    </c:otherwise>
-                </c:choose>
+                <div id="dna-container-main"></div>
             </div>
         </div>
 
@@ -1009,137 +945,10 @@
         <div id="tab-family" class="tab-content ${activeTab == 'family' ? 'active' : ''}">
             <div class="panel">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-                    <h2 style="margin: 0;"><i class="ri-group-fill" style="color: var(--primary);"></i> Family Hub</h2>
-                    <button class="btn btn-primary"><i class="ri-add-line"></i> Add Member</button>
+                    <h2 style="margin: 0;"><i class="ri-group-line" style="color: var(--primary);"></i> Family Hub</h2>
+                    <button class="btn" style="background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); padding: 8px 15px;"><i class="ri-user-add-line"></i> Invite Member</button>
                 </div>
-                
-                <!-- Family Roster -->
-                <h3 style="color: white; font-size: 1.2rem; margin-bottom: 15px;">Family Roster</h3>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 40px;">
-                    <c:choose>
-                        <c:when test="${not empty familyMembers}">
-                            <c:forEach var="member" items="${familyMembers}">
-                                <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--color-border); border-radius: 16px; padding: 25px; text-align: center;">
-                                    <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #74b9ff, #0984e3); margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: white; font-weight: bold;">${fn:substring(member.name, 0, 1)}</div>
-                                    <h3 style="color: white; font-size: 1.4rem; margin-bottom: 5px;">${member.name}</h3>
-                                    <p style="color: var(--text-secondary); margin-bottom: 15px;">${member.relation} • Age ${member.age}</p>
-                                    <c:choose>
-                                        <c:when test="${member.passportReadiness >= 80}">
-                                            <div style="background: rgba(0, 184, 148, 0.1); color: #00b894; padding: 8px; border-radius: 8px; font-size: 0.9rem;">
-                                                <i class="ri-passport-line"></i> Passport Ready (${member.passportReadiness}%)
-                                            </div>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <div style="background: rgba(255, 107, 0, 0.1); color: var(--primary); padding: 8px; border-radius: 8px; font-size: 0.9rem;">
-                                                <i class="ri-error-warning-line"></i> Document Action Needed (${member.passportReadiness}%)
-                                            </div>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </div>
-                            </c:forEach>
-                        </c:when>
-                        <c:otherwise>
-                            <!-- Mock Data -->
-                            <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--color-border); border-radius: 16px; padding: 25px; text-align: center;">
-                                <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #74b9ff, #0984e3); margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: white; font-weight: bold;">JD</div>
-                                <h3 style="color: white; font-size: 1.4rem; margin-bottom: 5px;">Jane Doe</h3>
-                                <p style="color: var(--text-secondary); margin-bottom: 15px;">Parent • Age 32</p>
-                                <div style="background: rgba(0, 184, 148, 0.1); color: #00b894; padding: 8px; border-radius: 8px; font-size: 0.9rem;">
-                                    <i class="ri-passport-line"></i> Passport Ready (100%)
-                                </div>
-                            </div>
-        
-                            <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--color-border); border-radius: 16px; padding: 25px; text-align: center;">
-                                <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #a29bfe, #6c5ce7); margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: white; font-weight: bold;">SD</div>
-                                <h3 style="color: white; font-size: 1.4rem; margin-bottom: 5px;">Sam Doe</h3>
-                                <p style="color: var(--text-secondary); margin-bottom: 15px;">Child • Age 8</p>
-                                <div style="background: rgba(255, 107, 0, 0.1); color: var(--primary); padding: 8px; border-radius: 8px; font-size: 0.9rem;">
-                                    <i class="ri-error-warning-line"></i> Visa Required (40%)
-                                </div>
-                            </div>
-                        </c:otherwise>
-                    </c:choose>
-                </div>
-
-                <!-- Family Dashboard Widgets -->
-                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
-                    
-                    <!-- Left Column: Bucket List & Shared Trips -->
-                    <div style="display: flex; flex-direction: column; gap: 20px;">
-                        
-                        <!-- Family Bucket List -->
-                        <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--color-border); border-radius: 16px; padding: 20px;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                                <h3 style="color: white; font-size: 1.2rem;"><i class="ri-list-check" style="color: var(--primary);"></i> Family Bucket List</h3>
-                                <button class="btn btn-outline" style="padding: 4px 10px; font-size: 0.8rem;"><i class="ri-add-line"></i> Add</button>
-                            </div>
-                            <ul style="list-style: none; padding: 0; margin: 0;">
-                                <li style="display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
-                                    <input type="checkbox" style="accent-color: var(--primary); width: 18px; height: 18px;">
-                                    <span style="color: white; font-size: 1.1rem;">Visit Kashmir</span>
-                                </li>
-                                <li style="display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
-                                    <input type="checkbox" style="accent-color: var(--primary); width: 18px; height: 18px;">
-                                    <span style="color: white; font-size: 1.1rem;">Visit Kerala</span>
-                                </li>
-                                <li style="display: flex; align-items: center; gap: 10px; padding: 10px 0;">
-                                    <input type="checkbox" style="accent-color: var(--primary); width: 18px; height: 18px;">
-                                    <span style="color: white; font-size: 1.1rem;">Visit Thailand</span>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <!-- Shared Trips -->
-                        <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--color-border); border-radius: 16px; padding: 20px;">
-                            <h3 style="color: white; font-size: 1.2rem; margin-bottom: 15px;"><i class="ri-suitcase-2-line" style="color: #00b894;"></i> Shared Upcoming Trips</h3>
-                            <c:choose>
-                                <c:when test="${not empty upcomingTrips}">
-                                    <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(0,184,148,0.05); padding: 15px; border-radius: 12px; border: 1px solid rgba(0,184,148,0.2);">
-                                        <div>
-                                            <h4 style="color: white; margin-bottom: 5px;">${upcomingTrips[0].planTitle != null ? upcomingTrips[0].planTitle : 'Family Vacation'}</h4>
-                                            <p style="color: var(--text-secondary); font-size: 0.9rem;">${upcomingTrips[0].travelDate}</p>
-                                        </div>
-                                        <div style="display: flex; gap: -10px;">
-                                            <!-- Overlapping avatars -->
-                                            <div style="width: 32px; height: 32px; border-radius: 50%; background: #0984e3; border: 2px solid #1a1a2e; color: white; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; z-index: 2;">JD</div>
-                                            <div style="width: 32px; height: 32px; border-radius: 50%; background: #6c5ce7; border: 2px solid #1a1a2e; color: white; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; z-index: 1; margin-left: -10px;">SD</div>
-                                        </div>
-                                    </div>
-                                </c:when>
-                                <c:otherwise>
-                                    <p style="color: var(--text-secondary); font-size: 0.9rem;">No shared upcoming trips. Add a trip to the planner to get started!</p>
-                                </c:otherwise>
-                            </c:choose>
-                        </div>
-                    </div>
-
-                    <!-- Right Column: Quick Actions & Stats -->
-                    <div style="display: flex; flex-direction: column; gap: 20px;">
-                        
-                        <!-- Shared Calendar Widget -->
-                        <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--color-border); border-radius: 16px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.3s ease;" onclick="switchTab('calendar', document.querySelector('.nav-item:nth-child(2)'))" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='rgba(255,255,255,0.02)'">
-                            <i class="ri-calendar-event-fill" style="font-size: 2rem; color: #fdcb6e; margin-bottom: 10px; display: block;"></i>
-                            <h4 style="color: white; margin-bottom: 5px;">Shared Calendar</h4>
-                            <p style="color: var(--text-secondary); font-size: 0.85rem;">View family availability and upcoming holidays.</p>
-                        </div>
-
-                        <!-- Shared Memories Widget -->
-                        <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--color-border); border-radius: 16px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.3s ease;" onclick="switchTab('memories', document.querySelector('.nav-item:nth-child(4)'))" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='rgba(255,255,255,0.02)'">
-                            <i class="ri-camera-lens-fill" style="font-size: 2rem; color: #e17055; margin-bottom: 10px; display: block;"></i>
-                            <h4 style="color: white; margin-bottom: 5px;">Shared Memories</h4>
-                            <p style="color: var(--text-secondary); font-size: 0.85rem;">View your collaborative family albums.</p>
-                        </div>
-
-                        <!-- Shared Expenses Widget -->
-                        <div style="background: linear-gradient(135deg, rgba(9, 132, 227, 0.1), rgba(0,0,0,0)); border: 1px solid rgba(9, 132, 227, 0.3); border-radius: 16px; padding: 20px;">
-                            <h4 style="color: white; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;"><i class="ri-wallet-3-line" style="color: #0984e3;"></i> Shared Expenses</h4>
-                            <div style="font-size: 1.8rem; font-weight: bold; color: white; margin-bottom: 5px;">₹45,000</div>
-                            <p style="color: var(--text-secondary); font-size: 0.85rem;">Total spent this year on family trips.</p>
-                        </div>
-
-                    </div>
-                </div>
-
+                <div id="family-grid-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;"></div>
             </div>
         </div>
 
@@ -1148,127 +957,26 @@
             <div class="panel">
                 <h2><i class="ri-history-line" style="color: var(--primary);"></i> Completed Trips</h2>
                 <p style="color: var(--text-secondary); margin-bottom: 30px;">Archive of your past journeys. Ready for Memories.</p>
-
-                <c:choose>
-                    <c:when test="${not empty completedTrips}">
-                        <c:forEach var="trip" items="${completedTrips}">
-                            <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--color-border); border-radius: 16px; padding: 25px; margin-bottom: 20px;">
-                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                                    <div>
-                                        <h3 style="color: white; font-size: 1.5rem; font-family: 'Clash Display', sans-serif;">
-                                            ${not empty trip.planTitle ? trip.planTitle : trip.type}
-                                        </h3>
-                                        <p style="color: var(--text-secondary); font-size: 0.9rem;"><i class="ri-calendar-check-line"></i> ${trip.travelDate != null ? trip.travelDate : 'Archived'}</p>
-                                    </div>
-                                    <div style="text-align: right;">
-                                        <h3 style="color: var(--primary); font-size: 1.5rem;">₹${trip.totalPrice}</h3>
-                                        <p style="color: var(--text-secondary); font-size: 0.9rem;">Total Cost</p>
-                                    </div>
-                                </div>
-                                <div style="margin-top: 15px;">
-                                    <button class="btn btn-outline" style="padding: 5px 10px; font-size: 0.8rem;" onclick="switchTab('memories', document.querySelector('.nav-item:nth-child(4)'))"><i class="ri-camera-lens-line"></i> Add Memories</button>
-                                </div>
-                            </div>
-                        </c:forEach>
-                    </c:when>
-                    <c:otherwise>
-                        <div style="text-align: center; padding: 40px;">
-                            <p style="color: var(--text-secondary);">No completed trips yet.</p>
-                        </div>
-                    </c:otherwise>
-                </c:choose>
+                <div id="completed-trips-container"></div>
             </div>
         </div>
 
         <!-- TAB: TRIP REPORTS (WRAPPED) -->
         <div id="tab-reports" class="tab-content ${activeTab == 'reports' ? 'active' : ''}">
-            <c:choose>
-                <c:when test="${not empty annualReport}">
-                    <!-- Travel Year in Review Hero -->
-                    <div style="background: linear-gradient(135deg, #FF007A 0%, #7928CA 100%); border-radius: 24px; padding: 40px; color: white; text-align: center; margin-bottom: 30px; box-shadow: 0 10px 30px rgba(121, 40, 202, 0.3);">
-                        <h2 style="font-size: 2.5rem; margin-bottom: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px;">Your Travel Year in Review</h2>
-                        <p style="font-size: 1.2rem; opacity: 0.9;">Look at all the incredible places you've explored this year.</p>
+            <div class="panel">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                    <div>
+                        <h2 style="margin: 0;"><i class="ri-bar-chart-2-line" style="color: var(--primary);"></i> Trip Reports</h2>
+                        <p style="color: var(--text-secondary); margin-top: 5px;">Financials, invoices, and analytics.</p>
                     </div>
+                    <button class="btn" style="background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); padding: 8px 15px;"><i class="ri-file-download-line"></i> Export All</button>
+                </div>
 
-                    <!-- Highlights row -->
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px;">
-                        <div style="background: rgba(255, 0, 122, 0.1); border: 1px solid rgba(255, 0, 122, 0.3); border-radius: 16px; padding: 25px; text-align: center;">
-                            <i class="ri-map-pin-line" style="font-size: 2.5rem; color: #FF007A; margin-bottom: 10px; display: block;"></i>
-                            <p style="color: var(--text-secondary); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Top Destination</p>
-                            <h3 style="color: white; font-size: 1.5rem;">${annualReport.topDestination}</h3>
-                        </div>
-                        <div style="background: rgba(121, 40, 202, 0.1); border: 1px solid rgba(121, 40, 202, 0.3); border-radius: 16px; padding: 25px; text-align: center;">
-                            <i class="ri-restaurant-2-line" style="font-size: 2.5rem; color: #7928CA; margin-bottom: 10px; display: block;"></i>
-                            <p style="color: var(--text-secondary); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Favorite Food</p>
-                            <h3 style="color: white; font-size: 1.5rem;">${annualReport.favoriteFood}</h3>
-                        </div>
-                        <div style="background: rgba(0, 184, 148, 0.1); border: 1px solid rgba(0, 184, 148, 0.3); border-radius: 16px; padding: 25px; text-align: center;">
-                            <i class="ri-compass-3-line" style="font-size: 2.5rem; color: #00b894; margin-bottom: 10px; display: block;"></i>
-                            <p style="color: var(--text-secondary); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Most Visited Place</p>
-                            <h3 style="color: white; font-size: 1.5rem;">${annualReport.mostVisitedPlace}</h3>
-                        </div>
-                    </div>
+                <div id="report-cards-container" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px;">
+                </div>
 
-                    <!-- Statistics Grid -->
-                    <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--color-border); border-radius: 16px; padding: 30px;">
-                        <h3 style="color: white; margin-bottom: 20px; font-size: 1.4rem;"><i class="ri-bar-chart-2-line" style="color: var(--primary);"></i> Travel Statistics</h3>
-                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
-                            <div style="padding: 15px; border-radius: 12px; background: rgba(255,255,255,0.03);">
-                                <p style="color: var(--text-secondary); font-size: 0.9rem;">Distance Traveled</p>
-                                <h4 style="color: white; font-size: 1.8rem; margin: 5px 0;">${annualReport.distanceTraveled} <span style="font-size:1rem; color:var(--text-secondary);">km</span></h4>
-                            </div>
-                            <div style="padding: 15px; border-radius: 12px; background: rgba(255,255,255,0.03);">
-                                <p style="color: var(--text-secondary); font-size: 0.9rem;">Cities Visited</p>
-                                <h4 style="color: white; font-size: 1.8rem; margin: 5px 0;">${annualReport.citiesVisited}</h4>
-                            </div>
-                            <div style="padding: 15px; border-radius: 12px; background: rgba(255,255,255,0.03);">
-                                <p style="color: var(--text-secondary); font-size: 0.9rem;">Money Spent</p>
-                                <h4 style="color: white; font-size: 1.8rem; margin: 5px 0; color: #e1b12c;">₹${annualReport.totalMoneySpent}</h4>
-                            </div>
-                            <div style="padding: 15px; border-radius: 12px; background: rgba(255,255,255,0.03);">
-                                <p style="color: var(--text-secondary); font-size: 0.9rem;">Experiences</p>
-                                <h4 style="color: white; font-size: 1.8rem; margin: 5px 0;">${annualReport.experiencesCompleted}</h4>
-                            </div>
-                            <div style="padding: 15px; border-radius: 12px; background: rgba(255,255,255,0.03);">
-                                <p style="color: var(--text-secondary); font-size: 0.9rem;">Food Spots</p>
-                                <h4 style="color: white; font-size: 1.8rem; margin: 5px 0;">${annualReport.foodSpotsVisited}</h4>
-                            </div>
-                            <div style="padding: 15px; border-radius: 12px; background: rgba(255,255,255,0.03);">
-                                <p style="color: var(--text-secondary); font-size: 0.9rem;">Hidden Gems</p>
-                                <h4 style="color: white; font-size: 1.8rem; margin: 5px 0; color: #a29bfe;">${annualReport.hiddenGemsFound}</h4>
-                            </div>
-                        </div>
-                    </div>
-                </c:when>
-                <c:otherwise>
-                    <div class="panel text-center" style="padding: 50px;">
-                        <p style="color: var(--text-secondary);">Your travel data is being compiled. Check back after your first trip!</p>
-                    </div>
-                </c:otherwise>
-            </c:choose>
-            
-            <!-- Standard Trip Reports (Logs) -->
-            <div style="margin-top: 40px;">
-                <h3 style="color: white; font-size: 1.4rem; margin-bottom: 20px;">Expense Reports & Summaries</h3>
-                <c:choose>
-                    <c:when test="${not empty tripReports}">
-                        <c:forEach var="tr" items="${tripReports}">
-                            <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--color-border); border-radius: 16px; padding: 20px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;">
-                                <div>
-                                    <h4 style="color: white; margin-bottom: 5px;">${tr.destination}</h4>
-                                    <p style="color: var(--text-secondary); font-size: 0.9rem;">${tr.summary}</p>
-                                </div>
-                                <div style="text-align: right;">
-                                    <h4 style="color: #e1b12c;">₹${tr.totalCost}</h4>
-                                    <p style="color: var(--text-secondary); font-size: 0.8rem;">Rating: ${tr.rating}/5</p>
-                                </div>
-                            </div>
-                        </c:forEach>
-                    </c:when>
-                    <c:otherwise>
-                        <p style="color: var(--text-secondary);">No trip reports generated yet.</p>
-                    </c:otherwise>
-                </c:choose>
+                <h3 style="font-size: 1.2rem; margin-bottom: 20px;">Recent Reports</h3>
+                <div id="recent-reports-container" style="display: flex; flex-direction: column; gap: 15px;"></div>
             </div>
         </div>
 
@@ -1277,31 +985,7 @@
 
 <jsp:include page="/components/footer.jsp" />
 
-<script>
-    function switchTab(tabId, element) {
-        // Update URL dynamically without reload
-        const url = new URL(window.location);
-        url.searchParams.set('tab', tabId);
-        window.history.pushState({}, '', url);
-
-        // Update active class on nav items
-        document.querySelectorAll('.profile-sidebar .nav-item').forEach(el => el.classList.remove('active'));
-        element.classList.add('active');
-
-        // Show appropriate content tab
-        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-        document.getElementById('tab-' + tabId).classList.add('active');
-    }
-
-    // Auto-select tab on load if parameter is present and JSP failed to set it
-    document.addEventListener('DOMContentLoaded', () => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const tab = urlParams.get('tab');
-        if (tab) {
-            const tabBtn = document.querySelector(`.profile-sidebar .nav-item[onclick*="'${tab}'"]`);
-            if (tabBtn) switchTab(tab, tabBtn);
-        }
-    });
-</script>
+<script>window.CONTEXT_PATH = '${pageContext.request.contextPath}';</script>
+<script src="${pageContext.request.contextPath}/assets/js/my-journey.js"></script>
 </body>
 </html>

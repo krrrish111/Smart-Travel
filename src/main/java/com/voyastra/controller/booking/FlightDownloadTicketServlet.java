@@ -35,7 +35,8 @@ public class FlightDownloadTicketServlet extends HttpServlet {
             return;
         }
         request.setAttribute("booking", booking);
-        request.setAttribute("autoDownload", true);
+        boolean isPreview = "true".equals(request.getParameter("preview"));
+        request.setAttribute("autoDownload", !isPreview);
         
         request.getRequestDispatcher("/pages/booking/flight-ticket.jsp").forward(request, response);
     }

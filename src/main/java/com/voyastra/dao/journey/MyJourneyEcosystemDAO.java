@@ -64,34 +64,6 @@ public class MyJourneyEcosystemDAO {
             e.printStackTrace();
         }
 
-        // Fallback: If no memories exist for this journey, generate mock ones
-        if (list.isEmpty()) {
-            TravelMemory m1 = new TravelMemory();
-            m1.setJourneyId(journeyId);
-            m1.setType("PHOTO");
-            m1.setMediaUrl("https://images.unsplash.com/photo-1499856871958-5b9627545d1a?q=80&w=800&auto=format&fit=crop");
-            m1.setCaption("A beautiful sunset over the city.");
-            m1.setLocation("City Center");
-            
-            TravelMemory m2 = new TravelMemory();
-            m2.setJourneyId(journeyId);
-            m2.setType("FOOD");
-            m2.setMediaUrl("https://images.unsplash.com/photo-1542051841857-5f90071e7989?q=80&w=800&auto=format&fit=crop");
-            m2.setCaption("Amazing local street food experience!");
-            m2.setLocation("Street Food Alley");
-
-            TravelMemory m3 = new TravelMemory();
-            m3.setJourneyId(journeyId);
-            m3.setType("EXPERIENCE");
-            m3.setMediaUrl("https://images.unsplash.com/photo-1506929562872-bb421503ef21?q=80&w=800&auto=format&fit=crop");
-            m3.setCaption("Surfing early morning waves.");
-            m3.setLocation("Beachside");
-
-            list.add(m1);
-            list.add(m2);
-            list.add(m3);
-        }
-
         return list;
     }
 
@@ -169,8 +141,25 @@ public class MyJourneyEcosystemDAO {
         int adventure = Math.min(100, 20 + (expCount * 15));
         int photography = Math.min(100, 20 + (photoCount * 5));
         
-        int luxury = Math.min(100, 40 + (tripCount * 5)); // Mock logic
-        int budget = 100 - luxury;
+        int luxury = 0;
+        int budget = 0;
+        double avgCost = 0;
+        if (tripCount > 0) {
+            double totalSpent = 0;
+            for (Booking b : completedTrips) {
+                totalSpent += b.getTotalPrice();
+            }
+            avgCost = totalSpent / tripCount;
+            if (avgCost > 50000) {
+                luxury = Math.min(100, 60 + (tripCount * 5));
+            } else {
+                luxury = Math.min(100, 20 + (tripCount * 2));
+            }
+            budget = 100 - luxury;
+        } else {
+            luxury = 50;
+            budget = 50;
+        }
 
         dna.setExplorerScore(explorer);
         dna.setFoodieScore(foodie);
@@ -181,18 +170,20 @@ public class MyJourneyEcosystemDAO {
 
         List<String> insights = new ArrayList<>();
         if (explorer > 70) insights.add("You are a natural explorer! You love venturing into the unknown.");
-        else insights.add("You are building your explorer profile one trip at a time.");
+        else if (explorer > 0) insights.add("You are building your explorer profile one trip at a time.");
+        else insights.add("Book a trip to start building your explorer profile!");
         
         if (foodie > 60) insights.add("Your food choices suggest you prioritize culinary experiences.");
         if (adventure > 60) insights.add("You have a high thrill-seeking tendency.");
         
-        if (luxury > budget) {
-            insights.add("You tend to prefer premium comforts on your travels.");
-        } else {
-            insights.add("You are a smart budget traveler who optimizes for value.");
+        if (tripCount > 0) {
+            if (luxury > budget) {
+                insights.add("You tend to prefer premium comforts on your travels.");
+            } else {
+                insights.add("You are a smart budget traveler who optimizes for value.");
+            }
+            insights.add("Based on your history, a tropical beach destination might be next!");
         }
-        
-        insights.add("You are highly likely to enjoy an upcoming trip to Vietnam."); // AI mock insight
 
         dna.setAiInsights(insights);
         return dna;
@@ -204,9 +195,9 @@ public class MyJourneyEcosystemDAO {
 
         int tripCount = completedTrips != null ? completedTrips.size() : 0;
         
-        // Mock calculations based on available data for prototype
-        report.setDistanceTraveled(tripCount * 2450 + 1200); // Arbitrary distance multiplier
-        report.setCitiesVisited(tripCount + 2); 
+        // Calculate distance based on random approximations per trip type if we want, or default to 0
+        report.setDistanceTraveled(tripCount * 1200); 
+        report.setCitiesVisited(tripCount); 
         
         java.math.BigDecimal totalSpent = java.math.BigDecimal.ZERO;
         if (completedTrips != null) {
@@ -214,7 +205,7 @@ public class MyJourneyEcosystemDAO {
                 totalSpent = totalSpent.add(java.math.BigDecimal.valueOf(b.getTotalPrice()));
             }
         }
-        report.setTotalMoneySpent(totalSpent.add(new java.math.BigDecimal("15000"))); // adding mock base
+        report.setTotalMoneySpent(totalSpent); 
 
         int foodSpots = 0;
         int expCount = 0;
@@ -226,14 +217,17 @@ public class MyJourneyEcosystemDAO {
             else if ("HIDDEN_GEM".equalsIgnoreCase(m.getType())) hiddenGems++;
         }
         
-        report.setFoodSpotsVisited(foodSpots + 4);
-        report.setExperiencesCompleted(expCount + 5);
-        report.setHiddenGemsFound(hiddenGems + 2);
+        report.setFoodSpotsVisited(foodSpots);
+        report.setExperiencesCompleted(expCount);
+        report.setHiddenGemsFound(hiddenGems);
 
-        // Spotify Wrapped style highlights
-        report.setTopDestination("Bali, Indonesia");
-        report.setFavoriteFood("Spicy Ramen");
-        report.setMostVisitedPlace("Beachside Cafes");
+        if (tripCount > 0) {
+            report.setTopDestination(completedTrips.get(0).getPlanTitle() != null ? completedTrips.get(0).getPlanTitle() : "Various");
+        } else {
+            report.setTopDestination("No destinations yet");
+        }
+        report.setFavoriteFood(foodSpots > 0 ? "Local Cuisine" : "N/A");
+        report.setMostVisitedPlace(tripCount > 0 ? "Hotels & Resorts" : "N/A");
 
         return report;
     }

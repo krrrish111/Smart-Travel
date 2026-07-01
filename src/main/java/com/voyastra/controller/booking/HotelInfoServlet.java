@@ -28,6 +28,7 @@ public class HotelInfoServlet extends HttpServlet {
             int id = Integer.parseInt(idStr);
             Hotel hotel = null;
 
+            com.voyastra.dao.booking.HotelDAO hotelDAO = new com.voyastra.dao.booking.HotelDAO();
             if (name != null && !name.isEmpty()) {
                 hotel = new Hotel();
                 hotel.setId(id);
@@ -42,7 +43,6 @@ public class HotelInfoServlet extends HttpServlet {
                 hotel.setAvailableRooms(5);
                 hotel.setCancellationPolicy("Free Cancellation");
             } else {
-                com.voyastra.dao.booking.HotelDAO hotelDAO = new com.voyastra.dao.booking.HotelDAO();
                 hotel = hotelDAO.getHotelById(id);
                 if (hotel == null) {
                     response.sendRedirect(request.getContextPath() + "/explore");
@@ -51,6 +51,10 @@ public class HotelInfoServlet extends HttpServlet {
             }
 
             request.setAttribute("hotel", hotel);
+            request.setAttribute("photos", hotelDAO.getPhotos(id));
+            request.setAttribute("rooms", hotelDAO.getHotelRooms(id));
+            request.setAttribute("reviews", hotelDAO.getReviews(id));
+            request.setAttribute("nearbyPlaces", hotelDAO.getNearbyPlaces(id));
         } catch (Exception e) {
             e.printStackTrace();
             response.sendRedirect(request.getContextPath() + "/explore");
@@ -58,9 +62,23 @@ public class HotelInfoServlet extends HttpServlet {
         }
 
         // Pass along search parameters for checkout
-        request.setAttribute("checkIn", request.getParameter("checkIn"));
-        request.setAttribute("checkOut", request.getParameter("checkOut"));
-        request.setAttribute("guests", request.getParameter("guests"));
+        String checkIn = request.getParameter("checkIn");
+        String checkOut = request.getParameter("checkOut");
+        String guests = request.getParameter("guests");
+
+        if (checkIn == null || checkIn.trim().isEmpty()) {
+            checkIn = java.time.LocalDate.now().plusDays(1).toString();
+        }
+        if (checkOut == null || checkOut.trim().isEmpty()) {
+            checkOut = java.time.LocalDate.now().plusDays(2).toString();
+        }
+        if (guests == null || guests.trim().isEmpty()) {
+            guests = "2";
+        }
+
+        request.setAttribute("checkIn", checkIn);
+        request.setAttribute("checkOut", checkOut);
+        request.setAttribute("guests", guests);
 
         request.getRequestDispatcher("/pages/booking/hotel-details.jsp").forward(request, response);
     }

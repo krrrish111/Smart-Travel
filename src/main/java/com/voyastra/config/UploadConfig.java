@@ -38,8 +38,15 @@ public class UploadConfig {
      * @return absolute path string, e.g. C:/tomcat/webapps/voyastra/uploads/profiles
      */
     public static String getUploadPath(ServletContext context, String category) {
-        String base = context.getRealPath("/");
-        String path = base + "uploads" + File.separator + category;
+        String base = com.voyastra.config.ConfigManager.get("UPLOAD_DIR");
+        if (base == null || base.trim().isEmpty()) {
+            base = context.getRealPath("/");
+            if (base != null && !base.endsWith(File.separator)) {
+                base += File.separator;
+            }
+            base += "uploads";
+        }
+        String path = base + File.separator + category;
         File dir = new File(path);
         if (!dir.exists()) {
             dir.mkdirs();

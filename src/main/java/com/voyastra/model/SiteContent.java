@@ -30,7 +30,9 @@ public class SiteContent {
     public String getBodyText() { return bodyText; }
     public void setBodyText(String bodyText) { this.bodyText = bodyText; }
 
-    public String getImageUrl() { return imageUrl; }
+    public String getImageUrl() {
+        return com.voyastra.util.ImageUtil.resolveDestinationImageUrl(imageUrl, id);
+    }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
 
     public String getButtonText() { return buttonText; }

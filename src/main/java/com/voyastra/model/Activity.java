@@ -26,7 +26,7 @@ public class Activity {
     public void setId(int id) { this.id = id; }
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
-    public String getHeroImage() { return heroImage; }
+    public String getHeroImage() { return com.voyastra.util.ImageUtil.resolveExperienceImageUrl(heroImage, id); }
     public void setHeroImage(String heroImage) { this.heroImage = heroImage; }
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
@@ -64,7 +64,7 @@ public class Activity {
     public void setName(String name) { this.title = name; }
     public int getDestinationId() { return 0; }
     public void setDestinationId(int destinationId) {}
-    public String getImageUrl() { return this.heroImage; }
+    public String getImageUrl() { return getHeroImage(); }
     public void setImageUrl(String imageUrl) { this.heroImage = imageUrl; }
     public int getReviewsCount() { return this.reviewCount; }
     public void setReviewsCount(int reviewsCount) { this.reviewCount = reviewsCount; }

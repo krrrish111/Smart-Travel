@@ -193,7 +193,7 @@ public class HotelDAO {
 
     public List<Hotel> getRecommendedHotels() {
         List<Hotel> hotels = new ArrayList<>();
-        String query = "SELECT * FROM hotels WHERE recommended = TRUE LIMIT 5";
+        String query = "SELECT * FROM hotels WHERE id IN (SELECT min_id FROM (SELECT MIN(id) as min_id FROM hotels GROUP BY name) as temp) ORDER BY rating DESC, id DESC LIMIT 4";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
             try (ResultSet rs = stmt.executeQuery()) {

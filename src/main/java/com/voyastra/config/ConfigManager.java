@@ -24,19 +24,25 @@ public class ConfigManager {
     }
 
     private static void validateRequiredKeys() {
-        String[] requiredKeys = {
-            "GEMINI_API_KEY",
-            "DB_URL",
-            "DB_USER",
-            "DB_PASSWORD"
-        };
-
-        for (String key : requiredKeys) {
-            String value = get(key);
-            if (value == null || value.trim().isEmpty()) {
-                throw new RuntimeException("CRITICAL CONFIGURATION ERROR: " + key + " is missing. Application cannot start safely.");
-            }
+        // Validate Gemini Key as it is critical
+        String gemini = get("GEMINI_API_KEY");
+        if (gemini == null || gemini.trim().isEmpty()) {
+            System.err.println("[ConfigManager WARNING] GEMINI_API_KEY is missing. AI features will not work.");
         }
+
+        // Verify either DB_URL or DB_HOST is present
+        String dbUrl = get("DB_URL");
+        String dbHost = get("DB_HOST");
+        if ((dbUrl == null || dbUrl.trim().isEmpty()) && (dbHost == null || dbHost.trim().isEmpty())) {
+            throw new RuntimeException("CRITICAL CONFIGURATION ERROR: Either DB_URL or DB_HOST must be provided. Application cannot start safely.");
+        }
+
+        // Check user
+        String dbUser = get("DB_USER");
+        if (dbUser == null || dbUser.trim().isEmpty()) {
+            throw new RuntimeException("CRITICAL CONFIGURATION ERROR: DB_USER is missing. Application cannot start safely.");
+        }
+
         System.out.println("[ConfigManager] All required environment variables are present.");
     }
 

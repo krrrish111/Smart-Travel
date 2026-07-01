@@ -56,7 +56,9 @@ public class PremiumTrip {
     public double getDiscountPrice() { return discountPrice; }
     public void setDiscountPrice(double discountPrice) { this.discountPrice = discountPrice; }
     
-    public String getImageUrl() { return imageUrl; }
+    public String getImageUrl() {
+        return com.voyastra.util.ImageUtil.resolveDestinationImageUrl(imageUrl, id);
+    }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
     
     public double getRating() { return rating; }

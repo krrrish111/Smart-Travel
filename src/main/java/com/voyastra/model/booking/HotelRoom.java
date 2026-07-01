@@ -28,7 +28,9 @@ public class HotelRoom {
     public void setPricePerNight(double pricePerNight) { this.pricePerNight = pricePerNight; }
     public String getAmenities() { return amenities; }
     public void setAmenities(String amenities) { this.amenities = amenities; }
-    public String getImageUrl() { return imageUrl; }
+    public String getImageUrl() {
+        return com.voyastra.util.ImageUtil.resolveRoomImageUrl(imageUrl, id);
+    }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
     
     public String[] getAmenitiesArray() {

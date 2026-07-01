@@ -1,0 +1,90 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: voyastra-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: voyastra
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./database/init:/docker-entrypoint-initdb.d
+    networks:
+      - voyastra-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$DB_PASSWORD"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  voyastra:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: voyastra-app
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_NAME=voyastra
+      - DB_USER=root
+      - DB_PASSWORD=${DB_PASSWORD:-root}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - GOOGLE_MAPS_API_KEY=${GOOGLE_MAPS_API_KEY}
+      - GOOGLE_PLACES_API_KEY=${GOOGLE_PLACES_API_KEY}
+      - TRAVELPAYOUTS_TOKEN=${TRAVELPAYOUTS_TOKEN}
+      - TRAVELPAYOUTS_MARKER=${TRAVELPAYOUTS_MARKER}
+      - RAPIDAPI_KEY=${RAPIDAPI_KEY}
+      - RAZORPAY_KEY=${RAZORPAY_KEY}
+      - RAZORPAY_SECRET=${RAZORPAY_SECRET}
+      - TWILIO_SID=${TWILIO_SID}
+      - TWILIO_TOKEN=${TWILIO_TOKEN}
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASS=${SMTP_PASS}
+      - UPLOAD_DIR=/var/voyastra/uploads
+    volumes:
+      - voyastra-uploads:/var/voyastra/uploads
+      - voyastra-logs:/usr/local/tomcat/logs
+    networks:
+      - voyastra-network
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: voyastra-phpmyadmin
+    restart: unless-stopped
+    ports:
+      - "8081:80"
+    environment:
+      - PMA_HOST=mysql
+      - PMA_PORT=3306
+      - PMA_USER=root
+      - PMA_PASSWORD=${DB_PASSWORD:-root}
+    networks:
+      - voyastra-network
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+volumes:
+  mysql-data:
+    driver: local
+  voyastra-uploads:
+    driver: local
+  voyastra-logs:
+    driver: local
+
+networks:
+  voyastra-network:
+    driver: bridge

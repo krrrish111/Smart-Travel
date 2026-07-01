@@ -49,7 +49,9 @@ public class Experience {
     public void setGuideId(String guideId) { this.guideId = guideId; }
     public int getCapacity() { return capacity; }
     public void setCapacity(int capacity) { this.capacity = capacity; }
-    public String getCoverImage() { return coverImage; }
+    public String getCoverImage() {
+        return com.voyastra.util.ImageUtil.resolveExperienceImageUrl(coverImage, id);
+    }
     public void setCoverImage(String coverImage) { this.coverImage = coverImage; }
     public double getFunScore() { return funScore; }
     public void setFunScore(double funScore) { this.funScore = funScore; }

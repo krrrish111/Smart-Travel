@@ -23,7 +23,9 @@ public class Stay {
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
-    public String getImageUrl() { return imageUrl; }
+    public String getImageUrl() {
+        return com.voyastra.util.ImageUtil.resolveHotelImageUrl(imageUrl, id, name);
+    }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
 
     public String getBadge() { return badge; }

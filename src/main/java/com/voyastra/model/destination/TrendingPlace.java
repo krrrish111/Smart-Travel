@@ -23,7 +23,9 @@ public class TrendingPlace {
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
-    public String getImageUrl() { return imageUrl; }
+    public String getImageUrl() {
+        return com.voyastra.util.ImageUtil.resolveDestinationImageUrl(imageUrl, id);
+    }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
 
     public String getCategory() { return category; }

@@ -859,26 +859,52 @@
                 <div class="container">
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                         <c:forEach var="hotel" items="${recommendedHotels}" end="3">
-                            <a href="${pageContext.request.contextPath}/hotel/details?id=${hotel.id}" class="plan-card" style="max-width: none; flex: unset;">
-                                <div class="plan-card-img-wrap" style="height: 160px;">
-                                    <c:choose>
-                                        <c:when test="${fn:startsWith(hotel.imageUrl, 'http')}">
-                                            <img src="${hotel.imageUrl}" alt="${hotel.name}" loading="lazy">
-                                        </c:when>
-                                        <c:otherwise>
-                                            <img src="${pageContext.request.contextPath}/${hotel.imageUrl}" alt="${hotel.name}" loading="lazy">
-                                        </c:otherwise>
-                                    </c:choose>
-                                    <div class="plan-card-category" style="background:rgba(139,92,246,0.85);">Recommended</div>
+                            <a href="${pageContext.request.contextPath}/hotel-details?id=${hotel.id}" class="plan-card" style="max-width: none; flex: unset; display: flex; flex-direction: column;">
+                                <div class="plan-card-img-wrap" style="height: 160px; position: relative;">
+                                    <img src="${hotel.imageUrl}" alt="${hotel.name}" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
+                                    <div class="plan-card-category" style="background:rgba(139,92,246,0.85);">${hotel.propertyType}</div>
                                 </div>
-                                <div class="plan-card-body p-4">
+                                <div class="plan-card-body p-4" style="flex-grow: 1; display: flex; flex-direction: column;">
                                     <div class="plan-card-title text-lg font-bold truncate">${hotel.name}</div>
-                                    <div class="text-sm text-gray-500 mb-2"><i class="fas fa-map-marker-alt text-primary"></i> ${hotel.city}</div>
+                                    <div class="text-sm text-gray-500 mb-1"><i class="fas fa-map-marker-alt text-primary"></i> ${hotel.city}, ${hotel.country}</div>
+                                    <div class="text-xs text-gray-400 mb-2">
+                                        <i class="fas fa-location-arrow text-accent text-xs"></i> 
+                                        <c:choose>
+                                            <c:when test="${hotel.distanceFromCenter < 1}">
+                                                <fmt:formatNumber value="${hotel.distanceFromCenter * 1000}" maxFractionDigits="0" /> m from center
+                                            </c:when>
+                                            <c:otherwise>
+                                                <fmt:formatNumber value="${hotel.distanceFromCenter}" maxFractionDigits="1" /> km from center
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </div>
                                     <div class="flex items-center gap-1 mb-2">
                                         <i class="fas fa-star text-accent text-xs"></i><span class="text-sm font-bold">${hotel.rating}</span>
                                     </div>
+                                    
+                                    <div class="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-2" style="overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
+                                        ${hotel.description}
+                                    </div>
+                                    <div class="flex flex-wrap gap-1 mb-3">
+                                        <c:if test="${hotel.freeCancellation}">
+                                            <span class="text-[0.65rem] font-semibold px-2 py-0.5 rounded bg-green-500/10 text-green-500 dark:bg-green-500/20"><i class="fas fa-check text-[0.6rem]"></i> Free Cancel</span>
+                                        </c:if>
+                                        <c:if test="${hotel.breakfastIncluded}">
+                                            <span class="text-[0.65rem] font-semibold px-2 py-0.5 rounded bg-blue-500/10 text-blue-500 dark:bg-blue-500/20"><i class="fas fa-utensils text-[0.6rem]"></i> Breakfast Inc.</span>
+                                        </c:if>
+                                    </div>
+
                                     <div class="plan-card-footer mt-auto pt-3 border-t border-gray-100 dark:border-gray-800">
-                                        <div class="plan-price text-lg font-bold">₹<fmt:formatNumber value="${hotel.startingPrice}" type="number" maxFractionDigits="0" /></div>
+                                        <div class="plan-price text-lg font-bold">
+                                            <c:choose>
+                                                <c:when test="${hotel.startingPrice > 0}">
+                                                    ₹<fmt:formatNumber value="${hotel.startingPrice}" type="number" maxFractionDigits="0" />
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <span class="text-sm font-normal text-muted">Price on request</span>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </div>
                                         <div class="plan-duration text-xs text-gray-500">per night</div>
                                     </div>
                                 </div>
@@ -899,22 +925,46 @@
                 <div class="container">
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                         <c:forEach var="hotel" items="${recentlyViewedHotels}" end="3">
-                            <a href="${pageContext.request.contextPath}/hotel/details?id=${hotel.id}" class="plan-card" style="max-width: none; flex: unset;">
-                                <div class="plan-card-img-wrap" style="height: 160px;">
-                                    <c:choose>
-                                        <c:when test="${fn:startsWith(hotel.imageUrl, 'http')}">
-                                            <img src="${hotel.imageUrl}" alt="${hotel.name}" loading="lazy">
-                                        </c:when>
-                                        <c:otherwise>
-                                            <img src="${pageContext.request.contextPath}/${hotel.imageUrl}" alt="${hotel.name}" loading="lazy">
-                                        </c:otherwise>
-                                    </c:choose>
+                            <a href="${pageContext.request.contextPath}/hotel-details?id=${hotel.id}" class="plan-card" style="max-width: none; flex: unset; display: flex; flex-direction: column;">
+                                <div class="plan-card-img-wrap" style="height: 160px; position: relative;">
+                                    <img src="${hotel.imageUrl}" alt="${hotel.name}" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
+                                    <div class="plan-card-category" style="background:rgba(79,70,229,0.85);">${hotel.propertyType}</div>
                                 </div>
-                                <div class="plan-card-body p-4">
+                                <div class="plan-card-body p-4" style="flex-grow: 1; display: flex; flex-direction: column;">
                                     <div class="plan-card-title text-lg font-bold truncate">${hotel.name}</div>
-                                    <div class="text-sm text-gray-500 mb-2"><i class="fas fa-map-marker-alt text-primary"></i> ${hotel.city}</div>
+                                    <div class="text-sm text-gray-500 mb-1"><i class="fas fa-map-marker-alt text-primary"></i> ${hotel.city}, ${hotel.country}</div>
+                                    <div class="text-xs text-gray-400 mb-2">
+                                        <i class="fas fa-location-arrow text-accent text-xs"></i> 
+                                        <c:choose>
+                                            <c:when test="${hotel.distanceFromCenter < 1}">
+                                                <fmt:formatNumber value="${hotel.distanceFromCenter * 1000}" maxFractionDigits="0" /> m from center
+                                            </c:when>
+                                            <c:otherwise>
+                                                <fmt:formatNumber value="${hotel.distanceFromCenter}" maxFractionDigits="1" /> km from center
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </div>
+                                    <div class="flex items-center gap-1 mb-2">
+                                        <i class="fas fa-star text-accent text-xs"></i><span class="text-sm font-bold">${hotel.rating}</span>
+                                    </div>
+                                    
+                                    <div class="flex flex-wrap gap-1 mb-3">
+                                        <c:if test="${hotel.freeCancellation}">
+                                            <span class="text-[0.65rem] font-semibold px-2 py-0.5 rounded bg-green-500/10 text-green-500 dark:bg-green-500/20">Free Cancel</span>
+                                        </c:if>
+                                    </div>
+
                                     <div class="plan-card-footer mt-auto pt-3 border-t border-gray-100 dark:border-gray-800">
-                                        <div class="plan-price text-lg font-bold">₹<fmt:formatNumber value="${hotel.startingPrice}" type="number" maxFractionDigits="0" /></div>
+                                        <div class="plan-price text-lg font-bold">
+                                            <c:choose>
+                                                <c:when test="${hotel.startingPrice > 0}">
+                                                    ₹<fmt:formatNumber value="${hotel.startingPrice}" type="number" maxFractionDigits="0" />
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <span class="text-sm font-normal text-muted">Price on request</span>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </div>
                                         <div class="plan-duration text-xs text-gray-500">per night</div>
                                     </div>
                                 </div>

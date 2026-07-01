@@ -56,7 +56,9 @@ public class Plan {
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
 
-    public String getImage() { return image; }
+    public String getImage() {
+        return com.voyastra.util.ImageUtil.resolveDestinationImageUrl(image, id);
+    }
     public void setImage(String image) { this.image = image; }
 
     public Timestamp getCreatedAt() { return createdAt; }

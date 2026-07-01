@@ -159,7 +159,7 @@
                                 <c:when test="${not empty rooms}">
                                     <c:forEach var="room" items="${rooms}">
                                         <label for="room-${room.id}" class="cursor-pointer group relative block">
-                                            <input type="radio" name="roomId" value="${room.id}" id="room-${room.id}" class="peer absolute opacity-0 w-0 h-0" onchange="updateSelectedRoom('${room.type}', ${room.pricePerNight})" ${empty checkIn or empty checkOut ? 'disabled' : ''}>
+                                            <input type="radio" name="roomId" value="${room.id}" id="room-${room.id}" class="peer absolute opacity-0 w-0 h-0" onchange="updateSelectedRoom('${room.type}', ${room.pricePerNight})" required ${empty checkIn or empty checkOut ? 'disabled' : ''}>
                                             <div class="surface-panel rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col md:flex-row border-2 border-transparent peer-checked:border-primary peer-checked:bg-primary/5 dark:peer-checked:bg-primary/10">
                                                 
                                                 <!-- Room Image -->
@@ -218,7 +218,7 @@
                                 </c:when>
                                 <c:otherwise>
                                     <label for="room-mock" class="cursor-pointer group relative block">
-                                        <input type="radio" name="roomId" value="-1" id="room-mock" class="peer absolute opacity-0 w-0 h-0" onchange="updateSelectedRoom('Standard Double Room', ${hotel.startingPrice > 0 ? hotel.startingPrice : 150})" ${empty checkIn or empty checkOut ? 'disabled' : ''}>
+                                        <input type="radio" name="roomId" value="-1" id="room-mock" class="peer absolute opacity-0 w-0 h-0" onchange="updateSelectedRoom('Standard Double Room', ${hotel.startingPrice > 0 ? hotel.startingPrice : 150})" required ${empty checkIn or empty checkOut ? 'disabled' : ''}>
                                         <div class="surface-panel rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col md:flex-row border-2 border-transparent peer-checked:border-primary peer-checked:bg-primary/5 dark:peer-checked:bg-primary/10">
                                             <div class="md:w-1/3 h-48 md:h-auto relative">
                                                 <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Standard Double Room" class="w-full h-full object-cover">

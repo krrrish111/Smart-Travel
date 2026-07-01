@@ -17,10 +17,19 @@ public class DBConnection {
         HikariConfig config = new HikariConfig();
         
         // 1. Connection settings
-        // Using 'localhost' instead of '127.0.0.1' for consistent behavior
-        config.setJdbcUrl(com.voyastra.config.ConfigManager.get("DB_URL", "jdbc:mysql://127.0.0.1:3306/voyastra?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true"));
+        String dbHost = com.voyastra.config.ConfigManager.get("DB_HOST", "127.0.0.1");
+        String dbPort = com.voyastra.config.ConfigManager.get("DB_PORT", "3306");
+        String dbName = com.voyastra.config.ConfigManager.get("DB_NAME", "voyastra");
+        String defaultUrl = "jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName + "?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
+
+        config.setJdbcUrl(com.voyastra.config.ConfigManager.get("DB_URL", defaultUrl));
         config.setUsername(com.voyastra.config.ConfigManager.get("DB_USER", "root"));
-        config.setPassword(com.voyastra.config.ConfigManager.get("DB_PASS", "Home@123"));
+        
+        String password = com.voyastra.config.ConfigManager.get("DB_PASSWORD");
+        if (password == null || password.isEmpty()) {
+            password = com.voyastra.config.ConfigManager.get("DB_PASS", "Home@123");
+        }
+        config.setPassword(password);
         config.setDriverClassName("com.mysql.cj.jdbc.Driver");
 
         // 2. Pool Performance Settings

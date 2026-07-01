@@ -80,9 +80,11 @@ public class Destination {
     public String getStartingCity() { return startingCity; }
     public void setStartingCity(String startingCity) { this.startingCity = startingCity; }
 
-    public String getImageUrl() { return imageUrl; }
+    public String getImageUrl() {
+        return com.voyastra.util.ImageUtil.resolveDestinationImageUrl(imageUrl, id);
+    }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
-    public String getImage() { return imageUrl; }
+    public String getImage() { return getImageUrl(); }
     public void setImage(String image) { this.imageUrl = image; }
 
     public float getRating() { return rating; }

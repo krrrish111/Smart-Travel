@@ -36,8 +36,15 @@ public class ImageServlet extends HttpServlet {
             return;
         }
 
-        // Resolve the absolute upload base dir dynamically from Tomcat context
-        String uploadBase = getServletContext().getRealPath("/") + "uploads";
+        // Resolve the absolute upload base dir dynamically from Tomcat context or env
+        String uploadBase = com.voyastra.config.ConfigManager.get("UPLOAD_DIR");
+        if (uploadBase == null || uploadBase.trim().isEmpty()) {
+            uploadBase = getServletContext().getRealPath("/");
+            if (uploadBase != null && !uploadBase.endsWith(File.separator)) {
+                uploadBase += File.separator;
+            }
+            uploadBase += "uploads";
+        }
         File imageFile = new File(uploadBase, pathInfo);
 
         // Security: prevent path traversal attacks

@@ -80,7 +80,21 @@ public class HotelCheckoutServlet extends HttpServlet {
                 room.setImageUrl("https://images.unsplash.com/photo-1618773928121-c32242e63f39?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80");
             } else {
                 hotel = hotelDAO.getHotelById(hotelId);
-                room  = hotelDAO.getRoomById(roomId);
+                if (roomId == -1) {
+                    room = new HotelRoom();
+                    room.setId(-1);
+                    room.setHotelId(hotelId);
+                    room.setType("Standard Double Room");
+                    room.setPricePerNight(hotel != null && hotel.getStartingPrice() > 0 ? hotel.getStartingPrice() : 150);
+                    room.setCapacity(2);
+                    room.setBedType("1 Double Bed");
+                    room.setRoomSize("30 m²");
+                    room.setFreeCancellation(true);
+                    room.setBreakfastIncluded(false);
+                    room.setImageUrl("https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80");
+                } else {
+                    room  = hotelDAO.getRoomById(roomId);
+                }
                 if (hotel == null || room == null) {
                     response.sendRedirect(request.getContextPath() + "/");
                     return;
@@ -196,7 +210,15 @@ public class HotelCheckoutServlet extends HttpServlet {
                 room.setPricePerNight(prices[index]);
             } else {
                 hotel = hotelDAO.getHotelById(hotelId);
-                room  = hotelDAO.getRoomById(roomId);
+                if (roomId == -1) {
+                    room = new HotelRoom();
+                    room.setId(-1);
+                    room.setHotelId(hotelId);
+                    room.setType("Standard Double Room");
+                    room.setPricePerNight(hotel != null && hotel.getStartingPrice() > 0 ? hotel.getStartingPrice() : 150);
+                } else {
+                    room  = hotelDAO.getRoomById(roomId);
+                }
             }
             pending.setHotel(hotel);
             pending.setRoom(room);

@@ -34,7 +34,9 @@ public class Post {
     public String getText() { return text; }
     public void setText(String text) { this.text = text; }
 
-    public String getImageUrl() { return imageUrl; }
+    public String getImageUrl() {
+        return com.voyastra.util.ImageUtil.resolvePostImageUrl(imageUrl, id);
+    }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
 
     public String getLocation() { return location; }

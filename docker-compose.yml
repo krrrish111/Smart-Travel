@@ -1,26 +1,32 @@
-version: '3.8'
-
 services:
   mysql:
     image: mysql:8.0
     container_name: voyastra-mysql
     restart: unless-stopped
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     environment:
       MYSQL_DATABASE: voyastra
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}
-    ports:
-      - "3306:3306"
+      MYSQL_USER: voyastra_user
+      MYSQL_PASSWORD: ${DB_PASSWORD:-Home@123}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-Home@123}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@voyastra.com}
+      ADMIN_PASSWORD_HASH: ${ADMIN_PASSWORD_HASH:-$$2a$$12$$OhufE14IFnHVGNvDtOlTKOuEYohGZD/HUV6CUEBioKhevSiRdcbIu}
     volumes:
       - mysql-data:/var/lib/mysql
       - ./database/init:/docker-entrypoint-initdb.d
     networks:
       - voyastra-network
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$DB_PASSWORD"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 15s
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -p$${MYSQL_ROOT_PASSWORD} --silent"]
+      interval: 15s
+      timeout: 10s
+      retries: 20
+      start_period: 180s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   voyastra:
     build:
@@ -34,8 +40,8 @@ services:
       - DB_HOST=mysql
       - DB_PORT=3306
       - DB_NAME=voyastra
-      - DB_USER=root
-      - DB_PASSWORD=${DB_PASSWORD:-root}
+      - DB_USER=${DB_USER:-voyastra_user}
+      - DB_PASSWORD=${DB_PASSWORD:-Home@123}
       - GEMINI_API_KEY=${GEMINI_API_KEY}
       - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
       - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
@@ -53,12 +59,19 @@ services:
       - UPLOAD_DIR=/var/voyastra/uploads
     volumes:
       - voyastra-uploads:/var/voyastra/uploads
+      - voyastra-tickets:/var/voyastra/tickets
+      - voyastra-pdfs:/var/voyastra/pdfs
       - voyastra-logs:/usr/local/tomcat/logs
     networks:
       - voyastra-network
     depends_on:
       mysql:
         condition: service_healthy
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   phpmyadmin:
     image: phpmyadmin:latest
@@ -70,17 +83,26 @@ services:
       - PMA_HOST=mysql
       - PMA_PORT=3306
       - PMA_USER=root
-      - PMA_PASSWORD=${DB_PASSWORD:-root}
+      - PMA_PASSWORD=${DB_PASSWORD:-Home@123}
     networks:
       - voyastra-network
     depends_on:
       mysql:
         condition: service_healthy
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
 volumes:
   mysql-data:
     driver: local
   voyastra-uploads:
+    driver: local
+  voyastra-tickets:
+    driver: local
+  voyastra-pdfs:
     driver: local
   voyastra-logs:
     driver: local

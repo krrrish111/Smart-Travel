@@ -1,131 +1,61 @@
-# Voyastra Smart Travel - Production Dockerization & Deployment Guide
+# Voyastra
 
-This guide details the containerization, environment setup, database operations, and multi-cloud deployment instructions for the Voyastra Smart Travel application.
+## Project Overview
+Voyastra is a comprehensive travel planning platform designed to make booking hotels, generating itineraries, and discovering local experiences seamless and intuitive. It leverages AI for trip generation, along with integrations for Maps, Payments, and SMS/Email communications.
 
----
+## Tech Stack
+- **Backend:** Java 17, Java Servlets, JSP, JSTL, Apache Tomcat 9
+- **Build Tool:** Maven
+- **Database:** MySQL 8
+- **Containerization:** Docker & Docker Compose
+- **APIs & Integrations:** Google OAuth, Google Maps, Google Places, Gemini AI, Razorpay, TravelPayouts, Twilio, JavaMail, Cloudinary
 
-## Folder Structure Summary
+## Features
+- Secure Google OAuth & Native Authentication
+- AI-Powered Trip Planning via Gemini
+- Interactive Maps & Directions via Google Maps
+- Real-time Flight & Fare Search via TravelPayouts
+- Hotel Booking & Review System
+- Secure Payment Gateway via Razorpay
+- Automated Email (SMTP) & SMS (Twilio) Notifications
+- PDF Ticket Generation
 
-```
-voyastra/
-├── .dockerignore
-├── .env.example
-├── Dockerfile
-├── docker-compose.yml
-├── pom.xml
-├── database/
-│   └── init/
-│       ├── 01-schema.sql  (Consolidated database schema)
-│       └── 02-seed.sql    (Initial mock and administrative data)
-├── scripts/
-│   ├── backup.sh          (Unix database backup script)
-│   ├── restore.sh         (Unix database restoration script)
-│   ├── backup.ps1         (Windows database backup script)
-│   └── restore.ps1        (Windows database restoration script)
-└── src/
-    └── main/
-        └── java/com/voyastra/
-            ├── config/
-            │   └── ConfigManager.java (Reads system environment)
-            └── controller/
-                └── HealthServlet.java (System /health diagnostics)
-```
-
----
-
-## 1. Quick Start
-
-Ensure Docker Desktop / Engine is running.
-
-### Step 1: Set up Environment Variables
-Duplicate `.env.example` as `.env` and fill in your details:
+## Environment Variables
+Before running the application, copy `.env.example` to `.env` and fill in your keys:
 ```bash
 cp .env.example .env
 ```
-Ensure you set your `GEMINI_API_KEY`, API tokens, and credentials.
+Ensure that all required keys (e.g., `GEMINI_API_KEY`, `GOOGLE_CLIENT_ID`, `RAZORPAY_KEY`, etc.) are provided.
 
-### Step 2: Run Application
-Start the entire stack using Docker Compose:
+## Docker Setup & Run Instructions
+The application is fully containerized. You only need Docker and Docker Compose installed.
+
+### Build and Run:
 ```bash
 docker compose up --build -d
 ```
-This single command compiles the project via Maven, constructs the Tomcat image, starts the MySQL database, initializes all database tables, seeds mock data, and registers phpMyAdmin.
 
-### Step 3: Access Application
-- **Main Web Application**: [http://localhost:8080/voyastra](http://localhost:8080/voyastra)
-- **Health Diagnostics Endpoint**: [http://localhost:8080/voyastra/health](http://localhost:8080/voyastra/health)
-- **phpMyAdmin Console**: [http://localhost:8081](http://localhost:8081)
+### Stop Containers:
+```bash
+docker compose down
+```
 
----
+## Build Instructions (Local without Docker)
+1. Ensure Java 17 and Maven are installed.
+2. Run `mvn clean package` to build the `voyastra.war` file.
+3. Deploy the `.war` to your local Tomcat 9 `webapps` directory.
 
-## 2. Docker Operations
+## Health Endpoint
+To check if the application is running correctly, access the health endpoint:
+```
+http://localhost:8080/voyastra/health
+```
 
-- **Stop Containers**:
-  ```bash
-  docker compose down
-  ```
-- **Stop and Clear Volumes**:
-  ```bash
-  docker compose down -v
-  ```
-- **View Application Logs**:
-  ```bash
-  docker compose logs -f voyastra
-  ```
-- **View Database Logs**:
-  ```bash
-  docker compose logs -f mysql
-  ```
+## Deployment
+Voyastra is ready to be deployed to PaaS providers like Render, AWS ECS, or DigitalOcean App Platform using the provided `Dockerfile` and `docker-compose.yml`.
+Ensure that all secrets from `.env` are set as environment variables in your deployment environment.
 
----
-
-## 3. Database Backup & Restoration
-
-Backup and restoration scripts are available inside the `scripts/` folder.
-
-### On Linux / macOS
-- **Backup**:
-  ```bash
-  ./scripts/backup.sh
-  ```
-- **Restore**:
-  ```bash
-  ./scripts/restore.sh ./database/backups/voyastra_backup_xxxx.sql
-  ```
-
-### On Windows (PowerShell)
-- **Backup**:
-  ```powershell
-  .\scripts\backup.ps1
-  ```
-- **Restore**:
-  ```powershell
-  .\scripts\restore.ps1 -BackupFile .\database\backups\voyastra_backup_xxxx.sql
-  ```
-
----
-
-## 4. Production Cloud Deployment Guides
-
-### A. AWS EC2 (Ubuntu VPS)
-1. Provision an Ubuntu EC2 instance and associate an Elastic IP.
-2. Install Docker and Docker Compose on the host:
-   ```bash
-   sudo apt update && sudo apt install docker.io docker-compose-v2 -y
-   ```
-3. Clone your codebase, navigate to the directory, and configure `.env` with production keys.
-4. Run the stack:
-   ```bash
-   sudo docker compose up --build -d
-   ```
-5. Configure Security Groups to allow incoming traffic on port `8080` (or set up an Nginx reverse proxy to handle SSL/TLS traffic on `443`).
-
-### B. Render / Railway / Google Cloud Run
-1. Since Cloud Run / Render run stateless application containers, deploy the `Dockerfile` directly by connecting your Github repository.
-2. Spin up a managed MySQL database instance (e.g. Google Cloud SQL or Railway database).
-3. Connect the application by overriding variables in the service environment block:
-   - `DB_HOST`: Mapped to the managed database hostname.
-   - `DB_PORT`: Database port (e.g. `3306`).
-   - `DB_NAME`: Database name.
-   - `DB_USER` / `DB_PASSWORD`: Managed credentials.
-   - `UPLOAD_DIR`: Point to a mounted cloud storage volume or persistent mount.
+## Troubleshooting
+- **Database Connection Issues:** Ensure `DB_PASSWORD` and `MYSQL_ROOT_PASSWORD` match in your `.env` file. Wait a few seconds for the MySQL container to become fully healthy before accessing the app.
+- **Missing API Keys:** If AI trips or Map features fail, verify that `GEMINI_API_KEY` and `GOOGLE_MAPS_API_KEY` are correctly loaded.
+- **File Uploads Failing:** Ensure the `uploads/` directory has appropriate write permissions inside the Docker container or mapped volume.

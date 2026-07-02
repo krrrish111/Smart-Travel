@@ -18,7 +18,6 @@ import java.util.Properties;
 
 public class GeminiService {
 
-    private static final String CONFIG_FILE = "config.properties";
     private static final String BASE_ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models/";
     // Primary model → fallback chain (tried in order until one succeeds)
     private static final String[] MODELS = { "gemini-3.5-flash", "gemini-3.1-flash-lite" };

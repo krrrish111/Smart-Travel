@@ -1,49 +1,28 @@
-# Environment Files
-.env
-.env.local
-.env.production
-*.env
-
-# Secrets
-secrets.properties
-oauth.properties
-application-local.properties
-config/secrets/*
-*.key
-*.pem
-*.p12
-*.jks
-
-# Build artifacts
+# Java & Maven
 target/
-build/
-out/
-*.war
 *.class
-build_war/
-
-# Tomcat
-tomcat/
-apache-tomcat*/
-logs/
-work/
-temp/
-
-# IDE
-.idea/
-.vscode/
-.settings/
-.project
-.classpath
-*.iml
-
-# Database Dumps
-*.sql
-*.bak
 
 # Logs
 *.log
+logs/
 
-# OS
-.DS_Store
+# Uploads & User Generated Content
+uploads/
+tickets/
+pdfs/
+docker-data/
+
+# Environment
+.env
+.env.local
+
+# IDE & OS Files
+.idea/
+.vscode/
+*.iml
 Thumbs.db
+.DS_Store
+
+# Temporary files
+*.pid
+*.tmp

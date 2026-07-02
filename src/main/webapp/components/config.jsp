@@ -1,13 +1,16 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<!-- Configuration File: Stores global variables and API keys centrally -->
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page import="com.voyastra.config.ConfigManager" %>
+<%-- Fallback logic for API Keys --%>
 <%
-    String googleApiKey = ConfigManager.get("GOOGLE_PLACES_API_KEY");
+    String googleMapsKey = ConfigManager.get("GOOGLE_MAPS_API_KEY");
+    String googlePlacesKey = ConfigManager.get("GOOGLE_PLACES_API_KEY");
+    String apiKey = (googleMapsKey != null && !googleMapsKey.trim().isEmpty()) ? googleMapsKey : googlePlacesKey;
 %>
 <script>
     // Maps Configuration
     var APP_CONFIG = APP_CONFIG || {
-        googleMapsApiKey: "<%= googleApiKey %>"
+        googleMapsApiKey: "<%= apiKey %>"
     };
 
     window.gm_authFailure = function() {

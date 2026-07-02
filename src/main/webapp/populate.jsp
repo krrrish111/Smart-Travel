@@ -1,9 +1,6 @@
-<%@ page import="java.sql.*" %>
+<%@ page import="java.sql.*, com.voyastra.util.DBConnection" %>
 <%
-    String url = "jdbc:mysql://localhost:3306/voyastra";
-    String user = "root";
-    String password = "Home@123";
-    try (Connection conn = DriverManager.getConnection(url, user, password);
+    try (Connection conn = DBConnection.getConnection();
          Statement stmt = conn.createStatement()) {
         ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM hotels");
         rs.next();

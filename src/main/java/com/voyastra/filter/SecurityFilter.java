@@ -8,6 +8,8 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
 
 /**
  * Centralized Security Filter — handles auth and role-based access.
@@ -17,13 +19,13 @@ import java.util.List;
 public class SecurityFilter implements Filter {
 
     // Public paths: no login required
-    private static final List<String> PUBLIC_PATHS = Arrays.asList(
-        "/", "/index", "/home", "/explore", "/login", "/register",
+    private static final Set<String> PUBLIC_PATHS = new HashSet<>(Arrays.asList(
+        "/", "/index", "/index.jsp", "/home", "/explore", "/login", "/register",
         "/community", "/destination", "/destinations", "/error", 
-        "/route", "/logout", "/google-auth", "/google-login",
+        "/route", "/logout", "/google-auth", "/google-login", "/forgot-password", "/reset-password", "/health", "/favicon.ico",
         "/getPlans", "/review", "/search", "/trending", "/activities", "/weather", "/test-travelpayouts",
-        "/hotel-details", "/experience-details", "/itinerary-details", "/planner", "/experiences", "/flight/download-ticket", "/flight/ticket"
-    );
+        "/hotel-details", "/experience-details", "/itinerary-details", "/experiences", "/flight/download-ticket", "/flight/ticket"
+    ));
 
     // Admin-only paths
     private static final List<String> ADMIN_PATHS = Arrays.asList(
@@ -46,6 +48,13 @@ public class SecurityFilter implements Filter {
             resp.setHeader("X-Content-Type-Options", "nosniff");
             resp.setHeader("X-Frame-Options", "SAMEORIGIN");
             resp.setHeader("X-XSS-Protection", "1; mode=block");
+            resp.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+            resp.setHeader("Permissions-Policy", "geolocation=(), microphone=(), camera=()");
+            resp.setHeader("Content-Security-Policy", "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://maps.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https:;");
+
+            if (req.isSecure() || "https".equalsIgnoreCase(req.getHeader("X-Forwarded-Proto"))) {
+                resp.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
+            }
 
             String uri = req.getRequestURI();
             String contextPath = req.getContextPath();
@@ -54,16 +63,23 @@ public class SecurityFilter implements Filter {
             // ── 1. Always allow static assets ───────────────────────────────────
             if (path.startsWith("/css/") || path.startsWith("/js/") ||
                     path.startsWith("/images/") || path.startsWith("/assets/") ||
-                    path.startsWith("/favicon") || path.startsWith("/uploads/")) {
+                    path.startsWith("/fonts/") || path.startsWith("/uploads/") ||
+                    path.startsWith("/webjars/") || path.equals("/robots.txt") ||
+                    path.equals("/manifest.json") || path.equals("/service-worker.js") ||
+                    path.startsWith("/favicon")) {
                 chain.doFilter(request, response);
                 return;
             }
 
             // ── 2. Allow public paths unconditionally ───────────────────────────
-            boolean isPublic = PUBLIC_PATHS.stream()
-                    .anyMatch(p -> path.equals(p) || path.startsWith(p + "?") || path.startsWith(p + "/"));
-            System.out.println("[SecurityFilter] path=" + path + " isPublic=" + isPublic);
+            boolean isPublic = PUBLIC_PATHS.contains(path) || 
+                               PUBLIC_PATHS.stream().anyMatch(p -> path.startsWith(p + "?") || (p.length() > 1 && path.startsWith(p + "/")));
             if (isPublic) {
+                if ("/health".equals(path)) {
+                    System.out.println("Health endpoint bypassed SecurityFilter.");
+                } else {
+                    System.out.println("Public resource allowed: " + path);
+                }
                 addSecurityHeaders(resp);
                 chain.doFilter(request, response);
                 return;

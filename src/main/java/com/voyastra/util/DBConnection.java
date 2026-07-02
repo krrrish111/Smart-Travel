@@ -23,7 +23,7 @@ public class DBConnection {
         String defaultUrl = "jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName + "?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
 
         config.setJdbcUrl(com.voyastra.config.ConfigManager.get("DB_URL", defaultUrl));
-        config.setUsername(com.voyastra.config.ConfigManager.get("DB_USER", "root"));
+        config.setUsername(com.voyastra.config.ConfigManager.get("DB_USER", "voyastra_user"));
         
         String password = com.voyastra.config.ConfigManager.get("DB_PASSWORD");
         if (password == null || password.isEmpty()) {

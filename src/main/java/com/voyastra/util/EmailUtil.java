@@ -32,9 +32,9 @@ public class EmailUtil {
         props.put("mail.smtp.host", "smtp.gmail.com"); 
         props.put("mail.smtp.port", "587");
 
-        // Use dummy credentials - in a real app, inject via env vars
-        final String username = "no-reply@voyastra.com";
-        final String password = "dummy-password";
+        // Use real credentials injected via env vars
+        final String username = com.voyastra.config.ConfigManager.get("SMTP_USER", "no-reply@voyastra.com");
+        final String password = com.voyastra.config.ConfigManager.get("SMTP_PASS", "");
 
         Session session = Session.getInstance(props, new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {

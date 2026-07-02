@@ -18,45 +18,57 @@ public class SchemaBootstrap implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
         
         System.out.println("=================================");
-        System.out.println("VOYASTRA STARTUP CHECK");
+        System.out.println("VOYASTRA STARTUP VERIFICATION");
         
-        // 1. Database Connection
+        // 1. Directories Auto-Creation & Writable Verification
+        String[] requiredDirs = {
+            com.voyastra.config.ConfigManager.get("UPLOAD_DIR", "/var/voyastra/uploads"),
+            "/var/voyastra/tickets",
+            "/var/voyastra/pdfs",
+            "/usr/local/tomcat/logs"
+        };
+        for (String dirPath : requiredDirs) {
+            java.io.File dir = new java.io.File(dirPath);
+            if (!dir.exists()) {
+                boolean created = dir.mkdirs();
+                System.out.println("[Startup] Directory " + dirPath + " created: " + created);
+            }
+            if (!dir.canWrite()) {
+                System.err.println("[Startup ERROR] Directory is not writable: " + dirPath);
+            } else {
+                System.out.println("[Startup] Directory " + dirPath + " is writable.");
+            }
+        }
+
+        // 2. Database Connection
         try (Connection conn = DBConnection.getConnection()) {
             if (conn != null && !conn.isClosed()) {
                 System.out.println("Database Connection: SUCCESS");
                 DiagnosticManager.dbConnected = true;
             } else {
-                System.out.println("Database Connection: FAILED");
+                System.err.println("Database Connection: FAILED");
                 DiagnosticManager.dbConnected = false;
             }
         } catch (Exception e) {
-            System.out.println("Database Connection: FAILED");
+            System.err.println("Database Connection: FAILED - " + e.getMessage());
             DiagnosticManager.dbConnected = false;
         }
 
-        // 2. Servlet Registration
-        // If we are here, listeners are working, assume Servlets are registered
+        // 3. Servlet Registration
         System.out.println("Servlet Registration: SUCCESS");
         DiagnosticManager.servletsRegistered = true;
 
-        // 3. YouTube Config
-        String ytKey = ConfigManager.get("YOUTUBE_API_KEY");
-        if (ytKey != null && !ytKey.trim().isEmpty() && !ytKey.contains("YOUR_YOUTUBE")) {
-            System.out.println("YouTube Config: SUCCESS");
-            DiagnosticManager.youtubeConfigured = true;
-        } else {
-            System.out.println("YouTube Config: FAILED");
-            DiagnosticManager.youtubeConfigured = false;
-        }
-
-        // 4. Unsplash Config
-        String unsplashKey = ConfigManager.get("UNSPLASH_ACCESS_KEY");
-        if (unsplashKey != null && !unsplashKey.trim().isEmpty() && !unsplashKey.contains("YOUR_UNSPLASH")) {
-            System.out.println("Unsplash Config: SUCCESS");
-            DiagnosticManager.unsplashConfigured = true;
-        } else {
-            System.out.println("Unsplash Config: FAILED");
-            DiagnosticManager.unsplashConfigured = false;
+        // 4. API Config Validations
+        String[] configKeys = {
+            "GEMINI_API_KEY", "GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET",
+            "GOOGLE_MAPS_API_KEY", "GOOGLE_PLACES_API_KEY", "RAZORPAY_KEY",
+            "RAZORPAY_SECRET"
+        };
+        for (String key : configKeys) {
+            String value = ConfigManager.get(key);
+            if (value == null || value.trim().isEmpty() || value.contains("YOUR_") || value.contains("dummy_")) {
+                System.err.println("[Startup WARNING] Configuration value for '" + key + "' is missing or set to placeholder!");
+            }
         }
         
         System.out.println("=================================");

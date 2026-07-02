@@ -49,8 +49,9 @@ public class SchemaBootstrap implements ServletContextListener {
                 System.err.println("Database Connection: FAILED");
                 DiagnosticManager.dbConnected = false;
             }
-        } catch (Exception e) {
+        } catch (Throwable e) {
             System.err.println("Database Connection: FAILED - " + e.getMessage());
+            e.printStackTrace();
             DiagnosticManager.dbConnected = false;
         }
 
@@ -823,8 +824,9 @@ public class SchemaBootstrap implements ServletContextListener {
 
                 System.out.println("[SchemaBootstrap] Schema migration complete.");
 
-        } catch (Exception e) {
+        } catch (Throwable e) {
             System.err.println("[SchemaBootstrap] Migration error: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 

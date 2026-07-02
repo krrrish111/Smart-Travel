@@ -10,7 +10,7 @@ import java.sql.SQLException;
  */
 public class DBConnection {
 
-    private static final HikariDataSource dataSource;
+    private static HikariDataSource dataSource = null;
 
     static {
         // Configuration
@@ -45,10 +45,16 @@ public class DBConnection {
         config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
         config.addDataSourceProperty("useServerPrepStmts", "true");
         
-        // Initialize DataSource
-        dataSource = new HikariDataSource(config);
-        
-        System.out.println("[DB] HikariCP Connection Pool initialized successfully.");
+        HikariDataSource ds = null;
+        try {
+            // Initialize DataSource
+            ds = new HikariDataSource(config);
+            System.out.println("[DB] HikariCP Connection Pool initialized successfully.");
+        } catch (Exception e) {
+            System.err.println("[DB ERROR] HikariCP Connection Pool initialization failed: " + e.getMessage());
+            e.printStackTrace();
+        }
+        dataSource = ds;
     }
 
     private DBConnection() {}

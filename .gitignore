@@ -1,28 +1,49 @@
-# Java & Maven
+# Maven
 target/
 *.class
 
 # Logs
 *.log
 logs/
+*.out
 
-# Uploads & User Generated Content
+# Runtime
 uploads/
 tickets/
 pdfs/
-docker-data/
+temp/
+tmp/
+cache/
 
 # Environment
 .env
-.env.local
+.env.*
+!.env.example
 
-# IDE & OS Files
+# IDE
 .idea/
 .vscode/
 *.iml
-Thumbs.db
-.DS_Store
+.project
+.classpath
+.settings/
 
-# Temporary files
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+docker-data/
+mysql-data/
 *.pid
-*.tmp
+
+# Generated reports
+coverage/
+reports/
+
+# Java
+hs_err_pid*
+replay_pid*
+
+# Git
+*.orig

@@ -1,13 +1,12 @@
 package com.voyastra.controller.auth;
 
 import com.google.gson.JsonObject;
-import java.util.logging.Logger;
-import java.util.logging.Level;
 import com.google.gson.JsonParser;
 import com.voyastra.dao.profile.UserDAO;
 import com.voyastra.model.profile.User;
 import com.voyastra.util.OAuthConfig;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -26,14 +25,12 @@ import java.nio.charset.StandardCharsets;
  */
 @WebServlet("/google-login")
 public class GoogleLoginServlet extends HttpServlet {
-    private static final Logger logger = Logger.getLogger(GoogleLoginServlet.class.getName());
-
+    private static final Logger logger = LoggerFactory.getLogger(GoogleLoginServlet.class);
 
     // --- Loaded from OAuthConfig ---
     private static final String CLIENT_ID = OAuthConfig.getClientId();
     private static final String CLIENT_SECRET = OAuthConfig.getClientSecret();
 
-    private static final String REDIRECT_URI = "http://localhost:8080/google-login";
     private static final String AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth";
     private static final String TOKEN_URL = "https://oauth2.googleapis.com/token";
     private static final String VOYA_USERINFO_URL = "https://www.googleapis.com/oauth2/v3/userinfo";
@@ -45,30 +42,70 @@ public class GoogleLoginServlet extends HttpServlet {
         userDAO = new UserDAO();
     }
 
+    private String getRedirectUri(HttpServletRequest request) {
+        // Respect Render/reverse proxy headers
+        String scheme = request.getHeader("X-Forwarded-Proto");
+        if (scheme == null || scheme.trim().isEmpty()) {
+            scheme = request.getScheme();
+        }
+        
+        String serverName = request.getHeader("X-Forwarded-Host");
+        if (serverName == null || serverName.trim().isEmpty()) {
+            serverName = request.getServerName();
+        }
+        
+        String portHeader = request.getHeader("X-Forwarded-Port");
+        int port = -1;
+        if (portHeader != null && !portHeader.trim().isEmpty()) {
+            try {
+                port = Integer.parseInt(portHeader.trim());
+            } catch (NumberFormatException ignored) {}
+        }
+        if (port == -1) {
+            port = request.getServerPort();
+        }
+        
+        StringBuilder url = new StringBuilder();
+        url.append(scheme).append("://").append(serverName);
+        
+        // Only append port if not standard for the scheme
+        if (("http".equalsIgnoreCase(scheme) && port != 80 && port != -1) || 
+            ("https".equalsIgnoreCase(scheme) && port != 443 && port != -1)) {
+            url.append(":").append(port);
+        }
+        
+        url.append(request.getContextPath()).append("/google-login");
+        return url.toString();
+    }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         String code = request.getParameter("code");
+        String redirectUri = getRedirectUri(request);
+        logger.debug("Generated OAuth redirect_uri: {}", redirectUri);
 
         // Phase 1: Redirect to Google if no code provided
         if (code == null || code.isEmpty()) {
             String url = AUTH_URL + "?" +
                     "client_id=" + CLIENT_ID +
-                    "&redirect_uri=" + URLEncoder.encode(REDIRECT_URI, StandardCharsets.UTF_8) +
+                    "&redirect_uri=" + URLEncoder.encode(redirectUri, StandardCharsets.UTF_8) +
                     "&response_type=code" +
                     "&scope=" + URLEncoder.encode("openid email profile", StandardCharsets.UTF_8) +
                     "&access_type=offline" +
                     "&prompt=select_account";
 
+            logger.info("Redirecting user to Google OAuth URL: {}", url);
             response.sendRedirect(url);
             return;
         }
 
         // Phase 2: Handle Authorization Code callback
         try {
+            logger.info("Received OAuth authorization code. Initiating token exchange.");
             // 1. Exchange Code for Tokens
-            String tokenResponse = exchangeCodeForToken(code);
+            String tokenResponse = exchangeCodeForToken(code, redirectUri);
             JsonObject tokenJson = JsonParser.parseString(tokenResponse).getAsJsonObject();
             String accessToken = tokenJson.get("access_token").getAsString();
 
@@ -80,9 +117,12 @@ public class GoogleLoginServlet extends HttpServlet {
             String email = userInfo.get("email").getAsString();
             String name = userInfo.has("name") ? userInfo.get("name").getAsString() : email.split("@")[0];
 
+            logger.info("Successfully fetched Google user profile. Email: {}", email);
+
             // 3. Find or Create User in Database
             User user = userDAO.findOrCreateGoogleUser(googleId, email, name);
             if (user == null) {
+                logger.error("Failed to link Google account for email: {}", email);
                 request.setAttribute("errorMsg", "Failed to link Google account.");
                 request.getRequestDispatcher("/pages/auth/login.jsp").forward(request, response);
                 return;
@@ -98,21 +138,19 @@ public class GoogleLoginServlet extends HttpServlet {
             session.setAttribute("user", user);
             session.setAttribute("auth_method", "google_oauth2");
 
+            logger.info("Google OAuth authentication successful. User ID: {}, Role: {}", user.getId(), user.getRole());
+
             // 5. Redirect based on role
-            if ("admin".equals(user.getRole())) {
-                response.sendRedirect(request.getContextPath() + "/");
-            } else {
-                response.sendRedirect(request.getContextPath() + "/");
-            }
+            response.sendRedirect(request.getContextPath() + "/");
 
         } catch (Exception e) {
-            logger.log(Level.SEVERE, "Exception occurred", e);
+            logger.error("Google Authentication failed", e);
             request.setAttribute("errorMsg", "Google Authentication failed: " + e.getMessage());
             request.getRequestDispatcher("/pages/auth/login.jsp").forward(request, response);
         }
     }
 
-    private String exchangeCodeForToken(String code) throws Exception {
+    private String exchangeCodeForToken(String code, String redirectUri) throws Exception {
         URL url = new URL(TOKEN_URL);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
@@ -122,7 +160,7 @@ public class GoogleLoginServlet extends HttpServlet {
         String params = "code=" + URLEncoder.encode(code, StandardCharsets.UTF_8) +
                 "&client_id=" + URLEncoder.encode(CLIENT_ID, StandardCharsets.UTF_8) +
                 "&client_secret=" + URLEncoder.encode(CLIENT_SECRET, StandardCharsets.UTF_8) +
-                "&redirect_uri=" + URLEncoder.encode(REDIRECT_URI, StandardCharsets.UTF_8) +
+                "&redirect_uri=" + URLEncoder.encode(redirectUri, StandardCharsets.UTF_8) +
                 "&grant_type=authorization_code";
 
         try (OutputStream os = conn.getOutputStream()) {

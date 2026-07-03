@@ -80,19 +80,40 @@ public class SchemaBootstrap implements ServletContextListener {
         
         System.out.println("=================================");
 
-        // Check if users table exists, otherwise load bootstrap.sql
+        // Check if users table exists scoping search strictly to active catalog database
         boolean usersTableExists = false;
-        try (Connection conn = DBConnection.getConnection();
-             ResultSet rs = conn.getMetaData().getTables(null, null, "users", null)) {
-            if (rs.next()) {
-                usersTableExists = true;
+        try (Connection conn = DBConnection.getConnection()) {
+            String catalog = conn.getCatalog();
+            String schema = conn.getSchema();
+            DatabaseMetaData metaData = conn.getMetaData();
+            String username = metaData.getUserName();
+            String url = metaData.getURL();
+            
+            logger.info("[SchemaBootstrap] Pre-check Diagnostics:");
+            logger.info("  JDBC URL: {}", url);
+            logger.info("  Active Catalog: {}", catalog);
+            logger.info("  Active Schema: {}", schema);
+            logger.info("  DB User: {}", username);
+            
+            try (ResultSet rs = metaData.getTables(catalog, null, "users", new String[]{"TABLE"})) {
+                while (rs.next()) {
+                    String tabCat = rs.getString("TABLE_CAT");
+                    String tabSchem = rs.getString("TABLE_SCHEM");
+                    String tabName = rs.getString("TABLE_NAME");
+                    String tabType = rs.getString("TABLE_TYPE");
+                    logger.info("[SchemaBootstrap] Metadata table found -> Catalog: {}, Schema: {}, Name: {}, Type: {}", 
+                                tabCat, tabSchem, tabName, tabType);
+                    if ("users".equalsIgnoreCase(tabName)) {
+                        usersTableExists = true;
+                    }
+                }
             }
         } catch (Exception e) {
             logger.error("[SchemaBootstrap] Error checking for users table: " + e.getMessage(), e);
         }
 
         if (!usersTableExists) {
-            logger.info("[SchemaBootstrap] Core table 'users' does not exist. Initializing database schema from bootstrap.sql...");
+            logger.info("[SchemaBootstrap] Core table 'users' does not exist in active catalog. Initializing database schema from bootstrap.sql...");
             try (Connection conn = DBConnection.getConnection();
                  Statement stmt = conn.createStatement();
                  java.io.InputStream in = getClass().getClassLoader().getResourceAsStream("bootstrap.sql")) {
@@ -100,6 +121,7 @@ public class SchemaBootstrap implements ServletContextListener {
                 if (in == null) {
                     throw new java.io.FileNotFoundException("bootstrap.sql not found on classpath!");
                 }
+                logger.info("[SchemaBootstrap] bootstrap.sql located successfully on classpath.");
                 
                 try (java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.InputStreamReader(in, java.nio.charset.StandardCharsets.UTF_8))) {
                     StringBuilder sqlBuilder = new StringBuilder();
@@ -113,23 +135,52 @@ public class SchemaBootstrap implements ServletContextListener {
                     }
                     
                     String[] statements = sqlBuilder.toString().split(";");
+                    logger.info("[SchemaBootstrap] Parsed {} SQL statements from bootstrap.sql.", statements.length);
+                    
+                    stmt.execute("SET FOREIGN_KEY_CHECKS = 0");
+                    int executedCount = 0;
                     for (String statement : statements) {
                         String execSql = statement.trim();
                         if (!execSql.isEmpty()) {
+                            executedCount++;
+                            String displaySql = execSql.length() > 150 ? execSql.substring(0, 150) + "..." : execSql;
+                            logger.info("[SchemaBootstrap] Executing statement {}: {}", executedCount, displaySql);
+                            long start = System.currentTimeMillis();
                             try {
                                 stmt.execute(execSql);
+                                long duration = System.currentTimeMillis() - start;
+                                logger.info("[SchemaBootstrap] Statement {} executed successfully in {} ms.", executedCount, duration);
                             } catch (SQLException e) {
-                                logger.error("[SchemaBootstrap] Error executing query: " + execSql + " - " + e.getMessage(), e);
+                                logger.error("[SchemaBootstrap] Statement " + executedCount + " failed. SQLState: " + e.getSQLState() + ", Code: " + e.getErrorCode() + " - " + e.getMessage(), e);
                             }
                         }
                     }
-                    logger.info("[SchemaBootstrap] Schema bootstrap initialized successfully.");
+                    stmt.execute("SET FOREIGN_KEY_CHECKS = 1");
+                    logger.info("[SchemaBootstrap] Core database schema bootstrap completed.");
                 }
+                
+                // SHOW TABLES verification
+                logger.info("[SchemaBootstrap] Verifying tables after bootstrap execution:");
+                try (ResultSet tablesRs = conn.getMetaData().getTables(conn.getCatalog(), null, null, new String[]{"TABLE"})) {
+                    while (tablesRs.next()) {
+                        logger.info("  - Table: {}", tablesRs.getString("TABLE_NAME"));
+                    }
+                }
+                
+                // SELECT COUNT(*) FROM users verification
+                try (ResultSet countRs = stmt.executeQuery("SELECT COUNT(*) FROM users")) {
+                    if (countRs.next()) {
+                        logger.info("[SchemaBootstrap] SELECT COUNT(*) FROM users returned: {}", countRs.getInt(1));
+                    }
+                } catch (SQLException e) {
+                    logger.error("[SchemaBootstrap] Verification SELECT COUNT(*) FROM users failed!", e);
+                }
+                
             } catch (Exception e) {
                 logger.error("[SchemaBootstrap] Failed to bootstrap database schema: " + e.getMessage(), e);
             }
         } else {
-            logger.info("[SchemaBootstrap] Core table 'users' exists. Skipping bootstrap.sql initialization.");
+            logger.info("[SchemaBootstrap] Core table 'users' already exists in the active catalog. Skipping bootstrap.sql initialization.");
         }
 
         try (Connection conn = DBConnection.getConnection();

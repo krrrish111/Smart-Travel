@@ -6,7 +6,7 @@ let globalDestsForPlans = [];
 
 async function loadPlans() {
     try {
-        const response = await fetch('/voyastra/plans');
+        const response = await fetch('/plans');
         if (!response.ok) throw new Error('Failed to fetch plans');
         
         const text = await response.text();
@@ -63,7 +63,7 @@ async function loadPlans() {
                 <td><input type="checkbox" class="checkbox-custom" data-bulk-context="plans" value="${p.id}" onchange="toggleBulkItem(${p.id}, 'plans', this)"></td>
                 <td>
                     <div style="display:flex; align-items:center; gap:12px;">
-                        <img src="${p.image ? (p.image.startsWith('http') ? p.image : '/voyastra/' + p.image) : 'https://placehold.co/100x100?text=No+Img'}" style="width:40px; height:40px; border-radius:6px; object-fit:cover;">
+                        <img src="${p.image ? (p.image.startsWith('http') ? p.image : '/' + p.image) : 'https://placehold.co/100x100?text=No+Img'}" style="width:40px; height:40px; border-radius:6px; object-fit:cover;">
                         <div>
                             <div style="font-weight:600;">${p.title}</div>
                             <div style="font-size:0.75rem; color:var(--text-muted);">${p.category}</div>
@@ -87,7 +87,7 @@ async function loadPlans() {
 
 async function loadDestinationsForPlans() {
     try {
-        const response = await fetch('/voyastra/destinations');
+        const response = await fetch('/destinations');
         if (response.ok) {
             const text = await response.text();
             if (!text.startsWith("<!DOCTYPE")) {

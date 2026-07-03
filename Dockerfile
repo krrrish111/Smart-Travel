@@ -27,7 +27,7 @@ RUN apt-get update && \
 RUN rm -rf webapps/*
 
 # 3. Copy only the built war file from builder stage
-COPY --from=builder /app/target/voyastra.war webapps/voyastra.war
+COPY --from=builder /app/target/voyastra.war webapps/ROOT.war
 
 # 4. Create upload folder and establish a secure, non-root tomcat user
 RUN mkdir -p /var/voyastra/uploads && \
@@ -52,7 +52,7 @@ ENV UPLOAD_DIR=/var/voyastra/uploads \
 
 # 8. Define standard health check
 HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
-    CMD curl -f http://localhost:8080/voyastra/health || exit 1
+    CMD curl -f http://localhost:8080/health || exit 1
 
 # 9. Set entrypoint and start Tomcat server
 ENTRYPOINT ["docker-entrypoint.sh"]

@@ -5,7 +5,7 @@ let globalDests = [];
 
 async function loadDests() {
     try {
-        const response = await fetch('/voyastra/destinations');
+        const response = await fetch('/destinations');
         if (!response.ok) throw new Error('Failed to fetch destinations');
         
         const text = await response.text();
@@ -54,7 +54,7 @@ async function loadDests() {
             
             return `
             <div class="stat-card" style="padding:0; overflow:hidden;">
-                <div style="height:140px; background: url('${d.image.startsWith('http') ? d.image : '/voyastra/' + d.image}') center/cover no-repeat; position:relative;">
+                <div style="height:140px; background: url('${d.image.startsWith('http') ? d.image : '/' + d.image}') center/cover no-repeat; position:relative;">
                     <input type="checkbox" class="checkbox-custom" data-bulk-context="dests" value="${d.id}" onchange="toggleBulkItem(${d.id}, 'dests', this)" style="position:absolute; top:12px; left:12px;">
                     <div style="position:absolute; bottom:12px; right:12px; padding:4px 10px; background:rgba(0,0,0,0.6); backdrop-filter:blur(4px); border-radius:8px; font-size:0.7rem; color:white;">ID: #${d.id}</div>
                     <div style="position:absolute; top:12px; right:12px; display:flex; gap:4px;">${tags.join('')}</div>

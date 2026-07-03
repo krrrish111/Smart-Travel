@@ -33,7 +33,7 @@ public class GoogleLoginServlet extends HttpServlet {
     private static final String CLIENT_ID = OAuthConfig.getClientId();
     private static final String CLIENT_SECRET = OAuthConfig.getClientSecret();
 
-    private static final String REDIRECT_URI = "http://localhost:8080/voyastra/google-login";
+    private static final String REDIRECT_URI = "http://localhost:8080/google-login";
     private static final String AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth";
     private static final String TOKEN_URL = "https://oauth2.googleapis.com/token";
     private static final String VOYA_USERINFO_URL = "https://www.googleapis.com/oauth2/v3/userinfo";

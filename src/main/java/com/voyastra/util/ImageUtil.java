@@ -11,7 +11,7 @@ public class ImageUtil {
             clean = clean.substring(1);
         }
         if (clean.equals("images/hotel1.jpg") || clean.equals("images/hotel2.jpg")) {
-            return "/voyastra/assets/" + clean;
+            return "/assets/" + clean;
         }
         if (clean.startsWith("images/")) {
             return getHotelFallback(id, name);

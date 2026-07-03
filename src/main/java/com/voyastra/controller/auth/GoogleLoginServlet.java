@@ -43,39 +43,15 @@ public class GoogleLoginServlet extends HttpServlet {
     }
 
     private String getRedirectUri(HttpServletRequest request) {
-        // Respect Render/reverse proxy headers
-        String scheme = request.getHeader("X-Forwarded-Proto");
-        if (scheme == null || scheme.trim().isEmpty()) {
-            scheme = request.getScheme();
+        String appUrl = com.voyastra.config.ConfigManager.get("APP_URL");
+        if (appUrl == null || appUrl.trim().isEmpty()) {
+            logger.warn("APP_URL environment variable is missing! Falling back to http://localhost:8080 for development.");
+            appUrl = "http://localhost:8080";
         }
-        
-        String serverName = request.getHeader("X-Forwarded-Host");
-        if (serverName == null || serverName.trim().isEmpty()) {
-            serverName = request.getServerName();
+        if (appUrl.endsWith("/")) {
+            appUrl = appUrl.substring(0, appUrl.length() - 1);
         }
-        
-        String portHeader = request.getHeader("X-Forwarded-Port");
-        int port = -1;
-        if (portHeader != null && !portHeader.trim().isEmpty()) {
-            try {
-                port = Integer.parseInt(portHeader.trim());
-            } catch (NumberFormatException ignored) {}
-        }
-        if (port == -1) {
-            port = request.getServerPort();
-        }
-        
-        StringBuilder url = new StringBuilder();
-        url.append(scheme).append("://").append(serverName);
-        
-        // Only append port if not standard for the scheme
-        if (("http".equalsIgnoreCase(scheme) && port != 80 && port != -1) || 
-            ("https".equalsIgnoreCase(scheme) && port != 443 && port != -1)) {
-            url.append(":").append(port);
-        }
-        
-        url.append(request.getContextPath()).append("/google-login");
-        return url.toString();
+        return appUrl + request.getContextPath() + "/google-login";
     }
 
     @Override

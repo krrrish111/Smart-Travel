@@ -161,21 +161,31 @@ public class SchemaBootstrap implements ServletContextListener {
             }
             System.out.println("--------------------------------------------------");
             
-            try (ResultSet rs = metaData.getTables(catalog, null, "users", new String[]{"TABLE"})) {
-                while (rs.next()) {
-                    String tabCat = rs.getString("TABLE_CAT");
-                    String tabSchem = rs.getString("TABLE_SCHEM");
-                    String tabName = rs.getString("TABLE_NAME");
-                    String tabType = rs.getString("TABLE_TYPE");
-                    logger.info("[SchemaBootstrap] Metadata table found -> Catalog: {}, Schema: {}, Name: {}, Type: {}", 
-                                tabCat, tabSchem, tabName, tabType);
-                    if ("users".equalsIgnoreCase(tabName)) {
-                        usersTableExists = true;
-                    }
-                }
+            // Production-safe direct check (driver-independent)
+            try (Statement stmt = conn.createStatement();
+                 ResultSet rsCheck = stmt.executeQuery("SELECT 1 FROM users LIMIT 1")) {
+                usersTableExists = true;
+                logger.info("[SchemaBootstrap] Core table 'users' exists (verified via SELECT check).");
+            } catch (SQLException e) {
+                logger.info("[SchemaBootstrap] Core table 'users' does not exist or is empty (verified via SELECT check).");
+            }
+
+            boolean trainBookingsExist = false;
+            try (Statement stmt = conn.createStatement();
+                 ResultSet rsCheck = stmt.executeQuery("SELECT 1 FROM train_bookings LIMIT 1")) {
+                trainBookingsExist = true;
+                logger.info("[SchemaBootstrap] train_bookings table exists (verified via SELECT check).");
+            } catch (SQLException e) {
+                logger.info("[SchemaBootstrap] train_bookings table does not exist (verified via SELECT check).");
+            }
+
+            // Force bootstrap if either users or train_bookings is missing
+            if (!usersTableExists || !trainBookingsExist) {
+                logger.info("[SchemaBootstrap] Triggering database schema bootstrap (usersExists={}, trainBookingsExists={})", usersTableExists, trainBookingsExist);
+                usersTableExists = false; // Forces the below bootstrap.sql initialization block to execute
             }
         } catch (Exception e) {
-            logger.error("[SchemaBootstrap] Error checking for users table: " + e.getMessage(), e);
+            logger.error("[SchemaBootstrap] Error checking database status: " + e.getMessage(), e);
         }
 
         if (!usersTableExists) {

@@ -81,8 +81,8 @@ INSERT IGNORE INTO flights (flight_number, airline, origin, destination, departu
 ('VY-104', 'Voyastra Air', 'Delhi', 'Tokyo', '2026-09-10 22:30:00', '2026-09-11 07:30:00', 35000.00, 60);
 
 -- 10. Seed Community Posts
-INSERT IGNORE INTO posts (id, user_id, title, content, destination, category, likes) VALUES
-(1, 2, 'Misty mornings in Manali', 'Waking up to snowy mountain peaks and warm chai is something else. Highly recommend visiting Old Manali!', 'Manali', 'Adventure', 14),
-(2, 2, 'Sunset cruise in Goa', 'Breathtaking golden hour views from the Mandovi river cruise. Totally worth it!', 'Goa', 'For You', 22);
+INSERT IGNORE INTO posts (id, user_id, content, location, category) VALUES
+(1, 2, 'Misty mornings in Manali - Waking up to snowy mountain peaks and warm chai is something else. Highly recommend visiting Old Manali!', 'Manali', 'Adventure'),
+(2, 2, 'Sunset cruise in Goa - Breathtaking golden hour views from the Mandovi river cruise. Totally worth it!', 'Goa', 'For You');
 
 SET FOREIGN_KEY_CHECKS = 1;

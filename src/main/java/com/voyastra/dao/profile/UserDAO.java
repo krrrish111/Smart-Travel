@@ -148,7 +148,7 @@ public class UserDAO {
             stmt.setInt(6, user.getId());
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Error in updateUser", e);
             return false;
         }
     }
@@ -161,7 +161,7 @@ public class UserDAO {
             stmt.setInt(2, userId);
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Error in updateRole", e);
             return false;
         }
     }
@@ -175,7 +175,7 @@ public class UserDAO {
             stmt.setInt(3, userId);
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Error in updateWalletAndLoyalty", e);
             return false;
         }
     }
@@ -196,15 +196,20 @@ public class UserDAO {
             stmt.setInt(2, userId);
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Error in updatePassword", e);
             return false;
         }
     }
 
     public User findOrCreateGoogleUser(String googleId, String email, String name) {
+        logger.info("Entering findOrCreateGoogleUser for googleId: {}, email: {}, name: {}", googleId, email, name);
         User user = getUserByEmail(email);
-        if (user != null) return user;
+        if (user != null) {
+            logger.info("User found for email {}. Returning existing user.", email);
+            return user;
+        }
 
+        logger.info("User not found for email {}. Creating new user.", email);
         user = new User();
         user.setName(name);
         user.setEmail(email.toLowerCase().trim());
@@ -213,6 +218,7 @@ public class UserDAO {
         user.setVerified(true);
         
         if (registerUser(user)) {
+            logger.info("New user successfully registered for email {}.", email);
             return getUserByEmail(email);
         } else {
             logger.warn("registerUser failed for Google user {}. Attempting to fetch again in case of race condition.", email);
@@ -221,6 +227,7 @@ public class UserDAO {
                 return existing;
             }
         }
+        logger.error("findOrCreateGoogleUser returning null for email {}", email);
         return null;
     }
 
@@ -232,7 +239,7 @@ public class UserDAO {
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) list.add(mapRow(rs));
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Error in getAllUsers", e);
         }
         return list;
     }
@@ -244,7 +251,7 @@ public class UserDAO {
             stmt.setInt(1, id);
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Error in deleteUser", e);
             return false;
         }
     }
@@ -256,7 +263,7 @@ public class UserDAO {
              ResultSet rs = stmt.executeQuery(sql)) {
             if (rs.next()) return rs.getInt(1);
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Error in getTotalUserCount", e);
         }
         return 0;
     }

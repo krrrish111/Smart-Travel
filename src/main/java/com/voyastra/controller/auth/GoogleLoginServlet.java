@@ -58,6 +58,13 @@ public class GoogleLoginServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        HttpSession existingSession = request.getSession(false);
+        if (existingSession != null && existingSession.getAttribute("user_id") != null) {
+            logger.info("User already logged in. Redirecting to home to prevent duplicate OAuth callback.");
+            response.sendRedirect(request.getContextPath() + "/");
+            return;
+        }
+
         String code = request.getParameter("code");
         String redirectUri = getRedirectUri(request);
         logger.debug("Generated OAuth redirect_uri: {}", redirectUri);

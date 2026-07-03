@@ -36,7 +36,7 @@ public class DBConnection {
 
         String jdbcUrl;
         if (dbHost != null && !dbHost.trim().isEmpty()) {
-            jdbcUrl = "jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName + "?sslMode=REQUIRED";
+            jdbcUrl = "jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName + "?sslMode=REQUIRED&zeroDateTimeBehavior=convertToNull";
         } else {
             jdbcUrl = com.voyastra.config.ConfigManager.get("DB_URL");
         }

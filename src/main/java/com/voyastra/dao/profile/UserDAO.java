@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDAO {
+    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(UserDAO.class);
 
     private User mapRow(ResultSet rs) throws SQLException {
         User user = new User();
@@ -47,7 +48,7 @@ public class UserDAO {
                 if (rs.next()) return mapRow(rs);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Error in getUserById", e);
         }
         return null;
     }
@@ -61,7 +62,7 @@ public class UserDAO {
                 if (rs.next()) return mapRow(rs);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Error in getUserByEmail for email: " + email, e);
         }
         return null;
     }
@@ -75,7 +76,7 @@ public class UserDAO {
                 if (rs.next()) return mapRow(rs);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Error in getUserByResetToken", e);
         }
         return null;
     }
@@ -89,6 +90,7 @@ public class UserDAO {
                 return rs.next();
             }
         } catch (SQLException e) {
+            logger.error("Error in emailExists", e);
             return false;
         }
     }
@@ -100,7 +102,7 @@ public class UserDAO {
             stmt.setString(1, token);
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Error in verifyUser", e);
             return false;
         }
     }
@@ -113,7 +115,7 @@ public class UserDAO {
             stmt.setString(2, email.toLowerCase().trim());
             stmt.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Error in updateResetToken", e);
         }
     }
 
@@ -129,7 +131,7 @@ public class UserDAO {
             stmt.setBoolean(6, user.isVerified());
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Error in registerUser for email: " + user.getEmail(), e);
             return false;
         }
     }
@@ -209,8 +211,15 @@ public class UserDAO {
         user.setPassword("GOOGLE_USER_" + googleId);
         user.setRole("user");
         user.setVerified(true);
+        
         if (registerUser(user)) {
             return getUserByEmail(email);
+        } else {
+            logger.warn("registerUser failed for Google user {}. Attempting to fetch again in case of race condition.", email);
+            User existing = getUserByEmail(email);
+            if (existing != null) {
+                return existing;
+            }
         }
         return null;
     }

@@ -16,26 +16,34 @@ echo "Directory permissions:"
 for dir in /var/voyastra/uploads /var/voyastra/tickets /var/voyastra/pdfs /usr/local/tomcat/logs; do
     if [ ! -d "$dir" ]; then
         echo "Creating missing directory: $dir"
-        mkdir -p "$dir"
+        mkdir -p "$dir" || true
     fi
     
-    # Check if writable by tomcat user
-    if ! su -s /bin/bash -c "test -w $dir" tomcat; then
-        if ! gosu tomcat test -w "$dir" 2>/dev/null; then
-           # We will fix it below, but first check if we even can
-           chown -R tomcat:tomcat "$dir" || true
-           if ! gosu tomcat test -w "$dir" 2>/dev/null; then
-               echo "ERROR: Directory not writable by tomcat: $dir"
-               exit 1
-           fi
+    # Check if writable
+    if [ "$(whoami)" = "root" ]; then
+        # Check if writable by tomcat user
+        if ! su -s /bin/bash -c "test -w $dir" tomcat; then
+            if ! gosu tomcat test -w "$dir" 2>/dev/null; then
+               chown -R tomcat:tomcat "$dir" || true
+               if ! gosu tomcat test -w "$dir" 2>/dev/null; then
+                   echo "ERROR: Directory not writable by tomcat: $dir"
+                   exit 1
+               fi
+            fi
+        fi
+    else
+        if [ ! -w "$dir" ]; then
+            echo "WARNING: Directory not writable by current user: $dir"
         fi
     fi
 done
 
 # PRODUCTION PERMISSIONS
-find /var/voyastra -type d -exec chmod 775 {} \;
-find /var/voyastra -type f -exec chmod 664 {} \;
-chown -R tomcat:tomcat /var/voyastra /usr/local/tomcat/logs
+if [ "$(whoami)" = "root" ]; then
+    find /var/voyastra -type d -exec chmod 775 {} \; || true
+    find /var/voyastra -type f -exec chmod 664 {} \; || true
+    chown -R tomcat:tomcat /var/voyastra /usr/local/tomcat/logs || true
+fi
 
 echo "Uploads: $(ls -ld /var/voyastra/uploads)"
 echo "Tickets: $(ls -ld /var/voyastra/tickets)"
@@ -88,9 +96,9 @@ if [ -f /usr/local/tomcat/conf/server.xml ]; then
 fi
 
 if [ "$(whoami)" != "root" ]; then
-    echo "ERROR: Container is not running as root. Cannot drop privileges."
-    exit 1
+    echo "Container is running as non-root user ($(whoami)). Bypassing privilege drop."
+    exec "$@"
 fi
 
-echo "Running as tomcat"
+echo "Running as tomcat (dropping privileges from root)"
 exec gosu tomcat "$@"

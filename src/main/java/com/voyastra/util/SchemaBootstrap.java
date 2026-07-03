@@ -95,6 +95,71 @@ public class SchemaBootstrap implements ServletContextListener {
             logger.info("  Active Catalog: {}", catalog);
             logger.info("  Active Schema: {}", schema);
             logger.info("  DB User: {}", username);
+
+            System.out.println("--------------------------------------------------");
+            System.out.println("Current JDBC URL: " + url);
+            System.out.println("Current catalog: " + catalog);
+            System.out.println("Current schema: " + schema);
+            System.out.println("Database product: " + metaData.getDatabaseProductName());
+            System.out.println("Database version: " + metaData.getDatabaseProductVersion());
+            System.out.println("Username: " + username);
+            System.out.println("Connection class: " + conn.getClass().getName());
+            System.out.println("--------------------------------------------------");
+
+            DatabaseMetaData meta = conn.getMetaData();
+            try (ResultSet rs = meta.getTables(conn.getCatalog(), null, "%", new String[]{"TABLE"})) {
+                while (rs.next()) {
+                    System.out.println("TABLE_CAT: " + rs.getString("TABLE_CAT") + 
+                                       ", TABLE_SCHEM: " + rs.getString("TABLE_SCHEM") + 
+                                       ", TABLE_NAME: " + rs.getString("TABLE_NAME") + 
+                                       ", TABLE_TYPE: " + rs.getString("TABLE_TYPE"));
+                }
+            }
+
+            System.out.println("--------------------------------------------------");
+            System.out.println("Executing: SHOW TABLES;");
+            try (Statement stmt = conn.createStatement();
+                 ResultSet rsTables = stmt.executeQuery("SHOW TABLES")) {
+                while (rsTables.next()) {
+                    System.out.println("SHOW TABLES ROW: " + rsTables.getString(1));
+                }
+            } catch (Exception e) {
+                System.out.println("Error executing SHOW TABLES: " + e.getMessage());
+            }
+
+            System.out.println("--------------------------------------------------");
+            System.out.println("Executing: SELECT DATABASE();");
+            try (Statement stmt = conn.createStatement();
+                 ResultSet rsDb = stmt.executeQuery("SELECT DATABASE()")) {
+                if (rsDb.next()) {
+                    System.out.println("SELECT DATABASE() RESULT: " + rsDb.getString(1));
+                }
+            } catch (Exception e) {
+                System.out.println("Error executing SELECT DATABASE(): " + e.getMessage());
+            }
+
+            System.out.println("--------------------------------------------------");
+            System.out.println("Executing: SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE();");
+            try (Statement stmt = conn.createStatement();
+                 ResultSet rsCount = stmt.executeQuery("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE()")) {
+                if (rsCount.next()) {
+                    System.out.println("COUNT RESULT: " + rsCount.getInt(1));
+                }
+            } catch (Exception e) {
+                System.out.println("Error executing count query: " + e.getMessage());
+            }
+
+            System.out.println("--------------------------------------------------");
+            System.out.println("Executing: SELECT table_name FROM information_schema.tables WHERE table_schema = DATABASE();");
+            try (Statement stmt = conn.createStatement();
+                 ResultSet rsTableNames = stmt.executeQuery("SELECT table_name FROM information_schema.tables WHERE table_schema = DATABASE()")) {
+                while (rsTableNames.next()) {
+                    System.out.println("INFORMATION_SCHEMA ROW: " + rsTableNames.getString("table_name"));
+                }
+            } catch (Exception e) {
+                System.out.println("Error executing information_schema table_name query: " + e.getMessage());
+            }
+            System.out.println("--------------------------------------------------");
             
             try (ResultSet rs = metaData.getTables(catalog, null, "users", new String[]{"TABLE"})) {
                 while (rs.next()) {

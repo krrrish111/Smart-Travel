@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.sql.Connection;
 import java.sql.Statement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import com.voyastra.config.ConfigManager;
 
 /**
@@ -77,6 +79,58 @@ public class SchemaBootstrap implements ServletContextListener {
         }
         
         System.out.println("=================================");
+
+        // Check if users table exists, otherwise load bootstrap.sql
+        boolean usersTableExists = false;
+        try (Connection conn = DBConnection.getConnection();
+             ResultSet rs = conn.getMetaData().getTables(null, null, "users", null)) {
+            if (rs.next()) {
+                usersTableExists = true;
+            }
+        } catch (Exception e) {
+            logger.error("[SchemaBootstrap] Error checking for users table: " + e.getMessage(), e);
+        }
+
+        if (!usersTableExists) {
+            logger.info("[SchemaBootstrap] Core table 'users' does not exist. Initializing database schema from bootstrap.sql...");
+            try (Connection conn = DBConnection.getConnection();
+                 Statement stmt = conn.createStatement();
+                 java.io.InputStream in = getClass().getClassLoader().getResourceAsStream("bootstrap.sql")) {
+                
+                if (in == null) {
+                    throw new java.io.FileNotFoundException("bootstrap.sql not found on classpath!");
+                }
+                
+                try (java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.InputStreamReader(in, java.nio.charset.StandardCharsets.UTF_8))) {
+                    StringBuilder sqlBuilder = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        String trimmed = line.trim();
+                        if (trimmed.isEmpty() || trimmed.startsWith("--") || trimmed.startsWith("#") || trimmed.startsWith("//")) {
+                            continue;
+                        }
+                        sqlBuilder.append(line).append("\n");
+                    }
+                    
+                    String[] statements = sqlBuilder.toString().split(";");
+                    for (String statement : statements) {
+                        String execSql = statement.trim();
+                        if (!execSql.isEmpty()) {
+                            try {
+                                stmt.execute(execSql);
+                            } catch (SQLException e) {
+                                logger.error("[SchemaBootstrap] Error executing query: " + execSql + " - " + e.getMessage(), e);
+                            }
+                        }
+                    }
+                    logger.info("[SchemaBootstrap] Schema bootstrap initialized successfully.");
+                }
+            } catch (Exception e) {
+                logger.error("[SchemaBootstrap] Failed to bootstrap database schema: " + e.getMessage(), e);
+            }
+        } else {
+            logger.info("[SchemaBootstrap] Core table 'users' exists. Skipping bootstrap.sql initialization.");
+        }
 
         try (Connection conn = DBConnection.getConnection();
              Statement stmt = conn.createStatement()) {

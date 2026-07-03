@@ -26,7 +26,7 @@ public class SecurityFilter implements Filter {
     private static final Set<String> PUBLIC_PATHS = new HashSet<>(Arrays.asList(
         "/", "/index", "/index.jsp", "/home", "/explore", "/login", "/register",
         "/community", "/destination", "/destinations", "/error", 
-        "/route", "/logout", "/google-auth", "/google-login", "/forgot-password", "/reset-password", "/health", "/favicon.ico",
+        "/route", "/logout", "/google-auth", "/google-login", "/forgot-password", "/reset-password", "/health", "/voyastra/health", "/favicon.ico",
         "/getPlans", "/review", "/search", "/trending", "/activities", "/weather", "/test-travelpayouts",
         "/hotel-details", "/experience-details", "/itinerary-details", "/experiences", "/flight/download-ticket", "/flight/ticket"
     ));
@@ -79,7 +79,7 @@ public class SecurityFilter implements Filter {
             boolean isPublic = PUBLIC_PATHS.contains(path) || 
                                PUBLIC_PATHS.stream().anyMatch(p -> path.startsWith(p + "?") || (p.length() > 1 && path.startsWith(p + "/")));
             if (isPublic) {
-                if ("/health".equals(path)) {
+                if ("/health".equals(path) || "/voyastra/health".equals(path)) {
                     logger.debug("Health endpoint bypassed SecurityFilter.");
                 } else {
                     logger.info("Public resource allowed: {}", path);

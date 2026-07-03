@@ -48,8 +48,9 @@ docker compose down
 ## Health Endpoint
 To check if the application is running correctly, access the health endpoint:
 ```
-http://localhost:8080/voyastra/health
+http://localhost:8080/health
 ```
+*(Note: If deploying the war file locally without Docker, the endpoint will be at `http://localhost:8080/voyastra/health` due to the webapp renaming to `voyastra.war`)*
 
 ## Deployment
 Voyastra is ready to be deployed to PaaS providers like Render, AWS ECS, or DigitalOcean App Platform using the provided `Dockerfile` and `docker-compose.yml`.

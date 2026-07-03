@@ -1,6 +1,5 @@
 package com.voyastra.controller;
 
-import com.voyastra.util.DBConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javax.servlet.ServletException;
@@ -19,7 +18,7 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-@WebServlet("/health")
+@WebServlet({"/health", "/voyastra/health"})
 public class HealthServlet extends HttpServlet {
 
     private static final Logger logger = LoggerFactory.getLogger(HealthServlet.class);
@@ -32,16 +31,7 @@ public class HealthServlet extends HttpServlet {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         
-        boolean dbConnected = false;
-        try (Connection conn = DBConnection.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT 1")) {
-            if (rs.next()) {
-                dbConnected = true;
-            }
-        } catch (Exception e) {
-            logger.warn("[HealthCheck Warning] Database connection check failed: {}", e.getMessage());
-        }
+        boolean dbConnected = com.voyastra.util.DiagnosticManager.dbConnected;
 
         // Metrics
         long uptime = System.currentTimeMillis() - startTime;

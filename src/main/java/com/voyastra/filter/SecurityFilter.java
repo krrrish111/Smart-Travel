@@ -5,6 +5,8 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -17,6 +19,8 @@ import java.util.HashSet;
  */
 @WebFilter("/*")
 public class SecurityFilter implements Filter {
+
+    private static final Logger logger = LoggerFactory.getLogger(SecurityFilter.class);
 
     // Public paths: no login required
     private static final Set<String> PUBLIC_PATHS = new HashSet<>(Arrays.asList(
@@ -76,9 +80,9 @@ public class SecurityFilter implements Filter {
                                PUBLIC_PATHS.stream().anyMatch(p -> path.startsWith(p + "?") || (p.length() > 1 && path.startsWith(p + "/")));
             if (isPublic) {
                 if ("/health".equals(path)) {
-                    System.out.println("Health endpoint bypassed SecurityFilter.");
+                    logger.debug("Health endpoint bypassed SecurityFilter.");
                 } else {
-                    System.out.println("Public resource allowed: " + path);
+                    logger.info("Public resource allowed: {}", path);
                 }
                 addSecurityHeaders(resp);
                 chain.doFilter(request, response);
@@ -103,7 +107,7 @@ public class SecurityFilter implements Filter {
                 if (queryString != null)
                     target += "?" + queryString;
                 String redirectTarget = req.getContextPath() + "/login?redirect=" + java.net.URLEncoder.encode(target, "UTF-8");
-                System.out.println("REDIRECTING TO: " + redirectTarget);
+                logger.info("Redirecting unauthorized request to: {}", redirectTarget);
                 resp.sendRedirect(redirectTarget);
                 return;
             }
@@ -120,7 +124,7 @@ public class SecurityFilter implements Filter {
                         return;
                     }
                     String redirectTarget = req.getContextPath() + "/login?error=admin_only";
-                    System.out.println("REDIRECTING TO: " + redirectTarget);
+                    logger.info("Redirecting non-admin request to: {}", redirectTarget);
                     resp.sendRedirect(redirectTarget);
                     return;
                 }
@@ -131,8 +135,7 @@ public class SecurityFilter implements Filter {
             chain.doFilter(request, response);
 
         } catch (Exception e) {
-            System.err.println("[CRITICAL ERROR] SecurityFilter crash: " + e.getMessage());
-            e.printStackTrace();
+            logger.error("[CRITICAL ERROR] SecurityFilter crash: ", e);
             // In case of crash, allow the request if it's not explicitly blocked (minimal failure)
             // but log clearly. Alternatively, redirect to error page.
             if (!resp.isCommitted()) {

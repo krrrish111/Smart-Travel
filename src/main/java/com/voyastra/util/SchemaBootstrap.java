@@ -3,6 +3,8 @@ package com.voyastra.util;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.sql.Connection;
 import java.sql.Statement;
 import com.voyastra.config.ConfigManager;
@@ -13,6 +15,8 @@ import com.voyastra.config.ConfigManager;
  */
 @WebListener
 public class SchemaBootstrap implements ServletContextListener {
+
+    private static final Logger logger = LoggerFactory.getLogger(SchemaBootstrap.class);
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
@@ -831,5 +835,46 @@ public class SchemaBootstrap implements ServletContextListener {
     }
 
     @Override
-    public void contextDestroyed(ServletContextEvent sce) { /* nothing */ }
+    public void contextDestroyed(ServletContextEvent sce) {
+        logger.info("[Shutdown] Starting web application shutdown cleanup...");
+        
+        // 1. Shutdown Email & SMS Services Background Thread Pools
+        try {
+            EmailService.shutdown();
+        } catch (Throwable t) {
+            logger.error("Error shutting down EmailService: ", t);
+        }
+        try {
+            SMSService.shutdown();
+        } catch (Throwable t) {
+            logger.error("Error shutting down SMSService: ", t);
+        }
+
+        // 2. Shutdown HikariCP Pool
+        DBConnection.shutdown();
+        
+        // 3. Unregister JDBC Drivers
+        java.util.Enumeration<java.sql.Driver> drivers = java.sql.DriverManager.getDrivers();
+        while (drivers.hasMoreElements()) {
+            java.sql.Driver driver = drivers.nextElement();
+            if (driver.getClass().getClassLoader() == sce.getServletContext().getClassLoader()) {
+                try {
+                    java.sql.DriverManager.deregisterDriver(driver);
+                    logger.info("[Shutdown] Unregistered JDBC driver: {}", driver);
+                } catch (java.sql.SQLException e) {
+                    logger.error("[Shutdown ERROR] Error unregistering JDBC driver: {}", driver, e);
+                }
+            }
+        }
+        
+        // 4. Stop MySQL abandoned connection cleanup thread
+        try {
+            com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.checkedShutdown();
+            logger.info("[Shutdown] Stopped MySQL abandoned connection cleanup thread.");
+        } catch (Throwable t) {
+            logger.warn("[Shutdown WARNING] Failed to stop MySQL abandoned connection cleanup thread: {}", t.getMessage());
+        }
+        
+        logger.info("[Shutdown] Web application shutdown cleanup complete.");
+    }
 }

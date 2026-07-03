@@ -3,13 +3,31 @@ package com.voyastra.util;
 import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.Properties;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Production-ready Email Service using Jakarta Mail.
  * Configuration can be externalized to environment variables or a properties file.
  */
 public class EmailService {
+
+    private static final Logger logger = LoggerFactory.getLogger(EmailService.class);
+
+    private static final ExecutorService executor = Executors.newFixedThreadPool(4, r -> {
+        Thread t = new Thread(r);
+        t.setDaemon(true);
+        t.setName("EmailService-Worker");
+        return t;
+    });
+
+    public static void shutdown() {
+        executor.shutdown();
+        logger.info("EmailService ExecutorService shut down successfully.");
+    }
 
     // --- Configuration (Environment Variables preferred in Production) ---
     private static final String SMTP_HOST = com.voyastra.config.ConfigManager.get("SMTP_HOST", "smtp.gmail.com");
@@ -33,8 +51,8 @@ public class EmailService {
      * Sends a plain HTML email.
      */
     public static void sendEmail(String to, String subject, String htmlContent) {
-        // Run in a thread to prevent blocking the web request
-        new Thread(() -> {
+        // Run in a thread pool to prevent blocking the web request
+        executor.submit(() -> {
             try {
                 Session session = Session.getInstance(props, new Authenticator() {
                     @Override
@@ -50,12 +68,12 @@ public class EmailService {
                 message.setContent(htmlContent, "text/html; charset=utf-8");
 
                 Transport.send(message);
-                System.out.println("[EMAIL] Sent successfully to: " + to);
+                logger.info("Sent email successfully to: {}", to);
 
             } catch (Exception e) {
-                System.err.println("[EMAIL ERROR] Failed to send to " + to + ": " + e.getMessage());
+                logger.error("Failed to send email to " + to, e);
             }
-        }).start();
+        });
     }
 
     public static void sendWelcomeEmail(String to, String name, String verifyLink) {
@@ -86,7 +104,7 @@ public class EmailService {
     }
 
     public static void sendTicketEmail(String to, java.io.InputStream pdfData, String fileName) {
-        new Thread(() -> {
+        executor.submit(() -> {
             try {
                 Session session = Session.getInstance(props, new Authenticator() {
                     @Override
@@ -127,14 +145,14 @@ public class EmailService {
                 // If using dummy credentials, skip Transport.send to avoid exception spam
                 if (!"your-app-password".equals(SMTP_PASS)) {
                     Transport.send(message);
-                    System.out.println("[EMAIL] Ticket sent successfully to: " + to);
+                    logger.info("Ticket sent successfully to: {}", to);
                 } else {
-                    System.out.println("[EMAIL MOCK] Ticket email 'sent' (using dummy credentials). Attachment length: " + tempFile.length() + " bytes.");
+                    logger.info("[EMAIL MOCK] Ticket email 'sent' (using dummy credentials). Attachment length: {} bytes.", tempFile.length());
                 }
             } catch (Exception e) {
-                System.err.println("[EMAIL ERROR] Failed to send ticket to " + to + ": " + e.getMessage());
+                logger.error("Failed to send ticket to " + to, e);
             }
-        }).start();
+        });
     }
 
     public static class EmailAttachment {
@@ -147,7 +165,7 @@ public class EmailService {
     }
 
     public static void sendEmailWithAttachments(String to, String subject, String htmlContent, java.util.List<EmailAttachment> attachments) {
-        new Thread(() -> {
+        executor.submit(() -> {
             try {
                 Session session = Session.getInstance(props, new Authenticator() {
                     @Override
@@ -191,13 +209,13 @@ public class EmailService {
 
                 if (!"your-app-password".equals(SMTP_PASS)) {
                     Transport.send(message);
-                    System.out.println("[EMAIL] Sent successfully with attachments to: " + to);
+                    logger.info("Sent email successfully with attachments to: {}", to);
                 } else {
-                    System.out.println("[EMAIL MOCK] Email with " + attachments.size() + " attachments sent (Total size: " + totalAttachmentSize + " bytes).");
+                    logger.info("[EMAIL MOCK] Email with {} attachments sent (Total size: {} bytes).", attachments.size(), totalAttachmentSize);
                 }
             } catch (Exception e) {
-                System.err.println("[EMAIL ERROR] Failed to send email with attachments to " + to + ": " + e.getMessage());
+                logger.error("Failed to send email with attachments to " + to, e);
             }
-        }).start();
+        });
     }
 }

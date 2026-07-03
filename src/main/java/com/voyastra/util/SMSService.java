@@ -1,22 +1,40 @@
 package com.voyastra.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.net.URLEncoder;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class SMSService {
+
+    private static final Logger logger = LoggerFactory.getLogger(SMSService.class);
+
+    private static final ExecutorService executor = Executors.newFixedThreadPool(2, r -> {
+        Thread t = new Thread(r);
+        t.setDaemon(true);
+        t.setName("SMSService-Worker");
+        return t;
+    });
 
     // IMPORTANT: Replace these with your actual Twilio Account SID and Auth Token
     private static final String TWILIO_ACCOUNT_SID = com.voyastra.config.ConfigManager.get("TWILIO_SID", "AC_dummy_sid");
     private static final String TWILIO_AUTH_TOKEN = com.voyastra.config.ConfigManager.get("TWILIO_TOKEN", "dummy_token");
     private static final String TWILIO_PHONE_NUMBER = com.voyastra.config.ConfigManager.get("TWILIO_PHONE", "+1234567890");
 
+    public static void shutdown() {
+        executor.shutdown();
+        logger.info("SMSService ExecutorService shut down successfully.");
+    }
+
     public static void sendBookingConfirmationSMS(String toPhoneNumber, String pnr, String flightName, String date) {
         if (toPhoneNumber == null || toPhoneNumber.trim().isEmpty()) {
-            System.err.println("[SMSService] No phone number provided.");
+            logger.warn("No phone number provided for booking confirmation SMS.");
             return;
         }
 
@@ -30,14 +48,14 @@ public class SMSService {
 
         String messageBody = "Voyastra Airlines:\nBooking Confirmed!\nPNR: " + pnr + "\nFlight: " + flightName + "\nDate: " + date + "\nThank you for flying with us!";
         
-        System.out.println("[SMSService] Attempting to send SMS to " + formattedPhone);
+        logger.info("Attempting to send SMS to {}", formattedPhone);
 
-        // Run in thread to not block UI
+        // Run in thread pool to not block UI
         final String finalPhone = formattedPhone;
-        new Thread(() -> {
+        executor.submit(() -> {
             try {
                 if ("AC_dummy_sid".equals(TWILIO_ACCOUNT_SID)) {
-                    System.out.println("[SMS MOCK] Simulated sending to " + finalPhone + ":\n" + messageBody);
+                    logger.info("[SMS MOCK] Simulated sending to {}:\n{}", finalPhone, messageBody);
                     return;
                 }
 
@@ -62,13 +80,13 @@ public class SMSService {
 
                 int responseCode = conn.getResponseCode();
                 if (responseCode >= 200 && responseCode < 300) {
-                    System.out.println("[SMSService] SMS successfully sent to " + finalPhone);
+                    logger.info("SMS successfully sent to {}", finalPhone);
                 } else {
-                    System.err.println("[SMSService ERROR] Failed to send SMS. HTTP Code: " + responseCode);
+                    logger.error("Failed to send SMS. HTTP Code: {}", responseCode);
                 }
             } catch (Exception e) {
-                System.err.println("[SMSService ERROR] " + e.getMessage());
+                logger.error("Error in SMSService background sender: ", e);
             }
-        }).start();
+        });
     }
 }

@@ -1,6 +1,8 @@
 package com.voyastra.controller;
 
 import com.voyastra.util.DBConnection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -20,6 +22,7 @@ import java.util.Date;
 @WebServlet("/health")
 public class HealthServlet extends HttpServlet {
 
+    private static final Logger logger = LoggerFactory.getLogger(HealthServlet.class);
     private static final long startTime = System.currentTimeMillis();
 
     @Override
@@ -37,7 +40,7 @@ public class HealthServlet extends HttpServlet {
                 dbConnected = true;
             }
         } catch (Exception e) {
-            System.err.println("[HealthCheck Error] Database check failed: " + e.getMessage());
+            logger.warn("[HealthCheck Warning] Database connection check failed: {}", e.getMessage());
         }
 
         // Metrics

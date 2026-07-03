@@ -81,6 +81,12 @@ check_env "SMTP_USER"
 check_env "TWILIO_SID"
 echo "========================================="
 
+# Disable Tomcat shutdown port to prevent invalid shutdown command logging warnings
+if [ -f /usr/local/tomcat/conf/server.xml ]; then
+    echo "Disabling Tomcat shutdown port..."
+    sed -i 's/port="8005"/port="-1"/g' /usr/local/tomcat/conf/server.xml
+fi
+
 if [ "$(whoami)" != "root" ]; then
     echo "ERROR: Container is not running as root. Cannot drop privileges."
     exit 1

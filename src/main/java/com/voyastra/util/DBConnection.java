@@ -2,6 +2,8 @@ package com.voyastra.util;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -10,26 +12,38 @@ import java.sql.SQLException;
  */
 public class DBConnection {
 
+    private static final Logger logger = LoggerFactory.getLogger(DBConnection.class);
     private static HikariDataSource dataSource = null;
 
     static {
+        // Load MySQL Driver explicitly
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            logger.info("com.mysql.cj.jdbc.Driver loaded successfully.");
+        } catch (ClassNotFoundException e) {
+            logger.error("com.mysql.cj.jdbc.Driver not found", e);
+        }
+
         // Configuration
         HikariConfig config = new HikariConfig();
         
         // 1. Connection settings
-        String dbHost = com.voyastra.config.ConfigManager.get("DB_HOST", "127.0.0.1");
+        String dbHost = com.voyastra.config.ConfigManager.get("DB_HOST");
         String dbPort = com.voyastra.config.ConfigManager.get("DB_PORT", "3306");
-        String dbName = com.voyastra.config.ConfigManager.get("DB_NAME", "voyastra");
-        String defaultUrl = "jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName + "?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
+        String dbName = com.voyastra.config.ConfigManager.get("DB_NAME");
+        String dbUser = com.voyastra.config.ConfigManager.get("DB_USER");
+        String dbPassword = com.voyastra.config.ConfigManager.get("DB_PASSWORD");
 
-        config.setJdbcUrl(com.voyastra.config.ConfigManager.get("DB_URL", defaultUrl));
-        config.setUsername(com.voyastra.config.ConfigManager.get("DB_USER", "voyastra_user"));
-        
-        String password = com.voyastra.config.ConfigManager.get("DB_PASSWORD");
-        if (password == null || password.isEmpty()) {
-            password = com.voyastra.config.ConfigManager.get("DB_PASS", "Home@123");
+        String jdbcUrl;
+        if (dbHost != null && !dbHost.trim().isEmpty()) {
+            jdbcUrl = "jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName + "?sslMode=REQUIRED";
+        } else {
+            jdbcUrl = com.voyastra.config.ConfigManager.get("DB_URL");
         }
-        config.setPassword(password);
+
+        config.setJdbcUrl(jdbcUrl);
+        config.setUsername(dbUser);
+        config.setPassword(dbPassword);
         config.setDriverClassName("com.mysql.cj.jdbc.Driver");
 
         // 2. Pool Performance Settings
@@ -49,10 +63,9 @@ public class DBConnection {
         try {
             // Initialize DataSource
             ds = new HikariDataSource(config);
-            System.out.println("[DB] HikariCP Connection Pool initialized successfully.");
+            logger.info("HikariCP Connection Pool initialized successfully.");
         } catch (Exception e) {
-            System.err.println("[DB ERROR] HikariCP Connection Pool initialization failed: " + e.getMessage());
-            e.printStackTrace();
+            logger.error("HikariCP Connection Pool initialization failed", e);
         }
         dataSource = ds;
     }
@@ -75,7 +88,14 @@ public class DBConnection {
      */
     public static void shutdown() {
         if (dataSource != null) {
-            dataSource.close();
+            try {
+                dataSource.close();
+                logger.info("HikariCP Connection Pool shut down successfully.");
+            } catch (Exception e) {
+                logger.error("Error shutting down HikariCP Connection Pool", e);
+            } finally {
+                dataSource = null;
+            }
         }
     }
 }

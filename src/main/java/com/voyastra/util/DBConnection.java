@@ -6,9 +6,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
- * Enhanced Database Connection Utility using HikariCP for high-performance pooling.
+ * Optimized Database Connection Utility using HikariCP for high-performance pooling in production.
  */
 public class DBConnection {
 
@@ -16,27 +17,17 @@ public class DBConnection {
     private static HikariDataSource dataSource = null;
 
     static {
-        logger.info("=== HIKARICP STARTUP ROOT-CAUSE DIAGNOSTICS ===");
-        
-        // 1. Log environment variables (mask passwords, secrets, keys)
-        System.getenv().forEach((k, v) -> {
-            String upper = k.toUpperCase();
-            if (upper.contains("PASSWORD") || upper.contains("SECRET") || upper.contains("KEY") || upper.contains("TOKEN") || upper.contains("PASS")) {
-                logger.info("  ENV: {} = [MASKED] (length: {})", k, v != null ? v.length() : 0);
-            } else {
-                logger.info("  ENV: {} = {}", k, v);
-            }
-        });
+        logger.info("[DB] Initializing HikariCP...");
 
-        // 2. Load driver explicitly and check it
+        // Load MySQL Driver explicitly
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            logger.info("com.mysql.cj.jdbc.Driver loaded successfully.");
         } catch (ClassNotFoundException e) {
-            logger.error("com.mysql.cj.jdbc.Driver not found!", e);
+            logger.error("[DB] MySQL driver com.mysql.cj.jdbc.Driver not found!", e);
+            throw new RuntimeException("MySQL driver load failure", e);
         }
 
-        // 3. Resolve connection parameters
+        // Resolve connection parameters
         String dbHost = com.voyastra.config.ConfigManager.get("DB_HOST");
         String dbPort = com.voyastra.config.ConfigManager.get("DB_PORT", "3306");
         String dbName = com.voyastra.config.ConfigManager.get("DB_NAME");
@@ -44,16 +35,12 @@ public class DBConnection {
         String dbPassword = com.voyastra.config.ConfigManager.get("DB_PASSWORD");
         String rawDbUrl = com.voyastra.config.ConfigManager.get("DB_URL");
 
-        logger.info("Configuration parameters read: DB_HOST='{}', DB_PORT='{}', DB_NAME='{}', DB_USER='{}', hasDBPassword={}", 
-            dbHost, dbPort, dbName, dbUser, (dbPassword != null && !dbPassword.trim().isEmpty()));
-
         String jdbcUrl = null;
         if (dbHost != null && !dbHost.trim().isEmpty()) {
             jdbcUrl = "jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName + "?sslMode=REQUIRED&zeroDateTimeBehavior=convertToNull";
         } else if (rawDbUrl != null && !rawDbUrl.trim().isEmpty()) {
             rawDbUrl = rawDbUrl.trim();
             if (rawDbUrl.startsWith("mysql://")) {
-                logger.info("Parsing raw mysql:// URL for embedded credentials.");
                 try {
                     String cleanUrl = rawDbUrl.substring("mysql://".length());
                     String credentials = "";
@@ -70,17 +57,14 @@ public class DBConnection {
                         int colonIndex = credentials.indexOf(":");
                         if (dbUser == null || dbUser.trim().isEmpty()) {
                             dbUser = credentials.substring(0, colonIndex);
-                            logger.info("Extracted user from URL: {}", dbUser);
                         }
                         if (dbPassword == null || dbPassword.trim().isEmpty()) {
                             dbPassword = credentials.substring(colonIndex + 1);
-                            logger.info("Extracted password from URL.");
                         }
                     }
                     
                     jdbcUrl = "jdbc:mysql://" + hostPortDb;
                 } catch (Exception parseEx) {
-                    logger.error("Failed to parse mysql:// connection URI, using raw URL.", parseEx);
                     jdbcUrl = "jdbc:" + rawDbUrl;
                 }
             } else {
@@ -89,7 +73,6 @@ public class DBConnection {
         }
 
         if (jdbcUrl != null) {
-            // Append essential parameters if they are missing
             if (!jdbcUrl.contains("zeroDateTimeBehavior")) {
                 jdbcUrl += (jdbcUrl.contains("?") ? "&" : "?") + "zeroDateTimeBehavior=convertToNull";
             }
@@ -98,9 +81,10 @@ public class DBConnection {
             }
         }
 
-        logger.info("Final Resolved JDBC URL: {}", jdbcUrl);
+        // Print resolved host and database safely without credentials
+        logger.info("[DB] Resolved JDBC: {}", getSafeUrlInfo(jdbcUrl));
 
-        // 4. Hikari Configuration
+        // Hikari Configuration
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl(jdbcUrl);
         config.setUsername(dbUser);
@@ -117,72 +101,42 @@ public class DBConnection {
         config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
         config.addDataSourceProperty("useServerPrepStmts", "true");
 
-        logger.info("=== HIKARI CONFIGURATION ===");
-        logger.info("  JdbcUrl: {}", config.getJdbcUrl());
-        logger.info("  Username: {}", config.getUsername());
-        logger.info("  DriverClassName: {}", config.getDriverClassName());
-        logger.info("  MaximumPoolSize: {}", config.getMaximumPoolSize());
-        logger.info("  MinimumIdle: {}", config.getMinimumIdle());
-        logger.info("  IdleTimeout: {}", config.getIdleTimeout());
-        logger.info("  ConnectionTimeout: {}", config.getConnectionTimeout());
-        logger.info("  ValidationTimeout: {}", config.getValidationTimeout());
-        logger.info("============================");
-
         try {
-            // Initialize pool
             dataSource = new HikariDataSource(config);
-            logger.info("HikariCP Connection Pool initialized successfully.");
 
-            // 5. Verify by creating a test connection immediately
-            logger.info("Creating validation connection immediately after Hikari initialization...");
-            try (Connection conn = dataSource.getConnection()) {
-                logger.info("Validation connection status: SUCCESS");
-                java.sql.DatabaseMetaData metaData = conn.getMetaData();
-                
-                String dbProductName = metaData.getDatabaseProductName();
-                String dbProductVersion = metaData.getDatabaseProductVersion();
-                String drvName = metaData.getDriverName();
-                String drvVersion = metaData.getDriverVersion();
-                
-                logger.info("Database Product Name: {}", dbProductName);
-                logger.info("Database Product Version: {}", dbProductVersion);
-                logger.info("Driver Name: {}", drvName);
-                logger.info("Driver Version: {}", drvVersion);
-                
-                try (java.sql.Statement stmt = conn.createStatement()) {
-                    try (java.sql.ResultSet rs = stmt.executeQuery("SELECT DATABASE()")) {
-                        if (rs.next()) {
-                            logger.info("SELECT DATABASE() returned: {}", rs.getString(1));
-                        }
-                    }
-                    try (java.sql.ResultSet rs = stmt.executeQuery("SELECT VERSION()")) {
-                        if (rs.next()) {
-                            logger.info("SELECT VERSION() returned: {}", rs.getString(1));
-                        }
-                    }
-                    try (java.sql.ResultSet rs = stmt.executeQuery("SHOW STATUS LIKE 'Ssl_cipher'")) {
-                        if (rs.next()) {
-                            logger.info("SSL status: {} = {}", rs.getString(1), rs.getString(2));
-                        } else {
-                            logger.info("SSL status: No active SSL cipher.");
-                        }
-                    }
-                }
+            // Verify with a lightweight check
+            try (Connection conn = dataSource.getConnection();
+                 Statement stmt = conn.createStatement()) {
+                stmt.execute("SELECT 1");
+                logger.info("[DB] Connected to MySQL ({})", (dbName != null ? dbName : "defaultdb"));
             }
+            logger.info("[DB] Connection pool initialized successfully. Size: {}", config.getMaximumPoolSize());
         } catch (Throwable t) {
-            logger.error("[CRITICAL ERROR] HikariCP Connection Pool initialization failed or validation check failed!");
-            logger.error("Error Class: {}", t.getClass().getName());
-            logger.error("Error Message: {}", t.getMessage());
-            logger.error("Error Cause: {}", t.getCause());
-            
-            // Print full stack trace
-            java.io.StringWriter sw = new java.io.StringWriter();
-            java.io.PrintWriter pw = new java.io.PrintWriter(sw);
-            t.printStackTrace(pw);
-            logger.error("Full Exception Stack Trace:\n{}", sw.toString());
-            
-            // Fail startup immediately
+            logger.error("[DB] [CRITICAL ERROR] HikariCP Connection Pool initialization or validation check failed!");
             throw new RuntimeException("HikariCP connection pool initialization failed permanently.", t);
+        }
+    }
+
+    private static String getSafeUrlInfo(String url) {
+        if (url == null) return "Unknown host";
+        try {
+            String clean = url;
+            if (clean.startsWith("jdbc:")) {
+                clean = clean.substring(5);
+            }
+            if (clean.startsWith("mysql://")) {
+                clean = clean.substring(8);
+            }
+            int slashIndex = clean.indexOf("/");
+            String hostPort = (slashIndex != -1) ? clean.substring(0, slashIndex) : clean;
+            String dbName = "";
+            if (slashIndex != -1) {
+                int queryIndex = clean.indexOf("?", slashIndex);
+                dbName = (queryIndex != -1) ? clean.substring(slashIndex + 1, queryIndex) : clean.substring(slashIndex + 1);
+            }
+            return "host=" + hostPort + ", database=" + dbName;
+        } catch (Exception e) {
+            return "Unknown host/database";
         }
     }
 
@@ -206,9 +160,9 @@ public class DBConnection {
         if (dataSource != null) {
             try {
                 dataSource.close();
-                logger.info("HikariCP Connection Pool shut down successfully.");
+                logger.info("[DB] HikariCP Connection Pool shut down successfully.");
             } catch (Exception e) {
-                logger.error("Error shutting down HikariCP Connection Pool", e);
+                logger.error("[DB] Error shutting down HikariCP Connection Pool", e);
             } finally {
                 dataSource = null;
             }

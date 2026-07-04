@@ -93,6 +93,11 @@ echo "========================================="
 if [ -f /usr/local/tomcat/conf/server.xml ]; then
     echo "Disabling Tomcat shutdown port..."
     sed -i 's/port="8005"/port="-1"/g' /usr/local/tomcat/conf/server.xml
+    
+    if [ -n "$PORT" ] && [ "$PORT" != "8080" ]; then
+        echo "Configuring Tomcat HTTP connector to listen on port $PORT..."
+        sed -i "s/port=\"8080\"/port=\"$PORT\"/g" /usr/local/tomcat/conf/server.xml
+    fi
 fi
 
 if [ "$(whoami)" != "root" ]; then

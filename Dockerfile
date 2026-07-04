@@ -52,7 +52,7 @@ ENV UPLOAD_DIR=/var/voyastra/uploads \
 
 # 8. Define standard health check
 HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
-    CMD curl -f http://localhost:8080/health || exit 1
+    CMD curl -f http://localhost:\${PORT:-8080}/health || exit 1
 
 # 9. Set entrypoint and start Tomcat server
 ENTRYPOINT ["docker-entrypoint.sh"]

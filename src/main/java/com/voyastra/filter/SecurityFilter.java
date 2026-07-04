@@ -54,7 +54,7 @@ public class SecurityFilter implements Filter {
             resp.setHeader("X-XSS-Protection", "1; mode=block");
             resp.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
             resp.setHeader("Permissions-Policy", "geolocation=(), microphone=(), camera=()");
-            resp.setHeader("Content-Security-Policy", "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://checkout.razorpay.com https://accounts.google.com https://apis.google.com https://maps.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https:; frame-src 'self' https://checkout.razorpay.com https://accounts.google.com;");
+            resp.setHeader("Content-Security-Policy", "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://checkout.razorpay.com https://cdn.razorpay.com https://accounts.google.com https://apis.google.com https://maps.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https:; frame-src 'self' https://checkout.razorpay.com https://api.razorpay.com https://accounts.google.com;");
 
             if (req.isSecure() || "https".equalsIgnoreCase(req.getHeader("X-Forwarded-Proto"))) {
                 resp.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");

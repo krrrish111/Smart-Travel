@@ -595,7 +595,7 @@
                                                 <span style="font-weight: 800; font-size: 1.2rem; color:var(--color-primary);">₹${f.totalPrice}</span>
                                             </div>
                                             <div style="display:flex; gap:5px; justify-content: flex-end; margin-top:10px;">
-                                                <a href="${pageContext.request.contextPath}/flight/details?id=${f.id}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">View Details</a>
+                                                <a href="${pageContext.request.contextPath}/ticket?code=${f.bookingCode}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">View Details</a>
                                                 <a href="${pageContext.request.contextPath}/flight/ticket?id=${f.id}" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">View Ticket</a>
                                                 <a href="${pageContext.request.contextPath}/flight/ticket?id=${f.id}&print=true" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">Print Ticket</a>
                                                 <a href="${pageContext.request.contextPath}/flight/download-ticket?id=${f.id}" class="btn btn-primary" style="padding: 6px 12px; font-size: 0.8rem;">Download Ticket</a>

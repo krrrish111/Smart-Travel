@@ -42,7 +42,7 @@ public class ProcessPaymentServlet extends HttpServlet {
         }
 
         // Get payment callback data
-        String method = request.getParameter("method"); // "mock" or "razorpay"
+        String method = request.getParameter("method"); // "wallet", "mock", or "razorpay"
         String paymentId = request.getParameter("payment_id");
         String transactionId = request.getParameter("transaction_id");
         String paymentStatus = request.getParameter("status"); // "SUCCESS" or "FAILED"
@@ -56,6 +56,11 @@ public class ProcessPaymentServlet extends HttpServlet {
                 ? (double) session.getAttribute("grandTotal") : 0;
         String selectedSeats = (String) session.getAttribute("selectedSeats");
         String draftId = (String) session.getAttribute("draftId");
+
+        // Fetch Draft to get the phone number
+        com.voyastra.dao.booking.BookingDraftDAO draftDAO = new com.voyastra.dao.booking.BookingDraftDAO();
+        com.voyastra.model.booking.BookingDraft draft = draftDAO.getDraftById(draftId);
+        String phone = (draft != null) ? draft.getContactPhone() : "";
 
         // Generate booking code
         String bookingCode = "FLT-" + new SimpleDateFormat("yyyy").format(new Date())
@@ -71,6 +76,17 @@ public class ProcessPaymentServlet extends HttpServlet {
                 return;
             }
             user.setWalletBalance(user.getWalletBalance() - grandTotal);
+            
+            // Sync with wallets table and insert transaction
+            com.voyastra.dao.travelcenter.WalletDAO walletDAO = new com.voyastra.dao.travelcenter.WalletDAO();
+            com.voyastra.model.travelcenter.Wallet wallet = walletDAO.getWalletByUserId(userId);
+            if (wallet == null) {
+                wallet = walletDAO.createWallet(userId);
+            }
+            if (wallet != null) {
+                walletDAO.updateBalance(wallet.getId(), -grandTotal);
+                walletDAO.addTransaction(wallet.getId(), -grandTotal, "DEBIT", "Flight booking: " + bookingCode);
+            }
         }
 
         // Award 1 loyalty point per 10 currency spent
@@ -79,8 +95,8 @@ public class ProcessPaymentServlet extends HttpServlet {
         
         userDAO.updateWalletAndLoyalty(userId, user.getWalletBalance(), user.getLoyaltyPoints());
 
-        // Persist to bookings table
-        Booking booking = new Booking();
+        // Persist to bookings table using FlightBooking object
+        com.voyastra.model.booking.FlightBooking booking = new com.voyastra.model.booking.FlightBooking();
         booking.setUserId(userId);
         booking.setType("flight");
         booking.setDetails("Flight: " + currentFlight.get("name") + " (" + currentFlight.get("id") + ")"
@@ -94,16 +110,43 @@ public class ProcessPaymentServlet extends HttpServlet {
         booking.setBookingCode(bookingCode);
         booking.setCustomerName(userName);
         booking.setCustomerEmail(userEmail);
-        booking.setCustomerPhone("");
+        booking.setCustomerPhone(phone);
         booking.setPaymentId(paymentId);
         booking.setTransactionId(transactionId);
         booking.setPaymentStatus(paymentStatus);
         
+        // Populate extra DB columns
+        booking.setTravelDate(currentFlight.get("date"));
+        booking.setNumAdults(Integer.parseInt(currentFlight.getOrDefault("passengers", "1")));
+        booking.setRoomType(currentFlight.get("class")); // maps to seat_class
+
         int bookingId = -1;
         try {
             bookingId = bookingDAO.createBooking(booking);
+            booking.setId(bookingId);
         } catch (Exception e) {
             System.err.println("[ProcessPaymentServlet] Booking save failed: " + e.getMessage());
+        }
+
+        // Save Payment record in the payments table
+        if (bookingId > 0) {
+            try {
+                com.voyastra.dao.payment.PaymentDAO paymentDAO = new com.voyastra.dao.payment.PaymentDAO();
+                com.voyastra.model.payment.Payment payment = new com.voyastra.model.payment.Payment();
+                payment.setBookingId(bookingId);
+                payment.setUserId(userId);
+                payment.setAmount(grandTotal);
+                payment.setMethod(method);
+                payment.setStatus(paymentStatus);
+                payment.setTransactionId(transactionId);
+                payment.setServiceType("flight");
+                payment.setBookingReference(bookingCode);
+                payment.setRazorpayPaymentId(paymentId);
+                payment.setCurrency("INR");
+                paymentDAO.addPayment(payment);
+            } catch (Exception e) {
+                System.err.println("[ProcessPaymentServlet] Payment record save failed: " + e.getMessage());
+            }
         }
 
         // Store confirmation data in session
@@ -115,19 +158,13 @@ public class ProcessPaymentServlet extends HttpServlet {
         session.setAttribute("confirmedFlight", currentFlight);
         session.setAttribute("confirmedSeats", selectedSeats);
 
-        // Fetch Draft to get the phone number
-        com.voyastra.dao.booking.BookingDraftDAO draftDAO = new com.voyastra.dao.booking.BookingDraftDAO();
-        com.voyastra.model.booking.BookingDraft draft = draftDAO.getDraftById(draftId);
-        String phone = (draft != null) ? draft.getContactPhone() : "";
-
-        // Send SMS via Twilio
-        String pnr = bookingCode.substring(4, 10) + (paymentId != null && paymentId.length() >= 6 ? paymentId.substring(4, 6) : "XX");
-        com.voyastra.util.SMSService.sendBookingConfirmationSMS(
-                phone,
-                pnr,
-                currentFlight.get("name") + " (" + currentFlight.get("id") + ")",
-                currentFlight.get("date")
-        );
+        // Send notifications (In-App, Email with PDFs, SMS) using NotificationManager
+        try {
+            com.voyastra.util.NotificationManager.sendTransportBookingSuccess(booking, userId);
+        } catch (Exception e) {
+            System.err.println("[ProcessPaymentServlet] Notification sending failed: " + e.getMessage());
+            e.printStackTrace();
+        }
 
         // Clean up draft session attrs
         session.removeAttribute("draftId");

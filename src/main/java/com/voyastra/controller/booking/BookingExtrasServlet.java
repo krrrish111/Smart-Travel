@@ -86,6 +86,8 @@ public class BookingExtrasServlet extends HttpServlet {
         session.setAttribute("extras_baggage",   baggage);
         session.setAttribute("extras_priority",  priorityBoard);
         session.setAttribute("extras_insurance", insurance);
+        session.setAttribute("extrasPriority",   priorityBoard ? "true" : "false");
+        session.setAttribute("extrasInsurance",  insurance ? "true" : "false");
         session.setAttribute("extras_total",     extrasTotal);
 
         response.sendRedirect(request.getContextPath() + "/review-booking");

@@ -38,7 +38,7 @@ public class BookingDAO {
      * Returns the generated booking ID or -1 on failure.
      */
     public int createBooking(com.voyastra.model.booking.Booking b) {
-        String query = "INSERT INTO bookings (user_id, type, details, total_price, status, booking_code, customer_name, customer_email, customer_phone, payment_id, transaction_id, payment_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO bookings (user_id, type, details, total_price, status, booking_code, customer_name, customer_email, customer_phone, payment_id, transaction_id, payment_status, travel_date, num_adults, room_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query, java.sql.Statement.RETURN_GENERATED_KEYS)) {
             stmt.setInt(1, b.getUserId());
@@ -53,6 +53,14 @@ public class BookingDAO {
             stmt.setString(10, b.getPaymentId());
             stmt.setString(11, b.getTransactionId());
             stmt.setString(12, b.getPaymentStatus());
+            
+            if (b.getTravelDate() != null && !b.getTravelDate().trim().isEmpty()) {
+                stmt.setString(13, b.getTravelDate());
+            } else {
+                stmt.setNull(13, java.sql.Types.DATE);
+            }
+            stmt.setInt(14, b.getNumAdults() > 0 ? b.getNumAdults() : 1);
+            stmt.setString(15, b.getRoomType() != null ? b.getRoomType() : "Economy");
             
             int affectedRows = stmt.executeUpdate();
             if (affectedRows > 0) {

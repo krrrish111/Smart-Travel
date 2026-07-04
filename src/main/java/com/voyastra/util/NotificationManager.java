@@ -60,6 +60,13 @@ public class NotificationManager {
             travelDate = b.getTravelDate();
             title = "Helicopter (" + b.getFlightType() + ")";
             type = "Helicopter";
+        } else if (bookingObj instanceof com.voyastra.model.booking.FlightBooking) {
+            com.voyastra.model.booking.FlightBooking b = (com.voyastra.model.booking.FlightBooking) bookingObj;
+            b.parseDetails();
+            pnr = b.getBookingCode();
+            travelDate = b.getTravelDate();
+            title = b.getAirlineName() + " (" + b.getFlightNumber() + ")";
+            type = "Flight";
         } else {
             System.err.println("[NotificationManager] Unsupported booking type");
             return;

@@ -9,6 +9,7 @@ public class FlightBooking extends Booking {
     private String arrivalCity;
     private String seatClass;
     private int travellerCount;
+    private String seatNumber;
     // travelDate and status are inherited from Booking
 
     // Parsed from details: "Flight: AirlineName (FlightNo) | City1 → City2 | Class: Economy | Passengers: 2 | Seats: 12A, 12B | Date: 2026-06-15"
@@ -17,34 +18,64 @@ public class FlightBooking extends Booking {
         if (detailsStr == null) return;
         
         try {
-            // Very basic parsing based on the format in ProcessPaymentServlet
-            String[] parts = detailsStr.split("\\|");
-            if (parts.length >= 6) {
-                // Flight: Airline Name (Flight No)
-                String flightPart = parts[0].trim().replace("Flight: ", "");
+            // Robust parsing using Regex and substrings
+            java.util.regex.Matcher mDate = java.util.regex.Pattern.compile("Date:\\s*([^|]+)").matcher(detailsStr);
+            if (mDate.find()) {
+                setTravelDate(mDate.group(1).trim());
+            }
+            
+            java.util.regex.Matcher mClass = java.util.regex.Pattern.compile("Class:\\s*([^|]+)").matcher(detailsStr);
+            if (mClass.find()) {
+                this.seatClass = mClass.group(1).trim();
+            }
+
+            java.util.regex.Matcher mPax = java.util.regex.Pattern.compile("Passengers:\\s*([^|]+)").matcher(detailsStr);
+            if (mPax.find()) {
+                try {
+                    this.travellerCount = Integer.parseInt(mPax.group(1).trim());
+                } catch(Exception e) {}
+            }
+
+            java.util.regex.Matcher mFlight = java.util.regex.Pattern.compile("Flight:\\s*([^|]+)").matcher(detailsStr);
+            if (mFlight.find()) {
+                String flightPart = mFlight.group(1).trim();
                 int parenIndex = flightPart.lastIndexOf("(");
                 if (parenIndex != -1) {
                     this.airlineName = flightPart.substring(0, parenIndex).trim();
                     this.flightNumber = flightPart.substring(parenIndex + 1, flightPart.lastIndexOf(")")).trim();
+                } else {
+                    this.airlineName = flightPart;
                 }
+            }
 
-                // City1 → City2
-                String citiesPart = parts[1].trim();
-                String[] cities = citiesPart.split("→");
+            // Extract Route
+            int arrowIndex = detailsStr.indexOf("→");
+            if (arrowIndex != -1) {
+                int prevPipe = detailsStr.lastIndexOf("|", arrowIndex);
+                int nextPipe = detailsStr.indexOf("|", arrowIndex);
+                String routeStr = "";
+                if (prevPipe != -1 && nextPipe != -1) {
+                    routeStr = detailsStr.substring(prevPipe + 1, nextPipe).trim();
+                } else if (prevPipe != -1) {
+                    routeStr = detailsStr.substring(prevPipe + 1).trim();
+                } else if (nextPipe != -1) {
+                    routeStr = detailsStr.substring(0, nextPipe).trim();
+                } else {
+                    routeStr = detailsStr.trim();
+                }
+                String[] cities = routeStr.split("→");
                 if (cities.length == 2) {
                     this.departureCity = cities[0].trim();
                     this.arrivalCity = cities[1].trim();
                 }
-
-                // Class: Economy
-                this.seatClass = parts[2].trim().replace("Class: ", "");
-
-                // Passengers: 2
-                try {
-                    this.travellerCount = Integer.parseInt(parts[3].trim().replace("Passengers: ", ""));
-                } catch (Exception e) {}
             }
-            
+
+            // Extract Seats
+            java.util.regex.Matcher mSeats = java.util.regex.Pattern.compile("Seats:\\s*([^|]+)").matcher(detailsStr);
+            if (mSeats.find()) {
+                this.seatNumber = mSeats.group(1).trim();
+            }
+
             // Generate dummy PNR if missing
             String bookingCode = getBookingCode();
             if (bookingCode != null && bookingCode.length() > 6) {
@@ -105,7 +136,8 @@ public class FlightBooking extends Booking {
     public String getDepartureDate() { return getTravelDate() != null ? getTravelDate() : ""; }
     public String getDepartureTime() { return "10:00 AM"; }
     public String getArrivalTime() { return "12:30 PM"; }
-    public String getSeatNumber() { return seatClass != null ? seatClass : "Economy"; }
+    public String getSeatNumber() { return seatNumber != null ? seatNumber : "TBA"; }
+    public void setSeatNumber(String seatNumber) { this.seatNumber = seatNumber; }
     public String getGate() { return "G1"; }
     public double getAmountPaid() { return getTotalPrice(); }
     public String getBookingStatus() { return getStatus() != null ? getStatus() : "CONFIRMED"; }

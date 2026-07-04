@@ -35,9 +35,31 @@ public class BookingConfirmationServlet extends HttpServlet {
         Booking booking = bookingDAO.getBookingByCode(code);
         List<Traveller> travellers = travellerDAO.getTravellersByDraftId(draftId);
 
-        request.setAttribute("booking", booking);
+        if (booking != null && "flight".equalsIgnoreCase(booking.getType())) {
+            com.voyastra.model.booking.FlightBooking fb = new com.voyastra.model.booking.FlightBooking();
+            fb.setId(booking.getId());
+            fb.setUserId(booking.getUserId());
+            fb.setPlanId(booking.getPlanId());
+            fb.setTotalPrice(booking.getTotalPrice());
+            fb.setStatus(booking.getStatus());
+            fb.setCreatedAt(booking.getCreatedAt());
+            fb.setType(booking.getType());
+            fb.setDetails(booking.getDetails());
+            fb.setBookingCode(booking.getBookingCode());
+            fb.setTravelDate(booking.getTravelDate());
+            fb.setCustomerName(booking.getCustomerName());
+            fb.setCustomerEmail(booking.getCustomerEmail());
+            fb.setCustomerPhone(booking.getCustomerPhone());
+            fb.setPaymentId(booking.getPaymentId());
+            fb.setTransactionId(booking.getTransactionId());
+            fb.setPaymentStatus(booking.getPaymentStatus());
+            fb.parseDetails();
+            request.setAttribute("booking", fb);
+        } else {
+            request.setAttribute("booking", booking);
+        }
+        
         request.setAttribute("travellers", travellers);
-
         request.getRequestDispatcher("/pages/booking/booking-success.jsp").forward(request, response);
     }
 }

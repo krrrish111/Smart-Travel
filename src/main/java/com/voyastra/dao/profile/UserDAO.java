@@ -54,15 +54,30 @@ public class UserDAO {
     }
 
     public User getUserByEmail(String email) {
+        logger.info("[STEP 11] Entering getUserByEmail. Email: {}", email);
+        String normalizedEmail = email != null ? email.toLowerCase().trim() : "";
+        logger.info("[STEP 11] Normalized Email: '{}'", normalizedEmail);
         String sql = "SELECT * FROM users WHERE email = ?";
+        logger.info("[STEP 12] SQL query: {}", sql);
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, email != null ? email.toLowerCase().trim() : "");
+            stmt.setString(1, normalizedEmail);
             try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) return mapRow(rs);
+                if (rs.next()) {
+                    User user = mapRow(rs);
+                    logger.info("[STEP 13] User exists? true. Found User ID: {}", user.getId());
+                    return user;
+                } else {
+                    logger.info("[STEP 13] User exists? false. No user found with email: '{}'", normalizedEmail);
+                }
             }
         } catch (SQLException e) {
-            logger.error("Error in getUserByEmail for email: " + email, e);
+            logger.error("[ERROR] SQLException in getUserByEmail. Message: " + e.getMessage() +
+                         ", SQLState: " + e.getSQLState() +
+                         ", ErrorCode: " + e.getErrorCode() +
+                         ", Cause: " + e.getCause(), e);
+        } catch (Throwable e) {
+            logger.error("[ERROR] Unexpected error in getUserByEmail", e);
         }
         return null;
     }
@@ -120,20 +135,54 @@ public class UserDAO {
     }
 
     public boolean registerUser(User user) {
+        logger.info("[STEP 14] Entering registerUser. Email: {}", user.getEmail());
         String sql = "INSERT INTO users (name, email, password, role, verification_token, is_verified) VALUES (?, ?, ?, ?, ?, ?)";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, user.getName());
-            stmt.setString(2, user.getEmail().toLowerCase().trim());
-            stmt.setString(3, BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(12)));
-            stmt.setString(4, user.getRole() != null ? user.getRole() : "user");
-            stmt.setString(5, user.getVerificationToken());
-            stmt.setBoolean(6, user.isVerified());
-            return stmt.executeUpdate() > 0;
+        logger.info("[STEP 15] SQL INSERT: {}", sql);
+        Connection conn = null;
+        try {
+            conn = DBConnection.getConnection();
+            // Audit auto-commit state
+            logger.info("[STEP 15] Database AutoCommit State: {}", conn.getAutoCommit());
+            
+            try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+                stmt.setString(1, user.getName());
+                stmt.setString(2, user.getEmail().toLowerCase().trim());
+                stmt.setString(3, BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(12)));
+                stmt.setString(4, user.getRole() != null ? user.getRole() : "user");
+                stmt.setString(5, user.getVerificationToken());
+                stmt.setBoolean(6, user.isVerified());
+                
+                int rows = stmt.executeUpdate();
+                logger.info("[STEP 15] SQL INSERT execution completed. Rows affected: {}", rows);
+                
+                if (rows > 0) {
+                    try (ResultSet gk = stmt.getGeneratedKeys()) {
+                        if (gk.next()) {
+                            int generatedId = gk.getInt(1);
+                            user.setId(generatedId);
+                            logger.info("[STEP 16] Generated user id: {}", generatedId);
+                        }
+                    }
+                    return true;
+                }
+            }
         } catch (SQLException e) {
-            logger.error("Error in registerUser for email: " + user.getEmail(), e);
-            return false;
+            logger.error("[ERROR] SQLException in registerUser. Message: " + e.getMessage() +
+                         ", SQLState: " + e.getSQLState() +
+                         ", ErrorCode: " + e.getErrorCode() +
+                         ", Cause: " + e.getCause(), e);
+        } catch (Throwable e) {
+            logger.error("[ERROR] Unexpected error in registerUser", e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    logger.error("Error closing connection in registerUser", e);
+                }
+            }
         }
+        return false;
     }
 
     public boolean updateUser(User user) {
@@ -202,14 +251,14 @@ public class UserDAO {
     }
 
     public User findOrCreateGoogleUser(String googleId, String email, String name) {
-        logger.info("Entering findOrCreateGoogleUser for googleId: {}, email: {}, name: {}", googleId, email, name);
+        logger.info("[STEP 10] Entering findOrCreateGoogleUser for googleId: {}, email: {}, name: {}", googleId, email, name);
         User user = getUserByEmail(email);
         if (user != null) {
-            logger.info("User found for email {}. Returning existing user.", email);
+            logger.info("[STEP 10] Google user found existing. Returning user.");
             return user;
         }
 
-        logger.info("User not found for email {}. Creating new user.", email);
+        logger.info("[STEP 10] Google user not found. Creating new user.");
         user = new User();
         user.setName(name);
         user.setEmail(email.toLowerCase().trim());
@@ -218,16 +267,14 @@ public class UserDAO {
         user.setVerified(true);
         
         if (registerUser(user)) {
-            logger.info("New user successfully registered for email {}.", email);
-            return getUserByEmail(email);
-        } else {
-            logger.warn("registerUser failed for Google user {}. Attempting to fetch again in case of race condition.", email);
-            User existing = getUserByEmail(email);
-            if (existing != null) {
-                return existing;
+            logger.info("[STEP 17] User registered. Fetching user again by email.");
+            User fetched = getUserByEmail(email);
+            if (fetched != null) {
+                logger.info("[STEP 17] User successfully fetched again. ID: {}", fetched.getId());
+                return fetched;
             }
         }
-        logger.error("findOrCreateGoogleUser returning null for email {}", email);
+        logger.error("[ERROR] findOrCreateGoogleUser returning null for email {}", email);
         return null;
     }
 

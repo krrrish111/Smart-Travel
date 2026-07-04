@@ -57,17 +57,19 @@ public class GoogleLoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        logger.info("[STEP 1] GoogleLoginServlet entered. Method: {}, Request URI: {}", request.getMethod(), request.getRequestURI());
 
         HttpSession existingSession = request.getSession(false);
         if (existingSession != null && existingSession.getAttribute("user_id") != null) {
-            logger.info("User already logged in. Redirecting to home to prevent duplicate OAuth callback.");
+            logger.info("[STEP 1] User already logged in. Redirecting to home to prevent duplicate OAuth callback.");
             response.sendRedirect(request.getContextPath() + "/");
             return;
         }
 
         String code = request.getParameter("code");
         String redirectUri = getRedirectUri(request);
-        logger.debug("Generated OAuth redirect_uri: {}", redirectUri);
+        logger.info("[STEP 3] Generated redirect URI: {}", redirectUri);
 
         // Phase 1: Redirect to Google if no code provided
         if (code == null || code.isEmpty()) {
@@ -79,39 +81,60 @@ public class GoogleLoginServlet extends HttpServlet {
                     "&access_type=offline" +
                     "&prompt=select_account";
 
-            logger.info("Redirecting user to Google OAuth URL: {}", url);
+            logger.info("[STEP 1] Redirecting user to Google OAuth Consent Page URL: {}", url);
             response.sendRedirect(url);
             return;
         }
 
-        // Phase 2: Handle Authorization Code callback
+        logger.info("[STEP 2] Authorization code received: {}", (code.length() > 5 ? code.substring(0, 5) + "..." : code));
+
+        String rawTokenResponse = "";
+        String rawUserInfoResponse = "";
+        JsonObject tokenJson = null;
+        JsonObject userInfoJson = null;
+
         try {
-            logger.info("Received OAuth authorization code. Initiating token exchange.");
             // 1. Exchange Code for Tokens
-            String tokenResponse = exchangeCodeForToken(code, redirectUri);
-            JsonObject tokenJson = JsonParser.parseString(tokenResponse).getAsJsonObject();
+            logger.info("[STEP 4] Initiating OAuth token request. Token URL: {}, Client ID: {}", TOKEN_URL, CLIENT_ID);
+            rawTokenResponse = exchangeCodeForToken(code, redirectUri);
+            logger.info("[STEP 5] Complete Google token response: {}", rawTokenResponse);
+            
+            tokenJson = JsonParser.parseString(rawTokenResponse).getAsJsonObject();
+            if (!tokenJson.has("access_token")) {
+                throw new IllegalStateException("Google token response does not contain access_token. Response: " + rawTokenResponse);
+            }
             String accessToken = tokenJson.get("access_token").getAsString();
+            logger.info("[STEP 6] Extract access token: {}", (accessToken.length() > 5 ? accessToken.substring(0, 5) + "..." : accessToken));
 
             // 2. Fetch User Profile Info
-            String userInfoResponse = fetchUserInfo(accessToken);
-            JsonObject userInfo = JsonParser.parseString(userInfoResponse).getAsJsonObject();
+            logger.info("[STEP 7] Fetching Google userinfo using access token.");
+            rawUserInfoResponse = fetchUserInfo(accessToken);
+            logger.info("[STEP 7] Complete Google userinfo response: {}", rawUserInfoResponse);
+            
+            userInfoJson = JsonParser.parseString(rawUserInfoResponse).getAsJsonObject();
+            
+            if (!userInfoJson.has("sub") || !userInfoJson.has("email")) {
+                throw new IllegalStateException("Google userinfo response is missing OpenID fields. Response: " + rawUserInfoResponse);
+            }
 
-            String googleId = userInfo.get("sub").getAsString();
-            String email = userInfo.get("email").getAsString();
-            String name = userInfo.has("name") ? userInfo.get("name").getAsString() : email.split("@")[0];
+            String googleId = userInfoJson.get("sub").getAsString();
+            String email = userInfoJson.get("email").getAsString();
+            String name = userInfoJson.has("name") ? userInfoJson.get("name").getAsString() : email.split("@")[0];
 
-            logger.info("Successfully fetched Google user profile. Email: {}", email);
+            logger.info("[STEP 8] Google email: {}", email);
+            logger.info("[STEP 9] Google id (sub): {}", googleId);
 
             // 3. Find or Create User in Database
             User user = userDAO.findOrCreateGoogleUser(googleId, email, name);
             if (user == null) {
-                logger.error("Failed to link Google account for email: {}", email);
+                logger.error("[ERROR] Failed to link Google account (UserDAO returned null) for email: {}", email);
                 request.setAttribute("errorMsg", "Failed to link Google account.");
                 request.getRequestDispatcher("/pages/auth/login.jsp").forward(request, response);
                 return;
             }
 
             // 4. Create Session
+            logger.info("[STEP 18] Creating HttpSession.");
             HttpSession session = request.getSession(true);
             session.setAttribute("user_id", user.getId());
             session.setAttribute("name", user.getName());
@@ -121,13 +144,33 @@ public class GoogleLoginServlet extends HttpServlet {
             session.setAttribute("user", user);
             session.setAttribute("auth_method", "google_oauth2");
 
-            logger.info("Google OAuth authentication successful. User ID: {}, Role: {}", user.getId(), user.getRole());
+            logger.info("[STEP 19] Session attributes set successfully:");
+            logger.info("  - user_id: {}", session.getAttribute("user_id"));
+            logger.info("  - name: {}", session.getAttribute("name"));
+            logger.info("  - username: {}", session.getAttribute("username"));
+            logger.info("  - email: {}", session.getAttribute("email"));
+            logger.info("  - role: {}", session.getAttribute("role"));
+            logger.info("  - auth_method: {}", session.getAttribute("auth_method"));
 
-            // 5. Redirect based on role
+            logger.info("[STEP 20] Redirecting to home page: {}", request.getContextPath() + "/");
             response.sendRedirect(request.getContextPath() + "/");
 
         } catch (Exception e) {
-            logger.error("Google Authentication failed", e);
+            logger.error("[CRITICAL ERROR] Google Authentication Exception!");
+            logger.error("Exception Class: {}", e.getClass().getName());
+            logger.error("Exception Message: {}", e.getMessage());
+            logger.error("Exception Cause: {}", e.getCause());
+            
+            // Print raw payloads if available
+            logger.error("Token Response JSON payload: {}", rawTokenResponse);
+            logger.error("UserInfo Response JSON payload: {}", rawUserInfoResponse);
+            
+            // Stack trace logging
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            e.printStackTrace(pw);
+            logger.error("Stack Trace:\n{}", sw.toString());
+
             request.setAttribute("errorMsg", "Google Authentication failed: " + e.getMessage());
             request.getRequestDispatcher("/pages/auth/login.jsp").forward(request, response);
         }

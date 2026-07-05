@@ -226,7 +226,8 @@ public class DestinationDAO {
         String query = "SELECT * FROM destinations WHERE LOWER(title) LIKE LOWER(?) OR LOWER(destination) LIKE LOWER(?) OR LOWER(short_description) LIKE LOWER(?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
-            String pattern = "%" + keyword + "%";
+            String trimmedKeyword = (keyword != null) ? keyword.trim() : "";
+            String pattern = "%" + trimmedKeyword + "%";
             stmt.setString(1, pattern);
             stmt.setString(2, pattern);
             stmt.setString(3, pattern);

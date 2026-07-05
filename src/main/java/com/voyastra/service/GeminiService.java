@@ -30,6 +30,9 @@ public class GeminiService {
 
     private void loadApiKey() {
         this.apiKey = com.voyastra.config.ConfigManager.get("GEMINI_API_KEY");
+        if (this.apiKey == null || this.apiKey.trim().isEmpty()) {
+            this.apiKey = com.voyastra.config.ConfigManager.get("GOOGLE_API_KEY");
+        }
     }
 
     public String generateTripPlan(String sessionId, Map<String, String> params) {

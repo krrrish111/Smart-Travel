@@ -31,6 +31,25 @@ public class HotelCheckoutServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        long startTime = System.currentTimeMillis();
+        String status = "SUCCESS";
+        try {
+            doGetInternal(request, response);
+        } catch (ServletException | IOException e) {
+            status = "ERROR";
+            com.voyastra.util.ObservabilityLogger.logError("HotelCheckoutServlet", "doGet", e);
+            throw e;
+        } catch (Exception e) {
+            status = "ERROR";
+            com.voyastra.util.ObservabilityLogger.logError("HotelCheckoutServlet", "doGet", e);
+            throw new ServletException(e);
+        } finally {
+            long duration = System.currentTimeMillis() - startTime;
+            com.voyastra.util.ObservabilityLogger.logStep("HotelCheckoutServlet", "doGet", status, duration, "Hotel checkout screen render: Hotel ID " + request.getParameter("hotelId"));
+        }
+    }
+
+    private void doGetInternal(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("user") == null) {
             response.sendRedirect("login.jsp");
@@ -128,6 +147,25 @@ public class HotelCheckoutServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        long startTime = System.currentTimeMillis();
+        String status = "SUCCESS";
+        try {
+            doPostInternal(request, response);
+        } catch (ServletException | IOException e) {
+            status = "ERROR";
+            com.voyastra.util.ObservabilityLogger.logError("HotelCheckoutServlet", "doPost", e);
+            throw e;
+        } catch (Exception e) {
+            status = "ERROR";
+            com.voyastra.util.ObservabilityLogger.logError("HotelCheckoutServlet", "doPost", e);
+            throw new ServletException(e);
+        } finally {
+            long duration = System.currentTimeMillis() - startTime;
+            com.voyastra.util.ObservabilityLogger.logStep("HotelCheckoutServlet", "doPost", status, duration, "Hotel checkout save draft for Hotel ID " + request.getParameter("hotelId"));
+        }
+    }
+
+    private void doPostInternal(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("user") == null) {
             response.sendRedirect("login.jsp");

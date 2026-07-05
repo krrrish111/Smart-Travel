@@ -94,17 +94,29 @@ public class TravelpayoutsService {
                                                     String destination,
                                                     String departureDate,
                                                     int adults, int children, int infants, String seatClass) {
-        String rawJson = searchFlights(origin, destination, departureDate, adults, children, infants, seatClass);
-        if (rawJson == null || rawJson.isEmpty()) {
-            System.err.println("[TravelpayoutsService] No JSON to parse. Parsing simulated JSON payload.");
-            return parseFlights(getSimulatedJson(origin, destination, departureDate));
+        long start = System.currentTimeMillis();
+        String status = "SUCCESS";
+        try {
+            String rawJson = searchFlights(origin, destination, departureDate, adults, children, infants, seatClass);
+            if (rawJson == null || rawJson.isEmpty()) {
+                System.err.println("[TravelpayoutsService] No JSON to parse. Parsing simulated JSON payload.");
+                return parseFlights(getSimulatedJson(origin, destination, departureDate));
+            }
+            List<FlightResult> parsed = parseFlights(rawJson);
+            if (parsed == null || parsed.isEmpty()) {
+                System.err.println("[TravelpayoutsService] Parsed empty results. Parsing simulated JSON payload.");
+                return parseFlights(getSimulatedJson(origin, destination, departureDate));
+            }
+            return parsed;
+        } catch (Exception e) {
+            status = "ERROR";
+            com.voyastra.util.ObservabilityLogger.logError("TravelpayoutsService", "searchAndParseFlights", e);
+            throw e;
+        } finally {
+            long duration = System.currentTimeMillis() - start;
+            com.voyastra.util.ObservabilityLogger.logStep("TravelpayoutsService", "searchAndParseFlights", status, duration,
+                    "Flight search from: " + origin + " to: " + destination + " date: " + departureDate);
         }
-        List<FlightResult> parsed = parseFlights(rawJson);
-        if (parsed == null || parsed.isEmpty()) {
-            System.err.println("[TravelpayoutsService] Parsed empty results. Parsing simulated JSON payload.");
-            return parseFlights(getSimulatedJson(origin, destination, departureDate));
-        }
-        return parsed;
     }
 
     /**

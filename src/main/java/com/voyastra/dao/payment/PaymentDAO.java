@@ -54,6 +54,48 @@ public class PaymentDAO {
         return generatedId;
     }
 
+    public int addPayment(Connection conn, Payment payment) throws SQLException {
+        String sql = "INSERT INTO payments (booking_id, user_id, amount, method, status, transaction_id, service_type, booking_reference, razorpay_order_id, razorpay_payment_id, currency) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        int generatedId = -1;
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            if (payment.getBookingId() > 0) {
+                stmt.setInt(1, payment.getBookingId());
+            } else {
+                stmt.setNull(1, Types.INTEGER);
+            }
+            stmt.setInt(2, payment.getUserId());
+            stmt.setDouble(3, payment.getAmount());
+            if (payment.getMethod() != null) {
+                stmt.setString(4, payment.getMethod());
+            } else {
+                stmt.setNull(4, Types.VARCHAR);
+            }
+            stmt.setString(5, payment.getStatus());
+            if (payment.getTransactionId() != null) {
+                stmt.setString(6, payment.getTransactionId());
+            } else {
+                stmt.setNull(6, Types.VARCHAR);
+            }
+            stmt.setString(7, payment.getServiceType());
+            stmt.setString(8, payment.getBookingReference());
+            stmt.setString(9, payment.getRazorpayOrderId());
+            stmt.setString(10, payment.getRazorpayPaymentId());
+            stmt.setString(11, payment.getCurrency() != null ? payment.getCurrency() : "INR");
+            
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows > 0) {
+                try (ResultSet rs = stmt.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        generatedId = rs.getInt(1);
+                        payment.setId(generatedId);
+                    }
+                }
+            }
+        }
+        return generatedId;
+    }
+
     public boolean updatePaymentStatus(int id, String status) {
         String sql = "UPDATE payments SET status = ? WHERE id = ?";
         try (Connection conn = DBConnection.getConnection();

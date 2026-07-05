@@ -14,11 +14,13 @@ import java.sql.Statement;
 public class DBConnection {
 
     private static final Logger logger = LoggerFactory.getLogger(DBConnection.class);
-    private static HikariDataSource dataSource = null;
+    private static volatile HikariDataSource dataSource = null;
+    private static String jdbcUrl = null;
+    private static String dbUser = null;
+    private static String dbPassword = null;
 
     static {
-        long begin = com.voyastra.util.StartupProfiler.mark("DBConnection & Hikari Initialization");
-        logger.info("[DB] Initializing HikariCP...");
+        logger.info("[DB] Loading MySQL driver and parsing configuration...");
 
         // Load MySQL Driver explicitly
         try {
@@ -29,14 +31,13 @@ public class DBConnection {
         }
 
         // Resolve connection parameters
+        dbUser = com.voyastra.config.ConfigManager.get("DB_USER");
+        dbPassword = com.voyastra.config.ConfigManager.get("DB_PASSWORD");
         String dbHost = com.voyastra.config.ConfigManager.get("DB_HOST");
         String dbPort = com.voyastra.config.ConfigManager.get("DB_PORT", "3306");
         String dbName = com.voyastra.config.ConfigManager.get("DB_NAME");
-        String dbUser = com.voyastra.config.ConfigManager.get("DB_USER");
-        String dbPassword = com.voyastra.config.ConfigManager.get("DB_PASSWORD");
         String rawDbUrl = com.voyastra.config.ConfigManager.get("DB_URL");
 
-        String jdbcUrl = null;
         if (dbHost != null && !dbHost.trim().isEmpty()) {
             jdbcUrl = "jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName + "?sslMode=REQUIRED&zeroDateTimeBehavior=convertToNull";
         } else if (rawDbUrl != null && !rawDbUrl.trim().isEmpty()) {
@@ -84,39 +85,6 @@ public class DBConnection {
 
         // Print resolved host and database safely without credentials
         logger.info("[DB] Resolved JDBC: {}", getSafeUrlInfo(jdbcUrl));
-
-        // Hikari Configuration
-        HikariConfig config = new HikariConfig();
-        config.setJdbcUrl(jdbcUrl);
-        config.setUsername(dbUser);
-        config.setPassword(dbPassword);
-        config.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        config.setMaximumPoolSize(10);
-        config.setMinimumIdle(2);
-        config.setIdleTimeout(300000);
-        config.setConnectionTimeout(30000);
-        config.setValidationTimeout(5000);
-        
-        config.addDataSourceProperty("cachePrepStmts", "true");
-        config.addDataSourceProperty("prepStmtCacheSize", "250");
-        config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
-        config.addDataSourceProperty("useServerPrepStmts", "true");
-
-        try {
-            dataSource = new HikariDataSource(config);
-
-            // Verify with a lightweight check
-            try (Connection conn = dataSource.getConnection();
-                 Statement stmt = conn.createStatement()) {
-                stmt.execute("SELECT 1");
-                logger.info("[DB] Connected to MySQL ({})", (dbName != null ? dbName : "defaultdb"));
-            }
-            logger.info("[DB] Connection pool initialized successfully. Size: {}", config.getMaximumPoolSize());
-        } catch (Throwable t) {
-            logger.error("[DB] [CRITICAL ERROR] HikariCP Connection Pool initialization or validation check failed!");
-            throw new RuntimeException("HikariCP connection pool initialization failed permanently.", t);
-        }
-        com.voyastra.util.StartupProfiler.duration("DBConnection & Hikari Initialization", begin);
     }
 
     private static String getSafeUrlInfo(String url) {
@@ -150,7 +118,45 @@ public class DBConnection {
      */
     public static Connection getConnection() throws SQLException {
         if (dataSource == null) {
-            throw new SQLException("DataSource not initialized");
+            synchronized (DBConnection.class) {
+                if (dataSource == null) {
+                    long begin = com.voyastra.util.StartupProfiler.mark("DBConnection & Hikari Initialization");
+                    logger.info("[DB] Lazy initializing HikariCP Connection Pool...");
+
+                    HikariConfig config = new HikariConfig();
+                    config.setJdbcUrl(jdbcUrl);
+                    config.setUsername(dbUser);
+                    config.setPassword(dbPassword);
+                    config.setDriverClassName("com.mysql.cj.jdbc.Driver");
+                    config.setMaximumPoolSize(10);
+                    config.setMinimumIdle(2);
+                    config.setIdleTimeout(300000);
+                    config.setConnectionTimeout(30000);
+                    config.setValidationTimeout(5000);
+                    
+                    config.addDataSourceProperty("cachePrepStmts", "true");
+                    config.addDataSourceProperty("prepStmtCacheSize", "250");
+                    config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+                    config.addDataSourceProperty("useServerPrepStmts", "true");
+
+                    try {
+                        HikariDataSource ds = new HikariDataSource(config);
+
+                        // Verify with a lightweight check
+                        try (Connection conn = ds.getConnection();
+                             Statement stmt = conn.createStatement()) {
+                            stmt.execute("SELECT 1");
+                            logger.info("[DB] Connected to MySQL");
+                        }
+                        dataSource = ds;
+                        logger.info("[DB] Connection pool lazy-initialized successfully. Size: {}", config.getMaximumPoolSize());
+                    } catch (Throwable t) {
+                        logger.error("[DB] [CRITICAL ERROR] HikariCP Connection Pool initialization or validation check failed!");
+                        throw new RuntimeException("HikariCP connection pool initialization failed permanently.", t);
+                    }
+                    com.voyastra.util.StartupProfiler.duration("DBConnection & Hikari Initialization", begin);
+                }
+            }
         }
         return dataSource.getConnection();
     }
@@ -160,13 +166,17 @@ public class DBConnection {
      */
     public static void shutdown() {
         if (dataSource != null) {
-            try {
-                dataSource.close();
-                logger.info("[DB] HikariCP Connection Pool shut down successfully.");
-            } catch (Exception e) {
-                logger.error("[DB] Error shutting down HikariCP Connection Pool", e);
-            } finally {
-                dataSource = null;
+            synchronized (DBConnection.class) {
+                if (dataSource != null) {
+                    try {
+                        dataSource.close();
+                        logger.info("[DB] HikariCP Connection Pool shut down successfully.");
+                    } catch (Exception e) {
+                        logger.error("[DB] Error shutting down HikariCP Connection Pool", e);
+                    } finally {
+                        dataSource = null;
+                    }
+                }
             }
         }
     }

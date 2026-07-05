@@ -31,7 +31,7 @@ public class RazorpayOrderServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
 
         HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("user") == null) {
+        if (session == null || session.getAttribute("user_id") == null) {
             response.setStatus(401);
             response.getWriter().write("{\"error\": \"Unauthorized\"}");
             return;

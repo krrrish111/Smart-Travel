@@ -229,6 +229,16 @@ public class UserDAO {
         }
     }
 
+    public boolean updateWalletAndLoyalty(Connection conn, int userId, double walletBalance, int loyaltyPoints) throws SQLException {
+        String sql = "UPDATE users SET wallet_balance = ?, loyalty_points = ? WHERE id = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setDouble(1, walletBalance);
+            stmt.setInt(2, loyaltyPoints);
+            stmt.setInt(3, userId);
+            return stmt.executeUpdate() > 0;
+        }
+    }
+
     public boolean changePassword(int userId, String currentPassword, String newPassword) {
         User user = getUserById(userId);
         if (user != null && BCrypt.checkpw(currentPassword, user.getPassword())) {

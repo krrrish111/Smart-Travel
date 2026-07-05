@@ -32,6 +32,28 @@ public class SearchServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        long startTime = System.currentTimeMillis();
+        String status = "SUCCESS";
+        String type = request.getParameter("type");
+        try {
+            doGetInternal(request, response);
+        } catch (ServletException | IOException e) {
+            status = "ERROR";
+            com.voyastra.util.ObservabilityLogger.logError("SearchServlet", "doGet", e);
+            throw e;
+        } catch (Exception e) {
+            status = "ERROR";
+            com.voyastra.util.ObservabilityLogger.logError("SearchServlet", "doGet", e);
+            throw new ServletException(e);
+        } finally {
+            long duration = System.currentTimeMillis() - startTime;
+            com.voyastra.util.ObservabilityLogger.logStep("SearchServlet", "doGet", status, duration,
+                "Search execution for type: " + type);
+        }
+    }
+
+    private void doGetInternal(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
         // ---- Core search params ----
         String type       = request.getParameter("type");

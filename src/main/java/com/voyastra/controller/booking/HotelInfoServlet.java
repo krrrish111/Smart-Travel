@@ -12,6 +12,25 @@ import java.io.IOException;
 public class HotelInfoServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        long startTime = System.currentTimeMillis();
+        String status = "SUCCESS";
+        try {
+            doGetInternal(request, response);
+        } catch (ServletException | IOException e) {
+            status = "ERROR";
+            com.voyastra.util.ObservabilityLogger.logError("HotelInfoServlet", "doGet", e);
+            throw e;
+        } catch (Exception e) {
+            status = "ERROR";
+            com.voyastra.util.ObservabilityLogger.logError("HotelInfoServlet", "doGet", e);
+            throw new ServletException(e);
+        } finally {
+            long duration = System.currentTimeMillis() - startTime;
+            com.voyastra.util.ObservabilityLogger.logStep("HotelInfoServlet", "doGet", status, duration, "Hotel details lookup: " + request.getParameter("id"));
+        }
+    }
+
+    private void doGetInternal(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             String idStr = request.getParameter("id");
             String name = request.getParameter("name");

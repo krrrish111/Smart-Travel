@@ -26,6 +26,19 @@ public class WalletDAO {
         return null;
     }
 
+    public Wallet getWalletByUserId(Connection conn, int userId) throws SQLException {
+        String sql = "SELECT * FROM wallets WHERE user_id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return mapRowToWallet(rs);
+                }
+            }
+        }
+        return null;
+    }
+
     public Wallet createWallet(int userId) {
         String sql = "INSERT INTO wallets (user_id, balance, currency) VALUES (?, 0.00, 'INR')";
         try (Connection conn = DBConnection.getConnection();
@@ -48,6 +61,25 @@ public class WalletDAO {
         return null;
     }
 
+    public Wallet createWallet(Connection conn, int userId) throws SQLException {
+        String sql = "INSERT INTO wallets (user_id, balance, currency) VALUES (?, 0.00, 'INR')";
+        try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setInt(1, userId);
+            ps.executeUpdate();
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    Wallet w = new Wallet();
+                    w.setId(rs.getInt(1));
+                    w.setUserId(userId);
+                    w.setBalance(0.0);
+                    w.setCurrency("INR");
+                    return w;
+                }
+            }
+        }
+        return null;
+    }
+
     public void updateBalance(int walletId, double amountDelta) {
         String sql = "UPDATE wallets SET balance = balance + ? WHERE id = ?";
         try (Connection conn = DBConnection.getConnection();
@@ -57,6 +89,15 @@ public class WalletDAO {
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void updateBalance(Connection conn, int walletId, double amountDelta) throws SQLException {
+        String sql = "UPDATE wallets SET balance = balance + ? WHERE id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setDouble(1, amountDelta);
+            ps.setInt(2, walletId);
+            ps.executeUpdate();
         }
     }
 
@@ -71,6 +112,17 @@ public class WalletDAO {
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void addTransaction(Connection conn, int walletId, double amount, String type, String description) throws SQLException {
+        String sql = "INSERT INTO wallet_transactions (wallet_id, amount, type, description) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, walletId);
+            ps.setDouble(2, amount);
+            ps.setString(3, type);
+            ps.setString(4, description);
+            ps.executeUpdate();
         }
     }
 

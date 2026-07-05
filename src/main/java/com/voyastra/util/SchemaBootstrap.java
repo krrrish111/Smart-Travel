@@ -48,6 +48,21 @@ public class SchemaBootstrap implements ServletContextListener {
             }
         }
 
+        String skipBootstrap = System.getenv("SKIP_SCHEMA_BOOTSTRAP");
+        if (skipBootstrap == null) {
+            skipBootstrap = System.getProperty("SKIP_SCHEMA_BOOTSTRAP");
+        }
+        if (skipBootstrap == null) {
+            skipBootstrap = com.voyastra.config.ConfigManager.get("SKIP_SCHEMA_BOOTSTRAP");
+        }
+
+        if ("true".equalsIgnoreCase(skipBootstrap)) {
+            logger.info("[SchemaBootstrap] Production mode. Bootstrap skipped.");
+            System.out.println("[SchemaBootstrap] Production mode. Bootstrap skipped.");
+            com.voyastra.util.StartupProfiler.duration("SchemaBootstrap Initialization", begin);
+            return;
+        }
+
         // 2. Database Connection
         try (Connection conn = DBConnection.getConnection()) {
             if (conn != null && !conn.isClosed()) {
@@ -155,6 +170,11 @@ public class SchemaBootstrap implements ServletContextListener {
             // --- Refunds booking_type column addition ---
             try {
                 stmt.execute("ALTER TABLE refunds ADD COLUMN booking_type VARCHAR(20) DEFAULT 'FLIGHT' AFTER booking_id");
+            } catch (Exception e) {}
+
+            // --- Notifications title column addition ---
+            try {
+                stmt.execute("ALTER TABLE notifications ADD COLUMN title VARCHAR(255) NULL AFTER user_id");
             } catch (Exception e) {}
 
             // --- Drop constraints ---

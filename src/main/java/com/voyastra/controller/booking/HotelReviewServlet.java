@@ -24,6 +24,25 @@ public class HotelReviewServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        long startTime = System.currentTimeMillis();
+        String status = "SUCCESS";
+        try {
+            doGetInternal(request, response);
+        } catch (ServletException | IOException e) {
+            status = "ERROR";
+            com.voyastra.util.ObservabilityLogger.logError("HotelReviewServlet", "doGet", e);
+            throw e;
+        } catch (Exception e) {
+            status = "ERROR";
+            com.voyastra.util.ObservabilityLogger.logError("HotelReviewServlet", "doGet", e);
+            throw new ServletException(e);
+        } finally {
+            long duration = System.currentTimeMillis() - startTime;
+            com.voyastra.util.ObservabilityLogger.logStep("HotelReviewServlet", "doGet", status, duration, "Hotel booking review screen render");
+        }
+    }
+
+    private void doGetInternal(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("user") == null) {
             response.sendRedirect("login.jsp");
@@ -65,6 +84,25 @@ public class HotelReviewServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        long startTime = System.currentTimeMillis();
+        String status = "SUCCESS";
+        try {
+            doPostInternal(request, response);
+        } catch (ServletException | IOException e) {
+            status = "ERROR";
+            com.voyastra.util.ObservabilityLogger.logError("HotelReviewServlet", "doPost", e);
+            throw e;
+        } catch (Exception e) {
+            status = "ERROR";
+            com.voyastra.util.ObservabilityLogger.logError("HotelReviewServlet", "doPost", e);
+            throw new ServletException(e);
+        } finally {
+            long duration = System.currentTimeMillis() - startTime;
+            com.voyastra.util.ObservabilityLogger.logStep("HotelReviewServlet", "doPost", status, duration, "Hotel booking review accepted, forwarding to payment");
+        }
+    }
+
+    private void doPostInternal(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("user") == null) {
             response.sendRedirect("login.jsp");

@@ -78,6 +78,8 @@ public class TransportPdfGenerator {
             return ((com.voyastra.model.booking.HelicopterBooking) bookingObj).getId();
         } else if (bookingObj instanceof com.voyastra.model.booking.FlightBooking) {
             return ((com.voyastra.model.booking.FlightBooking) bookingObj).getBookingCode();
+        } else if (bookingObj instanceof com.voyastra.model.booking.HotelBooking) {
+            return ((com.voyastra.model.booking.HotelBooking) bookingObj).getBookingCode();
         }
         return "UNKNOWN";
     }

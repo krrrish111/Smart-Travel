@@ -335,6 +335,15 @@
                             const loader = document.getElementById('payLoader');
                             const form = document.getElementById('paymentForm');
 
+                            if (currentMethod === 'WALLET' || currentMethod === 'MOCK') {
+                                btn.disabled = true;
+                                btn.style.opacity = '0.8';
+                                loader.style.display = 'block';
+                                document.getElementById('btnText').innerText = 'Processing Payment...';
+                                form.submit();
+                                return;
+                            }
+
                             btn.disabled = true;
                             btn.style.opacity = '0.8';
                             loader.style.display = 'block';

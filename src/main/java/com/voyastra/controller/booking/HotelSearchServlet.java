@@ -30,6 +30,25 @@ public class HotelSearchServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        long startTime = System.currentTimeMillis();
+        String status = "SUCCESS";
+        try {
+            doGetInternal(request, response);
+        } catch (ServletException | IOException e) {
+            status = "ERROR";
+            com.voyastra.util.ObservabilityLogger.logError("HotelSearchServlet", "doGet", e);
+            throw e;
+        } catch (Exception e) {
+            status = "ERROR";
+            com.voyastra.util.ObservabilityLogger.logError("HotelSearchServlet", "doGet", e);
+            throw new ServletException(e);
+        } finally {
+            long duration = System.currentTimeMillis() - startTime;
+            com.voyastra.util.ObservabilityLogger.logStep("HotelSearchServlet", "doGet", status, duration, "Hotel Search query: " + request.getParameter("q"));
+        }
+    }
+
+    private void doGetInternal(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String city = request.getParameter("q");
         if (city == null) city = "";
         

@@ -16,7 +16,6 @@ import com.voyastra.config.ConfigManager;
  * Runs automatic DB schema migrations on application startup.
  * All migrations are idempotent (safe to run multiple times).
  */
-@WebListener
 public class SchemaBootstrap implements ServletContextListener {
 
     private static final Logger logger = LoggerFactory.getLogger(SchemaBootstrap.class);
@@ -29,6 +28,22 @@ public class SchemaBootstrap implements ServletContextListener {
         }
         if (skipBootstrap == null) {
             skipBootstrap = com.voyastra.config.ConfigManager.get("SKIP_SCHEMA_BOOTSTRAP");
+        }
+
+        if (skipBootstrap != null) {
+            skipBootstrap = skipBootstrap.trim();
+        }
+
+        // Production environment auto-detection fallback
+        if (skipBootstrap == null || skipBootstrap.isEmpty()) {
+            String dbHost = System.getenv("DB_HOST");
+            if (dbHost == null) {
+                dbHost = com.voyastra.config.ConfigManager.get("DB_HOST");
+            }
+            if (System.getenv("RENDER") != null || (dbHost != null && dbHost.contains("aivencloud.com"))) {
+                skipBootstrap = "true";
+                logger.info("[SchemaBootstrap] Detected Render or Aiven MySQL production environment. Auto-defaulting SKIP_SCHEMA_BOOTSTRAP to true.");
+            }
         }
 
         if ("true".equalsIgnoreCase(skipBootstrap)) {

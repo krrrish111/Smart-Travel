@@ -36,7 +36,7 @@ RUN mkdir -p /var/voyastra/uploads && \
     chown -R tomcat:tomcat /usr/local/tomcat /var/voyastra/uploads && \
     sed -i '/tomcat.util.scan.StandardJarScanFilter.jarsToSkip=/a \
 twilio-*.jar,jackson-*.jar,itextpdf-*.jar,mysql-*.jar,gson-*.jar,jbcrypt-*.jar,HikariCP-*.jar,mail-*.jar,jakarta.mail-*.jar,slf4j-*.jar,guava-*.jar,httpclient-*.jar,httpcore-*.jar,commons-*.jar,jjwt-*.jar,jakarta.activation-*.jar,\\' /usr/local/tomcat/conf/catalina.properties && \
-    sed -i 's/port="8080"/port="${port.http:8080}"/g' /usr/local/tomcat/conf/server.xml && \
+    sed -i 's/port="8080"/port="${port.http}"/g' /usr/local/tomcat/conf/server.xml && \
     sed -i 's/port="8005"/port="-1"/g' /usr/local/tomcat/conf/server.xml
 
 # 5. Copy entrypoint
@@ -52,7 +52,7 @@ ENV UPLOAD_DIR=/var/voyastra/uploads \
     DB_NAME=voyastra \
     DB_USER=root \
     DB_PASSWORD=root \
-    CATALINA_OPTS="-Djava.security.egd=file:/dev/./urandom -Dorg.apache.tomcat.util.scan.StandardJarScanFilter.jarsToSkip=* -Dorg.apache.tomcat.util.scan.StandardJarScanFilter.jarsToScan=jstl-*.jar,standard-*.jar,jakarta.servlet.jsp.jstl-*.jar,taglibs-standard-*.jar"
+    CATALINA_OPTS="-Dport.http=8080 -Djava.security.egd=file:/dev/./urandom -Dorg.apache.tomcat.util.scan.StandardJarScanFilter.jarsToSkip=* -Dorg.apache.tomcat.util.scan.StandardJarScanFilter.jarsToScan=jstl-*.jar,standard-*.jar,jakarta.servlet.jsp.jstl-*.jar,taglibs-standard-*.jar"
 
 # 8. Define standard health check
 HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \

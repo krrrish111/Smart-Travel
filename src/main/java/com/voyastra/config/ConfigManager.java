@@ -10,6 +10,7 @@ public class ConfigManager {
     private static final Properties properties = new Properties();
 
     static {
+        long begin = com.voyastra.util.StartupProfiler.mark("ConfigManager Loading");
         // Load from .env file in root directory if it exists
         try (InputStream input = new FileInputStream(new File(".env"))) {
             properties.load(input);
@@ -21,6 +22,7 @@ public class ConfigManager {
 
         // Startup Validation
         validateRequiredKeys();
+        com.voyastra.util.StartupProfiler.duration("ConfigManager Loading", begin);
     }
 
     private static void validateRequiredKeys() {

@@ -23,11 +23,12 @@ public class SchemaBootstrap implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        
-        System.out.println("=================================");
-        System.out.println("VOYASTRA STARTUP VERIFICATION");
-        
-        // 1. Directories Auto-Creation & Writable Verification
+        long begin = com.voyastra.util.StartupProfiler.mark("SchemaBootstrap Initialization");
+        try {
+            System.out.println("=================================");
+            System.out.println("VOYASTRA STARTUP VERIFICATION");
+            
+            // 1. Directories Auto-Creation & Writable Verification
         String[] requiredDirs = {
             com.voyastra.config.ConfigManager.get("UPLOAD_DIR", "/var/voyastra/uploads"),
             "/var/voyastra/tickets",
@@ -902,6 +903,8 @@ public class SchemaBootstrap implements ServletContextListener {
 
         } catch (Throwable e) {
             logger.error("[SchemaBootstrap] Migration error: " + e.getMessage(), e);
+        } finally {
+            com.voyastra.util.StartupProfiler.duration("SchemaBootstrap Initialization", begin);
         }
     }
 

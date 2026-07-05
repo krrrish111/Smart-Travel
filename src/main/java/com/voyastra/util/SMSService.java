@@ -27,6 +27,11 @@ public class SMSService {
     private static final String TWILIO_AUTH_TOKEN = com.voyastra.config.ConfigManager.get("TWILIO_TOKEN", "dummy_token");
     private static final String TWILIO_PHONE_NUMBER = com.voyastra.config.ConfigManager.get("TWILIO_PHONE", "+1234567890");
 
+    static {
+        long begin = com.voyastra.util.StartupProfiler.mark("SMSService Initialization");
+        com.voyastra.util.StartupProfiler.duration("SMSService Initialization", begin);
+    }
+
     public static void shutdown() {
         executor.shutdown();
         logger.info("SMSService ExecutorService shut down successfully.");

@@ -12,7 +12,10 @@ import java.util.UUID;
 public class GlobalExceptionFilter implements Filter {
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {}
+    public void init(FilterConfig filterConfig) throws ServletException {
+        long begin = com.voyastra.util.StartupProfiler.mark("GlobalExceptionFilter Initialization");
+        com.voyastra.util.StartupProfiler.duration("GlobalExceptionFilter Initialization", begin);
+    }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)

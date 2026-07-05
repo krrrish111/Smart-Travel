@@ -5,6 +5,11 @@ import javax.crypto.spec.SecretKeySpec;
 import java.util.Base64;
 
 public class RazorpayConfig {
+
+    static {
+        long begin = com.voyastra.util.StartupProfiler.mark("RazorpayConfig Initialization");
+        com.voyastra.util.StartupProfiler.duration("RazorpayConfig Initialization", begin);
+    }
     
     public static String getKeyId() {
         return com.voyastra.config.ConfigManager.get("RAZORPAY_KEY");

@@ -38,7 +38,10 @@ public class SecurityFilter implements Filter {
     );
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {}
+    public void init(FilterConfig filterConfig) throws ServletException {
+        long begin = com.voyastra.util.StartupProfiler.mark("SecurityFilter Initialization");
+        com.voyastra.util.StartupProfiler.duration("SecurityFilter Initialization", begin);
+    }
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)

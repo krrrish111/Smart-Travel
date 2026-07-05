@@ -4,6 +4,11 @@ import com.voyastra.config.ConfigManager;
 
 public class OAuthConfig {
 
+    static {
+        long begin = com.voyastra.util.StartupProfiler.mark("OAuthConfig Initialization");
+        com.voyastra.util.StartupProfiler.duration("OAuthConfig Initialization", begin);
+    }
+
     public static String getClientId() {
         return ConfigManager.get("GOOGLE_CLIENT_ID", "YOUR_CLIENT_ID");
     }

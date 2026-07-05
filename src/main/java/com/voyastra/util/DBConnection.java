@@ -17,6 +17,7 @@ public class DBConnection {
     private static HikariDataSource dataSource = null;
 
     static {
+        long begin = com.voyastra.util.StartupProfiler.mark("DBConnection & Hikari Initialization");
         logger.info("[DB] Initializing HikariCP...");
 
         // Load MySQL Driver explicitly
@@ -115,6 +116,7 @@ public class DBConnection {
             logger.error("[DB] [CRITICAL ERROR] HikariCP Connection Pool initialization or validation check failed!");
             throw new RuntimeException("HikariCP connection pool initialization failed permanently.", t);
         }
+        com.voyastra.util.StartupProfiler.duration("DBConnection & Hikari Initialization", begin);
     }
 
     private static String getSafeUrlInfo(String url) {

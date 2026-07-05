@@ -57,6 +57,7 @@ services:
       - SMTP_USER=${SMTP_USER}
       - SMTP_PASS=${SMTP_PASS}
       - UPLOAD_DIR=/var/voyastra/uploads
+      - CATALINA_OPTS=-Djava.security.egd=file:/dev/./urandom -Dorg.apache.tomcat.util.scan.StandardJarScanFilter.jarsToSkip=* -Dorg.apache.tomcat.util.scan.StandardJarScanFilter.jarsToScan=jstl-*.jar,standard-*.jar,jakarta.servlet.jsp.jstl-*.jar,taglibs-standard-*.jar
     volumes:
       - voyastra-uploads:/var/voyastra/uploads
       - voyastra-tickets:/var/voyastra/tickets

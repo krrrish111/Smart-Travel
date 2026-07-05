@@ -8,6 +8,11 @@ import java.io.ByteArrayOutputStream;
 
 public class TransportPdfGenerator {
 
+    static {
+        long begin = com.voyastra.util.StartupProfiler.mark("TransportPdfGenerator Initialization");
+        com.voyastra.util.StartupProfiler.duration("TransportPdfGenerator Initialization", begin);
+    }
+
     public static byte[] generateGenericTicketPdf(Object bookingObj, User user) throws DocumentException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         Document document = new Document();

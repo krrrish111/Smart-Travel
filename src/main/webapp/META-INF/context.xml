@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context>
+    <!-- Use standard JarScanFilter to explicitly skip TLD and Pluggability scanning for unnecessary libraries -->
+    <JarScanner>
+        <JarScanFilter defaultTldScan="true" defaultPluggabilityScan="true"
+                       tldSkip="twilio-*.jar,jackson-*.jar,itextpdf-*.jar,mysql-*.jar,gson-*.jar,jbcrypt-*.jar,HikariCP-*.jar,mail-*.jar,jakarta.mail-*.jar,slf4j-*.jar,guava-*.jar,httpclient-*.jar,httpcore-*.jar,commons-*.jar,jjwt-*.jar,jakarta.activation-*.jar"
+                       pluggabilitySkip="twilio-*.jar,jackson-*.jar,itextpdf-*.jar,mysql-*.jar,gson-*.jar,jbcrypt-*.jar,HikariCP-*.jar,mail-*.jar,jakarta.mail-*.jar,slf4j-*.jar,guava-*.jar,httpclient-*.jar,httpcore-*.jar,commons-*.jar,jjwt-*.jar,jakarta.activation-*.jar"/>
+    </JarScanner>
+</Context>

@@ -40,11 +40,13 @@ public class EmailService {
     private static final Properties props = new Properties();
 
     static {
+        long begin = com.voyastra.util.StartupProfiler.mark("EmailService Initialization");
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.host", SMTP_HOST);
         props.put("mail.smtp.port", SMTP_PORT);
         props.put("mail.debug", "false"); // Set to true for troubleshooting
+        com.voyastra.util.StartupProfiler.duration("EmailService Initialization", begin);
     }
 
     /**

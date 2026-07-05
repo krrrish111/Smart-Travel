@@ -29,6 +29,8 @@ public class AuthenticationFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
+        long begin = com.voyastra.util.StartupProfiler.mark("AuthenticationFilter Initialization");
+        com.voyastra.util.StartupProfiler.duration("AuthenticationFilter Initialization", begin);
     }
 
     @Override

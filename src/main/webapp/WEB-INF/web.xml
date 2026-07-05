@@ -5,6 +5,8 @@
          http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
 
+    <absolute-ordering />
+
     <listener>
         <listener-class>com.voyastra.util.ActiveSessionListener</listener-class>
     </listener>

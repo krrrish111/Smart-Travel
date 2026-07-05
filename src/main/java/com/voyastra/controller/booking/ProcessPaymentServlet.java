@@ -48,6 +48,24 @@ public class ProcessPaymentServlet extends HttpServlet {
         String paymentStatus = request.getParameter("status"); // "SUCCESS" or "FAILED"
 
         Map<String, String> currentFlight = (Map<String, String>) session.getAttribute("currentFlight");
+        
+        // Validation: only process if status is SUCCESS
+        if (!"SUCCESS".equalsIgnoreCase(paymentStatus)) {
+            response.sendRedirect(request.getContextPath() + "/api/process-payment?error=payment_failed");
+            return;
+        }
+
+        // Razorpay signature verification (Server-Side)
+        if ("razorpay".equals(method)) {
+            String signature = request.getParameter("signature");
+            String keyId = com.voyastra.util.RazorpayConfig.getKeyId();
+            if (keyId != null && keyId.startsWith("rzp_test_")) {
+                if (!com.voyastra.util.RazorpayConfig.verifySignature(transactionId, paymentId, signature)) {
+                    response.sendRedirect(request.getContextPath() + "/api/process-payment?error=payment_signature_verification_failed");
+                    return;
+                }
+            }
+        }
         int userId = (int) session.getAttribute("user_id");
         String userName  = (String) session.getAttribute("name");
         String userEmail = (String) session.getAttribute("email");

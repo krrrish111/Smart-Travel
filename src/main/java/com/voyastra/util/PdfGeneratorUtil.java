@@ -15,6 +15,11 @@ import java.io.ByteArrayOutputStream;
 
 public class PdfGeneratorUtil {
 
+    static {
+        long begin = com.voyastra.util.StartupProfiler.mark("PdfGeneratorUtil Initialization");
+        com.voyastra.util.StartupProfiler.duration("PdfGeneratorUtil Initialization", begin);
+    }
+
     public static byte[] generateHotelVoucherPdf(HotelBooking booking) throws DocumentException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         Document document = new Document();

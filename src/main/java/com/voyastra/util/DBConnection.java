@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 /**
  * Optimized Database Connection Utility using HikariCP for high-performance pooling in production.
@@ -128,11 +127,17 @@ public class DBConnection {
                     config.setUsername(dbUser);
                     config.setPassword(dbPassword);
                     config.setDriverClassName("com.mysql.cj.jdbc.Driver");
-                    config.setMaximumPoolSize(10);
-                    config.setMinimumIdle(2);
+                    config.setMaximumPoolSize(5);
+                    // minimumIdle=0: Hikari will not open any physical connection
+                    // until the first getConnection() call from a request thread.
+                    config.setMinimumIdle(0);
                     config.setIdleTimeout(300000);
+                    // initializationFailTimeout=-1: pool creation succeeds even if DB is
+                    // unreachable at startup. First getConnection() will block/fail normally.
+                    config.setInitializationFailTimeout(-1);
                     config.setConnectionTimeout(30000);
                     config.setValidationTimeout(5000);
+                    config.setKeepaliveTime(60000);
                     
                     config.addDataSourceProperty("cachePrepStmts", "true");
                     config.addDataSourceProperty("prepStmtCacheSize", "250");
@@ -140,19 +145,15 @@ public class DBConnection {
                     config.addDataSourceProperty("useServerPrepStmts", "true");
 
                     try {
+                        // initializationFailTimeout=-1 means pool creation never blocks on DB.
+                        // No physical connection is opened here — only pool metadata is set up.
                         HikariDataSource ds = new HikariDataSource(config);
-
-                        // Verify with a lightweight check
-                        try (Connection conn = ds.getConnection();
-                             Statement stmt = conn.createStatement()) {
-                            stmt.execute("SELECT 1");
-                            logger.info("[DB] Connected to MySQL");
-                        }
                         dataSource = ds;
-                        logger.info("[DB] Connection pool lazy-initialized successfully. Size: {}", config.getMaximumPoolSize());
+                        logger.info("[DB] HikariCP pool object created (no physical connection yet). " +
+                                "Pool will connect on first getConnection() call.");
                     } catch (Throwable t) {
-                        logger.error("[DB] [CRITICAL ERROR] HikariCP Connection Pool initialization or validation check failed!");
-                        throw new RuntimeException("HikariCP connection pool initialization failed permanently.", t);
+                        logger.error("[DB] [CRITICAL ERROR] HikariCP pool creation failed!", t);
+                        throw new RuntimeException("HikariCP connection pool creation failed.", t);
                     }
                     com.voyastra.util.StartupProfiler.duration("DBConnection & Hikari Initialization", begin);
                 }

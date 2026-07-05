@@ -20,9 +20,7 @@ public class YouTubeExplorerService {
 
     public YouTubeExplorerService() {
         this.apiKey = com.voyastra.config.ConfigManager.get("YOUTUBE_API_KEY");
-        this.httpClient = HttpClient.newBuilder()
-            .connectTimeout(Duration.ofSeconds(10))
-            .build();
+        this.httpClient = com.voyastra.util.HttpClientFactory.get();
     }
 
     public String searchVideos(String destination, int maxResults) {

@@ -17,9 +17,7 @@ public class WikipediaService {
     private final HttpClient httpClient;
 
     public WikipediaService() {
-        this.httpClient = HttpClient.newBuilder()
-            .connectTimeout(Duration.ofSeconds(10))
-            .build();
+        this.httpClient = com.voyastra.util.HttpClientFactory.get();
     }
 
     public JsonObject getSummary(String destination) {

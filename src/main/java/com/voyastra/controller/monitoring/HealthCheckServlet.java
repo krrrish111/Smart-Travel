@@ -38,34 +38,28 @@ public class HealthCheckServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Root /health — instant response, NO network I/O.
+     *
+     * Render's health check calls this URL to decide if the container is alive.
+     * It must respond in under 50 ms without triggering DB or API connections.
+     *
+     * For deep dependency checks use:
+     *   GET /health/db       — tests MySQL
+     *   GET /health/payment  — tests Razorpay reachability
+     *   GET /health/email    — tests SMTP reachability
+     *   GET /health/sms      — tests Twilio reachability
+     */
     private void handleOverallHealth(HttpServletResponse resp) throws IOException {
-        boolean dbOk = checkDb();
-        boolean paymentOk = checkNetwork("api.razorpay.com", 443);
-        boolean emailOk = checkSmtp();
-        boolean smsOk = checkNetwork("api.twilio.com", 443);
-
-        boolean overallOk = dbOk && paymentOk;
-        int httpStatus = overallOk ? HttpServletResponse.SC_OK : HttpServletResponse.SC_SERVICE_UNAVAILABLE;
-        resp.setStatus(httpStatus);
-
+        resp.setStatus(HttpServletResponse.SC_OK);
         PrintWriter out = resp.getWriter();
-        out.write(String.format(
-            "{\n" +
-            "  \"status\": \"%s\",\n" +
-            "  \"checks\": {\n" +
-            "    \"database\": \"%s\",\n" +
-            "    \"payment_gateway\": \"%s\",\n" +
-            "    \"email_server\": \"%s\",\n" +
-            "    \"sms_gateway\": \"%s\"\n" +
-            "  }\n" +
-            "}",
-            overallOk ? "UP" : "DOWN",
-            dbOk ? "UP" : "DOWN",
-            paymentOk ? "UP" : "DOWN",
-            emailOk ? "UP" : "DOWN",
-            smsOk ? "UP" : "DOWN"
-        ));
+        out.write("{\n" +
+            "  \"status\": \"UP\",\n" +
+            "  \"service\": \"voyastra\",\n" +
+            "  \"note\": \"For deep checks use /health/db /health/payment /health/email /health/sms\"\n" +
+            "}");
     }
+
 
     private void handleDbHealth(HttpServletResponse resp) throws IOException {
         boolean ok = checkDb();

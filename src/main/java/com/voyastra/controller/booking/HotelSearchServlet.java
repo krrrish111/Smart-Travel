@@ -26,7 +26,7 @@ import java.util.List;
 public class HotelSearchServlet extends HttpServlet {
     private HotelDAO hotelDAO = new HotelDAO();
     private SearchHistoryDAO historyDAO = new SearchHistoryDAO();
-    private GoogleMapService googleMapService = new GoogleMapService();
+    private volatile GoogleMapService googleMapService = null;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -94,6 +94,13 @@ public class HotelSearchServlet extends HttpServlet {
         // Fetch API Dynamic Hotels using Google Places
         List<Hotel> apiHotels = new ArrayList<>();
         if (!city.isEmpty()) {
+            if (googleMapService == null) {
+                synchronized (this) {
+                    if (googleMapService == null) {
+                        googleMapService = new GoogleMapService();
+                    }
+                }
+            }
             JsonObject googleRes = googleMapService.getHotelsForDestination(city);
             if ("OK".equals(googleRes.get("status").getAsString())) {
                 JsonArray places = googleRes.getAsJsonArray("hotels");

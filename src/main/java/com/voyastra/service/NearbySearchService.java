@@ -20,9 +20,7 @@ public class NearbySearchService {
     private final String apiKey;
 
     public NearbySearchService() {
-        this.httpClient = HttpClient.newBuilder()
-                .connectTimeout(Duration.ofSeconds(10))
-                .build();
+        this.httpClient = com.voyastra.util.HttpClientFactory.get();
         this.apiKey = ConfigManager.get("GOOGLE_PLACES_API_KEY");
     }
 

@@ -1,14 +1,19 @@
 package com.voyastra.listener;
 
-import com.voyastra.util.DBConnection;
 import com.voyastra.config.ConfigManager;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Prints a startup summary banner WITHOUT performing any blocking I/O.
+ *
+ * PRODUCTION RULE: contextInitialized() must never open a DB connection,
+ * SMTP socket, or any external network call. Those block Tomcat startup.
+ * Live checks are deferred to the /health/* endpoints which are called
+ * on-demand after the server is already accepting traffic.
+ */
 public class StartupObserverListener implements ServletContextListener {
 
     private static final Logger logger = LoggerFactory.getLogger(StartupObserverListener.class);
@@ -16,62 +21,67 @@ public class StartupObserverListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         long startTime = System.currentTimeMillis();
-        
-        // 1. Gather Java and Container Versions
-        String javaVersion = System.getProperty("java.version");
+
+        // ── 1. Gather environment metadata (no I/O) ──────────────────────────
+        String javaVersion   = System.getProperty("java.version", "unknown");
         String tomcatVersion = sce.getServletContext().getServerInfo();
-        String appVersion = "1.0-SNAPSHOT";
-        String gitCommit = "N/A";
-        
-        // Try to retrieve git commit hash
-        try {
-            java.util.Scanner s = new java.util.Scanner(Runtime.getRuntime().exec("git rev-parse --short HEAD").getInputStream()).useDelimiter("\\A");
-            if (s.hasNext()) {
-                gitCommit = s.next().trim();
-            }
-        } catch (Exception ignored) {}
+        String appVersion    = "1.0-SNAPSHOT";
 
-        // 2. Validate DB connection
-        String dbInfo = "DISCONNECTED";
-        try (Connection conn = DBConnection.getConnection()) {
-            DatabaseMetaData meta = conn.getMetaData();
-            dbInfo = meta.getDatabaseProductName() + " " + meta.getDatabaseProductVersion() + " @ " + meta.getURL();
-        } catch (Exception e) {
-            dbInfo = "ERROR: " + e.getMessage();
-        }
+        // ── 2. API key presence check (no network calls) ──────────────────────
+        // We only verify that keys are configured — actual connectivity is
+        // checked lazily via /health/db, /health/payment, /health/email, /health/sms
+        String razorpayStatus      = isConfigured("RAZORPAY_KEY")         ? "CONFIGURED" : "NOT CONFIGURED";
+        String travelpayoutsStatus = isConfigured("TRAVELPAYOUTS_TOKEN")  ? "CONFIGURED" : "NOT CONFIGURED";
+        String emailStatus         = isConfigured("SMTP_HOST")            ? "CONFIGURED" : "NOT CONFIGURED";
+        String smsStatus           = isConfigured("TWILIO_SID")           ? "CONFIGURED" : "NOT CONFIGURED";
+        String dbStatus            = (isConfigured("DB_URL") || isConfigured("DB_HOST"))
+                                     ? "CONFIGURED (connection deferred to first request)"
+                                     : "NOT CONFIGURED — application will fail on first DB request!";
 
-        // 3. API Integrations check
-        String razorpayStatus = (ConfigManager.get("RAZORPAY_KEY_ID") != null) ? "ENABLED" : "DISABLED";
-        String travelpayoutsStatus = (ConfigManager.get("TRAVELPAYOUTS_TOKEN") != null) ? "ENABLED" : "DISABLED";
-        String emailStatus = (ConfigManager.get("SMTP_HOST") != null) ? "ENABLED" : "DISABLED";
-        String smsStatus = (ConfigManager.get("TWILIO_ACCOUNT_SID") != null) ? "ENABLED" : "DISABLED";
+        long elapsed = System.currentTimeMillis() - startTime;
 
-        long startupDuration = System.currentTimeMillis() - startTime;
-
-        // Print Structured Console Box
+        // ── 3. Print banner ───────────────────────────────────────────────────
         System.out.println("\n" +
             "==================================================\n" +
-            "              VOYASTRA STARTUP SUMMARY            \n" +
+            "         VOYASTRA STARTUP SUMMARY                 \n" +
             "==================================================\n" +
-            "Application Version : " + appVersion + "\n" +
-            "Git Commit          : " + gitCommit + "\n" +
-            "Java Version        : " + javaVersion + "\n" +
-            "Tomcat Version      : " + tomcatVersion + "\n" +
-            "Database            : " + dbInfo + "\n" +
-            "Connected APIs:\n" +
-            "  - Razorpay        : " + razorpayStatus + "\n" +
-            "  - Travelpayouts   : " + travelpayoutsStatus + "\n" +
-            "  - SMTP Email      : " + emailStatus + "\n" +
-            "  - Twilio SMS      : " + smsStatus + "\n" +
-            "Startup Time        : " + startupDuration + " ms\n" +
+            "Application Version : " + appVersion       + "\n" +
+            "Java Version        : " + javaVersion      + "\n" +
+            "Tomcat Version      : " + tomcatVersion     + "\n" +
+            "Database            : " + dbStatus          + "\n" +
+            "Connected APIs (key presence only — live checks via /health/*):\n" +
+            "  - Razorpay        : " + razorpayStatus      + "\n" +
+            "  - Travelpayouts   : " + travelpayoutsStatus  + "\n" +
+            "  - SMTP Email      : " + emailStatus          + "\n" +
+            "  - Twilio SMS      : " + smsStatus            + "\n" +
+            "Listener Init Time  : " + elapsed + " ms  (no blocking I/O)\n" +
             "==================================================\n"
         );
-        
-        logger.info("[STARTUP] Voyastra initialization summary printed successfully.");
+
+        logger.info("[STARTUP] StartupObserverListener initialized in {} ms (no DB connection opened).", elapsed);
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        // Cleanup resources
+        logger.info("[SHUTDOWN] Starting resource cleanup in StartupObserverListener...");
+        
+        // Shut down shared HttpClient to stop the SelectorManager threads
+        com.voyastra.util.HttpClientFactory.shutdown();
+        
+        // Shut down HikariCP DB connection pool
+        com.voyastra.util.DBConnection.shutdown();
+        
+        // Shut down EmailService executor service
+        com.voyastra.util.EmailService.shutdown();
+        
+        // Shut down SMSService executor service
+        com.voyastra.util.SMSService.shutdown();
+        
+        logger.info("[SHUTDOWN] StartupObserverListener resource cleanup completed.");
+    }
+
+    private static boolean isConfigured(String key) {
+        String val = ConfigManager.get(key);
+        return val != null && !val.trim().isEmpty();
     }
 }

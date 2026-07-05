@@ -23,31 +23,6 @@ public class SchemaBootstrap implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        long begin = com.voyastra.util.StartupProfiler.mark("SchemaBootstrap Initialization");
-        try {
-            System.out.println("=================================");
-            System.out.println("VOYASTRA STARTUP VERIFICATION");
-            
-            // 1. Directories Auto-Creation & Writable Verification
-        String[] requiredDirs = {
-            com.voyastra.config.ConfigManager.get("UPLOAD_DIR", "/var/voyastra/uploads"),
-            "/var/voyastra/tickets",
-            "/var/voyastra/pdfs",
-            "/usr/local/tomcat/logs"
-        };
-        for (String dirPath : requiredDirs) {
-            java.io.File dir = new java.io.File(dirPath);
-            if (!dir.exists()) {
-                boolean created = dir.mkdirs();
-                System.out.println("[Startup] Directory " + dirPath + " created: " + created);
-            }
-            if (!dir.canWrite()) {
-                System.err.println("[Startup ERROR] Directory is not writable: " + dirPath);
-            } else {
-                System.out.println("[Startup] Directory " + dirPath + " is writable.");
-            }
-        }
-
         String skipBootstrap = System.getenv("SKIP_SCHEMA_BOOTSTRAP");
         if (skipBootstrap == null) {
             skipBootstrap = System.getProperty("SKIP_SCHEMA_BOOTSTRAP");
@@ -59,9 +34,34 @@ public class SchemaBootstrap implements ServletContextListener {
         if ("true".equalsIgnoreCase(skipBootstrap)) {
             logger.info("[SchemaBootstrap] Production mode. Bootstrap skipped.");
             System.out.println("[SchemaBootstrap] Production mode. Bootstrap skipped.");
-            com.voyastra.util.StartupProfiler.duration("SchemaBootstrap Initialization", begin);
             return;
         }
+
+        long begin = com.voyastra.util.StartupProfiler.mark("SchemaBootstrap Initialization");
+        try {
+            System.out.println("=================================");
+            System.out.println("VOYASTRA STARTUP VERIFICATION");
+            
+            // 1. Directories Auto-Creation & Writable Verification
+            String[] requiredDirs = {
+                com.voyastra.config.ConfigManager.get("UPLOAD_DIR", "/var/voyastra/uploads"),
+                "/var/voyastra/tickets",
+                "/var/voyastra/pdfs",
+                "/usr/local/tomcat/logs"
+            };
+            for (String dirPath : requiredDirs) {
+                java.io.File dir = new java.io.File(dirPath);
+                if (!dir.exists()) {
+                    boolean created = dir.mkdirs();
+                    System.out.println("[Startup] Directory " + dirPath + " created: " + created);
+                }
+                if (!dir.canWrite()) {
+                    System.err.println("[Startup ERROR] Directory is not writable: " + dirPath);
+                } else {
+                    System.out.println("[Startup] Directory " + dirPath + " is writable.");
+                }
+            }
+
 
         // 2. Database Connection
         try (Connection conn = DBConnection.getConnection()) {

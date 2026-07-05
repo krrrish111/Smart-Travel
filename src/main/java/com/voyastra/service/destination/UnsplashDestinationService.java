@@ -18,9 +18,7 @@ public class UnsplashDestinationService {
 
     public UnsplashDestinationService() {
         this.apiKey = com.voyastra.config.ConfigManager.get("UNSPLASH_ACCESS_KEY");
-        this.httpClient = HttpClient.newBuilder()
-            .connectTimeout(Duration.ofSeconds(10))
-            .build();
+        this.httpClient = com.voyastra.util.HttpClientFactory.get();
     }
 
     public String searchPhotos(String destination, int count) {

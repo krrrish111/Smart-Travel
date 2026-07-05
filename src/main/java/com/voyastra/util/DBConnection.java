@@ -135,7 +135,7 @@ public class DBConnection {
                     // initializationFailTimeout=-1: pool creation succeeds even if DB is
                     // unreachable at startup. First getConnection() will block/fail normally.
                     config.setInitializationFailTimeout(-1);
-                    config.setConnectionTimeout(30000);
+                    config.setConnectionTimeout(2000);
                     config.setValidationTimeout(5000);
                     config.setKeepaliveTime(60000);
                     

@@ -35,14 +35,15 @@ RUN mkdir -p /var/voyastra/uploads && \
     useradd -r -g tomcat -d /usr/local/tomcat -s /sbin/nologin tomcat && \
     chown -R tomcat:tomcat /usr/local/tomcat /var/voyastra/uploads && \
     sed -i '/tomcat.util.scan.StandardJarScanFilter.jarsToSkip=/a \
-twilio-*.jar,jackson-*.jar,itextpdf-*.jar,mysql-*.jar,gson-*.jar,jbcrypt-*.jar,HikariCP-*.jar,mail-*.jar,jakarta.mail-*.jar,slf4j-*.jar,guava-*.jar,httpclient-*.jar,httpcore-*.jar,commons-*.jar,jjwt-*.jar,jakarta.activation-*.jar,\\' /usr/local/tomcat/conf/catalina.properties
+twilio-*.jar,jackson-*.jar,itextpdf-*.jar,mysql-*.jar,gson-*.jar,jbcrypt-*.jar,HikariCP-*.jar,mail-*.jar,jakarta.mail-*.jar,slf4j-*.jar,guava-*.jar,httpclient-*.jar,httpcore-*.jar,commons-*.jar,jjwt-*.jar,jakarta.activation-*.jar,\\' /usr/local/tomcat/conf/catalina.properties && \
+    sed -i 's/port="8080"/port="${port.http:8080}"/g' /usr/local/tomcat/conf/server.xml && \
+    sed -i 's/port="8005"/port="-1"/g' /usr/local/tomcat/conf/server.xml
 
 # 5. Copy entrypoint
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
-# 6. Expose default Tomcat HTTP port
-EXPOSE 8080
+# 6. Expose instruction removed to allow Render to dynamically detect port from PORT environment variable.
 
 # 7. Environment variable defaults
 ENV UPLOAD_DIR=/var/voyastra/uploads \

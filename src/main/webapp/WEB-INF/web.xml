@@ -8,13 +8,13 @@
 
     <!-- Listeners -->
     <listener>
+        <listener-class>com.voyastra.listener.StartupObserverListener</listener-class>
+    </listener>
+    <listener>
         <listener-class>com.voyastra.util.ActiveSessionListener</listener-class>
     </listener>
     <listener>
         <listener-class>com.voyastra.util.SchemaBootstrap</listener-class>
-    </listener>
-    <listener>
-        <listener-class>com.voyastra.listener.StartupObserverListener</listener-class>
     </listener>
 
     <!-- Filters -->
@@ -42,6 +42,70 @@
         <filter-name>SecurityFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+    <filter>
+        <filter-name>AuthenticationFilter</filter-name>
+        <filter-class>com.voyastra.filter.AuthenticationFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/destination/customize</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/pages/profile.jsp</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/destination/confirmation</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/pages/destination-review.jsp</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/pages/trip-review.jsp</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/pages/destination-customize.jsp</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/destination/payment</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/pages/journey/my-journey.jsp</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/destination/review</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/pages/trip-checkout.jsp</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/pages/destination-confirmation.jsp</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/destination/booking</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/api/destination/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/pages/destination-booking.jsp</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/trip-payment</url-pattern>
+    </filter-mapping>
 
     <!-- Session Configuration -->
     <session-config>
@@ -52,6 +116,7 @@
             <max-age>1800</max-age> <!-- 30 mins -->
         </cookie-config>
         <tracking-mode>COOKIE</tracking-mode>
+    
     
     </session-config>
 
@@ -70,6 +135,34 @@
     </error-page>
 
     <!-- Servlets -->
+    <servlet>
+        <servlet-name>AIBuddyServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.AIBuddyServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AIBuddyServlet</servlet-name>
+        <url-pattern>/api/ai-buddy</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ActivityPaymentServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.payment.ActivityPaymentServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ActivityPaymentServlet</servlet-name>
+        <url-pattern>/api/experience/payment-callback</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ActivityServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.ActivityServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ActivityServlet</servlet-name>
+        <url-pattern>/admin/api/activities</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ActivityServlet</servlet-name>
+        <url-pattern>/activities</url-pattern>
+    </servlet-mapping>
     <servlet>
         <servlet-name>AddHotelReviewServlet</servlet-name>
         <servlet-class>com.voyastra.controller.booking.AddHotelReviewServlet</servlet-class>
@@ -143,6 +236,14 @@
         <url-pattern>/admin/content</url-pattern>
     </servlet-mapping>
     <servlet>
+        <servlet-name>AdminContentServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.admin.AdminContentServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AdminContentServlet</servlet-name>
+        <url-pattern>/admin/content-api</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>AdminDashboard</servlet-name>
         <jsp-file>/admin/index.jsp</jsp-file>
     </servlet>
@@ -152,7 +253,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>AdminDashboard</servlet-name>
-        <url-pattern>/admin/index</url-pattern>
+        <url-pattern>/admin</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>AdminDashboard</servlet-name>
@@ -160,7 +261,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>AdminDashboard</servlet-name>
-        <url-pattern>/admin</url-pattern>
+        <url-pattern>/admin/index</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>AdminDestinations</servlet-name>
@@ -171,12 +272,28 @@
         <url-pattern>/admin/destinations</url-pattern>
     </servlet-mapping>
     <servlet>
+        <servlet-name>AdminLogServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.admin.AdminLogServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AdminLogServlet</servlet-name>
+        <url-pattern>/admin/api/logs</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>AdminLogs</servlet-name>
         <jsp-file>/admin/logs.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>AdminLogs</servlet-name>
         <url-pattern>/admin/logs</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>AdminPaymentServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.admin.AdminPaymentServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AdminPaymentServlet</servlet-name>
+        <url-pattern>/admin/payments-api</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>AdminPayments</servlet-name>
@@ -227,6 +344,14 @@
         <url-pattern>/admin/settings</url-pattern>
     </servlet-mapping>
     <servlet>
+        <servlet-name>AdminSettingsServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.admin.AdminSettingsServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AdminSettingsServlet</servlet-name>
+        <url-pattern>/admin/settings-api</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>AdminSystemHealthServlet</servlet-name>
         <servlet-class>com.voyastra.controller.admin.AdminSystemHealthServlet</servlet-class>
     </servlet>
@@ -249,6 +374,30 @@
     <servlet-mapping>
         <servlet-name>AdminUsers</servlet-name>
         <url-pattern>/admin/users</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>AirportServicesServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.travelcenter.AirportServicesServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AirportServicesServlet</servlet-name>
+        <url-pattern>/travel-center/airport-services</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ApplyCouponServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.booking.ApplyCouponServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ApplyCouponServlet</servlet-name>
+        <url-pattern>/api/apply-coupon</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>AttractionServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.AttractionServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AttractionServlet</servlet-name>
+        <url-pattern>/api/nearby/attractions</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>BookingConfirmationServlet</servlet-name>
@@ -283,6 +432,22 @@
         <url-pattern>/book</url-pattern>
     </servlet-mapping>
     <servlet>
+        <servlet-name>BusBookingServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.transport.BusBookingServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>BusBookingServlet</servlet-name>
+        <url-pattern>/transport/bus/booking</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>BusConfirmationServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.transport.BusConfirmationServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>BusConfirmationServlet</servlet-name>
+        <url-pattern>/transport/bus/confirmation</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>BusDetailsServlet</servlet-name>
         <servlet-class>com.voyastra.controller.transport.BusDetailsServlet</servlet-class>
     </servlet>
@@ -299,12 +464,48 @@
         <url-pattern>/bus/download-ticket</url-pattern>
     </servlet-mapping>
     <servlet>
+        <servlet-name>BusPaymentServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.transport.BusPaymentServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>BusPaymentServlet</servlet-name>
+        <url-pattern>/transport/bus/payment</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BusPaymentServlet</servlet-name>
+        <url-pattern>/transport/bus/payment-callback</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>BusServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.transport.BusServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>BusServlet</servlet-name>
+        <url-pattern>/transport/bus/search</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>BusTicketServlet</servlet-name>
         <servlet-class>com.voyastra.controller.transport.BusTicketServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>BusTicketServlet</servlet-name>
         <url-pattern>/bus/ticket</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>CabBookingServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.transport.CabBookingServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CabBookingServlet</servlet-name>
+        <url-pattern>/transport/cab/booking</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>CabConfirmationServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.transport.CabConfirmationServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CabConfirmationServlet</servlet-name>
+        <url-pattern>/transport/cab/confirmation</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>CabDetailsServlet</servlet-name>
@@ -323,12 +524,56 @@
         <url-pattern>/cab/download-ticket</url-pattern>
     </servlet-mapping>
     <servlet>
+        <servlet-name>CabPaymentServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.transport.CabPaymentServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CabPaymentServlet</servlet-name>
+        <url-pattern>/transport/cab/payment-callback</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CabPaymentServlet</servlet-name>
+        <url-pattern>/transport/cab/payment</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>CabServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.transport.CabServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CabServlet</servlet-name>
+        <url-pattern>/transport/cab/search</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>CabTicketServlet</servlet-name>
         <servlet-class>com.voyastra.controller.transport.CabTicketServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>CabTicketServlet</servlet-name>
         <url-pattern>/cab/ticket</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>CancelBookingServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.destination.CancelBookingServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CancelBookingServlet</servlet-name>
+        <url-pattern>/api/destination/booking/cancel</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>CarBookingServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.transport.CarBookingServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CarBookingServlet</servlet-name>
+        <url-pattern>/transport/car/booking</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>CarConfirmationServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.transport.CarConfirmationServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CarConfirmationServlet</servlet-name>
+        <url-pattern>/transport/car/confirmation</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>CarDetailsServlet</servlet-name>
@@ -345,6 +590,26 @@
     <servlet-mapping>
         <servlet-name>CarDownloadTicketServlet</servlet-name>
         <url-pattern>/car/download-ticket</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>CarPaymentServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.transport.CarPaymentServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CarPaymentServlet</servlet-name>
+        <url-pattern>/transport/car/payment-callback</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CarPaymentServlet</servlet-name>
+        <url-pattern>/transport/car/payment</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>CarServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.transport.CarServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CarServlet</servlet-name>
+        <url-pattern>/transport/car/search</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>CarTicketServlet</servlet-name>
@@ -371,6 +636,14 @@
         <url-pattern>/command-center</url-pattern>
     </servlet-mapping>
     <servlet>
+        <servlet-name>CommentServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.community.CommentServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CommentServlet</servlet-name>
+        <url-pattern>/community/post/comment</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>CommunityServlet</servlet-name>
         <servlet-class>com.voyastra.controller.community.CommunityServlet</servlet-class>
     </servlet>
@@ -395,12 +668,36 @@
         <url-pattern>/confirmation</url-pattern>
     </servlet-mapping>
     <servlet>
+        <servlet-name>CreatePostServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.community.CreatePostServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CreatePostServlet</servlet-name>
+        <url-pattern>/community/post/create</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>CreatorHub</servlet-name>
         <jsp-file>/pages/community/creator-hub.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>CreatorHub</servlet-name>
         <url-pattern>/community/creator-hub</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>CruiseBookingServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.transport.CruiseBookingServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CruiseBookingServlet</servlet-name>
+        <url-pattern>/transport/cruise/booking</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>CruiseConfirmationServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.transport.CruiseConfirmationServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CruiseConfirmationServlet</servlet-name>
+        <url-pattern>/transport/cruise/confirmation</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>CruiseDetailsServlet</servlet-name>
@@ -419,6 +716,26 @@
         <url-pattern>/cruise/download-ticket</url-pattern>
     </servlet-mapping>
     <servlet>
+        <servlet-name>CruisePaymentServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.transport.CruisePaymentServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CruisePaymentServlet</servlet-name>
+        <url-pattern>/transport/cruise/payment</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CruisePaymentServlet</servlet-name>
+        <url-pattern>/transport/cruise/payment-callback</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>CruiseServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.transport.CruiseServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CruiseServlet</servlet-name>
+        <url-pattern>/transport/cruise/search</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>CruiseTicketServlet</servlet-name>
         <servlet-class>com.voyastra.controller.transport.CruiseTicketServlet</servlet-class>
     </servlet>
@@ -427,12 +744,20 @@
         <url-pattern>/cruise/ticket</url-pattern>
     </servlet-mapping>
     <servlet>
+        <servlet-name>CustomizeTripServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.planner.CustomizeTripServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CustomizeTripServlet</servlet-name>
+        <url-pattern>/trip/customize</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>DashboardServlet</servlet-name>
         <servlet-class>com.voyastra.controller.DashboardServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>DashboardServlet</servlet-name>
-        <url-pattern>/dashboard</url-pattern>
+        <url-pattern>/dashboard.jsp</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>DashboardServlet</servlet-name>
@@ -440,7 +765,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>DashboardServlet</servlet-name>
-        <url-pattern>/dashboard.jsp</url-pattern>
+        <url-pattern>/dashboard</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>DebugServlet</servlet-name>
@@ -457,6 +782,14 @@
     <servlet-mapping>
         <servlet-name>DeletePlanServlet</servlet-name>
         <url-pattern>/deletePlan</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>DeletePostServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.community.DeletePostServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeletePostServlet</servlet-name>
+        <url-pattern>/community/post/delete</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>DeleteStoryServlet</servlet-name>
@@ -499,12 +832,48 @@
         <url-pattern>/destination/details</url-pattern>
     </servlet-mapping>
     <servlet>
+        <servlet-name>DestinationExplorerServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.destination.DestinationExplorerServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DestinationExplorerServlet</servlet-name>
+        <url-pattern>/experiences</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>DestinationItineraryServlet</servlet-name>
         <servlet-class>com.voyastra.controller.destination.DestinationItineraryServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>DestinationItineraryServlet</servlet-name>
         <url-pattern>/destination/itinerary</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>DestinationMediaServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.destination.DestinationMediaServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DestinationMediaServlet</servlet-name>
+        <url-pattern>/api/explore/media</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>DestinationPaymentServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.destination.DestinationPaymentServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DestinationPaymentServlet</servlet-name>
+        <url-pattern>/destination/payment</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DestinationPaymentServlet</servlet-name>
+        <url-pattern>/api/destination/payment/create</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>DestinationPaymentValidateServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.destination.DestinationPaymentValidateServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DestinationPaymentValidateServlet</servlet-name>
+        <url-pattern>/api/destination/payment/validate</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>DestinationReviewServlet</servlet-name>
@@ -515,6 +884,22 @@
         <url-pattern>/destination/review</url-pattern>
     </servlet-mapping>
     <servlet>
+        <servlet-name>DestinationSearchServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.destination.DestinationSearchServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DestinationSearchServlet</servlet-name>
+        <url-pattern>/api/explore/search</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>DestinationServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.destination.DestinationServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DestinationServlet</servlet-name>
+        <url-pattern>/destinations</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>DiscoverServlet</servlet-name>
         <servlet-class>com.voyastra.controller.community.DiscoverServlet</servlet-class>
     </servlet>
@@ -523,12 +908,72 @@
         <url-pattern>/community/discover</url-pattern>
     </servlet-mapping>
     <servlet>
+        <servlet-name>EditBookingServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.destination.EditBookingServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>EditBookingServlet</servlet-name>
+        <url-pattern>/api/destination/booking/edit</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>EsimServlet</servlet-name>
         <servlet-class>com.voyastra.controller.travelcenter.EsimServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>EsimServlet</servlet-name>
         <url-pattern>/travel-center/esim</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ExperienceBookingServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.booking.ExperienceBookingServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ExperienceBookingServlet</servlet-name>
+        <url-pattern>/api/experience/book</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ExperienceDetailsServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.ExperienceDetailsServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ExperienceDetailsServlet</servlet-name>
+        <url-pattern>/experience/details</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ExperienceServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.ExperienceServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ExperienceServlet</servlet-name>
+        <url-pattern>/api/nearby/experiences</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ExperiencesDebugServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.ExperiencesDebugServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ExperiencesDebugServlet</servlet-name>
+        <url-pattern>/experiences-debug</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ExperiencesDebugServlet</servlet-name>
+        <url-pattern>/api/experiences/debug</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ExperiencesServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.experience.ExperiencesServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ExperiencesServlet</servlet-name>
+        <url-pattern>/old-experiences</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ExploreServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.ExploreServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ExploreServlet</servlet-name>
+        <url-pattern>/explore</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>FinancialDashboardServlet</servlet-name>
@@ -587,6 +1032,14 @@
         <url-pattern>/travel-center/forex</url-pattern>
     </servlet-mapping>
     <servlet>
+        <servlet-name>ForgotPasswordServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.auth.ForgotPasswordServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ForgotPasswordServlet</servlet-name>
+        <url-pattern>/forgot-password</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>GeneratePlanServlet</servlet-name>
         <servlet-class>com.voyastra.controller.GeneratePlanServlet</servlet-class>
     </servlet>
@@ -611,6 +1064,14 @@
         <url-pattern>/google-login</url-pattern>
     </servlet-mapping>
     <servlet>
+        <servlet-name>GooglePlacesServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.destination.GooglePlacesServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GooglePlacesServlet</servlet-name>
+        <url-pattern>/api/places/autocomplete</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>GuidesServlet</servlet-name>
         <servlet-class>com.voyastra.controller.community.GuidesServlet</servlet-class>
     </servlet>
@@ -618,7 +1079,82 @@
         <servlet-name>GuidesServlet</servlet-name>
         <url-pattern>/community/guides</url-pattern>
     </servlet-mapping>
-
+    <servlet>
+        <servlet-name>HealthCheckServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.monitoring.HealthCheckServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>HealthCheckServlet</servlet-name>
+        <url-pattern>/health</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>HealthCheckServlet</servlet-name>
+        <url-pattern>/voyastra/health</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>HealthCheckServlet</servlet-name>
+        <url-pattern>/health/*</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>HelicopterBookingServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.transport.HelicopterBookingServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>HelicopterBookingServlet</servlet-name>
+        <url-pattern>/transport/helicopter/booking</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>HelicopterConfirmationServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.transport.HelicopterConfirmationServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>HelicopterConfirmationServlet</servlet-name>
+        <url-pattern>/transport/helicopter/confirmation</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>HelicopterDetailsServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.transport.HelicopterDetailsServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>HelicopterDetailsServlet</servlet-name>
+        <url-pattern>/helicopter/details</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>HelicopterDownloadTicketServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.transport.HelicopterDownloadTicketServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>HelicopterDownloadTicketServlet</servlet-name>
+        <url-pattern>/helicopter/download-ticket</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>HelicopterPaymentServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.transport.HelicopterPaymentServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>HelicopterPaymentServlet</servlet-name>
+        <url-pattern>/transport/helicopter/payment-callback</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>HelicopterPaymentServlet</servlet-name>
+        <url-pattern>/transport/helicopter/payment</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>HelicopterServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.transport.HelicopterServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>HelicopterServlet</servlet-name>
+        <url-pattern>/transport/helicopter/search</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>HelicopterTicketServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.transport.HelicopterTicketServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>HelicopterTicketServlet</servlet-name>
+        <url-pattern>/helicopter/ticket</url-pattern>
+    </servlet-mapping>
     <servlet>
         <servlet-name>HiddenGemsServlet</servlet-name>
         <servlet-class>com.voyastra.controller.community.HiddenGemsServlet</servlet-class>
@@ -626,6 +1162,22 @@
     <servlet-mapping>
         <servlet-name>HiddenGemsServlet</servlet-name>
         <url-pattern>/community/hidden-gems</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>HomeServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.HomeServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>HomeServlet</servlet-name>
+        <url-pattern>/home</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>HomeServlet</servlet-name>
+        <url-pattern>/index.jsp</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>HomeServlet</servlet-name>
+        <url-pattern>/index</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>HotelCheckoutServlet</servlet-name>
@@ -668,6 +1220,22 @@
         <url-pattern>/hotel-details</url-pattern>
     </servlet-mapping>
     <servlet>
+        <servlet-name>HotelPaymentFailureServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.booking.HotelPaymentFailureServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>HotelPaymentFailureServlet</servlet-name>
+        <url-pattern>/hotel-payment-failure</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>HotelPaymentServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.booking.HotelPaymentServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>HotelPaymentServlet</servlet-name>
+        <url-pattern>/process-hotel-payment</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>HotelReviewServlet</servlet-name>
         <servlet-class>com.voyastra.controller.booking.HotelReviewServlet</servlet-class>
     </servlet>
@@ -682,6 +1250,14 @@
     <servlet-mapping>
         <servlet-name>HotelSearchServlet</servlet-name>
         <url-pattern>/hotels</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>HotelServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.booking.HotelServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>HotelServlet</servlet-name>
+        <url-pattern>/api/nearby/hotels</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>HotelTicketServlet</servlet-name>
@@ -706,6 +1282,14 @@
     <servlet-mapping>
         <servlet-name>HotelWishlistServlet</servlet-name>
         <url-pattern>/toggle-wishlist</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ImageServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.ImageServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ImageServlet</servlet-name>
+        <url-pattern>/uploads/*</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>InsuranceServlet</servlet-name>
@@ -740,6 +1324,22 @@
         <url-pattern>/itinerary</url-pattern>
     </servlet-mapping>
     <servlet>
+        <servlet-name>LikePostServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.community.LikePostServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LikePostServlet</servlet-name>
+        <url-pattern>/community/post/like</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>LikeServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.community.LikeServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LikeServlet</servlet-name>
+        <url-pattern>/api/like</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>LocalGuidesServlet</servlet-name>
         <servlet-class>com.voyastra.controller.experience.LocalGuidesServlet</servlet-class>
     </servlet>
@@ -764,6 +1364,14 @@
         <url-pattern>/logout</url-pattern>
     </servlet-mapping>
     <servlet>
+        <servlet-name>MyJourneyApiServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.api.MyJourneyApiServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MyJourneyApiServlet</servlet-name>
+        <url-pattern>/api/journey/*</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>MyJourneyServlet</servlet-name>
         <servlet-class>com.voyastra.controller.journey.MyJourneyServlet</servlet-class>
     </servlet>
@@ -778,6 +1386,98 @@
     <servlet-mapping>
         <servlet-name>NotificationServlet</servlet-name>
         <url-pattern>/notifications</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>PaymentServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.payment.PaymentServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PaymentServlet</servlet-name>
+        <url-pattern>/process-payment</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PaymentServlet</servlet-name>
+        <url-pattern>/payment</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>PlaceDetailsServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.destination.PlaceDetailsServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PlaceDetailsServlet</servlet-name>
+        <url-pattern>/api/places/details</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>PlanServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.PlanServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PlanServlet</servlet-name>
+        <url-pattern>/plans</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>PlannerDebugServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.planner.PlannerDebugServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PlannerDebugServlet</servlet-name>
+        <url-pattern>/api/planner/debug</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>PlannerMapSyncServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.planner.PlannerMapSyncServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PlannerMapSyncServlet</servlet-name>
+        <url-pattern>/api/planner/map-sync</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>PlannerServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.planner.PlannerServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PlannerServlet</servlet-name>
+        <url-pattern>/planner-debug</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PlannerServlet</servlet-name>
+        <url-pattern>/planner-result</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PlannerServlet</servlet-name>
+        <url-pattern>/planner-result.jsp</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PlannerServlet</servlet-name>
+        <url-pattern>/my-plans</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PlannerServlet</servlet-name>
+        <url-pattern>/planner</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ProcessPaymentServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.booking.ProcessPaymentServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ProcessPaymentServlet</servlet-name>
+        <url-pattern>/api/process-payment</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ProfileServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.profile.ProfileServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ProfileServlet</servlet-name>
+        <url-pattern>/profile</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>RazorpayOrderServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.payment.RazorpayOrderServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RazorpayOrderServlet</servlet-name>
+        <url-pattern>/api/razorpay/create-order</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>ReelsServlet</servlet-name>
@@ -804,6 +1504,22 @@
         <url-pattern>/register</url-pattern>
     </servlet-mapping>
     <servlet>
+        <servlet-name>ResetPasswordServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.auth.ResetPasswordServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ResetPasswordServlet</servlet-name>
+        <url-pattern>/reset-password</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>RestaurantServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.RestaurantServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RestaurantServlet</servlet-name>
+        <url-pattern>/api/nearby/restaurants</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>ReviewBookingServlet</servlet-name>
         <servlet-class>com.voyastra.controller.booking.ReviewBookingServlet</servlet-class>
     </servlet>
@@ -820,6 +1536,30 @@
         <url-pattern>/review</url-pattern>
     </servlet-mapping>
     <servlet>
+        <servlet-name>SaveDestinationServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.destination.SaveDestinationServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SaveDestinationServlet</servlet-name>
+        <url-pattern>/api/destination/save</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>SavePostServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.community.SavePostServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SavePostServlet</servlet-name>
+        <url-pattern>/community/post/save</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>SaveTripPlanServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.planner.SaveTripPlanServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SaveTripPlanServlet</servlet-name>
+        <url-pattern>/api/trip/save</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>SearchServlet</servlet-name>
         <servlet-class>com.voyastra.controller.SearchServlet</servlet-class>
     </servlet>
@@ -834,6 +1574,22 @@
     <servlet-mapping>
         <servlet-name>SeatSelectionServlet</servlet-name>
         <url-pattern>/seat-selection</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>SendTicketServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.booking.SendTicketServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SendTicketServlet</servlet-name>
+        <url-pattern>/api/send-ticket</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>SetActiveTripServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.planner.SetActiveTripServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SetActiveTripServlet</servlet-name>
+        <url-pattern>/api/trip/set-active</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>Settings</servlet-name>
@@ -860,6 +1616,14 @@
         <url-pattern>/community/story/list</url-pattern>
     </servlet-mapping>
     <servlet>
+        <servlet-name>StoryCleanupServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.StoryCleanupServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>StoryCleanupServlet</servlet-name>
+        <url-pattern>/community/story/cleanup</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>StoryServlet</servlet-name>
         <servlet-class>com.voyastra.controller.StoryServlet</servlet-class>
     </servlet>
@@ -874,6 +1638,30 @@
     <servlet-mapping>
         <servlet-name>SubmitGenericBookingServlet</servlet-name>
         <url-pattern>/submit-booking</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>TicketServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.booking.TicketServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TicketServlet</servlet-name>
+        <url-pattern>/trip-ticket</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>TrainBookingServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.transport.TrainBookingServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TrainBookingServlet</servlet-name>
+        <url-pattern>/transport/train/booking</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>TrainConfirmationServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.transport.TrainConfirmationServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TrainConfirmationServlet</servlet-name>
+        <url-pattern>/transport/train/confirmation</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>TrainDetailsServlet</servlet-name>
@@ -892,6 +1680,18 @@
         <url-pattern>/train/download-ticket</url-pattern>
     </servlet-mapping>
     <servlet>
+        <servlet-name>TrainPaymentServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.transport.TrainPaymentServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TrainPaymentServlet</servlet-name>
+        <url-pattern>/transport/train/payment-callback</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TrainPaymentServlet</servlet-name>
+        <url-pattern>/transport/train/payment</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>TrainServlet</servlet-name>
         <servlet-class>com.voyastra.controller.transport.TrainServlet</servlet-class>
     </servlet>
@@ -906,6 +1706,14 @@
     <servlet-mapping>
         <servlet-name>TrainTicketServlet</servlet-name>
         <url-pattern>/train/ticket</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>TransportServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.transport.TransportServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TransportServlet</servlet-name>
+        <url-pattern>/transport</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>TravelCenterServlet</servlet-name>
@@ -930,6 +1738,82 @@
     <servlet-mapping>
         <servlet-name>TrendingServlet</servlet-name>
         <url-pattern>/trending</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>TripBookingServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.booking.TripBookingServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TripBookingServlet</servlet-name>
+        <url-pattern>/trip-booking</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>TripBookingSuccessServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.booking.TripBookingSuccessServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TripBookingSuccessServlet</servlet-name>
+        <url-pattern>/api/trip/booking-success</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>TripDetailServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.planner.TripDetailServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TripDetailServlet</servlet-name>
+        <url-pattern>/trip</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>TripGroupsServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.planner.TripGroupsServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TripGroupsServlet</servlet-name>
+        <url-pattern>/trip-groups</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>TripPaymentServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.payment.TripPaymentServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TripPaymentServlet</servlet-name>
+        <url-pattern>/api/razorpay/trip-payment-init</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TripPaymentServlet</servlet-name>
+        <url-pattern>/trip-payment</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>TripReviewServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.planner.TripReviewServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TripReviewServlet</servlet-name>
+        <url-pattern>/trip-confirmation</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>UnsplashServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.UnsplashServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UnsplashServlet</servlet-name>
+        <url-pattern>/api/unsplash/search</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>UpdatePlanServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.UpdatePlanServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UpdatePlanServlet</servlet-name>
+        <url-pattern>/updatePlan</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>UploadStoryServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.UploadStoryServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UploadStoryServlet</servlet-name>
+        <url-pattern>/community/story/upload</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>UserProfile</servlet-name>
@@ -972,45 +1856,26 @@
         <url-pattern>/travel-center/visa</url-pattern>
     </servlet-mapping>
     <servlet>
-        <servlet-name>PaymentServlet</servlet-name>
-        <servlet-class>com.voyastra.controller.payment.PaymentServlet</servlet-class>
+        <servlet-name>WeatherServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.WeatherServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>PaymentServlet</servlet-name>
-        <url-pattern>/payment</url-pattern>
-        <url-pattern>/process-payment</url-pattern>
+        <servlet-name>WeatherServlet</servlet-name>
+        <url-pattern>/api/weather</url-pattern>
     </servlet-mapping>
     <servlet>
-        <servlet-name>ProcessPaymentServlet</servlet-name>
-        <servlet-class>com.voyastra.controller.booking.ProcessPaymentServlet</servlet-class>
+        <servlet-name>YouTubeServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.YouTubeServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>ProcessPaymentServlet</servlet-name>
-        <url-pattern>/api/process-payment</url-pattern>
-    </servlet-mapping>
-    <servlet>
-        <servlet-name>HotelPaymentServlet</servlet-name>
-        <servlet-class>com.voyastra.controller.booking.HotelPaymentServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>HotelPaymentServlet</servlet-name>
-        <url-pattern>/process-hotel-payment</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>HealthCheckServlet</servlet-name>
-        <servlet-class>com.voyastra.controller.monitoring.HealthCheckServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>HealthCheckServlet</servlet-name>
-        <url-pattern>/health</url-pattern>
-        <url-pattern>/health/*</url-pattern>
-        <url-pattern>/voyastra/health</url-pattern>
+        <servlet-name>YouTubeServlet</servlet-name>
+        <url-pattern>/api/youtube/search</url-pattern>
     </servlet-mapping>
 
     <!-- Welcome File List -->
     <welcome-file-list>
         <welcome-file>home</welcome-file>
+    
     
     </welcome-file-list>
 

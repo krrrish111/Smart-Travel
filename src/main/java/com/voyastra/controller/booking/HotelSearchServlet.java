@@ -97,18 +97,27 @@ public class HotelSearchServlet extends HttpServlet {
             JsonObject googleRes = googleMapService.getHotelsForDestination(city);
             if ("OK".equals(googleRes.get("status").getAsString())) {
                 JsonArray places = googleRes.getAsJsonArray("hotels");
+                int apiIndex = 0;
                 for (JsonElement el : places) {
                     JsonObject p = el.getAsJsonObject();
                     Hotel h = new Hotel();
                     h.setName(p.get("name").getAsString());
                     h.setAddress(p.get("address").getAsString());
-                    h.setStartingPrice(150.0); // Dummy price
+                    h.setCity(city);
+                    h.setStartingPrice(150.0 + (apiIndex * 30.0)); // Staggered price
                     h.setRating(p.get("rating").getAsDouble());
                     h.setImageUrl(p.get("photo").getAsString());
+                    // Assign a stable synthetic ID >= 100 so HotelCheckoutServlet
+                    // routes this as a dynamic API hotel instead of a DB lookup.
+                    // Formula: 100 + abs(nameHash) % 9900  → always in [100, 9999]
+                    int syntheticId = 100 + Math.abs(h.getName().hashCode()) % 9900;
+                    h.setId(syntheticId);
                     apiHotels.add(h);
+                    apiIndex++;
                 }
             }
         }
+
         
         // Merge results
         List<Hotel> allHotels = new ArrayList<>();

@@ -618,18 +618,7 @@
         <servlet-name>GuidesServlet</servlet-name>
         <url-pattern>/community/guides</url-pattern>
     </servlet-mapping>
-    <servlet>
-        <servlet-name>HealthServlet</servlet-name>
-        <servlet-class>com.voyastra.controller.HealthServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>HealthServlet</servlet-name>
-        <url-pattern>/health</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>HealthServlet</servlet-name>
-        <url-pattern>/voyastra/health</url-pattern>
-    </servlet-mapping>
+
     <servlet>
         <servlet-name>HiddenGemsServlet</servlet-name>
         <servlet-class>com.voyastra.controller.community.HiddenGemsServlet</servlet-class>
@@ -1016,6 +1005,7 @@
         <servlet-name>HealthCheckServlet</servlet-name>
         <url-pattern>/health</url-pattern>
         <url-pattern>/health/*</url-pattern>
+        <url-pattern>/voyastra/health</url-pattern>
     </servlet-mapping>
 
     <!-- Welcome File List -->

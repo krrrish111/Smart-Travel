@@ -18,7 +18,6 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-@WebServlet({"/health", "/voyastra/health"})
 public class HealthServlet extends HttpServlet {
 
     private static final Logger logger = LoggerFactory.getLogger(HealthServlet.class);

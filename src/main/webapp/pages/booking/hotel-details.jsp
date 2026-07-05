@@ -285,6 +285,16 @@
                             document.getElementById('selectedRoomPrice').innerText = '$' + price + ' / night';
                             document.getElementById('stickySelectionBar').classList.remove('translate-y-full');
                         }
+
+                        // Auto-select the first available room so Continue Booking
+                        // never submits with roomId=-1 or no selection.
+                        (function autoSelectFirstRoom() {
+                            var radios = document.querySelectorAll('input[name="roomId"]');
+                            if (radios.length > 0 && !radios[0].disabled) {
+                                radios[0].checked = true;
+                                radios[0].dispatchEvent(new Event('change'));
+                            }
+                        })();
                     </script>
                 </section>
 

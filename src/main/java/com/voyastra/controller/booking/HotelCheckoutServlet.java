@@ -1,8 +1,8 @@
 package com.voyastra.controller.booking;
 
 import com.voyastra.dao.booking.HotelBookingDAO;
-import java.util.logging.Logger;
-import java.util.logging.Level;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.voyastra.dao.booking.HotelDAO;
 import com.voyastra.model.booking.Hotel;
 import com.voyastra.model.booking.HotelBooking;
@@ -24,7 +24,7 @@ import java.time.temporal.ChronoUnit;
 
 @WebServlet("/hotel-checkout")
 public class HotelCheckoutServlet extends HttpServlet {
-    private static final Logger logger = Logger.getLogger(HotelCheckoutServlet.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(HotelCheckoutServlet.class);
 
     private HotelDAO hotelDAO = new HotelDAO();
     private HotelBookingDAO bookingDAO = new HotelBookingDAO();
@@ -56,38 +56,67 @@ public class HotelCheckoutServlet extends HttpServlet {
             return;
         }
 
-        String hotelIdStr = request.getParameter("hotelId");
-        String roomIdStr = request.getParameter("roomId");
-        String checkInStr = request.getParameter("checkIn");
+        String hotelIdStr  = request.getParameter("hotelId");
+        String roomIdStr   = request.getParameter("roomId");
+        String checkInStr  = request.getParameter("checkIn");
         String checkOutStr = request.getParameter("checkOut");
-        String guestsStr = request.getParameter("guests");
+        String guestsStr   = request.getParameter("guests");
 
         try {
+            // ── Validate required parameters ─────────────────────────────────
+            if (hotelIdStr == null || hotelIdStr.isEmpty()
+                    || roomIdStr  == null || roomIdStr.isEmpty()
+                    || checkInStr  == null || checkInStr.isEmpty()
+                    || checkOutStr == null || checkOutStr.isEmpty()) {
+                logger.warn("[HotelCheckoutServlet] Missing required parameter."
+                        + " hotelId={}, roomId={}, checkIn={}, checkOut={}",
+                        hotelIdStr, roomIdStr, checkInStr, checkOutStr);
+                String backId = (hotelIdStr != null && !hotelIdStr.isEmpty()) ? hotelIdStr : null;
+                redirectToHotelDetails(response, request.getContextPath(), backId,
+                        "Missing booking parameters. Please select a room.");
+                return;
+            }
+
             int hotelId = Integer.parseInt(hotelIdStr);
-            int roomId = Integer.parseInt(roomIdStr);
+            int roomId  = Integer.parseInt(roomIdStr);
+            int guests  = guestsStr != null && !guestsStr.isEmpty() ? Integer.parseInt(guestsStr) : 1;
+
+            // ── Guard: invalid hotel ID ───────────────────────────────────────
+            if (hotelId <= 0) {
+                logger.warn("[HotelCheckoutServlet] Checkout validation failed."
+                        + " hotelId={}, roomId={}, guests={}, checkIn={}, checkOut={}",
+                        hotelId, roomId, guests, checkInStr, checkOutStr);
+                redirectToHotelDetails(response, request.getContextPath(), null,
+                        "Invalid hotel selected (id=" + hotelId + "). Please search again.");
+                return;
+            }
 
             Hotel hotel;
             HotelRoom room;
 
             if (hotelId >= 100) {
-                // Dynamic API hotel â€” reconstruct from parameters
+                // ── Dynamic API hotel: reconstruct from parameters ────────────
                 hotel = new Hotel();
                 hotel.setId(hotelId);
-                hotel.setName(request.getParameter("hotelName") != null ? request.getParameter("hotelName") : "Premium Hotel");
-                hotel.setCity(request.getParameter("city") != null ? request.getParameter("city") : "Dynamic City");
-                hotel.setImageUrl("https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80");
+                hotel.setName(request.getParameter("hotelName") != null
+                        ? request.getParameter("hotelName") : "Premium Hotel");
+                hotel.setCity(request.getParameter("city") != null
+                        ? request.getParameter("city") : "Dynamic City");
+                hotel.setImageUrl("https://images.unsplash.com/photo-1566073771259-6a8506099945"
+                        + "?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80");
                 hotel.setRating(4.8);
 
-                // Reconstruct room from roomId index (0-4 maps to Standardâ€“Luxury Suite)
+                // roomId = hotelId*10 + index; negative roomId → index 0
                 String[] roomTypes = {"Standard", "Deluxe", "Suite", "Executive", "Luxury Suite"};
                 double[] prices    = {120.0, 180.0, 250.0, 350.0, 500.0};
-                String[] bedTypes  = {"1 Queen Bed", "1 King Bed", "1 King Bed & 1 Sofa Bed", "1 King Bed", "2 King Beds"};
-                String[] roomSizes = {"25 mÂ²", "35 mÂ²", "50 mÂ²", "45 mÂ²", "80 mÂ²"};
+                String[] bedTypes  = {"1 Queen Bed", "1 King Bed", "1 King Bed & 1 Sofa Bed",
+                                      "1 King Bed", "2 King Beds"};
+                String[] roomSizes = {"25 m\u00b2", "35 m\u00b2", "50 m\u00b2", "45 m\u00b2", "80 m\u00b2"};
                 int index = (roomId - hotelId * 10);
                 if (index < 0 || index >= roomTypes.length) index = 0;
 
                 room = new HotelRoom();
-                room.setId(roomId);
+                room.setId(roomId >= 0 ? roomId : hotelId * 10); // normalise negative roomId
                 room.setHotelId(hotelId);
                 room.setType(roomTypes[index]);
                 room.setCapacity(index % 2 == 0 ? 2 : 4);
@@ -96,35 +125,51 @@ public class HotelCheckoutServlet extends HttpServlet {
                 room.setRoomSize(roomSizes[index]);
                 room.setFreeCancellation(true);
                 room.setBreakfastIncluded(index > 0);
-                room.setImageUrl("https://images.unsplash.com/photo-1618773928121-c32242e63f39?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80");
+                room.setImageUrl("https://images.unsplash.com/photo-1618773928121-c32242e63f39"
+                        + "?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80");
             } else {
+                // ── Local DB hotel ────────────────────────────────────────────
                 hotel = hotelDAO.getHotelById(hotelId);
                 if (roomId == -1) {
+                    // Fallback room when DB has no rooms for this hotel
                     room = new HotelRoom();
                     room.setId(-1);
                     room.setHotelId(hotelId);
                     room.setType("Standard Double Room");
-                    room.setPricePerNight(hotel != null && hotel.getStartingPrice() > 0 ? hotel.getStartingPrice() : 150);
+                    room.setPricePerNight(hotel != null && hotel.getStartingPrice() > 0
+                            ? hotel.getStartingPrice() : 150);
                     room.setCapacity(2);
                     room.setBedType("1 Double Bed");
-                    room.setRoomSize("30 m²");
+                    room.setRoomSize("30 m\u00b2");
                     room.setFreeCancellation(true);
                     room.setBreakfastIncluded(false);
-                    room.setImageUrl("https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80");
+                    room.setImageUrl("https://images.unsplash.com/photo-1590490360182-c33d57733427"
+                            + "?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80");
                 } else {
-                    room  = hotelDAO.getRoomById(roomId);
+                    room = hotelDAO.getRoomById(roomId);
                 }
                 if (hotel == null || room == null) {
-                    response.sendRedirect(request.getContextPath() + "/");
+                    logger.warn("[HotelCheckoutServlet] Checkout validation failed."
+                            + " hotelId={}, roomId={}, guests={}, checkIn={}, checkOut={}"
+                            + " — hotel={}, room={}",
+                            hotelId, roomId, guests, checkInStr, checkOutStr,
+                            hotel != null ? "found" : "NULL",
+                            room  != null ? "found" : "NULL");
+                    redirectToHotelDetails(response, request.getContextPath(),
+                            String.valueOf(hotelId),
+                            "Hotel or room not found. Please try selecting a room again.");
                     return;
                 }
             }
 
             Date inDoc  = Date.valueOf(checkInStr);
             Date outDoc = Date.valueOf(checkOutStr);
-
             long days   = ChronoUnit.DAYS.between(inDoc.toLocalDate(), outDoc.toLocalDate());
             double total = days * room.getPricePerNight();
+
+            logger.info("[HotelCheckoutServlet] Proceeding to hotel checkout."
+                    + " hotelId={}, roomId={}",
+                    hotelId, roomId);
 
             request.setAttribute("hotel", hotel);
             request.setAttribute("room", room);
@@ -136,11 +181,14 @@ public class HotelCheckoutServlet extends HttpServlet {
 
             request.getRequestDispatcher("/pages/booking/hotel-checkout.jsp").forward(request, response);
         } catch (Exception e) {
-            logger.log(Level.SEVERE, "Exception occurred", e);
+            logger.error("[HotelCheckoutServlet] Unexpected exception during GET."
+                    + " hotelId={}, roomId={}, checkIn={}, checkOut={}.",
+                    hotelIdStr, roomIdStr, checkInStr, checkOutStr, e);
             if (hotelIdStr != null && !hotelIdStr.isEmpty()) {
-                response.sendRedirect(request.getContextPath() + "/hotel-details?id=" + hotelIdStr);
+                redirectToHotelDetails(response, request.getContextPath(), hotelIdStr,
+                        "An error occurred. Please try again.");
             } else {
-                response.sendRedirect(request.getContextPath() + "/");
+                response.sendRedirect(request.getContextPath() + "/explore");
             }
         }
     }
@@ -272,13 +320,35 @@ public class HotelCheckoutServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/hotel-review");
 
         } catch (Exception e) {
-            logger.log(Level.SEVERE, "Exception occurred", e);
+            logger.error("[HotelCheckoutServlet] POST exception. hotelId={}",
+                    request.getParameter("hotelId"), e);
             String hotelIdStr = request.getParameter("hotelId");
             if (hotelIdStr != null && !hotelIdStr.isEmpty()) {
-                response.sendRedirect(request.getContextPath() + "/hotel-details?id=" + hotelIdStr);
+                redirectToHotelDetails(response, request.getContextPath(), hotelIdStr,
+                        "An error occurred processing your booking. Please try again.");
             } else {
-                response.sendRedirect(request.getContextPath() + "/");
+                response.sendRedirect(request.getContextPath() + "/explore");
             }
+        }
+    }
+
+    /**
+     * Redirect back to hotel-details with an optional error message.
+     * If hotelId is available the user lands on the same hotel page;
+     * otherwise they are sent to the explore page.
+     */
+    private void redirectToHotelDetails(HttpServletResponse response,
+                                         String contextPath,
+                                         String hotelId,
+                                         String errorMessage) throws IOException {
+        if (hotelId != null && !hotelId.isEmpty() && !"0".equals(hotelId)) {
+            String url = contextPath + "/hotel-details?id=" + hotelId;
+            if (errorMessage != null && !errorMessage.isEmpty()) {
+                url += "&error=" + java.net.URLEncoder.encode(errorMessage, "UTF-8");
+            }
+            response.sendRedirect(url);
+        } else {
+            response.sendRedirect(contextPath + "/explore");
         }
     }
 }

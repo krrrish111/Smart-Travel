@@ -31,6 +31,7 @@ public class HotelInfoServlet extends HttpServlet {
     }
 
     private void doGetInternal(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        java.util.logging.Logger log = java.util.logging.Logger.getLogger(HotelInfoServlet.class.getName());
         try {
             String idStr = request.getParameter("id");
             String name = request.getParameter("name");
@@ -40,15 +41,30 @@ public class HotelInfoServlet extends HttpServlet {
             String image = request.getParameter("image");
 
             if (idStr == null || idStr.trim().isEmpty()) {
+                log.warning("[HotelInfoServlet] Missing 'id' parameter. Redirecting to /explore.");
                 response.sendRedirect(request.getContextPath() + "/explore");
                 return;
             }
 
-            int id = Integer.parseInt(idStr);
+            int id = Integer.parseInt(idStr.trim());
+
+            // Guard: id=0 means a hotel object arrived without a valid DB/API id.
+            // Redirect cleanly rather than forwarding with broken data.
+            if (id <= 0) {
+                log.warning("[HotelInfoServlet] Received invalid hotelId=" + id
+                        + " (name=" + name + "). This usually means an API hotel was"
+                        + " constructed without setId(). Redirecting to /explore.");
+                response.sendRedirect(request.getContextPath() + "/explore");
+                return;
+            }
+
+            log.info("[HotelInfoServlet] Loading hotel id=" + id + " name=" + name);
+
             Hotel hotel = null;
 
             com.voyastra.dao.booking.HotelDAO hotelDAO = new com.voyastra.dao.booking.HotelDAO();
             if (name != null && !name.isEmpty()) {
+                // API-style hotel: reconstruct from URL parameters
                 hotel = new Hotel();
                 hotel.setId(id);
                 hotel.setName(name);
@@ -56,17 +72,21 @@ public class HotelInfoServlet extends HttpServlet {
                 hotel.setRating(ratingStr != null && !ratingStr.isEmpty() ? Double.parseDouble(ratingStr) : 4.0);
                 hotel.setStartingPrice(priceStr != null && !priceStr.isEmpty() ? Double.parseDouble(priceStr) : 150.0);
                 hotel.setImageUrl(image != null ? image : "");
-                
+
                 hotel.setAddress(city != null ? city + " Central Area" : "Central Area");
                 hotel.setAmenities("WiFi,Pool,Gym,Parking,Restaurant");
                 hotel.setAvailableRooms(5);
                 hotel.setCancellationPolicy("Free Cancellation");
+                log.info("[HotelInfoServlet] API hotel reconstructed: id=" + id + " name=" + hotel.getName());
             } else {
+                // Local DB hotel
                 hotel = hotelDAO.getHotelById(id);
                 if (hotel == null) {
+                    log.warning("[HotelInfoServlet] DB hotel id=" + id + " not found. Redirecting to /explore.");
                     response.sendRedirect(request.getContextPath() + "/explore");
                     return;
                 }
+                log.info("[HotelInfoServlet] DB hotel loaded: id=" + hotel.getId() + " name=" + hotel.getName());
             }
 
             request.setAttribute("hotel", hotel);
@@ -79,6 +99,7 @@ public class HotelInfoServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/explore");
             return;
         }
+
 
         // Pass along search parameters for checkout
         String checkIn = request.getParameter("checkIn");

@@ -888,6 +888,7 @@ CREATE TABLE IF NOT EXISTS `posts` (
   `category` varchar(50) DEFAULT 'For You',
   `hashtags` varchar(255) DEFAULT '',
   `hidden` tinyint(1) DEFAULT '0',
+  `rating` int DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 

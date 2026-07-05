@@ -97,9 +97,9 @@ public class CruiseBookingDAO {
                     booking.setCabinType(rs.getString("cabin_type"));
                     booking.setAmount(rs.getDouble("total_price"));
                     booking.setStatus(rs.getString("status"));
-                      booking.setAmount(rs.getDouble("amount"));
                     booking.setCruiseLine(rs.getString("cruise_line"));
                     booking.setShipName(rs.getString("ship_name"));
+                    booking.setPaxCount(rs.getInt("passengers"));
                     try { booking.setDurationDays(Integer.parseInt(rs.getString("duration").split(" ")[0])); } catch(Exception e) { booking.setDurationDays(0); }
                     booking.setPassengers(new java.util.ArrayList<>());
                 }

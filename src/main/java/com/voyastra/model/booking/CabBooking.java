@@ -15,6 +15,12 @@ public class CabBooking {
     private double amount;
     private String status;
     private CabPassenger passenger;
+    // Driver / vehicle assignment fields (populated from DB after dispatch)
+    private String driverName;
+    private String driverContact;
+    private String vehicleNumber;
+    private String distance;
+    private String duration;
 
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
@@ -38,7 +44,7 @@ public class CabBooking {
     public void setAmount(double amount) { this.amount = amount; }
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
-    // Aliases for JSP profile.jsp compatibility
+    public String getPassenger2Name() { return passenger != null ? passenger.getName() : ""; }
     public String getVehicleModel() { return vehicleType; }
     public String getBookingRef() { return id; }
     public String getPickupDate() { return date; }
@@ -55,16 +61,16 @@ public class CabBooking {
     public String getTravelDateAlias() { return date != null ? date : ""; }
 
     public String getPassengerName() { return passenger != null ? passenger.getName() : "Guest"; }
-    
-    public String getVehicleNumber() { return "Not Assigned"; }
-    
-    
-    
-    public double getAmountPaid() { return amount; }
-    public String getPaymentStatus() { return "PAID"; }
-    public String getEmail() { return passenger != null ? passenger.getEmail() : "N/A"; }
-    public String getPhone() { return passenger != null ? passenger.getPhone() : "N/A"; }
-    public String getDriverName() { return "Pending Assignment"; }
-    public String getDistance() { return "TBD"; }
-    public String getDuration() { return "TBD"; }
+
+    // Driver / vehicle assignment — backed by fields (DB-populated after dispatch)
+    public String getDriverName() { return driverName != null ? driverName : "Pending Assignment"; }
+    public void setDriverName(String driverName) { this.driverName = driverName; }
+    public String getDriverContact() { return driverContact != null ? driverContact : "N/A"; }
+    public void setDriverContact(String driverContact) { this.driverContact = driverContact; }
+    public String getVehicleNumber() { return vehicleNumber != null ? vehicleNumber : "Not Assigned"; }
+    public void setVehicleNumber(String vehicleNumber) { this.vehicleNumber = vehicleNumber; }
+    public String getDistance() { return distance != null ? distance : "TBD"; }
+    public void setDistance(String distance) { this.distance = distance; }
+    public String getDuration() { return duration != null ? duration : "TBD"; }
+    public void setDuration(String duration) { this.duration = duration; }
 }

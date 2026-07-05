@@ -92,8 +92,10 @@ public class CabBookingDAO {
                     booking.setVehicleType(rs.getString("vehicle_type"));
                     booking.setAmount(rs.getDouble("total_price"));
                     booking.setStatus(rs.getString("status"));
-                      booking.setAmount(rs.getDouble("amount"));
-                    
+                    // Populate driver/vehicle fields if assigned
+                    booking.setDriverName(rs.getString("driver_name"));
+                    booking.setDriverContact(rs.getString("driver_contact"));
+                    booking.setVehicleNumber(rs.getString("vehicle_number"));
                 }
             }
             if (booking != null) {

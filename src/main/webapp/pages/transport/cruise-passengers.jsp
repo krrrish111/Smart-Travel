@@ -1,6 +1,15 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%
+    // Bridge session key "currentCruiseBooking" → request attribute "booking"
+    // so that JSP EL expressions like ${booking.shipName} work correctly.
+    com.voyastra.model.booking.CruiseBooking __cruiseBooking =
+        (com.voyastra.model.booking.CruiseBooking) session.getAttribute("currentCruiseBooking");
+    if (__cruiseBooking != null) {
+        request.setAttribute("booking", __cruiseBooking);
+    }
+%>
 <%@ include file="/components/header.jsp" %>
 <%@ include file="/components/global_ui.jsp" %>
 <main style="padding-top: 100px; padding-bottom: 60px; min-height: 80vh; background: var(--color-background);">

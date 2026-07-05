@@ -734,7 +734,7 @@
                                                         <div style="font-size: 0.75rem; color: var(--color-muted); margin-top: 4px; margin-bottom: 12px;">per night</div>
                                                         
                                                         <button class="btn-select" style="padding: 10px 24px; font-weight: 800; width: 100%; border-radius: 8px;"
-                                                                onclick="location.href='${pageContext.request.contextPath}/hotel-details?id=${s.id}'">
+                                                                onclick="if('${searchType}' === 'package'){location.href='${pageContext.request.contextPath}/destination/details?id=${s.id}'}else{location.href='${pageContext.request.contextPath}/hotel-details?id=${s.id}'}">
                                                             Book →
                                                         </button>
                                                     </div>

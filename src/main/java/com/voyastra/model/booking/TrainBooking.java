@@ -80,17 +80,25 @@ public class TrainBooking {
     public String getOrigin() { return fromStation != null ? fromStation : ""; }
     public String getDestination() { return toStation != null ? toStation : ""; }
     public String getCustomerNameAlias() { return passengers != null && !passengers.isEmpty() ? passengers.get(0).getName() : ""; }
-    public double getAmount() { return 0.0; }
-    public String getTravelDateAlias() { return journeyDate != null ? journeyDate : ""; }
-
-    public String getPassengerName() { return passengers != null && !passengers.isEmpty() ? passengers.get(0).getName() : "Guest"; }
-    
-    public String getSeat() { return passengers != null && !passengers.isEmpty() ? "12A" : "12A"; }
-    
-    
+    public double getAmountPaid() { return fare; }
     public String getPaymentStatus() { return "PAID"; }
-    public String getDepartureTime() { return "08:00 AM"; }
-    public String getArrivalTime() { return "04:00 PM"; }
-    public String getCoach() { return passengers != null && !passengers.isEmpty() ? passengers.get(0).getBerthPreference() : "B1"; }
+    // Override getAmount to return real fare
+    public double getAmount() { return fare; }
+    // Hardcoded departure/arrival — overridable via setters if real data is available
+    private String departureTime;
+    private String arrivalTime;
+    public String getDepartureTime() { return departureTime != null ? departureTime : "08:00 AM"; }
+    public void setDepartureTime(String t) { this.departureTime = t; }
+    public String getArrivalTime() { return arrivalTime != null ? arrivalTime : "04:00 PM"; }
+    public void setArrivalTime(String t) { this.arrivalTime = t; }
+    public String getSeat() {
+        if (passengers != null && !passengers.isEmpty()) {
+            String berth = passengers.get(0).getBerthPreference();
+            return berth != null && !berth.isEmpty() ? berth : "To be assigned";
+        }
+        return "To be assigned";
+    }
+    public String getCoach() {
+        return "B1"; // Compartment assignment is train-operator side; display as placeholder
+    }
 }
-

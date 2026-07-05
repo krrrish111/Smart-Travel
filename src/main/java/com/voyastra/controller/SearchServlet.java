@@ -4,6 +4,8 @@ import com.voyastra.api.TravelpayoutsService;
 import com.voyastra.api.TrainApiService;
 import com.voyastra.api.BusApiService;
 import com.voyastra.api.CabApiService;
+import com.voyastra.dao.destination.DestinationDAO;
+import com.voyastra.model.destination.Destination;
 import com.voyastra.model.booking.FlightResult;
 import com.voyastra.model.transport.Transport;
 import com.voyastra.model.Stay;
@@ -27,6 +29,7 @@ public class SearchServlet extends HttpServlet {
     private TrainApiService trainApiService = new TrainApiService();
     private BusApiService busApiService = new BusApiService();
     private CabApiService cabApiService = new CabApiService();
+    private DestinationDAO destinationDAO = new DestinationDAO();
 
     // ==================== MAIN DISPATCHER ====================
     @Override
@@ -407,8 +410,32 @@ public class SearchServlet extends HttpServlet {
     }
 
     private void handlePackageSearch(HttpServletRequest request, HttpServletResponse response, String city, String date, String type) throws ServletException, IOException {
-        List<Stay> packages = getMockPackages(city, type);
-        request.setAttribute("hotels", packages); // Reusing hotels display format for packages
+        // Query real destinations from the database instead of returning mock data
+        List<Destination> destinations;
+        if (city != null && !city.isBlank()) {
+            destinations = destinationDAO.searchDestinations(city);
+        } else {
+            destinations = destinationDAO.getAllDestinations();
+        }
+
+        // Map Destination → Stay so the existing hotel card template in booking.jsp works
+        List<Stay> packages = new ArrayList<>();
+        for (Destination d : destinations) {
+            Stay s = new Stay();
+            s.setId(d.getId());
+            s.setName(d.getTitle() != null ? d.getTitle() : d.getName());
+            s.setLocation(d.getDestination() != null ? d.getDestination() : d.getCountry());
+            double price = d.getDiscountPrice() > 0 ? d.getDiscountPrice() : d.getPriceInr();
+            s.setDiscountedPrice(price);
+            s.setOriginalPrice(d.getPriceInr() > 0 ? d.getPriceInr() : price * 1.25);
+            s.setImageUrl(d.getImageUrl() != null ? d.getImageUrl() : d.getImage());
+            s.setAmenities(d.getShortDescription() != null ? d.getShortDescription() : d.getDescription());
+            s.setBadge(d.getDurationDays() > 0 ? d.getDurationDays() + "D / " + d.getDurationNights() + "N" : null);
+            s.setPriceNote("Per person, taxes included");
+            packages.add(s);
+        }
+
+        request.setAttribute("hotels", packages);
         request.setAttribute("searchType", "package");
         request.setAttribute("searchLocation", city);
         request.setAttribute("date", date);

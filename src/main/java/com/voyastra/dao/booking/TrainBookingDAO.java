@@ -95,6 +95,7 @@ public class TrainBookingDAO {
                     booking.setToStation(rs.getString("to_station"));
                     booking.setJourneyDate(rs.getString("journey_date"));
                     booking.setTrainClass(rs.getString("train_class"));
+                    booking.setTotalPrice(rs.getDouble("total_price"));
                     booking.setStatus(rs.getString("status"));
                     booking.setEmail(rs.getString("user_email"));
                     booking.setPhone(rs.getString("user_phone"));

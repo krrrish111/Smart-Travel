@@ -102,7 +102,7 @@ public class BusBookingDAO {
                     booking.setEmail(rs.getString("user_email"));
                     booking.setPhone(rs.getString("user_phone"));
                       
-                      booking.setFare(rs.getDouble("total_fare"));
+                    booking.setFare(rs.getDouble("total_price"));
                     booking.setPassengers(new java.util.ArrayList<>());
                 }
             }

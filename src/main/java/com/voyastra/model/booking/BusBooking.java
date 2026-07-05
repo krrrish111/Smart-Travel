@@ -20,6 +20,9 @@ public class BusBooking {
     private List<BusPassenger> passengers = new ArrayList<>();
     private String email;
     private String phone;
+    // Schedule fields — populated from real data when available
+    private String departureTime;
+    private String arrivalTime;
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
     public String getPhone() { return phone; }
@@ -74,6 +77,8 @@ public class BusBooking {
     
     public double getAmountPaid() { return fare; }
     public String getPaymentStatus() { return "PAID"; }
-    public String getDepartureTime() { return "09:00 PM"; }
-    public String getArrivalTime() { return "06:00 AM"; }
+    public String getDepartureTime() { return departureTime != null ? departureTime : "09:00 PM"; }
+    public void setDepartureTime(String departureTime) { this.departureTime = departureTime; }
+    public String getArrivalTime() { return arrivalTime != null ? arrivalTime : "06:00 AM"; }
+    public void setArrivalTime(String arrivalTime) { this.arrivalTime = arrivalTime; }
 }

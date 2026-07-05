@@ -93,9 +93,9 @@ public class HelicopterBookingDAO {
                     booking.setFlightType(rs.getString("heli_class"));
                     booking.setAmount(rs.getDouble("total_price"));
                     booking.setStatus(rs.getString("status"));
-                      booking.setAmount(rs.getDouble("amount"));
                     booking.setOperator(rs.getString("operator"));
                     booking.setTravelTime(rs.getString("departure_time"));
+                    booking.setPaxCount(rs.getInt("passengers"));
                     booking.setPassengers(new java.util.ArrayList<>());
                 }
             }

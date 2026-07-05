@@ -1,6 +1,13 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%
+    // Bridge: expose currentCruiseBooking session key as request attribute "booking"
+    // so that ${booking.*} EL expressions in this JSP resolve correctly.
+    com.voyastra.model.booking.CruiseBooking __cb =
+        (com.voyastra.model.booking.CruiseBooking) session.getAttribute("currentCruiseBooking");
+    if (__cb != null) request.setAttribute("booking", __cb);
+%>
 <%@ include file="/components/header.jsp" %>
 <%@ include file="/components/global_ui.jsp" %>
 <main style="padding-top: 100px; padding-bottom: 60px; min-height: 80vh; background: var(--color-background);">

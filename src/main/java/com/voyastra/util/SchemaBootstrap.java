@@ -900,7 +900,7 @@ public class SchemaBootstrap implements ServletContextListener {
             } catch (Exception e) {}
 
             logger.info("[SchemaBootstrap] Schema migration and setup complete.");
-
+        }
         } catch (Throwable e) {
             logger.error("[SchemaBootstrap] Migration error: " + e.getMessage(), e);
         } finally {

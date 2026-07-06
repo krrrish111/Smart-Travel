@@ -202,4 +202,44 @@ public class DestinationBookingDAO {
         }
         return null;
     }
+
+    public DestinationBooking getBookingByIdOrCode(String key) {
+        String query = "SELECT b.*, d.title, d.destination, d.image_url " +
+                       "FROM destination_bookings b " +
+                       "JOIN destinations d ON b.destination_id = d.id " +
+                       "WHERE CAST(b.id AS CHAR) = ? OR b.order_id = ? OR b.payment_id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, key);
+            stmt.setString(2, key);
+            stmt.setString(3, key);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    DestinationBooking b = new DestinationBooking();
+                    b.setId(rs.getInt("id"));
+                    b.setUserId(rs.getInt("user_id"));
+                    b.setDestinationId(rs.getInt("destination_id"));
+                    b.setOrderId(rs.getString("order_id"));
+                    b.setPaymentId(rs.getString("payment_id"));
+                    b.setAmount(rs.getDouble("amount"));
+                    b.setStatus(rs.getString("status"));
+                    b.setActive(rs.getBoolean("is_active"));
+                    b.setTravelDate(rs.getDate("travel_date"));
+                    b.setGuests(rs.getInt("guests"));
+                    b.setBookingDate(rs.getTimestamp("booking_date"));
+                    
+                    Destination d = new Destination();
+                    d.setId(b.getDestinationId());
+                    d.setTitle(rs.getString("title"));
+                    d.setDestination(rs.getString("destination"));
+                    d.setImageUrl(rs.getString("image_url"));
+                    b.setDestination(d);
+                    return b;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

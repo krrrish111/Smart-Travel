@@ -67,19 +67,9 @@
         </div>
 
         <div class="flex flex-col md:flex-row gap-4 justify-center">
-            <!-- Hidden form to pass data to ticket page -->
-            <form action="${pageContext.request.contextPath}/pages/destination-ticket.jsp" method="POST" target="_blank">
-                <input type="hidden" name="bookingId" value="<%= bookingId %>">
-                <input type="hidden" name="destinationTitle" value="${requestScope.destinationTitle}">
-                <input type="hidden" name="travelDate" value="${requestScope.travelDate}">
-                <input type="hidden" name="primaryName" value="${requestScope.primaryName}">
-                <input type="hidden" name="primaryEmail" value="${requestScope.primaryEmail}">
-                <input type="hidden" name="primaryPhone" value="${requestScope.primaryPhone}">
-                <input type="hidden" name="guests" value="${requestScope.guests}">
-                <button type="submit" class="btn btn-primary px-8 py-3 w-full md:w-auto flex justify-center items-center gap-2">
-                    <i class="fas fa-ticket-alt"></i> Download Ticket
-                </button>
-            </form>
+            <a href="${pageContext.request.contextPath}/trip-ticket?id=<%= bookingId %>&type=destination" target="_blank" class="btn btn-primary px-8 py-3 w-full md:w-auto flex justify-center items-center gap-2" style="text-decoration: none; color: black; font-weight: bold;">
+                <i class="fas fa-ticket-alt"></i> Download Ticket
+            </a>
 
             <a href="${pageContext.request.contextPath}/my-journey" class="btn btn-glass-secondary px-8 py-3 w-full md:w-auto flex justify-center items-center gap-2">
                 <i class="fas fa-map-marked-alt"></i> View My Journey

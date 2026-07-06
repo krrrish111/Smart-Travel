@@ -117,34 +117,34 @@
             <div style="text-align:right;">
                 <div class="icon-large">📍</div>
                 <div class="ticket-title">E-Ticket</div>
-                <div style="font-weight: bold; color: #555; margin-top: 5px;">Ref: ${param.bookingId}</div>
+                <div style="font-weight: bold; color: #555; margin-top: 5px;">Ref: ${not empty bookingId ? bookingId : param.bookingId}</div>
             </div>
         </div>
         
         <div class="content-grid">
             <div class="field-group">
                 <div class="label">Lead Traveler</div>
-                <div class="value">${param.primaryName}</div>
+                <div class="value">${not empty primaryName ? primaryName : param.primaryName}</div>
             </div>
             <div class="field-group">
                 <div class="label">Destination</div>
-                <div class="value">${param.destinationTitle}</div>
+                <div class="value">${not empty destinationTitle ? destinationTitle : param.destinationTitle}</div>
             </div>
             <div class="field-group">
                 <div class="label">Departure Date</div>
-                <div class="value">${param.travelDate}</div>
+                <div class="value">${not empty travelDate ? travelDate : param.travelDate}</div>
             </div>
             <div class="field-group">
                 <div class="label">Travelers</div>
-                <div class="value">${param.guests}</div>
+                <div class="value">${not empty guests ? guests : param.guests}</div>
             </div>
             <div class="field-group">
                 <div class="label">Contact Email</div>
-                <div class="value">${param.primaryEmail}</div>
+                <div class="value">${not empty primaryEmail ? primaryEmail : param.primaryEmail}</div>
             </div>
             <div class="field-group">
                 <div class="label">Contact Phone</div>
-                <div class="value">${param.primaryPhone}</div>
+                <div class="value">${not empty primaryPhone ? primaryPhone : param.primaryPhone}</div>
             </div>
             <div class="field-group">
                 <div class="label">Booking Status</div>
@@ -154,7 +154,7 @@
                 <div style="text-align: center;">
                     <div class="label">Scan Ticket QR</div>
                     <div class="value" style="margin-top: 10px;">
-                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Voyastra_Destination_${param.bookingId}" alt="QR Code" style="border-radius: 8px; border: 1px solid #ccc; padding: 10px;">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Voyastra_Destination_${not empty bookingId ? bookingId : param.bookingId}" alt="QR Code" style="border-radius: 8px; border: 1px solid #ccc; padding: 10px;">
                     </div>
                 </div>
             </div>
@@ -172,7 +172,7 @@
             const element = document.getElementById('ticketArea');
             const opt = {
                 margin:       0.5,
-                filename:     'Destination_Ticket_${param.bookingId}.pdf',
+                filename:     'Destination_Ticket_${not empty bookingId ? bookingId : param.bookingId}.pdf',
                 image:        { type: 'jpeg', quality: 0.98 },
                 html2canvas:  { scale: 2 },
                 jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }

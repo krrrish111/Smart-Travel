@@ -143,7 +143,7 @@ public class SchemaBootstrap {
             logger.info("[SchemaBootstrap] Initializing database schema from bootstrap.sql...");
             try (Connection conn = DBConnection.getConnection();
                  Statement stmt = conn.createStatement();
-                 java.io.InputStream in = getClass().getClassLoader().getResourceAsStream("bootstrap.sql")) {
+                 java.io.InputStream in = SchemaBootstrap.class.getClassLoader().getResourceAsStream("bootstrap.sql")) {
                 
                 if (in == null) {
                     throw new java.io.FileNotFoundException("bootstrap.sql not found on classpath!");

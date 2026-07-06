@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ include file="/components/header.jsp" %>
 <%@ include file="/components/global_ui.jsp" %>
 
@@ -253,24 +254,24 @@
             
             <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-bottom: 30px;">
                 <div class="metric-card" style="padding: 15px; border-radius: 12px; background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(0,0,0,0));">
-                    <h3 style="font-size: 1.8rem; margin:0;">12</h3>
+                    <h3 style="font-size: 1.8rem; margin:0;">${totalTrips}</h3>
                     <span style="font-size: 0.75rem;">Total Trips</span>
                 </div>
                 <div class="metric-card" style="padding: 15px; border-radius: 12px; background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(0,0,0,0));">
-                    <h3 style="font-size: 1.8rem; margin:0;">14</h3>
-                    <span style="font-size: 0.75rem;">Countries Visited</span>
+                    <h3 style="font-size: 1.8rem; margin:0;">${upcomingCount}</h3>
+                    <span style="font-size: 0.75rem;">Upcoming Trips</span>
                 </div>
                 <div class="metric-card" style="padding: 15px; border-radius: 12px; background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(0,0,0,0));">
-                    <h3 style="font-size: 1.8rem; margin:0;">35</h3>
-                    <span style="font-size: 0.75rem;">Cities Visited</span>
+                    <h3 style="font-size: 1.8rem; margin:0;">${completedCount}</h3>
+                    <span style="font-size: 0.75rem;">Completed Trips</span>
                 </div>
                 <div class="metric-card" style="padding: 15px; border-radius: 12px; background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(0,0,0,0));">
-                    <h3 style="font-size: 1.8rem; margin:0;">8</h3>
-                    <span style="font-size: 0.75rem;">Experiences Completed</span>
+                    <h3 style="font-size: 1.8rem; margin:0;">${fn:length(activeUnified)}</h3>
+                    <span style="font-size: 0.75rem;">Active Now</span>
                 </div>
                 <div class="metric-card" style="padding: 15px; border-radius: 12px; background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(0,0,0,0));">
-                    <h3 style="font-size: 1.8rem; margin:0;">42</h3>
-                    <span style="font-size: 0.75rem;">Community Contributions</span>
+                    <h3 style="font-size: 1.8rem; margin:0;">&#8377;${totalSpent}</h3>
+                    <span style="font-size: 0.75rem;">Total Spent</span>
                 </div>
             </div>
 
@@ -302,20 +303,31 @@
                     <!-- Upcoming Trips Widget -->
                     <div class="panel" style="padding: 20px; margin-bottom: 0;">
                         <h2 style="font-size: 1.4rem; margin-bottom: 15px;"><i class="ri-flight-takeoff-line" style="color: var(--primary);"></i> Upcoming Trips</h2>
-                        <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--color-border); border-radius: 12px; padding: 15px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                            <div>
-                                <strong style="font-size: 1.1rem;">Kyoto, Japan</strong>
-                                <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 5px;"><i class="ri-calendar-line"></i> Oct 12 - Oct 20, 2026</div>
-                            </div>
-                            <div style="background: rgba(0, 184, 148, 0.2); color: #00b894; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem;">Confirmed</div>
-                        </div>
-                        <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--color-border); border-radius: 12px; padding: 15px; display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <strong style="font-size: 1.1rem;">Paris, France</strong>
-                                <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 5px;"><i class="ri-calendar-line"></i> Dec 24 - Jan 2, 2027</div>
-                            </div>
-                            <div style="background: rgba(255, 107, 0, 0.2); color: var(--primary); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem;">Planning</div>
-                        </div>
+                        <c:choose>
+                            <c:when test="${not empty upcomingUnified}">
+                                <c:forEach var="ub" items="${upcomingUnified}" end="4">
+                                <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--color-border); border-radius: 12px; padding: 15px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                    <div>
+                                        <strong style="font-size: 1.1rem;">${ub.label}</strong>
+                                        <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 5px;">
+                                            <i class="ri-map-pin-line"></i> ${ub.destination}
+                                            <c:if test="${not empty ub.travelDate}">&nbsp;&bull;&nbsp;<i class="ri-calendar-line"></i> ${ub.travelDate}</c:if>
+                                        </div>
+                                    </div>
+                                    <div style="display:flex; flex-direction:column; align-items:flex-end; gap:6px;">
+                                        <div style="background: rgba(0, 184, 148, 0.2); color: #00b894; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem;">${ub.status}</div>
+                                        <a href="${pageContext.request.contextPath}${ub.ticketUrl}" style="font-size:0.75rem; color: var(--primary); text-decoration:none;"><i class="ri-download-2-line"></i> Ticket</a>
+                                    </div>
+                                </div>
+                                </c:forEach>
+                            </c:when>
+                            <c:otherwise>
+                                <div style="text-align: center; padding: 30px; color: var(--text-secondary);">
+                                    <i class="ri-flight-takeoff-line" style="font-size: 2rem; opacity: 0.3;"></i>
+                                    <p style="margin-top: 10px;">No upcoming trips. <a href="${pageContext.request.contextPath}/pages/common/explore.jsp" style="color: var(--primary);">Book one!</a></p>
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
 
                     <!-- Quick Actions Widget -->
@@ -534,33 +546,37 @@
                 <h2><i class="ri-flight-takeoff-line" style="color: var(--primary);"></i> Upcoming Trips</h2>
                 
                 <c:choose>
-                    <c:when test="${not empty upcomingTripBookings}">
-                        <c:forEach var="trip" items="${upcomingTripBookings}">
+                    <c:when test="${not empty upcomingUnified}">
+                        <c:forEach var="trip" items="${upcomingUnified}">
                             <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--color-border); border-radius: 16px; padding: 25px; display: flex; justify-content: space-between; align-items: center; transition: all 0.3s ease; margin-bottom: 20px;" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.03)'">
                                 <div>
-                                    <h3 style="font-size: 1.6rem; font-family: 'Clash Display', sans-serif; margin-bottom: 8px;">
-                                        ${not empty trip.destination.title ? trip.destination.title : 'Trip'}
+                                    <div style="font-size:0.75rem; color:var(--primary); text-transform:uppercase; letter-spacing:1px; margin-bottom:6px;">${trip.type}</div>
+                                    <h3 style="font-size: 1.4rem; font-family: 'Clash Display', sans-serif; margin-bottom: 8px;">
+                                        ${not empty trip.label ? trip.label : 'Booking'}
                                     </h3>
-                                    <p style="color: var(--text-secondary); font-size: 1rem;"><i class="ri-calendar-event-line"></i> ${trip.bookingDate != null ? trip.bookingDate : 'Open Date'}</p>
+                                    <p style="color: var(--text-secondary); font-size: 0.95rem;">
+                                        <c:if test="${not empty trip.destination}"><i class="ri-map-pin-line"></i> ${trip.destination}&nbsp;&bull;&nbsp;</c:if>
+                                        <c:if test="${not empty trip.travelDate}"><i class="ri-calendar-event-line"></i> ${trip.travelDate}</c:if>
+                                    </p>
                                 </div>
-                                <div style="text-align: right;">
-                                    <div style="background: rgba(0, 184, 148, 0.2); color: #00b894; padding: 6px 15px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; margin-bottom: 10px; display: inline-block;">${trip.status}</div>
-                                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 10px;">ID: ${trip.id}</p>
-                                    <button class="btn btn-outline" style="padding: 5px 15px; font-size: 0.85rem;" onclick="editTrip(${trip.id}, '${trip.travelDate}', ${trip.guests})">Edit</button>
-                                    <button class="btn btn-outline" style="padding: 5px 15px; font-size: 0.85rem; color: #e74c3c; border-color: #e74c3c;" onclick="cancelTrip(${trip.id})">Cancel</button>
-                                    <button class="btn btn-primary" style="padding: 5px 15px; font-size: 0.85rem;" onclick="setActiveTrip(${trip.id})">Set Active</button>
+                                <div style="text-align: right; display:flex; flex-direction:column; gap:8px; align-items:flex-end;">
+                                    <div style="background: rgba(0, 184, 148, 0.2); color: #00b894; padding: 6px 15px; border-radius: 20px; font-weight: 600; font-size: 0.85rem;">${trip.status}</div>
+                                    <div style="color: var(--text-secondary); font-size: 0.85rem;">&#8377;${trip.totalPrice}</div>
+                                    <a href="${pageContext.request.contextPath}${trip.ticketUrl}" class="btn btn-outline" style="padding: 5px 15px; font-size: 0.85rem;"><i class="ri-download-2-line"></i> Ticket</a>
                                 </div>
                             </div>
                         </c:forEach>
                     </c:when>
                     <c:otherwise>
                         <div style="text-align: center; padding: 40px;">
-                            <p style="color: var(--text-secondary);">No upcoming trips found. Time to plan a new adventure!</p>
+                            <i class="ri-flight-takeoff-line" style="font-size:3rem; opacity:0.2;"></i>
+                            <p style="color: var(--text-secondary); margin-top:15px;">No upcoming trips found. Time to plan a new adventure!</p>
                             <a href="${pageContext.request.contextPath}/planner" class="btn btn-outline" style="margin-top: 15px;">Start Planning</a>
                         </div>
                     </c:otherwise>
                 </c:choose>
             </div>
+
             <script>
                 function setActiveTrip(bookingId) {
                     fetch('${pageContext.request.contextPath}/api/trip/set-active', {

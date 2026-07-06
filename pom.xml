@@ -119,6 +119,7 @@
                     <!-- Points Maven to the correct webapp folder -->
                     <warSourceDirectory>src/main/webapp</warSourceDirectory>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
+                    <packagingExcludes>uploads/**</packagingExcludes>
                 </configuration>
             </plugin>
 

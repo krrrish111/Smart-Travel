@@ -261,7 +261,7 @@
                             <c:forEach var="trip" items="${premiumTrips}">
                                 <div class="plan-card active">
                                     <div class="plan-card-img-wrap">
-                                        <img src="${trip.imageUrl}" alt="${trip.title}" loading="lazy">
+                                        <img src="${not empty trip.imageUrl ? trip.imageUrl : 'https://images.unsplash.com/photo-1542332213-31f87348057f?auto=format&fit=crop&w=800&q=80'}" alt="${trip.title}" loading="lazy">
                                         <div class="plan-card-category">${trip.category}</div>
                                     </div>
                                     <div class="plan-card-body">
@@ -639,7 +639,7 @@
                         <c:forEach var="trip" items="${premiumTrips}">
                         <a href="${pageContext.request.contextPath}/trip?id=${trip.id}" class="plan-card active" style="max-width: none; flex: unset; text-decoration: none;">
                             <div class="plan-card-img-wrap" style="height: 160px;">
-                                <img src="${trip.imageUrl}" alt="${trip.title}" loading="lazy">
+                                <img src="${not empty trip.imageUrl ? trip.imageUrl : 'https://images.unsplash.com/photo-1542332213-31f87348057f?auto=format&fit=crop&w=800&q=80'}" alt="${trip.title}" loading="lazy">
                                 <div class="plan-card-category" style="background:rgba(59,130,246,0.85);">${trip.category}</div>
                             </div>
                             <div class="plan-card-body">
@@ -672,7 +672,7 @@
                         <!-- Hero Showcase -->
                         <c:set var="heroDest" value="${iconicDestinations[0]}" />
                         <div class="iconic-hero relative overflow-hidden rounded-3xl mb-12 shadow-2xl group">
-                            <img src="${heroDest.imageUrl}" alt="${heroDest.title}" class="w-full h-[600px] object-cover transition-transform duration-700 group-hover:scale-105">
+                            <img src="${not empty heroDest.imageUrl ? heroDest.imageUrl : 'https://images.unsplash.com/photo-1542332213-31f87348057f?auto=format&fit=crop&w=800&q=80'}" alt="${heroDest.title}" class="w-full h-[600px] object-cover transition-transform duration-700 group-hover:scale-105">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
                             
                             <div class="absolute bottom-0 left-0 p-8 md:p-16 w-full">
@@ -706,7 +706,7 @@
                             <c:forEach var="dest" items="${iconicDestinations}" begin="1">
                                 <div class="iconic-card group relative bg-black/40 border border-white/10 rounded-2xl overflow-hidden hover:border-yellow-500/50 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_10px_40px_-10px_rgba(234,179,8,0.3)] backdrop-blur-xl flex flex-col">
                                     <div class="relative h-64 overflow-hidden shrink-0">
-                                        <img src="${dest.imageUrl}" alt="${dest.title}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                                        <img src="${not empty dest.imageUrl ? dest.imageUrl : 'https://images.unsplash.com/photo-1542332213-31f87348057f?auto=format&fit=crop&w=800&q=80'}" alt="${dest.title}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                                         <div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent"></div>
                                         <div class="absolute top-4 right-4 bg-black/50 backdrop-blur-md px-2 py-1 rounded border border-white/20 text-xs font-bold text-white flex items-center gap-1">
                                             <span class="text-yellow-400">★</span> ${dest.rating}
@@ -861,7 +861,7 @@
                         <c:forEach var="hotel" items="${recommendedHotels}" end="3">
                             <a href="${pageContext.request.contextPath}/hotel-details?id=${hotel.id}" class="plan-card" style="max-width: none; flex: unset; display: flex; flex-direction: column;">
                                 <div class="plan-card-img-wrap" style="height: 160px; position: relative;">
-                                    <img src="${hotel.imageUrl}" alt="${hotel.name}" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
+                                    <img src="${not empty hotel.imageUrl ? hotel.imageUrl : 'https://images.unsplash.com/photo-1542332213-31f87348057f?auto=format&fit=crop&w=800&q=80'}" alt="${hotel.name}" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
                                     <div class="plan-card-category" style="background:rgba(139,92,246,0.85);">${hotel.propertyType}</div>
                                 </div>
                                 <div class="plan-card-body p-4" style="flex-grow: 1; display: flex; flex-direction: column;">
@@ -927,7 +927,7 @@
                         <c:forEach var="hotel" items="${recentlyViewedHotels}" end="3">
                             <a href="${pageContext.request.contextPath}/hotel-details?id=${hotel.id}" class="plan-card" style="max-width: none; flex: unset; display: flex; flex-direction: column;">
                                 <div class="plan-card-img-wrap" style="height: 160px; position: relative;">
-                                    <img src="${hotel.imageUrl}" alt="${hotel.name}" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
+                                    <img src="${not empty hotel.imageUrl ? hotel.imageUrl : 'https://images.unsplash.com/photo-1542332213-31f87348057f?auto=format&fit=crop&w=800&q=80'}" alt="${hotel.name}" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
                                     <div class="plan-card-category" style="background:rgba(79,70,229,0.85);">${hotel.propertyType}</div>
                                 </div>
                                 <div class="plan-card-body p-4" style="flex-grow: 1; display: flex; flex-direction: column;">

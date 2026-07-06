@@ -84,7 +84,7 @@ public class CreatePostServlet extends HttpServlet {
                     Files.copy(input, destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 }
                 
-                imageUrl = request.getContextPath() + "/" + UploadConfig.POSTS_URL + "/" + uniqueFilename;
+                imageUrl = UploadConfig.POSTS_URL + "/" + uniqueFilename;
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -64,13 +64,36 @@ public class CommunityServlet extends HttpServlet {
             StringBuilder json = new StringBuilder("[");
             for (int i = 0; i < posts.size(); i++) {
                 Post p = posts.get(i);
+                
+                String dbMediaValue = p.getRawImageUrl();
+                String postFieldVal = p.getImageUrl();
+                String resolvedImageUrl = postFieldVal;
+                
+                if (resolvedImageUrl != null && !resolvedImageUrl.isEmpty() && !resolvedImageUrl.startsWith("http")) {
+                    if (resolvedImageUrl.startsWith("/")) {
+                        String cp = request.getContextPath();
+                        if (!cp.isEmpty() && !resolvedImageUrl.startsWith(cp)) {
+                            resolvedImageUrl = cp + resolvedImageUrl;
+                        }
+                    } else {
+                        resolvedImageUrl = request.getContextPath() + "/" + resolvedImageUrl;
+                    }
+                }
+                
+                System.out.println("--------------------------------");
+                System.out.println("Post ID: " + p.getId());
+                System.out.println("Database media value: " + dbMediaValue);
+                System.out.println("Post object media value: " + postFieldVal);
+                System.out.println("Final URL sent to JSP/JSON: " + resolvedImageUrl);
+                System.out.println("--------------------------------");
+                
                 json.append("{")
                     .append("\"id\":").append(p.getId()).append(",")
                     .append("\"userId\":").append(p.getUserId()).append(",")
                     .append("\"userName\":\"").append(escapeJson(p.getUserName())).append("\",")
                     .append("\"userRole\":\"").append(escapeJson(p.getUserRole())).append("\",")
                     .append("\"text\":\"").append(escapeJson(p.getText())).append("\",")
-                    .append("\"imageUrl\":\"").append(escapeJson(p.getImageUrl())).append("\",")
+                    .append("\"imageUrl\":\"").append(escapeJson(resolvedImageUrl)).append("\",")
                     .append("\"location\":\"").append(escapeJson(p.getLocation())).append("\",")
                     .append("\"category\":\"").append(escapeJson(p.getCategory())).append("\",")
                     .append("\"hashtags\":\"").append(escapeJson(p.getHashtags())).append("\",")
@@ -99,13 +122,36 @@ public class CommunityServlet extends HttpServlet {
             StringBuilder json = new StringBuilder("[");
             for (int i = 0; i < posts.size(); i++) {
                 Post p = posts.get(i);
+                
+                String dbMediaValue = p.getRawImageUrl();
+                String postFieldVal = p.getImageUrl();
+                String resolvedImageUrl = postFieldVal;
+                
+                if (resolvedImageUrl != null && !resolvedImageUrl.isEmpty() && !resolvedImageUrl.startsWith("http")) {
+                    if (resolvedImageUrl.startsWith("/")) {
+                        String cp = request.getContextPath();
+                        if (!cp.isEmpty() && !resolvedImageUrl.startsWith(cp)) {
+                            resolvedImageUrl = cp + resolvedImageUrl;
+                        }
+                    } else {
+                        resolvedImageUrl = request.getContextPath() + "/" + resolvedImageUrl;
+                    }
+                }
+                
+                System.out.println("--------------------------------");
+                System.out.println("Post ID: " + p.getId());
+                System.out.println("Database media value: " + dbMediaValue);
+                System.out.println("Post object media value: " + postFieldVal);
+                System.out.println("Final URL sent to JSP/JSON: " + resolvedImageUrl);
+                System.out.println("--------------------------------");
+                
                 json.append("{")
                     .append("\"id\":").append(p.getId()).append(",")
                     .append("\"userId\":").append(p.getUserId()).append(",")
                     .append("\"userName\":\"").append(escapeJson(p.getUserName())).append("\",")
                     .append("\"userRole\":\"").append(escapeJson(p.getUserRole())).append("\",")
                     .append("\"text\":\"").append(escapeJson(p.getText())).append("\",")
-                    .append("\"imageUrl\":\"").append(escapeJson(p.getImageUrl())).append("\",")
+                    .append("\"imageUrl\":\"").append(escapeJson(resolvedImageUrl)).append("\",")
                     .append("\"location\":\"").append(escapeJson(p.getLocation())).append("\",")
                     .append("\"category\":\"").append(escapeJson(p.getCategory())).append("\",")
                     .append("\"hashtags\":\"").append(escapeJson(p.getHashtags())).append("\",")

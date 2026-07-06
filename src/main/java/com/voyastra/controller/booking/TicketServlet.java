@@ -19,7 +19,9 @@ public class TicketServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String idParam = request.getParameter("id");
         if (idParam == null || idParam.trim().isEmpty()) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing booking ID");
+            request.setAttribute("errorId", "MISSING_BOOKING_ID");
+            request.setAttribute("javax.servlet.error.status_code", 400);
+            request.getRequestDispatcher("/pages/common/error.jsp").forward(request, response);
             return;
         }
 
@@ -30,10 +32,14 @@ public class TicketServlet extends HttpServlet {
                 request.setAttribute("booking", booking);
                 request.getRequestDispatcher("/pages/ticket/trip-ticket.jsp").forward(request, response);
             } else {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Booking not found");
+                request.setAttribute("errorId", "BOOKING_NOT_FOUND");
+                request.setAttribute("javax.servlet.error.status_code", 404);
+                request.getRequestDispatcher("/pages/common/error.jsp").forward(request, response);
             }
         } catch (NumberFormatException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid booking ID");
+            request.setAttribute("errorId", "INVALID_BOOKING_ID");
+            request.setAttribute("javax.servlet.error.status_code", 400);
+            request.getRequestDispatcher("/pages/common/error.jsp").forward(request, response);
         }
     }
 }

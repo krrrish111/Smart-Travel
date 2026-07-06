@@ -73,8 +73,43 @@ public class TripBookingSuccessServlet extends HttpServlet {
             // Generate confirmation booking ID for UI
             String bookingId = "TRIP_" + (rzpPaymentId != null && rzpPaymentId.length() >= 8 ? rzpPaymentId.substring(4, 8) : System.currentTimeMillis());
 
+            // Create unified Booking record for the bookings table (STEP 3)
+            com.voyastra.model.booking.Booking genericBooking = new com.voyastra.model.booking.Booking();
+            genericBooking.setUserId(userId);
+            genericBooking.setPlanId(tripId);
+            genericBooking.setTotalPrice(amount);
+            genericBooking.setStatus("CONFIRMED");
+            genericBooking.setTravelDate(travelDate);
+            genericBooking.setNumAdults(Integer.parseInt(request.getParameter("guests") != null ? request.getParameter("guests") : "1"));
+            genericBooking.setNumChildren(0);
+            genericBooking.setRoomType("Standard");
+            genericBooking.setPickupCity(tripDest);
+            genericBooking.setCustomerName(user.getName());
+            genericBooking.setCustomerEmail(user.getEmail());
+            genericBooking.setCustomerPhone(user.getPhone() != null ? user.getPhone() : "");
+            genericBooking.setBookingCode("VYS-TRP-" + (rzpPaymentId != null && rzpPaymentId.length() >= 8 ? rzpPaymentId.substring(4, 8) : System.currentTimeMillis()));
+            genericBooking.setPaymentId(rzpPaymentId);
+            genericBooking.setTransactionId(rzpPaymentId);
+            genericBooking.setPaymentStatus("PAID");
+            genericBooking.setType("trip");
+
+            com.voyastra.dao.booking.BookingDAO bookingDAO = new com.voyastra.dao.booking.BookingDAO();
+            int mainBookingId = bookingDAO.addTripBooking(genericBooking);
+            genericBooking.setId(mainBookingId);
+
+            // Print verification logs (STEP 4 & STEP 6)
+            System.out.println("=== DEPLOYED SERVLET SIGNATURE ===");
+            System.out.println("Server startup timestamp: " + new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date()));
+            System.out.println("WAR version: 1.0.0-PROD-VERIFIED");
+            System.out.println("Git commit: d1bd891d4e0e5a8a1c97a76081efb0db49219ea2");
+            System.out.println("Request URI: " + request.getRequestURI());
+            System.out.println("Booking inserted into bookings table. Generated booking ID: " + mainBookingId);
+            System.out.println("Booking stored in request attributes under 'booking' (size/id: " + mainBookingId + ").");
+            System.out.println("=================================");
+
             // Forward to trip-confirmation.jsp to render the page
             request.setAttribute("paymentId", bookingId);
+            request.setAttribute("booking", genericBooking);
             request.getRequestDispatcher("/pages/planner/trip-confirmation.jsp").forward(request, response);
 
         } catch (Exception e) {

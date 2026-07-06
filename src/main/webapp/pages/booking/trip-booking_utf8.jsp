@@ -1,0 +1,253 @@
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+
+
+<%@ include file="/components/header.jsp" %>
+<%@ include file="/components/global_ui.jsp" %>
+
+<main style="padding-top: 80px; padding-bottom: 80px;">
+
+    <!-- Hero Banner -->
+    <div class="relative" style="height: 280px; overflow: hidden;">
+        <img src="${trip.imageUrl}" style="width:100%;height:100%;object-fit:cover;filter:brightness(0.45);">
+        <div class="absolute w-full text-center" style="top:50%;transform:translateY(-50%);z-index:10;">
+            <p class="text-primary fw-bold text-sm uppercase tracking-widest mb-2">Book Your Adventure</p>
+            <h1 class="text-white fw-bold" style="font-size:clamp(1.8rem,4vw,3rem);text-shadow:0 4px 20px rgba(0,0,0,0.6);">${trip.title}</h1>
+            <p class="text-white opacity-70">${trip.destination} â€¢ ${trip.duration}</p>
+        </div>
+    </div>
+
+    <div class="container" style="margin-top:-40px;position:relative;z-index:20;">
+        <form method="POST" action="${pageContext.request.contextPath}/trip-confirmation" id="bookingForm" onsubmit="return populateHiddenFields()">
+            <input type="hidden" name="action" value="submitBooking">
+            <input type="hidden" name="tripId" value="${trip.id}">
+            <input type="hidden" name="tripTitle" value="${trip.title}">
+            <input type="hidden" name="tripDest" value="${trip.destination}">
+            <input type="hidden" name="tripDuration" value="${trip.duration}">
+            <input type="hidden" name="basePrice" id="hiddenBasePrice" value="">
+            <input type="hidden" name="totalPrice" id="hiddenTotalPrice" value="">
+            <input type="hidden" name="guests" id="hiddenGuests" value="">
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- LEFT: Package Summary + Form -->
+                <div class="md:col-span-2">
+
+                    <!-- Package Summary Card -->
+                    <div class="glass-panel p-5 mb-5 flex flex-col sm:flex-row gap-5 items-center slide-up">
+                        <div style="width:140px;height:100px;border-radius:12px;overflow:hidden;flex-shrink:0;">
+                            <img src="${trip.imageUrl}" style="width:100%;height:100%;object-fit:cover;">
+                        </div>
+                        <div class="flex-1">
+                            <span class="text-primary text-xs fw-bold uppercase tracking-widest">${trip.category}</span>
+                            <h3 class="text-main fw-bold" style="font-size:1.4rem;margin:4px 0;">${trip.title}</h3>
+                            <div class="flex flex-wrap gap-4 text-muted text-sm">
+                                <span>ðŸ“ ${trip.destination}</span>
+                                <span>â± ${trip.duration}</span>
+                                <span>â­ ${trip.rating}</span>
+                                <span>ðŸ—“ ${trip.bestSeason}</span>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-muted text-xs line-through">â‚¹<fmt:formatNumber value="${trip.priceInr}" type="number" maxFractionDigits="0"/></div>
+                            <div class="text-primary fw-bold" style="font-size:1.6rem;">â‚¹<fmt:formatNumber value="${trip.discountPrice}" type="number" maxFractionDigits="0"/></div>
+                            <div class="text-muted text-xs">per person</div>
+                        </div>
+                    </div>
+
+                    <!-- Travel Details -->
+                    <div class="glass-panel p-5 mb-5 slide-up" style="animation-delay:0.1s;">
+                        <h3 class="fw-bold text-main mb-4" style="font-size:1.2rem;">
+                            <span class="text-primary mr-2">â‘ </span> Travel Details
+                        </h3>
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            <div class="form-group">
+                                <label class="form-label">Departure Date *</label>
+                                <input type="date" name="departureDate" required class="form-input location-autocomplete" min="2026-05-01">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Pickup City *</label>
+                                <select name="pickupCity" required class="form-input">
+                                    <option value="">Select City</option>
+                                    <option>New Delhi</option><option>Mumbai</option><option>Bangalore</option>
+                                    <option>Chennai</option><option>Kolkata</option><option>Hyderabad</option>
+                                    <option>Pune</option><option>Ahmedabad</option><option>Jaipur</option>
+                                    <option>Lucknow</option><option>Chandigarh</option><option>Kochi</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Adults *</label>
+                                <select name="numAdults" id="numAdults" required class="form-input" onchange="updatePrice()">
+                                    <option value="1">1 Adult</option><option value="2" selected>2 Adults</option>
+                                    <option value="3">3 Adults</option><option value="4">4 Adults</option>
+                                    <option value="5">5 Adults</option><option value="6">6 Adults</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Children (under 12)</label>
+                                <select name="numChildren" id="numChildren" class="form-input" onchange="updatePrice()">
+                                    <option value="0" selected>No Children</option><option value="1">1 Child</option>
+                                    <option value="2">2 Children</option><option value="3">3 Children</option>
+                                </select>
+                            </div>
+                            <div class="form-group sm:col-span-2">
+                                <label class="form-label">Room Type</label>
+                                <select name="roomType" id="roomType" class="form-input" onchange="updatePrice()">
+                                    <option value="Standard">Standard Room</option>
+                                    <option value="Deluxe">Deluxe Room (+30%)</option>
+                                    <option value="Suite">Suite (+80%)</option>
+                                    <option value="Premium Suite">Premium Suite (+150%)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Customer Details -->
+                    <div class="glass-panel p-5 mb-5 slide-up" style="animation-delay:0.2s;">
+                        <h3 class="fw-bold text-main mb-4" style="font-size:1.2rem;">
+                            <span class="text-primary mr-2">â‘¡</span> Customer Details
+                        </h3>
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            <div class="form-group">
+                                <label class="form-label">First Name *</label>
+                                <input autocomplete="given-name" type="text" name="firstName" required class="form-input" placeholder="First Name">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Last Name *</label>
+                                <input autocomplete="family-name" type="text" name="lastName" required class="form-input" placeholder="Last Name">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Email Address *</label>
+                                <input type="email" name="guestEmail" required class="form-input" placeholder="you@example.com">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Phone Number *</label>
+                                <input type="tel" name="guestPhone" required class="form-input" placeholder="+91 XXXXX XXXXX">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Special Requests</label>
+                                <textarea name="specialRequests" class="form-input" rows="2" placeholder="Any dietary needs, accessibility requirements..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT: Price Breakdown Sidebar -->
+                <div>
+                    <div class="glass-panel p-5 sticky slide-up" style="top:100px;animation-delay:0.3s;">
+                        <h3 class="fw-bold text-main mb-4" style="font-size:1.2rem;">Price Breakdown</h3>
+
+                        <div class="mb-4" style="border-bottom:1px solid var(--color-border);padding-bottom:16px;">
+                            <div class="flex justify-between mb-2">
+                                <span class="text-muted text-sm">Base Price</span>
+                                <span class="text-main fw-bold">â‚¹<fmt:formatNumber value="${trip.discountPrice > 0 ? trip.discountPrice : trip.priceInr}" type="number" maxFractionDigits="0"/></span>
+                            </div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-muted text-sm">Travelers</span>
+                                <span class="text-main" id="displayTravelers">Ã— 2</span>
+                            </div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-muted text-sm">Room Upgrade</span>
+                                <span class="text-main" id="displayRoomUpgrade">Ã— 1.0</span>
+                            </div>
+                        </div>
+
+                        <div class="mb-4" style="border-bottom:1px solid var(--color-border);padding-bottom:16px;">
+                            <div class="flex justify-between mb-2">
+                                <span class="text-muted text-sm">Subtotal</span>
+                                <span class="text-main fw-bold" id="displaySubtotal">â‚¹0</span>
+                            </div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-muted text-sm">GST (5%)</span>
+                                <span class="text-main" id="displayTax">â‚¹0</span>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-between mb-4">
+                            <span class="text-main fw-bold" style="font-size:1.1rem;">Total</span>
+                            <span class="text-primary fw-bold" style="font-size:1.4rem;" id="displayTotal">â‚¹0</span>
+                        </div>
+
+                        <button type="submit" class="btn-primary w-full" style="padding:14px;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer;">
+                            Proceed to Confirmation â†’
+                        </button>
+
+                        <div class="text-center mt-3">
+                            <span class="text-muted text-xs">ðŸ”’ Secure & encrypted booking</span>
+                        </div>
+
+                        <div class="mt-4 p-3" style="background:rgba(212,165,116,0.08);border-radius:8px;border:1px solid rgba(212,165,116,0.2);">
+                            <p class="text-xs text-muted mb-1"><strong class="text-primary">Free Cancellation</strong></p>
+                            <p class="text-xs text-muted">Full refund up to 30 days before departure date.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</main>
+
+<style>
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-label { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-muted); }
+    .form-input {
+        padding: 10px 14px; border-radius: 8px; border: 1.5px solid var(--color-border);
+        background: var(--color-surface); color: var(--color-main); font-size: 0.95rem;
+        transition: border-color 0.2s; outline: none; font-family: inherit;
+    }
+    .form-input:focus { border-color: var(--color-primary); box-shadow: 0 0 0 3px rgba(212,165,116,0.15); }
+    select.form-input { cursor: pointer; }
+    textarea.form-input { resize: vertical; min-height: 60px; }
+</style>
+
+<script>
+    const BASE_PRICE = Number("${empty trip.discountPrice ? 0 : trip.discountPrice}") > 0 
+        ? Number("${empty trip.discountPrice ? 0 : trip.discountPrice}") 
+        : Number("${empty trip.priceInr ? 0 : trip.priceInr}");
+
+    function updatePrice() {
+        const adults = parseInt(document.getElementById('numAdults').value) || 1;
+        const children = parseInt(document.getElementById('numChildren').value) || 0;
+        const roomType = document.getElementById('roomType').value;
+
+        let roomMult = 1.0;
+        if (roomType === 'Deluxe') roomMult = 1.3;
+        else if (roomType === 'Suite') roomMult = 1.8;
+        else if (roomType === 'Premium Suite') roomMult = 2.5;
+
+        const travelers = adults + children;
+        const subtotal = BASE_PRICE * travelers * roomMult;
+        // Taxes are included in the base price
+        const total = subtotal;
+
+        document.getElementById('displayTravelers').textContent = 'Ã— ' + travelers;
+        document.getElementById('displayRoomUpgrade').textContent = 'Ã— ' + roomMult.toFixed(1);
+        document.getElementById('displaySubtotal').textContent = 'â‚¹' + Math.round(subtotal).toLocaleString('en-IN');
+        document.getElementById('displayTax').textContent = 'Included';
+        document.getElementById('displayTotal').textContent = 'â‚¹' + Math.round(total).toLocaleString('en-IN');
+    }
+
+    function populateHiddenFields() {
+        const adults = parseInt(document.getElementById('numAdults').value) || 1;
+        const children = parseInt(document.getElementById('numChildren').value) || 0;
+        const roomType = document.getElementById('roomType').value;
+
+        let roomMult = 1.0;
+        if (roomType === 'Deluxe') roomMult = 1.3;
+        else if (roomType === 'Suite') roomMult = 1.8;
+        else if (roomType === 'Premium Suite') roomMult = 2.5;
+
+        const travelers = adults + children;
+        const subtotal = BASE_PRICE * travelers * roomMult;
+        const total = subtotal;
+        
+        document.getElementById('hiddenBasePrice').value = BASE_PRICE;
+        document.getElementById('hiddenTotalPrice').value = Math.round(total);
+        document.getElementById('hiddenGuests').value = travelers;
+        return true;
+    }
+
+    // Initialize on load
+    document.addEventListener('DOMContentLoaded', updatePrice);
+</script>
+
+<%@ include file="/components/footer.jsp" %>

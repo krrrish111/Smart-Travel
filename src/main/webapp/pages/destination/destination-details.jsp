@@ -428,25 +428,43 @@
     window.CONTEXT_PATH = '${pageContext.request.contextPath}';
     /* ============================================================
      *  Destination Details – Action Button Logic
-     *  VoyastraToast is loaded globally via header.jsp / global_ui.jsp
+     *
+     *  Servlet contract:  POST /api/destination/save
+     *    Required params: destination_id=<int>  action=save|remove
+     *    Auth:            session attribute "user" must exist
+     *    Responses:
+     *      {"success":true}                              → saved (new or duplicate)
+     *      {"success":false,"message":"Unauthorized"}    → HTTP 401
+     *      {"success":false,"message":"Missing parameters"} → HTTP 400
+     *      {"success":false,"message":"Invalid ID"}      → HTTP 400
+     *      {"success":false}                             → DB error
      * ============================================================ */
     (function () {
-        const ctx    = window.CONTEXT_PATH || '';
-        const destId = '${destination.id}';
+        'use strict';
 
-        /* ---------- Helper: toast wrapper (safe even if VoyastraToast not ready) ---------- */
-        function toast(msg, type) {
-            if (window.VoyastraToast) {
-                window.VoyastraToast.show(msg, type || 'info');
+        var ctx    = window.CONTEXT_PATH || '';
+        var destId = '${destination.id}';
+
+        /* ── VoyastraToast helper ──────────────────────────────────────────────
+         * Calls window.VoyastraToast.show() directly.
+         * Falls back to console only — never uses toast() / toast.success().
+         * --------------------------------------------------------------------- */
+        function showToast(msg, type) {
+            type = type || 'info';
+            if (window.VoyastraToast && typeof window.VoyastraToast.show === 'function') {
+                window.VoyastraToast.show(msg, type);
             } else {
-                console.info('[Toast ' + (type||'info') + ']', msg);
-                if (type === 'error') alert(msg);
+                console.info('[VoyastraToast ' + type + ']', msg);
+                /* Only surface blocking alert for hard errors when toast unavailable */
+                if (type === 'error') {
+                    alert(msg);
+                }
             }
         }
 
         /* ================================================================
          *  BUTTON 1: VIEW ITINERARY
-         *  Navigates to the planner page pre-filled with the destination.
+         *  Navigates to /planner, optionally pre-seeding the destination.
          * ================================================================ */
         var btnItinerary = document.getElementById('btn-view-itinerary');
         if (btnItinerary) {
@@ -459,49 +477,74 @@
                     window.location.href = url;
                 } catch (e) {
                     console.error('[ViewItinerary]', e);
-                    toast(e.message, 'error');
+                    showToast('Navigation error: ' + e.message, 'error');
                 }
             });
         }
 
         /* ================================================================
          *  BUTTON 2: SAVE TRIP
-         *  POSTs to /api/destination/save.
-         *  Persists saved state in localStorage so button survives refresh.
+         *
+         *  POST /api/destination/save
+         *  Body (application/x-www-form-urlencoded):
+         *    destination_id=<destId>&action=save
+         *
+         *  Response handling:
+         *    HTTP 401 → not logged in  → redirect to login
+         *    HTTP 400 → bad request    → show error message from server
+         *    HTTP 200 + success:true   → saved (new or already existed)
+         *    HTTP 200 + success:false  → DB error
+         *
+         *  State persistence: localStorage key voyastra_saved_<destId>
+         *  ensures "Saved ✓" survives page refresh without an extra server call.
          * ================================================================ */
-        var btnSave  = document.getElementById('btn-save-trip');
-        var lblSave  = document.getElementById('save-trip-label');
-        var lsKey    = 'voyastra_saved_' + destId;
+        var btnSave = document.getElementById('btn-save-trip');
+        var lblSave = document.getElementById('save-trip-label');
+        var lsKey   = 'voyastra_saved_' + destId;
 
-        function setSavedAppearance(saved) {
+        /* Update visual state of the Save button */
+        function setSavedAppearance(isSaved) {
             if (!btnSave || !lblSave) return;
-            if (saved) {
-                lblSave.textContent = 'Saved ✓';
-                btnSave.style.borderColor = 'rgba(0,184,148,0.4)';
-                btnSave.style.color       = '#00b894';
+            if (isSaved) {
+                lblSave.textContent          = 'Saved \u2713';
+                btnSave.disabled             = true;
+                btnSave.style.borderColor    = 'rgba(0,184,148,0.4)';
+                btnSave.style.color          = '#00b894';
+                btnSave.style.cursor         = 'default';
+                btnSave.title                = 'Already in your wishlist';
             } else {
-                lblSave.textContent = 'Save Trip';
-                btnSave.style.borderColor = '';
-                btnSave.style.color       = '';
+                lblSave.textContent          = 'Save Trip';
+                btnSave.disabled             = false;
+                btnSave.style.borderColor    = '';
+                btnSave.style.color          = '';
+                btnSave.style.cursor         = '';
+                btnSave.title                = '';
             }
         }
 
-        // Restore button state on page load
+        /* Restore saved state on page load without a server round-trip */
         if (localStorage.getItem(lsKey) === '1') {
             setSavedAppearance(true);
         }
 
         if (btnSave) {
             btnSave.addEventListener('click', async function () {
-                if (!destId || destId === '0') {
-                    toast('Destination ID not available.', 'error');
+                /* Guard: must have a valid destination ID */
+                if (!destId || destId === '' || destId === '0') {
+                    showToast('Destination ID is not available.', 'error');
                     return;
                 }
-                var originalHtml = btnSave.innerHTML;
+
+                /* Disable button immediately to prevent double-submit */
                 btnSave.disabled = true;
+                var prevLabel    = lblSave ? lblSave.textContent : '';
+                if (lblSave) lblSave.textContent = 'Saving\u2026';
+
                 try {
+                    /* Build request body exactly as SaveDestinationServlet expects */
                     var params = new URLSearchParams();
-                    params.append('destinationId', destId);
+                    params.append('destination_id', destId);   /* required: integer ID  */
+                    params.append('action', 'save');            /* required: 'save'      */
 
                     var response = await fetch(ctx + '/api/destination/save', {
                         method:  'POST',
@@ -509,67 +552,92 @@
                         body:    params.toString()
                     });
 
-                    if (!response.ok) {
-                        var text = await response.text();
-                        throw new Error('HTTP ' + response.status + ': ' + text);
+                    /* ── HTTP 401: not logged in ──────────────────────────────── */
+                    if (response.status === 401) {
+                        showToast('Please log in to save trips.', 'error');
+                        /* Redirect to login, returning to current page after auth */
+                        var redirect = encodeURIComponent(window.location.pathname + window.location.search);
+                        window.location.href = ctx + '/login?redirect=' + redirect;
+                        return;
                     }
 
+                    /* ── HTTP 400: bad request ────────────────────────────────── */
+                    if (response.status === 400) {
+                        var errData = await response.json().catch(function () { return {}; });
+                        showToast(errData.message || 'Invalid request.', 'error');
+                        return;
+                    }
+
+                    /* ── Any other non-2xx ────────────────────────────────────── */
+                    if (!response.ok) {
+                        showToast('Server error (' + response.status + '). Please try again.', 'error');
+                        return;
+                    }
+
+                    /* ── HTTP 200: parse JSON body ────────────────────────────── */
                     var data = await response.json();
 
                     if (data.success) {
+                        /* Both "first save" and "already in wishlist" land here */
                         localStorage.setItem(lsKey, '1');
-                        setSavedAppearance(true);
-                        toast(data.alreadySaved
-                            ? 'Already in your wishlist!'
-                            : 'Trip saved to your wishlist!', 'success');
+                        setSavedAppearance(true);   /* shows "Saved ✓" and disables button */
+                        window.VoyastraToast && window.VoyastraToast.show('Trip saved to your wishlist!', 'success');
                     } else {
-                        toast(data.message || 'Could not save trip.', 'error');
+                        /* DB error — server returned {"success":false} */
+                        showToast(data.message || 'Could not save trip. Please try again.', 'error');
+                        /* Re-enable the button so the user can retry */
+                        btnSave.disabled = false;
+                        if (lblSave) lblSave.textContent = prevLabel;
                     }
-                } catch (e) {
-                    console.error('[SaveTrip]', e);
-                    toast(e.message, 'error');
-                } finally {
+
+                } catch (networkErr) {
+                    /* Network / JSON parse failure */
+                    console.error('[SaveTrip] Network error:', networkErr);
+                    showToast('Network error — please check your connection and try again.', 'error');
                     btnSave.disabled = false;
+                    if (lblSave) lblSave.textContent = prevLabel;
                 }
+                /* Note: finally is intentionally omitted — setSavedAppearance(true)
+                 * already disables the button permanently on success.            */
             });
         }
 
         /* ================================================================
          *  BUTTON 3: SHARE TRIP
-         *  Uses native Web Share API with clipboard fallback.
+         *  Uses native Web Share API (mobile) with clipboard fallback.
          * ================================================================ */
         var btnShare = document.getElementById('btn-share-trip');
         if (btnShare) {
             btnShare.addEventListener('click', async function () {
                 try {
                     var shareData = {
-                        title: document.title || 'Voyastra – Trip Details',
+                        title: document.title || 'Voyastra \u2013 Trip Details',
                         text:  'Check out this amazing trip on Voyastra!',
                         url:   window.location.href
                     };
 
                     if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
-                        // Native share sheet (mobile/modern browsers)
                         await navigator.share(shareData);
-                        toast('Shared successfully!', 'success');
+                        window.VoyastraToast && window.VoyastraToast.show('Shared successfully!', 'success');
                     } else {
-                        // Clipboard fallback
                         await navigator.clipboard.writeText(window.location.href);
-                        toast('Link copied to clipboard!', 'success');
+                        window.VoyastraToast && window.VoyastraToast.show('Link copied to clipboard!', 'success');
                     }
                 } catch (e) {
-                    if (e.name === 'AbortError') return; // User dismissed share sheet
+                    if (e.name === 'AbortError') return; /* user dismissed native share sheet */
                     console.error('[ShareTrip]', e);
-                    // Last-resort fallback – prompt with URL
                     try {
                         await navigator.clipboard.writeText(window.location.href);
-                        toast('Link copied to clipboard!', 'success');
+                        window.VoyastraToast && window.VoyastraToast.show('Link copied to clipboard!', 'success');
                     } catch (clipErr) {
-                        toast('Copy this URL: ' + window.location.href, 'info');
+                        showToast('Copy this link manually: ' + window.location.href, 'info');
                     }
                 }
             });
         }
+
     })();
 </script>
 <%@ include file="/components/footer.jsp" %>
+
+

@@ -1879,6 +1879,14 @@
         <servlet-name>SetActiveJourneyServlet</servlet-name>
         <url-pattern>/my-journey/set-active</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>SaveTripServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.destination.SaveTripServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SaveTripServlet</servlet-name>
+        <url-pattern>/api/destination/save</url-pattern>
+    </servlet-mapping>
 
     <!-- Welcome File List -->
     <welcome-file-list>

@@ -178,11 +178,11 @@
         <div class="dest-actions-glass">
             <div class="action-group-left">
                 <!-- Action: View Itinerary -->
-                <button class="dest-btn btn-glass-secondary" onclick="toast.info('Viewing full itinerary details...')">
+                <button id="btn-view-itinerary" class="dest-btn btn-glass-secondary">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
                     View Itinerary
                 </button>
-                
+
                 <!-- Action: Customize Trip -->
                 <a href="${pageContext.request.contextPath}/planner" class="dest-btn btn-glass-secondary">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
@@ -190,18 +190,18 @@
                 </a>
 
                 <!-- Action: Save Trip -->
-                <button class="dest-btn btn-glass-secondary" onclick="toast.success('Trip saved to your wishlist!')">
+                <button id="btn-save-trip" class="dest-btn btn-glass-secondary">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
-                    Save Trip
+                    <span id="save-trip-label">Save Trip</span>
                 </button>
 
                 <!-- Action: Share Trip -->
-                <button class="dest-btn btn-glass-secondary" onclick="toast.success('Link copied to clipboard!')">
+                <button id="btn-share-trip" class="dest-btn btn-glass-secondary">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
                     Share Trip
                 </button>
             </div>
-            
+
             <div class="action-group-right">
                 <!-- Action: Book This Trip -->
                 <a href="${pageContext.request.contextPath}/destination/customize?id=${destination.id}" class="dest-btn btn-primary-gold">
@@ -425,7 +425,151 @@
 </main>
 
 <script>
-    // Ensure auth utility is available
     window.CONTEXT_PATH = '${pageContext.request.contextPath}';
+    /* ============================================================
+     *  Destination Details – Action Button Logic
+     *  VoyastraToast is loaded globally via header.jsp / global_ui.jsp
+     * ============================================================ */
+    (function () {
+        const ctx    = window.CONTEXT_PATH || '';
+        const destId = '${destination.id}';
+
+        /* ---------- Helper: toast wrapper (safe even if VoyastraToast not ready) ---------- */
+        function toast(msg, type) {
+            if (window.VoyastraToast) {
+                window.VoyastraToast.show(msg, type || 'info');
+            } else {
+                console.info('[Toast ' + (type||'info') + ']', msg);
+                if (type === 'error') alert(msg);
+            }
+        }
+
+        /* ================================================================
+         *  BUTTON 1: VIEW ITINERARY
+         *  Navigates to the planner page pre-filled with the destination.
+         * ================================================================ */
+        var btnItinerary = document.getElementById('btn-view-itinerary');
+        if (btnItinerary) {
+            btnItinerary.addEventListener('click', function () {
+                try {
+                    var url = ctx + '/planner';
+                    if (destId && destId !== '' && destId !== '0') {
+                        url += '?destinationId=' + encodeURIComponent(destId);
+                    }
+                    window.location.href = url;
+                } catch (e) {
+                    console.error('[ViewItinerary]', e);
+                    toast(e.message, 'error');
+                }
+            });
+        }
+
+        /* ================================================================
+         *  BUTTON 2: SAVE TRIP
+         *  POSTs to /api/destination/save.
+         *  Persists saved state in localStorage so button survives refresh.
+         * ================================================================ */
+        var btnSave  = document.getElementById('btn-save-trip');
+        var lblSave  = document.getElementById('save-trip-label');
+        var lsKey    = 'voyastra_saved_' + destId;
+
+        function setSavedAppearance(saved) {
+            if (!btnSave || !lblSave) return;
+            if (saved) {
+                lblSave.textContent = 'Saved ✓';
+                btnSave.style.borderColor = 'rgba(0,184,148,0.4)';
+                btnSave.style.color       = '#00b894';
+            } else {
+                lblSave.textContent = 'Save Trip';
+                btnSave.style.borderColor = '';
+                btnSave.style.color       = '';
+            }
+        }
+
+        // Restore button state on page load
+        if (localStorage.getItem(lsKey) === '1') {
+            setSavedAppearance(true);
+        }
+
+        if (btnSave) {
+            btnSave.addEventListener('click', async function () {
+                if (!destId || destId === '0') {
+                    toast('Destination ID not available.', 'error');
+                    return;
+                }
+                var originalHtml = btnSave.innerHTML;
+                btnSave.disabled = true;
+                try {
+                    var params = new URLSearchParams();
+                    params.append('destinationId', destId);
+
+                    var response = await fetch(ctx + '/api/destination/save', {
+                        method:  'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body:    params.toString()
+                    });
+
+                    if (!response.ok) {
+                        var text = await response.text();
+                        throw new Error('HTTP ' + response.status + ': ' + text);
+                    }
+
+                    var data = await response.json();
+
+                    if (data.success) {
+                        localStorage.setItem(lsKey, '1');
+                        setSavedAppearance(true);
+                        toast(data.alreadySaved
+                            ? 'Already in your wishlist!'
+                            : 'Trip saved to your wishlist!', 'success');
+                    } else {
+                        toast(data.message || 'Could not save trip.', 'error');
+                    }
+                } catch (e) {
+                    console.error('[SaveTrip]', e);
+                    toast(e.message, 'error');
+                } finally {
+                    btnSave.disabled = false;
+                }
+            });
+        }
+
+        /* ================================================================
+         *  BUTTON 3: SHARE TRIP
+         *  Uses native Web Share API with clipboard fallback.
+         * ================================================================ */
+        var btnShare = document.getElementById('btn-share-trip');
+        if (btnShare) {
+            btnShare.addEventListener('click', async function () {
+                try {
+                    var shareData = {
+                        title: document.title || 'Voyastra – Trip Details',
+                        text:  'Check out this amazing trip on Voyastra!',
+                        url:   window.location.href
+                    };
+
+                    if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+                        // Native share sheet (mobile/modern browsers)
+                        await navigator.share(shareData);
+                        toast('Shared successfully!', 'success');
+                    } else {
+                        // Clipboard fallback
+                        await navigator.clipboard.writeText(window.location.href);
+                        toast('Link copied to clipboard!', 'success');
+                    }
+                } catch (e) {
+                    if (e.name === 'AbortError') return; // User dismissed share sheet
+                    console.error('[ShareTrip]', e);
+                    // Last-resort fallback – prompt with URL
+                    try {
+                        await navigator.clipboard.writeText(window.location.href);
+                        toast('Link copied to clipboard!', 'success');
+                    } catch (clipErr) {
+                        toast('Copy this URL: ' + window.location.href, 'info');
+                    }
+                }
+            });
+        }
+    })();
 </script>
 <%@ include file="/components/footer.jsp" %>

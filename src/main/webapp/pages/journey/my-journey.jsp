@@ -343,7 +343,17 @@
                                     </div>
                                     <div style="display:flex; flex-direction:column; align-items:flex-end; gap:6px;">
                                         <div style="background: rgba(0, 184, 148, 0.2); color: #00b894; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem;">${ub.status}</div>
-                                        <a href="${pageContext.request.contextPath}${ub.ticketUrl}" style="font-size:0.75rem; color: var(--primary); text-decoration:none;"><i class="ri-download-2-line"></i> Ticket</a>
+                                        <div style="display:flex; gap:6px; align-items:center;">
+                                            <a href="${pageContext.request.contextPath}${ub.ticketUrl}" style="font-size:0.75rem; color: var(--primary); text-decoration:none; padding:4px; border:1px solid var(--color-border); border-radius:4px;"><i class="ri-download-2-line"></i> Ticket</a>
+                                            <c:choose>
+                                                <c:when test="${activeBookingRef == (not empty ub.bookingRef ? ub.bookingRef : ub.id) && activeBookingType == ub.type}">
+                                                    <button style="font-size:0.75rem; color: #00b894; background:rgba(0,184,148,0.1); border:1px solid rgba(0,184,148,0.2); padding:4px 8px; border-radius:4px; cursor:default;" disabled><i class="ri-checkbox-circle-line"></i> Active</button>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <button style="font-size:0.75rem; color: var(--text-primary); background:var(--primary); border:none; padding:4px 8px; border-radius:4px; cursor:pointer;" onclick="setActiveJourney('${not empty ub.bookingRef ? ub.bookingRef : ub.id}', '${ub.type}', this)"><i class="ri-star-line"></i> Set Active</button>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </div>
                                     </div>
                                 </div>
                                 </c:forEach>

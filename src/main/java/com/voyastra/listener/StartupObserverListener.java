@@ -76,6 +76,28 @@ public class StartupObserverListener implements ServletContextListener {
         
         // Shut down SMSService executor service
         com.voyastra.util.SMSService.shutdown();
+
+        // Unregister JDBC Drivers
+        java.util.Enumeration<java.sql.Driver> drivers = java.sql.DriverManager.getDrivers();
+        while (drivers.hasMoreElements()) {
+            java.sql.Driver driver = drivers.nextElement();
+            if (driver.getClass().getClassLoader() == sce.getServletContext().getClassLoader()) {
+                try {
+                    java.sql.DriverManager.deregisterDriver(driver);
+                    logger.info("[SHUTDOWN] Unregistered JDBC driver: {}", driver);
+                } catch (java.sql.SQLException e) {
+                    logger.error("[SHUTDOWN ERROR] Error unregistering JDBC driver: {}", driver, e);
+                }
+            }
+        }
+        
+        // Stop MySQL abandoned connection cleanup thread
+        try {
+            com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.checkedShutdown();
+            logger.info("[SHUTDOWN] Stopped MySQL abandoned connection cleanup thread.");
+        } catch (Throwable t) {
+            logger.warn("[SHUTDOWN WARNING] Failed to stop MySQL abandoned connection cleanup thread: {}", t.getMessage());
+        }
         
         logger.info("[SHUTDOWN] StartupObserverListener resource cleanup completed.");
     }

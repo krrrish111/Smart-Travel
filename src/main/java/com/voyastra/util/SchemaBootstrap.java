@@ -16,12 +16,14 @@ import com.voyastra.config.ConfigManager;
  * Runs automatic DB schema migrations on application startup.
  * All migrations are idempotent (safe to run multiple times).
  */
-public class SchemaBootstrap implements ServletContextListener {
+public class SchemaBootstrap {
 
     private static final Logger logger = LoggerFactory.getLogger(SchemaBootstrap.class);
+    private static volatile boolean isBootstrapped = false;
 
-    @Override
-    public void contextInitialized(ServletContextEvent sce) {
+    public static synchronized void ensureBootstrapped() {
+        if (isBootstrapped) return;
+        
         String skipBootstrap = System.getenv("SKIP_SCHEMA_BOOTSTRAP");
         if (skipBootstrap == null) {
             skipBootstrap = System.getProperty("SKIP_SCHEMA_BOOTSTRAP");
@@ -946,56 +948,20 @@ public class SchemaBootstrap implements ServletContextListener {
                 );
             } catch (Exception e) {}
 
-            logger.info("[SchemaBootstrap] Schema migration and setup complete.");
         }
-        } catch (Throwable e) {
-            logger.error("[SchemaBootstrap] Migration error: " + e.getMessage(), e);
-        } finally {
-            com.voyastra.util.StartupProfiler.duration("SchemaBootstrap Initialization", begin);
-        }
-    }
+            // Also ensure the user_saved_trips table exists
+            com.voyastra.dao.destination.SavedTripDAO savedTripDAO = new com.voyastra.dao.destination.SavedTripDAO();
+            savedTripDAO.ensureTableExists();
 
-    @Override
-    public void contextDestroyed(ServletContextEvent sce) {
-        logger.info("[Shutdown] Starting web application shutdown cleanup...");
-        
-        // 1. Shutdown Email & SMS Services Background Thread Pools
-        try {
-            EmailService.shutdown();
-        } catch (Throwable t) {
-            logger.error("Error shutting down EmailService: ", t);
-        }
-        try {
-            SMSService.shutdown();
-        } catch (Throwable t) {
-            logger.error("Error shutting down SMSService: ", t);
-        }
+            isBootstrapped = true;
+            logger.info("[SchemaBootstrap] Schema bootstrap completed successfully in {} ms.", 
+                    System.currentTimeMillis() - begin);
+            System.out.println("[SchemaBootstrap] Successfully Bootstrapped!");
 
-        // 2. Shutdown HikariCP Pool
-        DBConnection.shutdown();
-        
-        // 3. Unregister JDBC Drivers
-        java.util.Enumeration<java.sql.Driver> drivers = java.sql.DriverManager.getDrivers();
-        while (drivers.hasMoreElements()) {
-            java.sql.Driver driver = drivers.nextElement();
-            if (driver.getClass().getClassLoader() == sce.getServletContext().getClassLoader()) {
-                try {
-                    java.sql.DriverManager.deregisterDriver(driver);
-                    logger.info("[Shutdown] Unregistered JDBC driver: {}", driver);
-                } catch (java.sql.SQLException e) {
-                    logger.error("[Shutdown ERROR] Error unregistering JDBC driver: {}", driver, e);
-                }
-            }
+        } catch (Exception e) {
+            System.err.println("[SchemaBootstrap ERROR] " + e.getMessage());
+            e.printStackTrace();
+            logger.error("[SchemaBootstrap ERROR]", e);
         }
-        
-        // 4. Stop MySQL abandoned connection cleanup thread
-        try {
-            com.mysql.cj.jdbc.AbandonedConnectionCleanupThread.checkedShutdown();
-            logger.info("[Shutdown] Stopped MySQL abandoned connection cleanup thread.");
-        } catch (Throwable t) {
-            logger.warn("[Shutdown WARNING] Failed to stop MySQL abandoned connection cleanup thread: {}", t.getMessage());
-        }
-        
-        logger.info("[Shutdown] Web application shutdown cleanup complete.");
     }
 }

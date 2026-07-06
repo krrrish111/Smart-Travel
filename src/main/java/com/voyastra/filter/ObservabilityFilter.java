@@ -18,6 +18,10 @@ public class ObservabilityFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         
+        // Lazy initialization of database schema on the first HTTP request.
+        // This prevents Tomcat startup from blocking and timing out on Render.
+        com.voyastra.util.SchemaBootstrap.ensureBootstrapped();
+        
         if (request instanceof HttpServletRequest) {
             HttpServletRequest httpRequest = (HttpServletRequest) request;
             

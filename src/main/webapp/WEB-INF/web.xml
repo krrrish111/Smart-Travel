@@ -13,9 +13,6 @@
     <listener>
         <listener-class>com.voyastra.util.ActiveSessionListener</listener-class>
     </listener>
-    <listener>
-        <listener-class>com.voyastra.util.SchemaBootstrap</listener-class>
-    </listener>
 
     <!-- Filters -->
     <filter>

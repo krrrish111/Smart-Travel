@@ -35,8 +35,6 @@ public class SaveTripServlet extends HttpServlet {
     public void init() throws ServletException {
         savedTripDAO = new SavedTripDAO();
         gson = new Gson();
-        // Create table if it doesn't exist (idempotent, safe to call every startup)
-        savedTripDAO.ensureTableExists();
     }
 
     @Override

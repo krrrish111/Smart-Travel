@@ -45,7 +45,12 @@ public class ImageServlet extends HttpServlet {
             }
             uploadBase += "uploads";
         }
-        File imageFile = new File(uploadBase, pathInfo);
+        // IMPORTANT: strip the leading '/' from pathInfo before passing to new File().
+        // In Java, new File(parent, child) ignores the parent when child starts with '/'
+        // (treated as an absolute path on Unix). This causes files to be looked up at
+        // /posts/uuid.jpg instead of /var/voyastra/uploads/posts/uuid.jpg.
+        String relativePath = pathInfo.startsWith("/") ? pathInfo.substring(1) : pathInfo;
+        File imageFile = new File(uploadBase, relativePath);
 
         // Security: prevent path traversal attacks
         String canonicalBase = new File(uploadBase).getCanonicalPath();

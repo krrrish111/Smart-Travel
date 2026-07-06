@@ -1871,6 +1871,14 @@
         <servlet-name>YouTubeServlet</servlet-name>
         <url-pattern>/api/youtube/search</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>SetActiveJourneyServlet</servlet-name>
+        <servlet-class>com.voyastra.controller.journey.SetActiveJourneyServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SetActiveJourneyServlet</servlet-name>
+        <url-pattern>/my-journey/set-active</url-pattern>
+    </servlet-mapping>
 
     <!-- Welcome File List -->
     <welcome-file-list>

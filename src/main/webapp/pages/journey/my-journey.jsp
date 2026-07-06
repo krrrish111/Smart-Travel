@@ -655,7 +655,7 @@
             </div>
 
             <script>
-                function setActiveJourney(bookingId, bookingType, btnElement) {
+                async function setActiveJourney(bookingId, bookingType, btnElement) {
                     const originalHtml = btnElement.innerHTML;
                     btnElement.innerHTML = '<i class="ri-loader-4-line" style="animation: spin 1s linear infinite;"></i> Setting...';
                     btnElement.disabled = true;
@@ -664,13 +664,20 @@
                     params.append('bookingId', bookingId);
                     params.append('bookingType', bookingType);
 
-                    fetch('${pageContext.request.contextPath}/my-journey/set-active', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                        body: params.toString()
-                    })
-                    .then(r => r.json())
-                    .then(data => {
+                    try {
+                        const response = await fetch('${pageContext.request.contextPath}/my-journey/set-active', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                            body: params.toString()
+                        });
+
+                        if (!response.ok) {
+                            const text = await response.text();
+                            throw new Error("HTTP " + response.status + ": " + text);
+                        }
+
+                        const data = await response.json();
+                        
                         if (data.success) {
                             if (window.VoyastraToast) {
                                 VoyastraToast.show("Active Journey updated.", "success");
@@ -683,13 +690,12 @@
                             btnElement.innerHTML = originalHtml;
                             btnElement.disabled = false;
                         }
-                    })
-                    .catch(e => {
+                    } catch (e) {
                         console.error(e);
                         alert('An error occurred. Please try again.');
                         btnElement.innerHTML = originalHtml;
                         btnElement.disabled = false;
-                    });
+                    }
                 }
 
                 function cancelActiveJourney() {

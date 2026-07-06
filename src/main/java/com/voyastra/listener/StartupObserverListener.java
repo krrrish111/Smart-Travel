@@ -59,6 +59,22 @@ public class StartupObserverListener implements ServletContextListener {
         );
 
         logger.info("[STARTUP] StartupObserverListener initialized in {} ms (no DB connection opened).", elapsed);
+
+        // ── 4. Kick off DB schema bootstrap in a background daemon thread ─────
+        // The health check (Render's first request) must return HTTP 200 immediately.
+        // We MUST NOT block Tomcat startup or the first request with DB migrations.
+        // A daemon thread runs concurrently and migrates the schema in the background.
+        Thread bootstrapThread = new Thread(() -> {
+            try {
+                logger.info("[STARTUP] Background schema bootstrap starting...");
+                com.voyastra.util.SchemaBootstrap.ensureBootstrapped();
+                logger.info("[STARTUP] Background schema bootstrap complete.");
+            } catch (Exception e) {
+                logger.error("[STARTUP] Background schema bootstrap failed: {}", e.getMessage(), e);
+            }
+        }, "voyastra-schema-bootstrap");
+        bootstrapThread.setDaemon(true);
+        bootstrapThread.start();
     }
 
     @Override

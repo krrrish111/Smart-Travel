@@ -747,6 +747,18 @@ public class SchemaBootstrap implements ServletContextListener {
                 "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)"
             );
 
+            // --- User Active Journey ---
+            stmt.execute(
+                "CREATE TABLE IF NOT EXISTS user_active_journey (" +
+                "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                "user_id INT NOT NULL, " +
+                "booking_id VARCHAR(100) NOT NULL, " +
+                "booking_type VARCHAR(50) NOT NULL, " +
+                "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, " +
+                "UNIQUE KEY uq_user_active_journey_user (user_id), " +
+                "CONSTRAINT fk_uaj_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE)"
+            );
+
             // --- Community Posts Column Additions ---
             try { stmt.execute("ALTER TABLE posts ADD COLUMN image_url VARCHAR(255) DEFAULT NULL"); } catch (Exception e) {}
             try { stmt.execute("ALTER TABLE posts ADD COLUMN category VARCHAR(50) DEFAULT 'For You'"); } catch (Exception e) {}

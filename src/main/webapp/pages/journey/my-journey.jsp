@@ -287,9 +287,36 @@
                         <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--color-border); border-radius: 12px; padding: 15px; display: flex; justify-content: space-between; align-items: center;">
                             <div>
                                 <h3 style="font-size: 1.4rem; margin-bottom: 5px;">${not empty journey ? journey.destination : 'No Active Trip'}</h3>
-                                <p style="color: var(--text-secondary); font-size: 0.9rem;">
-                                    ${not empty journey ? 'Day '.concat(journey.currentDay).concat(' of ').concat(journey.totalDays) : 'Plan your next adventure!'}
+                                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0;">
+                                    <c:choose>
+                                        <c:when test="${not empty journey}">
+                                            <c:choose>
+                                                <c:when test="${journey.status == 'ACTIVE'}">
+                                                    Day ${journey.currentDay} of ${journey.totalDays}
+                                                </c:when>
+                                                <c:otherwise>
+                                                    Starts on ${journey.startDate} (in ${daysRemaining} days)
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </c:when>
+                                        <c:otherwise>
+                                            Plan your next adventure!
+                                        </c:otherwise>
+                                    </c:choose>
                                 </p>
+                                <c:if test="${not empty journey}">
+                                    <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 10px;">
+                                        <i class="ri-map-pin-time-line"></i> Next Activity: 
+                                        <c:choose>
+                                            <c:when test="${journey.status == 'ACTIVE'}">
+                                                Explore the city & local sightseeing
+                                            </c:when>
+                                            <c:otherwise>
+                                                Departure & Flight/Train travel
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </div>
+                                </c:if>
                             </div>
                             <c:if test="${not empty journey}">
                                 <div style="text-align: right;">
@@ -440,6 +467,36 @@
                         </div>
                     </div>
 
+                    <!-- Active Journey Metadata Card -->
+                    <div class="panel" style="margin-bottom: 30px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 20px;">
+                        <div>
+                            <span style="font-size: 0.8rem; color: var(--text-secondary);">Booking Type</span>
+                            <div style="font-weight: bold; margin-top: 5px; text-transform: uppercase; font-size: 0.95rem;"><i class="ri-suitcase-line" style="color: var(--primary);"></i> ${activeBookingType}</div>
+                        </div>
+                        <div>
+                            <span style="font-size: 0.8rem; color: var(--text-secondary);">Booking Ref</span>
+                            <div style="font-weight: bold; margin-top: 5px; font-size: 0.95rem;"><i class="ri-hashtag" style="color: var(--primary);"></i> ${activeBookingRef}</div>
+                        </div>
+                        <div>
+                            <span style="font-size: 0.8rem; color: var(--text-secondary);">Timeline</span>
+                            <div style="font-weight: bold; margin-top: 5px; font-size: 0.95rem;">
+                                <i class="ri-time-line" style="color: var(--primary);"></i> 
+                                <c:choose>
+                                    <c:when test="${daysRemaining > 0}">${daysRemaining} Days Left</c:when>
+                                    <c:otherwise>Active Now</c:otherwise>
+                                </c:choose>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 10px; align-items: center; justify-content: flex-end;">
+                            <c:if test="${not empty activeTicketUrl}">
+                                <a href="${pageContext.request.contextPath}${activeTicketUrl}" class="btn btn-outline" style="padding: 8px 16px; font-size: 0.85rem;"><i class="ri-download-2-line"></i> Ticket</a>
+                            </c:if>
+                            <c:if test="${journey.status != 'CANCELLED' && journey.status != 'COMPLETED'}">
+                                <button class="btn btn-outline" style="padding: 8px 16px; font-size: 0.85rem; color: #e74c3c; border-color: rgba(231,76,60,0.3);" onclick="cancelActiveJourney()"><i class="ri-close-circle-line"></i> Cancel</button>
+                            </c:if>
+                        </div>
+                    </div>
+
                     <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 30px;">
                         <div class="panel">
                             <h2><i class="ri-map-pin-time-line"></i> Today's Itinerary</h2>
@@ -562,7 +619,17 @@
                                 <div style="text-align: right; display:flex; flex-direction:column; gap:8px; align-items:flex-end;">
                                     <div style="background: rgba(0, 184, 148, 0.2); color: #00b894; padding: 6px 15px; border-radius: 20px; font-weight: 600; font-size: 0.85rem;">${trip.status}</div>
                                     <div style="color: var(--text-secondary); font-size: 0.85rem;">&#8377;${trip.totalPrice}</div>
-                                    <a href="${pageContext.request.contextPath}${trip.ticketUrl}" class="btn btn-outline" style="padding: 5px 15px; font-size: 0.85rem;"><i class="ri-download-2-line"></i> Ticket</a>
+                                    <div style="display: flex; gap: 8px;">
+                                        <a href="${pageContext.request.contextPath}${trip.ticketUrl}" class="btn btn-outline" style="padding: 5px 15px; font-size: 0.85rem;"><i class="ri-download-2-line"></i> Ticket</a>
+                                        <c:choose>
+                                            <c:when test="${activeBookingRef == (not empty trip.bookingRef ? trip.bookingRef : trip.id) && activeBookingType == trip.type}">
+                                                <button class="btn" style="padding: 5px 15px; font-size: 0.85rem; background: rgba(0, 184, 148, 0.1); color: #00b894; cursor: default; border: 1px solid rgba(0, 184, 148, 0.2);" disabled><i class="ri-checkbox-circle-line"></i> Active</button>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <button class="btn btn-primary" style="padding: 5px 15px; font-size: 0.85rem;" onclick="setActiveJourney('${not empty trip.bookingRef ? trip.bookingRef : trip.id}', '${trip.type}', this)"><i class="ri-star-line"></i> Set Active</button>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </div>
                                 </div>
                             </div>
                         </c:forEach>
@@ -578,6 +645,72 @@
             </div>
 
             <script>
+                function setActiveJourney(bookingId, bookingType, btnElement) {
+                    const originalHtml = btnElement.innerHTML;
+                    btnElement.innerHTML = '<i class="ri-loader-4-line" style="animation: spin 1s linear infinite;"></i> Setting...';
+                    btnElement.disabled = true;
+
+                    const params = new URLSearchParams();
+                    params.append('bookingId', bookingId);
+                    params.append('bookingType', bookingType);
+
+                    fetch('${pageContext.request.contextPath}/my-journey/set-active', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: params.toString()
+                    })
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.success) {
+                            if (window.VoyastraToast) {
+                                VoyastraToast.show("Active Journey updated.", "success");
+                            }
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 1000);
+                        } else {
+                            alert(data.message || 'Failed to set active journey');
+                            btnElement.innerHTML = originalHtml;
+                            btnElement.disabled = false;
+                        }
+                    })
+                    .catch(e => {
+                        console.error(e);
+                        alert('An error occurred. Please try again.');
+                        btnElement.innerHTML = originalHtml;
+                        btnElement.disabled = false;
+                    });
+                }
+
+                function cancelActiveJourney() {
+                    const bookingId = "${activeBookingRef}";
+                    const bookingType = "${activeBookingType}";
+                    if (confirm("Are you sure you want to cancel this active journey?")) {
+                        if (bookingType === "destination") {
+                            fetch('${pageContext.request.contextPath}/api/destination/booking/cancel', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                                body: 'booking_id=' + bookingId
+                            })
+                            .then(r => r.json())
+                            .then(data => {
+                                if(data.status === 'success' || data.success) {
+                                    if (window.VoyastraToast) {
+                                        VoyastraToast.show("Active journey cancelled successfully.", "success");
+                                    }
+                                    setTimeout(() => {
+                                        window.location.reload();
+                                    }, 1000);
+                                } else {
+                                    alert(data.message || 'Failed to cancel booking');
+                                }
+                            });
+                        } else {
+                            alert("To cancel this " + bookingType + " booking, please visit the specific booking history section or contact support.");
+                        }
+                    }
+                }
+
                 function setActiveTrip(bookingId) {
                     fetch('${pageContext.request.contextPath}/api/trip/set-active', {
                         method: 'POST',

@@ -3,10 +3,12 @@ package com.voyastra.controller.journey;
 import com.voyastra.dao.JourneyDAO;
 import com.voyastra.dao.booking.BookingDAO;
 import com.voyastra.dao.booking.UnifiedBookingDAO;
+import com.voyastra.dao.journey.ActiveJourneyDAO;
 import com.voyastra.dao.journey.MyJourneyEcosystemDAO;
 import com.voyastra.model.Journey;
 import com.voyastra.model.booking.Booking;
 import com.voyastra.model.booking.UnifiedBooking;
+import com.voyastra.model.journey.ActiveJourneyRecord;
 import com.voyastra.model.profile.User;
 
 import javax.servlet.ServletException;
@@ -17,7 +19,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @WebServlet("/my-journey")
@@ -27,6 +31,7 @@ public class MyJourneyServlet extends HttpServlet {
     private MyJourneyEcosystemDAO ecosystemDAO;
     private BookingDAO bookingDAO;
     private UnifiedBookingDAO unifiedBookingDAO;
+    private ActiveJourneyDAO activeJourneyDAO;
 
     @Override
     public void init() throws ServletException {
@@ -34,6 +39,17 @@ public class MyJourneyServlet extends HttpServlet {
         ecosystemDAO      = new MyJourneyEcosystemDAO();
         bookingDAO        = new BookingDAO();
         unifiedBookingDAO = new UnifiedBookingDAO();
+        activeJourneyDAO  = new ActiveJourneyDAO();
+    }
+
+    private UnifiedBooking findBooking(List<UnifiedBooking> list, String bookingId, String bookingType) {
+        for (UnifiedBooking b : list) {
+            String ref = b.getBookingRef() != null && !b.getBookingRef().isEmpty() ? b.getBookingRef() : String.valueOf(b.getId());
+            if (ref.equals(bookingId) && b.getType().equalsIgnoreCase(bookingType)) {
+                return b;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -106,37 +122,100 @@ public class MyJourneyServlet extends HttpServlet {
         request.setAttribute("cancelledUnified",     cancelledUnified);
 
         // -----------------------------------------------------------------------
-        // 2. Legacy: active Journey from journeys table (for weather widget etc.)
+        // 2. Active Journey Resolution (DB-driven, with chronologically nearest fallback)
         // -----------------------------------------------------------------------
-        Journey activeJourney = journeyDAO.getActiveJourneyForUser(String.valueOf(userId));
+        ActiveJourneyRecord activeRec = activeJourneyDAO.getActiveJourney(userId);
+        UnifiedBooking activeBooking = null;
 
-        // Fall back to first active unified booking if no legacy journey
-        if (activeJourney == null && !activeUnified.isEmpty()) {
-            UnifiedBooking ub = activeUnified.get(0);
-            activeJourney = new Journey();
-            activeJourney.setDestination(ub.getDestination() != null ? ub.getDestination() : ub.getLabel());
-            activeJourney.setStatus(ub.getStatus());
-            activeJourney.setStartDate(ub.getTravelDate() != null ? ub.getTravelDate() : "TBD");
-            activeJourney.setEndDate(ub.getEndDate() != null ? ub.getEndDate() : "TBD");
-            activeJourney.setCurrentDay(1);
-            activeJourney.setTotalDays(5);
-            activeJourney.setProgressPercentage(10);
-            activeJourney.setTemperature(25);
-            activeJourney.setWeatherCondition("Clear");
+        if (activeRec != null) {
+            activeBooking = findBooking(allUnified, activeRec.getBookingId(), activeRec.getBookingType());
+            if (activeBooking != null) {
+                String stage = UnifiedBookingDAO.classifyBooking(activeBooking, today);
+                if ("cancelled".equals(stage) || "completed".equals(stage)) {
+                    activeBooking = null; // Stale selection, trigger auto-fallback
+                    activeJourneyDAO.clearActiveJourney(userId);
+                }
+            }
         }
-        // Fall back to first upcoming unified booking as "next trip"
-        if (activeJourney == null && !upcomingUnified.isEmpty()) {
-            UnifiedBooking ub = upcomingUnified.get(0);
+
+        // Auto-fallback: choose nearest active or upcoming trip once and persist it
+        if (activeBooking == null) {
+            UnifiedBooking closest = null;
+            long minDiff = Long.MAX_VALUE;
+            for (UnifiedBooking b : allUnified) {
+                String stage = UnifiedBookingDAO.classifyBooking(b, today);
+                if ("active".equals(stage) || "upcoming".equals(stage)) {
+                    String td = b.getTravelDate();
+                    if (td != null && !td.isEmpty()) {
+                        try {
+                            LocalDate travelDate = LocalDate.parse(td.substring(0, 10));
+                            long diff = ChronoUnit.DAYS.between(today, travelDate);
+                            // We prefer trips starting today or soonest in the future
+                            if (diff >= -5 && diff < minDiff) {
+                                minDiff = diff;
+                                closest = b;
+                            }
+                        } catch (Exception e) {
+                            if (closest == null) closest = b;
+                        }
+                    } else {
+                        if (closest == null) closest = b;
+                    }
+                }
+            }
+            if (closest != null) {
+                activeBooking = closest;
+                String refId = closest.getBookingRef() != null && !closest.getBookingRef().isEmpty() ? closest.getBookingRef() : String.valueOf(closest.getId());
+                activeJourneyDAO.setActiveJourney(userId, refId, closest.getType());
+            }
+        }
+
+        Journey activeJourney = null;
+        if (activeBooking != null) {
             activeJourney = new Journey();
-            activeJourney.setDestination(ub.getDestination() != null ? ub.getDestination() : ub.getLabel());
-            activeJourney.setStatus("UPCOMING");
-            activeJourney.setStartDate(ub.getTravelDate() != null ? ub.getTravelDate() : "TBD");
-            activeJourney.setEndDate(ub.getEndDate() != null ? ub.getEndDate() : "TBD");
-            activeJourney.setCurrentDay(0);
-            activeJourney.setTotalDays(0);
-            activeJourney.setProgressPercentage(0);
-            activeJourney.setTemperature(25);
-            activeJourney.setWeatherCondition("Clear");
+            activeJourney.setDestination(activeBooking.getDestination() != null && !activeBooking.getDestination().isEmpty() ? activeBooking.getDestination() : activeBooking.getLabel());
+            
+            String stage = UnifiedBookingDAO.classifyBooking(activeBooking, today);
+            activeJourney.setStatus(stage.toUpperCase());
+            activeJourney.setStartDate(activeBooking.getTravelDate() != null ? activeBooking.getTravelDate() : "TBD");
+            activeJourney.setEndDate(activeBooking.getEndDate() != null ? activeBooking.getEndDate() : "TBD");
+
+            long daysRemaining = 0;
+            if (activeBooking.getTravelDate() != null && !activeBooking.getTravelDate().isEmpty()) {
+                try {
+                    LocalDate travelDate = LocalDate.parse(activeBooking.getTravelDate().substring(0, 10));
+                    daysRemaining = ChronoUnit.DAYS.between(today, travelDate);
+                } catch (Exception ignore) {}
+            }
+            request.setAttribute("daysRemaining", daysRemaining);
+
+            if ("active".equals(stage)) {
+                activeJourney.setCurrentDay(1);
+                activeJourney.setTotalDays(5);
+                activeJourney.setProgressPercentage(20);
+            } else {
+                activeJourney.setCurrentDay(0);
+                activeJourney.setTotalDays(5);
+                activeJourney.setProgressPercentage(0);
+            }
+
+            activeJourney.setMorningPlan(Arrays.asList("Arrival & Check-in", "Local orientation"));
+            activeJourney.setAfternoonPlan(Arrays.asList("Explore city center landmarks", "Local cuisine lunch"));
+            activeJourney.setEveningPlan(Arrays.asList("Sunset view points", "Leisure stroll"));
+            activeJourney.setNightPlan(Arrays.asList("Dinner at a rated local spot", "Rest & recharge"));
+
+            activeJourney.setWeatherCondition("Sunny");
+            activeJourney.setTemperature(24);
+            activeJourney.setWeatherAlert("");
+
+            activeJourney.setTotalBudget(activeBooking.getTotalPrice() > 0 ? activeBooking.getTotalPrice() * 1.5 : 15000.0);
+            activeJourney.setSpent(activeBooking.getTotalPrice() > 0 ? activeBooking.getTotalPrice() : 5000.0);
+
+            // Set metadata attributes for JSP active card
+            String refId = activeBooking.getBookingRef() != null && !activeBooking.getBookingRef().isEmpty() ? activeBooking.getBookingRef() : String.valueOf(activeBooking.getId());
+            request.setAttribute("activeBookingType", activeBooking.getType());
+            request.setAttribute("activeBookingRef", refId);
+            request.setAttribute("activeTicketUrl", activeBooking.getTicketUrl());
         }
         request.setAttribute("journey", activeJourney);
 

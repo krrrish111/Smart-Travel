@@ -50,10 +50,9 @@ public class DestinationPaymentValidateServlet extends HttpServlet {
             boolean isValid = com.voyastra.util.RazorpayConfig.verifySignature(orderId, paymentId, signature);
 
             if (isValid) {
-                // Update booking status
                 DestinationBooking booking = destinationBookingDAO.getBookingByOrderId(orderId);
                 if (booking != null) {
-                    destinationBookingDAO.updateBookingStatus(booking.getId(), "CONFIRMED");
+                    destinationBookingDAO.updatePaymentStatus(orderId, paymentId, "CONFIRMED");
                     
                     // Set active
                     destinationBookingDAO.setActiveBooking(booking.getUserId(), booking.getId());

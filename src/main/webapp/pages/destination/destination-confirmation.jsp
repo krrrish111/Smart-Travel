@@ -5,8 +5,20 @@
 <%@ include file="/components/global_ui.jsp" %>
 
 <%
-    // Generate a simple Booking ID if not passed
+    // Safely extract booking reference
     String bookingId = request.getParameter("paymentId");
+    if (bookingId == null || bookingId.isEmpty()) {
+        bookingId = (String) request.getAttribute("paymentId");
+    }
+    if (bookingId == null || bookingId.isEmpty()) {
+        bookingId = request.getParameter("orderId");
+    }
+    if (bookingId == null || bookingId.isEmpty()) {
+        bookingId = (String) request.getAttribute("orderId");
+    }
+    if (bookingId == null || bookingId.isEmpty()) {
+        bookingId = request.getParameter("order_id");
+    }
     if (bookingId == null || bookingId.isEmpty()) {
         bookingId = "DEST_" + System.currentTimeMillis();
     }

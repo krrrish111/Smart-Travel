@@ -326,7 +326,10 @@ public class ProfileServlet extends HttpServlet {
                 File uploadDir = new File(uploadPath);
                 if (!uploadDir.exists()) uploadDir.mkdirs();
 
-                filePart.write(uploadPath + File.separator + fileName);
+                File destFile = new File(uploadDir, fileName);
+                try (java.io.InputStream input = filePart.getInputStream()) {
+                    java.nio.file.Files.copy(input, destFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                }
                 // Store as a webapp-relative path (no hardcoded absolute path)
                 user.setProfileImage(UploadConfig.PROFILES_URL + "/" + fileName);
             }

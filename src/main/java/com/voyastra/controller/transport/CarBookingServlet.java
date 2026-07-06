@@ -92,7 +92,10 @@ public class CarBookingServlet extends HttpServlet {
             File uploadDir = new File(uploadPath);
             if (!uploadDir.exists()) uploadDir.mkdirs();
             
-            filePart.write(uploadPath + File.separator + uniqueFileName);
+            File destFile = new File(uploadDir, uniqueFileName);
+            try (java.io.InputStream input = filePart.getInputStream()) {
+                java.nio.file.Files.copy(input, destFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+            }
             dlPath = UploadConfig.DL_URL + "/" + uniqueFileName;
         }
 

@@ -801,40 +801,26 @@ function clearLocation() {
 }
 
 function initGooglePlaces() {
-    if (typeof google === 'undefined' || !google.maps || !google.maps.places) return;
+    console.log("Community initGooglePlaces called");
+    const input = document.getElementById('locationSearchInput');
+    if (!input) return;
 
-    const container = document.querySelector('#locationModal .form-group');
-    if (!container) return;
-
-    // Modern API: PlaceAutocompleteElement (Web Component)
-    // Replaces the deprecated google.maps.places.Autocomplete
-    if (google.maps.places.PlaceAutocompleteElement) {
-        const oldInput = document.getElementById('locationSearchInput');
-        if (oldInput) oldInput.remove();
-
-        const placeAutocomplete = new google.maps.places.PlaceAutocompleteElement({
-            types: ['geocode', 'establishment']
-        });
-        placeAutocomplete.id = 'locationSearchInput';
-        placeAutocomplete.setAttribute('placeholder', 'Search for a place...');
-        placeAutocomplete.style.cssText = 'width:100%;display:block;';
-        container.appendChild(placeAutocomplete);
-
-        placeAutocomplete.addEventListener('gmp-placeselect', async (event) => {
-            const place = event.place;
-            await place.fetchFields({ fields: ['displayName', 'formattedAddress'] });
-            _selectedPlace = {
-                name: place.displayName,
-                formatted_address: place.formattedAddress
-            };
-            const name = place.displayName || place.formattedAddress;
-            const display = document.getElementById('selectedLocationDisplay');
-            if (display) display.textContent = '📍 ' + name;
-        });
-        return;
+    // Make sure Places Autocomplete is initialized on this input
+    if (typeof initializePlacesAutocomplete === 'function') {
+        initializePlacesAutocomplete(input);
     }
 
-    // The legacy fallback was removed to ensure full compliance with the new API.
+    // Listen for custom place-selected event to capture the selection
+    input.addEventListener('place-selected', (event) => {
+        const place = event.detail.place;
+        _selectedPlace = {
+            name: place.name || place.formatted_address,
+            formatted_address: place.formatted_address
+        };
+        const name = place.name || place.formatted_address;
+        const display = document.getElementById('selectedLocationDisplay');
+        if (display) display.textContent = '📍 ' + name;
+    });
 }
 
 // ══════════════════════════════════════════════════════

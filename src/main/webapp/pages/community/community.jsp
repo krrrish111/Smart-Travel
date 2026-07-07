@@ -230,7 +230,7 @@
         <h3 class="modal-title">Write a Trip Review</h3>
         <div class="form-group">
             <label>Destination</label>
-            <input type="text" id="reviewDestinationInput" class="voyastra-input" placeholder="E.g., Ladakh">
+            <input type="text" id="reviewDestinationInput" class="voyastra-input location-autocomplete" placeholder="E.g., Ladakh">
         </div>
         <div class="form-group">
             <label>Rating</label>

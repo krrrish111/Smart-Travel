@@ -2,6 +2,7 @@ package com.voyastra.controller;
 
 import com.voyastra.dao.StoryDAO;
 import com.voyastra.model.Story;
+import com.voyastra.config.UploadConfig;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

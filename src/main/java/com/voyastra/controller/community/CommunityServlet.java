@@ -6,6 +6,7 @@ import com.voyastra.dao.StoryDAO;
 import com.voyastra.model.community.Post;
 import com.voyastra.model.Story;
 import com.voyastra.config.ConfigManager;
+import com.voyastra.config.UploadConfig;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

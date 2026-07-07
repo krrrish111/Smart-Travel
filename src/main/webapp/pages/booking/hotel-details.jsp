@@ -413,15 +413,14 @@
                             <h3 class="font-bold text-lg">Location</h3>
                         </div>
                         <div class="h-64 bg-gray-200 relative">
-                            <!-- Mock Map Iframe based on City -->
-                            <iframe 
-                                width="100%" 
-                                height="100%" 
-                                frameborder="0" 
-                                style="border:0" 
-                                src="https://maps.google.com/maps?q=${hotel.city}&t=&z=13&ie=UTF8&iwloc=&output=embed" 
-                                allowfullscreen>
-                            </iframe>
+                            <!-- Google Maps Container -->
+                            <div id="hotel-map" 
+                                 class="w-full h-full relative"
+                                 data-latitude="${hotel.latitude}"
+                                 data-longitude="${hotel.longitude}"
+                                 data-name="<c:out value='${hotel.name}'/>"
+                                 data-address="<c:out value='${hotel.address}, ${hotel.city}'/>">
+                            </div>
                         </div>
                         <div class="p-4 bg-white dark:bg-gray-900">
                             <p class="text-sm text-gray-600 dark:text-gray-400 flex items-start gap-2">
@@ -532,6 +531,116 @@
                 }
             }
         });
+    }
+</script>
+
+<script>
+    async function initHotelMap() {
+        console.log("Loading hotel map...");
+        // Wait for google.maps and importLibrary to be defined
+        let retries = 0;
+        while ((typeof google === 'undefined' || !google.maps || !google.maps.importLibrary) && retries < 100) {
+            await new Promise(r => setTimeout(r, 100));
+            retries++;
+        }
+        
+        if (typeof google === 'undefined' || !google.maps || !google.maps.importLibrary) {
+            console.error("Google Maps API did not load in time.");
+            showMapFallback();
+            return;
+        }
+
+        try {
+            const { Map } = await google.maps.importLibrary("maps");
+            
+            const mapContainer = document.getElementById('hotel-map');
+            if (!mapContainer) return;
+
+            const latVal = parseFloat(mapContainer.dataset.latitude);
+            const lngVal = parseFloat(mapContainer.dataset.longitude);
+            const name = mapContainer.dataset.name;
+            const address = mapContainer.dataset.address;
+
+            console.log("Hotel coordinates parsed: ", latVal, lngVal);
+
+            if (isNaN(latVal) || isNaN(lngVal) || (latVal === 0 && lngVal === 0)) {
+                console.log("Latitude/Longitude missing/zero. Attempting geocoding...");
+                geocodeAddressAndInitMap(Map, address, name);
+            } else {
+                renderMap(Map, { lat: latVal, lng: lngVal }, name);
+            }
+        } catch (error) {
+            console.error("Failed to initialize map:", error);
+            showMapFallback();
+        }
+    }
+
+    function renderMap(Map, position, hotelName) {
+        const mapContainer = document.getElementById('hotel-map');
+        if (!mapContainer) return;
+        
+        // Remove fallback if any
+        mapContainer.innerHTML = '';
+        
+        const map = new Map(mapContainer, {
+            center: position,
+            zoom: 15,
+            mapId: "DEMO_MAP_ID",
+            gestureHandling: "cooperative"
+        });
+
+        // Place one marker with the hotel's name as the title
+        try {
+            new google.maps.Marker({
+                position: position,
+                map: map,
+                title: hotelName
+            });
+            console.log("Map rendered with marker at position:", position);
+        } catch (e) {
+            console.error("Failed to place marker:", e);
+        }
+    }
+
+    async function geocodeAddressAndInitMap(Map, address, hotelName) {
+        try {
+            // Import geocoding library dynamically
+            await google.maps.importLibrary("geocoding");
+            const geocoder = new google.maps.Geocoder();
+            geocoder.geocode({ address: address }, (results, status) => {
+                if (status === "OK" && results && results[0]) {
+                    const loc = results[0].geometry.location;
+                    const position = { lat: loc.lat(), lng: loc.lng() };
+                    console.log("Geocoding success:", position);
+                    renderMap(Map, position, hotelName);
+                } else {
+                    console.error("Geocoding failed with status: " + status);
+                    showMapFallback();
+                }
+            });
+        } catch (error) {
+            console.error("Geocoding service error:", error);
+            showMapFallback();
+        }
+    }
+
+    function showMapFallback() {
+        const mapContainer = document.getElementById('hotel-map');
+        if (mapContainer) {
+            mapContainer.innerHTML = `
+                <div class="absolute inset-0 flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 p-4 text-center">
+                    <i class="fas fa-map-marked-alt text-4xl mb-2 text-gray-400"></i>
+                    <p class="font-semibold text-gray-900 dark:text-white">Location unavailable</p>
+                    <p class="text-xs mt-1 text-gray-500 dark:text-gray-400">We couldn't load the map for this hotel.</p>
+                </div>
+            `;
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initHotelMap);
+    } else {
+        initHotelMap();
     }
 </script>
 

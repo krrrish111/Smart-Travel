@@ -18,7 +18,8 @@ public class StayDAO {
     public List<Stay> getStaysByLocation(String location) {
         List<Stay> options = new ArrayList<>();
         // Uses wildcard searching to match anything broadly near the given locale
-        String query = "SELECT * FROM stays WHERE LOWER(location) LIKE LOWER(?) ORDER BY discounted_price ASC";
+        String query = "SELECT id, type, name, image_url, badge, location, amenities, original_price, discounted_price, price_note " +
+                       "FROM stays WHERE LOWER(location) LIKE LOWER(?) ORDER BY discounted_price ASC LIMIT 50";
                        
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -40,7 +41,8 @@ public class StayDAO {
         List<Stay> options = new ArrayList<>();
         // As requested: SELECT * FROM stays WHERE location = ? LIMIT 4
         // Note: Using 'stays' table as confirmed by project structure
-        String query = "SELECT * FROM stays WHERE LOWER(location) LIKE LOWER(?) LIMIT 4";
+        String query = "SELECT id, type, name, image_url, badge, location, amenities, original_price, discounted_price, price_note " +
+                       "FROM stays WHERE LOWER(location) LIKE LOWER(?) LIMIT 4";
                        
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -63,7 +65,8 @@ public class StayDAO {
      */
     public List<Stay> getAllStays() {
         List<Stay> options = new ArrayList<>();
-        String query = "SELECT * FROM stays ORDER BY discounted_price ASC";
+        String query = "SELECT id, type, name, image_url, badge, location, amenities, original_price, discounted_price, price_note " +
+                       "FROM stays ORDER BY discounted_price ASC LIMIT 50";
                        
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query);

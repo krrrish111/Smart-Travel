@@ -127,7 +127,7 @@ public class DBConnection {
                     config.setUsername(dbUser);
                     config.setPassword(dbPassword);
                     config.setDriverClassName("com.mysql.cj.jdbc.Driver");
-                    config.setMaximumPoolSize(5);
+                    config.setMaximumPoolSize(10);
                     // minimumIdle=0: Hikari will not open any physical connection
                     // until the first getConnection() call from a request thread.
                     config.setMinimumIdle(0);
@@ -135,9 +135,10 @@ public class DBConnection {
                     // initializationFailTimeout=-1: pool creation succeeds even if DB is
                     // unreachable at startup. First getConnection() will block/fail normally.
                     config.setInitializationFailTimeout(-1);
-                    config.setConnectionTimeout(2000);
-                    config.setValidationTimeout(5000);
+                    config.setConnectionTimeout(5000);
+                    config.setValidationTimeout(2000);
                     config.setKeepaliveTime(60000);
+                    config.setLeakDetectionThreshold(10000); // 10 seconds leak detection threshold
                     
                     config.addDataSourceProperty("cachePrepStmts", "true");
                     config.addDataSourceProperty("prepStmtCacheSize", "250");

@@ -149,7 +149,7 @@ public class BookingDAO {
      */
     public Booking getBookingByCode(String code) {
         Booking booking = null;
-        String query = "SELECT * FROM bookings WHERE booking_code = ?";
+        String query = "SELECT id, user_id, plan_id, total_price, status, created_at, booking_code, travel_date, num_adults, num_children, room_type, pickup_city, customer_name, customer_email, customer_phone, special_requests FROM bookings WHERE booking_code = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, code);
@@ -234,10 +234,6 @@ public class BookingDAO {
                        "p.title AS plan_title, p.image AS plan_image " +
                        "FROM bookings b LEFT JOIN plans p ON b.plan_id = p.id WHERE b.id = ?";
         
-        System.out.println("===== BookingDAO Debug =====");
-        System.out.println("Executing SQL: " + query);
-        System.out.println("Parameters: id=" + id);
-        
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, id);
@@ -271,19 +267,17 @@ public class BookingDAO {
                     } catch (Exception e) {}
                 }
             }
-            System.out.println("Result Set parsed, returning Booking: " + (booking != null ? booking.getId() : "null"));
         } catch (SQLException e) {
             System.err.println("ERROR: BookingDAO.getBookingById failed.");
             e.printStackTrace();
         }
-        System.out.println("============================");
         return booking;
     }
 
     public List<Booking> getAllBookings() {
         List<Booking> list = new ArrayList<>();
         String query = "SELECT b.id, b.user_id, b.plan_id, b.total_price, b.status, b.created_at, b.type, b.details, b.booking_code, p.title AS plan_title, p.image AS plan_image, u.name AS user_name " +
-                       "FROM bookings b LEFT JOIN plans p ON b.plan_id = p.id JOIN users u ON b.user_id = u.id ORDER BY b.created_at DESC";
+                       "FROM bookings b LEFT JOIN plans p ON b.plan_id = p.id JOIN users u ON b.user_id = u.id ORDER BY b.created_at DESC LIMIT 50";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {

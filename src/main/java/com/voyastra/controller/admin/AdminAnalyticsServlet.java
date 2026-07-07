@@ -6,6 +6,8 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 import com.voyastra.dao.DashboardDAO;
 
+import com.voyastra.util.PerformanceProfiler;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -26,36 +28,19 @@ public class AdminAnalyticsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        long tStart = System.currentTimeMillis();
+        PerformanceProfiler.start(request.getRequestURI());
         
         response.setContentType("application/json;charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
 
         try {
-            JsonObject json = new JsonObject();
-            
-            // Basic Counts
-            json.addProperty("users", dashboardDAO.getTotalCount("users"));
-            json.addProperty("bookings", dashboardDAO.getTotalCount("bookings"));
-            json.addProperty("revenue", dashboardDAO.getThisMonthRevenue()); // Actually, maybe total revenue is better?
-            json.addProperty("totalRevenue", dashboardDAO.getThisMonthRevenue()); // We'll query total later if needed
-            json.addProperty("plans", dashboardDAO.getTotalCount("plans"));
-            json.addProperty("destinations", dashboardDAO.getTotalCount("destinations"));
-            json.addProperty("reviews", dashboardDAO.getTotalCount("reviews"));
-            json.addProperty("activities", dashboardDAO.getTotalCount("activities"));
-            
-            // Specific booking stats
-            json.addProperty("pendingBookings", dashboardDAO.getBookingsByStatus("pending"));
-            json.addProperty("completedBookings", dashboardDAO.getBookingsByStatus("confirmed"));
-            json.addProperty("cancelledBookings", dashboardDAO.getBookingsByStatus("cancelled"));
-            json.addProperty("todaysBookings", dashboardDAO.getTodaysBookings());
-            json.addProperty("premiumUsers", dashboardDAO.getPremiumUsers());
-            json.addProperty("thisMonthRevenue", dashboardDAO.getThisMonthRevenue());
-
-            // Chart data
-            json.add("bookingsPerMonth", dashboardDAO.getBookingsPerMonth());
-            json.add("revenuePerMonth", dashboardDAO.getRevenuePerMonth());
+            long tDaoStart = System.currentTimeMillis();
+            JsonObject json = dashboardDAO.getDashboardMetrics();
+            dashboardDAO.getMonthlyStats(json);
             json.add("topPlans", dashboardDAO.getTopPlans(5));
             json.add("destinationPieChart", dashboardDAO.getDestinationPieChart());
+            PerformanceProfiler.record("DAO", System.currentTimeMillis() - tDaoStart);
 
             response.getWriter().write(json.toString());
             
@@ -65,6 +50,9 @@ public class AdminAnalyticsServlet extends HttpServlet {
             error.addProperty("error", "Failed to fetch analytics data");
             response.getWriter().write(error.toString());
             logger.log(Level.SEVERE, "Exception occurred", e);
+        } finally {
+            PerformanceProfiler.record("Servlet", System.currentTimeMillis() - tStart);
+            PerformanceProfiler.log();
         }
     }
 }

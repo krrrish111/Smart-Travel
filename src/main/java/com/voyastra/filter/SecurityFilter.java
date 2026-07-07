@@ -74,6 +74,13 @@ public class SecurityFilter implements Filter {
                     path.startsWith("/webjars/") || path.equals("/robots.txt") ||
                     path.equals("/manifest.json") || path.equals("/service-worker.js") ||
                     path.startsWith("/favicon")) {
+                
+                if (path.startsWith("/fonts/")) {
+                    resp.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+                } else {
+                    resp.setHeader("Cache-Control", "public, max-age=86400");
+                }
+                
                 chain.doFilter(request, response);
                 return;
             }

@@ -413,6 +413,7 @@
                     </c:otherwise>
                 </c:choose>
                 <img src="${imgSrc}" alt="${user.name}" class="profile-avatar" id="profileImgPreview"
+                     width="128" height="128" loading="lazy" decoding="async"
                      onerror="this.onerror=null;this.src='${avatarUrl}'">
                 <label for="profileUploadInput" class="avatar-edit-overlay">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
@@ -1413,7 +1414,7 @@
                     if (post.imageUrl.match(/\.(mp4|webm|ogg)$/i)) {
                         mediaHtml = `<video src="\${post.imageUrl}" controls style="width: 150px; height: 150px; object-fit: cover; border-radius: 12px;"></video>`;
                     } else {
-                        mediaHtml = `<img src="\${post.imageUrl}" style="width: 150px; height: 150px; object-fit: cover; border-radius: 12px;">`;
+                        mediaHtml = `<img src="\${post.imageUrl}" width="150" height="150" loading="lazy" decoding="async" style="width: 150px; height: 150px; object-fit: cover; border-radius: 12px;">`;
                     }
                 } else {
                     mediaHtml = `<div style="width: 150px; height: 150px; background: rgba(255,107,0,0.1); border-radius: 12px; display:flex; align-items:center; justify-content:center; color:var(--color-primary);">No Media</div>`;

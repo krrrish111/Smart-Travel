@@ -49,5 +49,29 @@
     </div>
 </div>
 
-<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/ai-buddy.css">
-<script src="${pageContext.request.contextPath}/assets/js/ai-buddy.js" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var orb = document.getElementById('ai-buddy-orb');
+    if (orb) {
+        var loaded = false;
+        var loadAiBuddy = function() {
+            if (loaded) return;
+            loaded = true;
+            orb.removeEventListener('mouseenter', loadAiBuddy);
+            orb.removeEventListener('click', loadAiBuddy);
+            
+            var link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = '${pageContext.request.contextPath}/assets/css/ai-buddy.css';
+            document.head.appendChild(link);
+            
+            var script = document.createElement('script');
+            script.src = '${pageContext.request.contextPath}/assets/js/ai-buddy.js';
+            script.defer = true;
+            document.body.appendChild(script);
+        };
+        orb.addEventListener('mouseenter', loadAiBuddy);
+        orb.addEventListener('click', loadAiBuddy);
+    }
+});
+</script>

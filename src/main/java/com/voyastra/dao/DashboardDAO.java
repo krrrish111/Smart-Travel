@@ -7,86 +7,81 @@ import com.google.gson.JsonObject;
 
 public class DashboardDAO {
 
-    public int getTotalCount(String table) {
-        String query = "SELECT COUNT(*) FROM " + table;
+    public JsonObject getDashboardMetrics() {
+        JsonObject metrics = new JsonObject();
+        String query = "SELECT " +
+            "(SELECT COUNT(*) FROM users) as users_count, " +
+            "(SELECT COUNT(*) FROM bookings) as bookings_count, " +
+            "(SELECT COUNT(*) FROM plans) as plans_count, " +
+            "(SELECT COUNT(*) FROM destinations) as destinations_count, " +
+            "(SELECT COUNT(*) FROM reviews) as reviews_count, " +
+            "(SELECT COUNT(*) FROM activities) as activities_count, " +
+            "(SELECT COUNT(*) FROM bookings WHERE status = 'pending') as pending_bookings, " +
+            "(SELECT COUNT(*) FROM bookings WHERE status = 'confirmed') as confirmed_bookings, " +
+            "(SELECT COUNT(*) FROM bookings WHERE status = 'cancelled') as cancelled_bookings, " +
+            "(SELECT COUNT(*) FROM bookings WHERE DATE(created_at) = CURDATE()) as todays_bookings, " +
+            "(SELECT COUNT(*) FROM users WHERE role = 'premium') as premium_users, " +
+            "(SELECT COALESCE(SUM(total_price), 0.0) FROM bookings WHERE MONTH(created_at) = MONTH(CURDATE()) AND YEAR(created_at) = YEAR(CURDATE()) AND status = 'confirmed') as this_month_rev";
+
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
-            if (rs.next()) return rs.getInt(1);
-        } catch (Exception e) { e.printStackTrace(); }
-        return 0;
-    }
-
-    public int getPremiumUsers() {
-        String query = "SELECT COUNT(*) FROM users WHERE role = 'premium'";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
-            if (rs.next()) return rs.getInt(1);
-        } catch (Exception e) { e.printStackTrace(); }
-        return 0;
-    }
-
-    public int getBookingsByStatus(String status) {
-        String query = "SELECT COUNT(*) FROM bookings WHERE status = ?";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-            stmt.setString(1, status);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) return rs.getInt(1);
+            if (rs.next()) {
+                metrics.addProperty("users", rs.getInt("users_count"));
+                metrics.addProperty("bookings", rs.getInt("bookings_count"));
+                metrics.addProperty("plans", rs.getInt("plans_count"));
+                metrics.addProperty("destinations", rs.getInt("destinations_count"));
+                metrics.addProperty("reviews", rs.getInt("reviews_count"));
+                metrics.addProperty("activities", rs.getInt("activities_count"));
+                metrics.addProperty("pendingBookings", rs.getInt("pending_bookings"));
+                metrics.addProperty("completedBookings", rs.getInt("confirmed_bookings"));
+                metrics.addProperty("cancelledBookings", rs.getInt("cancelled_bookings"));
+                metrics.addProperty("todaysBookings", rs.getInt("todays_bookings"));
+                metrics.addProperty("premiumUsers", rs.getInt("premium_users"));
+                double rev = rs.getDouble("this_month_rev");
+                metrics.addProperty("revenue", rev);
+                metrics.addProperty("totalRevenue", rev);
+                metrics.addProperty("thisMonthRevenue", rev);
             }
-        } catch (Exception e) { e.printStackTrace(); }
-        return 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return metrics;
     }
 
-    public int getTodaysBookings() {
-        String query = "SELECT COUNT(*) FROM bookings WHERE DATE(created_at) = CURDATE()";
+    public void getMonthlyStats(JsonObject target) {
+        JsonArray bookingsArray = new JsonArray();
+        JsonArray revenueArray = new JsonArray();
+        String query = "SELECT " +
+            "MONTH(created_at) as m, " +
+            "COUNT(*) as c, " +
+            "SUM(CASE WHEN status = 'confirmed' THEN total_price ELSE 0.0 END) as s " +
+            "FROM bookings " +
+            "WHERE YEAR(created_at) = YEAR(CURDATE()) " +
+            "GROUP BY MONTH(created_at) " +
+            "ORDER BY MONTH(created_at)";
+
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
-            if (rs.next()) return rs.getInt(1);
-        } catch (Exception e) { e.printStackTrace(); }
-        return 0;
-    }
-
-    public double getThisMonthRevenue() {
-        String query = "SELECT SUM(total_price) FROM bookings WHERE MONTH(created_at) = MONTH(CURDATE()) AND YEAR(created_at) = YEAR(CURDATE()) AND status = 'confirmed'";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
-            if (rs.next()) return rs.getDouble(1);
-        } catch (Exception e) { e.printStackTrace(); }
-        return 0.0;
-    }
-
-    public JsonArray getBookingsPerMonth() {
-        JsonArray array = new JsonArray();
-        String query = "SELECT MONTH(created_at) as m, COUNT(*) as c FROM bookings WHERE YEAR(created_at) = YEAR(CURDATE()) GROUP BY MONTH(created_at) ORDER BY MONTH(created_at)";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
-             int[] counts = new int[12];
+            int[] counts = new int[12];
+            double[] sums = new double[12];
             while (rs.next()) {
-                counts[rs.getInt("m") - 1] = rs.getInt("c");
+                int monthIdx = rs.getInt("m") - 1;
+                if (monthIdx >= 0 && monthIdx < 12) {
+                    counts[monthIdx] = rs.getInt("c");
+                    sums[monthIdx] = rs.getDouble("s");
+                }
             }
-            for(int i=0; i<12; i++) array.add(counts[i]);
-        } catch (Exception e) { e.printStackTrace(); }
-        return array;
-    }
-
-    public JsonArray getRevenuePerMonth() {
-        JsonArray array = new JsonArray();
-        String query = "SELECT MONTH(created_at) as m, SUM(total_price) as s FROM bookings WHERE YEAR(created_at) = YEAR(CURDATE()) AND status = 'confirmed' GROUP BY MONTH(created_at) ORDER BY MONTH(created_at)";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
-             double[] sums = new double[12];
-            while (rs.next()) {
-                sums[rs.getInt("m") - 1] = rs.getDouble("s");
+            for (int i = 0; i < 12; i++) {
+                bookingsArray.add(counts[i]);
+                revenueArray.add(sums[i]);
             }
-            for(int i=0; i<12; i++) array.add(sums[i]);
-        } catch (Exception e) { e.printStackTrace(); }
-        return array;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        target.add("bookingsPerMonth", bookingsArray);
+        target.add("revenuePerMonth", revenueArray);
     }
 
     public JsonArray getTopPlans(int limit) {

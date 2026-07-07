@@ -136,6 +136,11 @@ public class DestinationDAO {
     }
 
     public List<Destination> getFeaturedDestinations() {
+        @SuppressWarnings("unchecked")
+        List<Destination> cached = (List<Destination>) com.voyastra.util.CacheManager.get("featured_destinations");
+        if (cached != null) {
+            return cached;
+        }
         List<Destination> list = new ArrayList<>();
         String query = "SELECT * FROM destinations WHERE is_featured = true ORDER BY id DESC LIMIT 6";
         try (Connection conn = DBConnection.getConnection();
@@ -178,11 +183,12 @@ public class DestinationDAO {
         
         // Ultimate fallback: never return empty list
         if (list.isEmpty()) {
-            list.add(getMockDestination(1, "Golden Triangle Tour", "Delhi, Agra & Jaipur, India", "Heritage", "Discover the iconic trio — Taj Mahal, Amber Fort and Red Fort in one unforgettable circuit.", 15999, "https://images.unsplash.com/photo-1524492412937-b28074a7d70?auto=format&fit=crop&w=600&q=80", 4.8f));
+            list.add(getMockDestination(1, "Golden Triangle Tour", "Delhi, Agra & Jaipur, India", "Nature", "Discover the iconic trio — Taj Mahal, Amber Fort and Red Fort in one unforgettable circuit.", 15999, "https://images.unsplash.com/photo-1524492412937-b28074a7d70?auto=format&fit=crop&w=600&q=80", 4.8f));
             list.add(getMockDestination(2, "Kerala Backwaters Escape", "Kerala, India", "Nature", "Cruise through serene backwaters, lush paddy fields, and tranquil lagoons in God's Own Country.", 18999, "https://images.unsplash.com/photo-1593693397690-362cb9666fc2?auto=format&fit=crop&w=600&q=80", 4.9f));
-            list.add(getMockDestination(3, "Goa Beach Paradise", "Goa, India", "Beach", "Sun, sand, seafood and Portuguese heritage along India's most famous coastline.", 11999, "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=600&q=80", 4.6f));
+            list.add(getMockDestination(3, "Goa Beach Paradise", "Goa, India", "Nature", "Sun, sand, seafood and Portuguese heritage along India's most famous coastline.", 11999, "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=600&q=80", 4.6f));
         }
         
+        com.voyastra.util.CacheManager.put("featured_destinations", list);
         return list;
     }
 
@@ -211,6 +217,11 @@ public class DestinationDAO {
     }
     
     public List<Destination> getPopularDestinations() {
+        @SuppressWarnings("unchecked")
+        List<Destination> cached = (List<Destination>) com.voyastra.util.CacheManager.get("popular_destinations");
+        if (cached != null) {
+            return cached;
+        }
         List<Destination> list = new ArrayList<>();
         String query = "SELECT * FROM destinations ORDER BY review_count DESC LIMIT 6";
         try (Connection conn = DBConnection.getConnection();
@@ -225,10 +236,16 @@ public class DestinationDAO {
         if (list.isEmpty()) {
             list = getFeaturedDestinations();
         }
+        com.voyastra.util.CacheManager.put("popular_destinations", list);
         return list;
     }
 
     public List<Destination> getIconicDestinations() {
+        @SuppressWarnings("unchecked")
+        List<Destination> cached = (List<Destination>) com.voyastra.util.CacheManager.get("iconic_destinations");
+        if (cached != null) {
+            return cached;
+        }
         List<Destination> list = new ArrayList<>();
         // Fetch a larger set of destinations to populate the Iconic Destinations grid
         String query = "SELECT * FROM destinations WHERE title IN ('Golden Triangle Tour', 'Kerala Backwaters Escape', 'Rajasthan Royal Odyssey', 'Goa Beach Paradise', 'Ladakh High Altitude Adventure', 'Shimla & Manali Hill Retreat', 'Varanasi Spiritual Journey', 'Andaman Island Explorer', 'Darjeeling & Sikkim Tea Trail', 'Hampi Heritage & Ruins', 'Coorg Coffee Country', 'Udaipur — City of Lakes', 'Rann of Kutch White Desert', 'Khajuraho Temples & Wildlife') LIMIT 17";
@@ -239,6 +256,7 @@ public class DestinationDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        com.voyastra.util.CacheManager.put("iconic_destinations", list);
         return list;
     }
 

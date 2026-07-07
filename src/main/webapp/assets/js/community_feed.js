@@ -191,7 +191,7 @@ const CommunityFeed = {
                 } else {
                     imageHTML = `
                         <div class="community-image-wrap">
-                            <img src="${post.imageUrl}" alt="Travel Photo" class="community-image media-item" data-media="${post.imageUrl}" data-type="image" onclick="openMediaViewer('${post.imageUrl}', 'image')">
+                            <img src="${post.imageUrl}" alt="Travel Photo" class="community-image media-item" data-media="${post.imageUrl}" data-type="image" width="600" height="400" loading="lazy" decoding="async" onclick="openMediaViewer('${post.imageUrl}', 'image')">
                         </div>
                     `;
                 }

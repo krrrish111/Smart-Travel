@@ -42,11 +42,6 @@ async function waitForGooglePlacesAPI() {
  */
 async function initializePlacesAutocomplete(rootElement) {
     try {
-        const placesLib = await waitForGooglePlacesAPI();
-        if (!placesLib) {
-            return;
-        }
-
         const root = rootElement || document;
 
         // Selectors targeting location fields across Voyastra
@@ -83,6 +78,16 @@ async function initializePlacesAutocomplete(rootElement) {
         }
         if (root.querySelectorAll) {
             inputs = inputs.concat(Array.from(root.querySelectorAll(selectors)));
+        }
+
+        // Return early if no matching input elements are present to avoid loading Google Maps API unnecessarily
+        if (inputs.length === 0) {
+            return;
+        }
+
+        const placesLib = await waitForGooglePlacesAPI();
+        if (!placesLib) {
+            return;
         }
 
         inputs.forEach(input => {

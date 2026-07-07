@@ -12,6 +12,7 @@ import com.voyastra.service.BudgetCalculationEngine;
 import com.voyastra.dao.destination.DestinationDAO;
 import com.voyastra.util.DiagnosticManager;
 import com.voyastra.model.planner.PlannerStatus;
+import com.voyastra.util.PerformanceProfiler;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -83,7 +84,10 @@ public class PlannerServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String sessionId = request.getSession().getId();
+        long tStart = System.currentTimeMillis();
+        PerformanceProfiler.start(request.getRequestURI());
+        try {
+            String sessionId = request.getSession().getId();
         PlannerDebugService.clearSession(sessionId);
         DiagnosticManager.setStatus(sessionId, PlannerStatus.REQUEST_RECEIVED);
 
@@ -211,6 +215,7 @@ public class PlannerServlet extends HttpServlet {
             itineraryJson = geminiService.generateTripPlan(sessionId, params);
             
             long geminiDuration = System.currentTimeMillis() - geminiStart;
+            PerformanceProfiler.record("Gemini", geminiDuration);
             PlannerDebugService.log(sessionId, "Gemini API", "SUCCESS", "Gemini response generated successfully", geminiDuration);
             System.out.println("[STEP 3] Gemini Response Received");
             System.out.println(itineraryJson.substring(0, Math.min(500, itineraryJson.length())));
@@ -286,6 +291,7 @@ public class PlannerServlet extends HttpServlet {
             UnsplashService unsplashService = new UnsplashService();
             String unsplashJson = unsplashService.searchDestinationImages(sessionId, destination, "tourism", 5);
             long unsplashDuration = System.currentTimeMillis() - unsplashStart;
+            PerformanceProfiler.record("Unsplash", unsplashDuration);
 
             com.google.gson.JsonObject unsplashObj = com.google.gson.JsonParser.parseString(unsplashJson).getAsJsonObject();
             if (unsplashObj.has("results")) {
@@ -347,6 +353,7 @@ public class PlannerServlet extends HttpServlet {
             YouTubeService youtubeService = new YouTubeService();
             String youtubeJson = youtubeService.searchDestinationVideos(sessionId, destination, "travel vlog", 3);
             long youtubeDuration = System.currentTimeMillis() - youtubeStart;
+            PerformanceProfiler.record("YouTube", youtubeDuration);
 
             com.google.gson.JsonObject youtubeObj = com.google.gson.JsonParser.parseString(youtubeJson).getAsJsonObject();
             if (youtubeObj.has("items")) {
@@ -464,6 +471,10 @@ public class PlannerServlet extends HttpServlet {
             request.setAttribute("plannerError", e.getMessage());
             request.setAttribute("error", "Forward Failure: " + e.getMessage());
             request.getRequestDispatcher("/pages/planner/planner.jsp").forward(request, response);
+        }
+        } finally {
+            PerformanceProfiler.record("Servlet", System.currentTimeMillis() - tStart);
+            PerformanceProfiler.log();
         }
     }
 }

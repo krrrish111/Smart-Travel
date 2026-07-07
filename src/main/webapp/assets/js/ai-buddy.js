@@ -1,3 +1,8 @@
+/* Single-run guard: prevent double-initialization if script is somehow loaded twice */
+if (window._voyastraBuddyJsLoaded) { /* already running */ }
+else {
+window._voyastraBuddyJsLoaded = true;
+
 document.addEventListener('DOMContentLoaded', () => {
     const container = document.getElementById('ai-draggable-container');
     const orb = document.getElementById('ai-buddy-orb');
@@ -258,3 +263,4 @@ document.addEventListener('DOMContentLoaded', () => {
         popup.classList.add('popup-right'); // Default
     }
 });
+} /* end single-run guard */

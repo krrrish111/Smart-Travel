@@ -18,8 +18,6 @@
     </div>
 </div>
 
-<%@ include file="/components/ai-buddy.jsp" %>
-
 <!-- ===== SCROLL PROGRESS LINE ===== -->
 <div class="scroll-line-container">
     <div class="scroll-line-progress" id="scrollProgress"></div>

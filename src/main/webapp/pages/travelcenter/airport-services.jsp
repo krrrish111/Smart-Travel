@@ -105,6 +105,5 @@
     </main>
 
     <jsp:include page="/components/footer.jsp" />
-    <jsp:include page="/components/ai-buddy.jsp" />
 </body>
 </html>

@@ -207,7 +207,6 @@
     </main>
 
     <jsp:include page="/components/footer.jsp" />
-    <jsp:include page="/components/ai-buddy.jsp" />
     <jsp:include page="/components/global_ui.jsp" />
 </body>
 </html>

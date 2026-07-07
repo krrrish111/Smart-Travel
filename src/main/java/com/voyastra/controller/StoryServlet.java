@@ -36,7 +36,7 @@ public class StoryServlet extends HttpServlet {
                 .append("\"id\":").append(s.getId()).append(",")
                 .append("\"userId\":").append(s.getUserId()).append(",")
                 .append("\"userName\":\"").append(escapeJson(s.getUserName())).append("\",")
-                .append("\"mediaUrl\":\"").append(escapeJson(s.getMediaUrl())).append("\",")
+                .append("\"mediaUrl\":\"").append(escapeJson(UploadConfig.resolveStoryImageUrl(request.getContextPath(), s.getMediaUrl()))).append("\",")
                 .append("\"createdAt\":\"").append(s.getCreatedAt() != null ? s.getCreatedAt().toString() : "").append("\"")
                 .append("}");
             if (i < stories.size() - 1) json.append(",");

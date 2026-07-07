@@ -70,9 +70,11 @@ public class UploadStoryServlet extends HttpServlet {
             if (!uploadDir.exists()) uploadDir.mkdirs();
 
             String fileName = UUID.randomUUID().toString() + "_" + getSubmittedFileName(filePart);
-            filePart.write(uploadPath + File.separator + fileName);
+            File destFile = new File(uploadDir, fileName);
+            filePart.write(destFile.getAbsolutePath());
+            UploadConfig.copyToSourceFolder("stories", fileName, destFile);
 
-            String mediaUrl = request.getContextPath() + "/" + UploadConfig.STORIES_URL + "/" + fileName;
+            String mediaUrl = UploadConfig.STORIES_URL + "/" + fileName;
 
             String caption = request.getParameter("caption");
             String location = request.getParameter("location");

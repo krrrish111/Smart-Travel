@@ -96,6 +96,7 @@ public class CarBookingServlet extends HttpServlet {
             try (java.io.InputStream input = filePart.getInputStream()) {
                 java.nio.file.Files.copy(input, destFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
             }
+            UploadConfig.copyToSourceFolder("dl", uniqueFileName, destFile);
             dlPath = UploadConfig.DL_URL + "/" + uniqueFileName;
         }
 

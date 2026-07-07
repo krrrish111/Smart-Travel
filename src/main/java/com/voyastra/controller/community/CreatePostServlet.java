@@ -83,7 +83,7 @@ public class CreatePostServlet extends HttpServlet {
                 try (InputStream input = mediaPart.getInputStream()) {
                     Files.copy(input, destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 }
-                
+                UploadConfig.copyToSourceFolder("posts", uniqueFilename, destFile);
                 imageUrl = UploadConfig.POSTS_URL + "/" + uniqueFilename;
             }
         } catch (Exception e) {

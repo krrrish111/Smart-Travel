@@ -180,7 +180,7 @@ public class CommunityServlet extends HttpServlet {
                     .append("\"id\":").append(s.getId()).append(",")
                     .append("\"userId\":").append(s.getUserId()).append(",")
                     .append("\"userName\":\"").append(escapeJson(s.getUserName())).append("\",")
-                    .append("\"mediaUrl\":\"").append(escapeJson(s.getMediaUrl())).append("\",")
+                    .append("\"mediaUrl\":\"").append(escapeJson(UploadConfig.resolveStoryImageUrl(request.getContextPath(), s.getMediaUrl()))).append("\",")
                     .append("\"mediaType\":\"").append(escapeJson(s.getMediaType())).append("\",")
                     .append("\"caption\":\"").append(escapeJson(s.getCaption())).append("\",")
                     .append("\"location\":\"").append(escapeJson(s.getLocation())).append("\",")

@@ -153,7 +153,9 @@ public class PlanServlet extends HttpServlet {
             java.io.File uploadDir = new java.io.File(uploadPath);
             if (!uploadDir.exists()) uploadDir.mkdirs();
             String savedName = java.util.UUID.randomUUID().toString() + "_" + filePart.getSubmittedFileName();
-            filePart.write(uploadPath + java.io.File.separator + savedName);
+            java.io.File destFile = new java.io.File(uploadDir, savedName);
+            filePart.write(destFile.getAbsolutePath());
+            UploadConfig.copyToSourceFolder("plans", savedName, destFile);
             return UploadConfig.PLANS_URL + "/" + savedName;
         }
         return null;

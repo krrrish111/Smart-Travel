@@ -189,7 +189,15 @@ if (!window.voyastraPlacesObserver) {
             }
         });
     });
-    window.voyastraPlacesObserver.observe(document.body, { childList: true, subtree: true });
+    if (document.body) {
+        window.voyastraPlacesObserver.observe(document.body, { childList: true, subtree: true });
+    } else {
+        document.addEventListener('DOMContentLoaded', () => {
+            if (document.body) {
+                window.voyastraPlacesObserver.observe(document.body, { childList: true, subtree: true });
+            }
+        });
+    }
 }
 
 /* ══════════════════════════════════════════════

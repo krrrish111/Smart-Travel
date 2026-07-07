@@ -61,8 +61,11 @@ public class ImageServlet extends HttpServlet {
         }
 
         if (!imageFile.exists() || !imageFile.isFile()) {
-            // Serve a default avatar instead of a broken 404
-            serveDefaultAvatar(response);
+            if (pathInfo != null && pathInfo.startsWith("/profiles")) {
+                serveDefaultAvatar(response);
+            } else {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            }
             return;
         }
 

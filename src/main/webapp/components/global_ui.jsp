@@ -81,7 +81,15 @@
             var observer = new MutationObserver(function(mutations) {
                 if(mutations.length) addHoverEffects();
             });
-            observer.observe(document.body, { childList: true, subtree: true });
+            if (document.body) {
+                observer.observe(document.body, { childList: true, subtree: true });
+            } else {
+                document.addEventListener('DOMContentLoaded', function() {
+                    if (document.body) {
+                        observer.observe(document.body, { childList: true, subtree: true });
+                    }
+                });
+            }
         }
 
         // ── Scroll progress line ───────────────────────────────────────

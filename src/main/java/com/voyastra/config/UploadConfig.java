@@ -117,4 +117,40 @@ public class UploadConfig {
         } catch (java.io.UnsupportedEncodingException ignored) {}
         return DEFAULT_AVATAR_BASE_URL + safeName;
     }
+
+    /**
+     * Mirrors an uploaded file to the source webapp directory during development,
+     * so that local file uploads survive clean rebuilds or WAR redeployments.
+     */
+    public static void copyToSourceFolder(String category, String fileName, File targetFile) {
+        try {
+            File sourceDir = new File("src/main/webapp/uploads/" + category);
+            if (sourceDir.exists() || sourceDir.mkdirs()) {
+                File sourceFile = new File(sourceDir, fileName);
+                java.nio.file.Files.copy(targetFile.toPath(), sourceFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                System.out.println("[UploadConfig] Successfully mirrored uploaded file to source directory: " + sourceFile.getAbsolutePath());
+            }
+        } catch (Exception e) {
+            System.err.println("[UploadConfig WARN] Could not mirror upload to source folder: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Dynamically resolves story media URLs with the proper context path.
+     */
+    public static String resolveStoryImageUrl(String contextPath, String storedPath) {
+        if (storedPath != null && !storedPath.trim().isEmpty()) {
+            if (storedPath.startsWith("http")) {
+                return storedPath;
+            }
+            if (storedPath.startsWith("/")) {
+                if (!contextPath.isEmpty() && !storedPath.startsWith(contextPath)) {
+                    return contextPath + storedPath;
+                }
+                return storedPath;
+            }
+            return contextPath + "/" + storedPath;
+        }
+        return "";
+    }
 }

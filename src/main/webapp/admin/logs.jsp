@@ -102,7 +102,6 @@
 
 <!-- Page Specific JS -->
 <script src="${pageContext.request.contextPath}/admin/js/logs.js"></script>
-<script src="${pageContext.request.contextPath}/admin/js/logs.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         if (typeof loadSystemHealth === 'function') loadSystemHealth();

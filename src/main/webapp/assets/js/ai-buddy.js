@@ -224,7 +224,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             const context = getPageContext();
-            const response = await fetch(`${window.location.origin}/antigravity/api/ai-buddy`, {
+            const ctx = window.CONTEXT_PATH || '';
+            const response = await fetch(`${ctx}/api/ai-buddy`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: new URLSearchParams({ message: text, context: context })

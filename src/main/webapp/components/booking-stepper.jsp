@@ -34,26 +34,32 @@
             <% for(int i=1; i<=totalSteps; i++) {
                 boolean done    = i < step;
                 boolean current = i == step;
-                String circleStyle = done    ? "background:var(--color-primary);color:#000;border-color:var(--color-primary);"
-                                   : current ? "background:rgba(212,165,116,0.15);color:var(--color-primary);border-color:var(--color-primary);"
-                                   :           "background:transparent;color:rgba(255,255,255,0.25);border-color:rgba(255,255,255,0.12);";
-                String labelStyle  = done || current ? "color:var(--color-primary);" : "color:rgba(255,255,255,0.25);";
+                String circleBg     = done    ? "var(--color-primary)"
+                                    : current ? "rgba(212,165,116,0.15)"
+                                    :           "transparent";
+                String circleColor  = done    ? "#000"
+                                    : current ? "var(--color-primary)"
+                                    :           "rgba(255,255,255,0.25)";
+                String circleBorder = done    ? "var(--color-primary)"
+                                    : current ? "var(--color-primary)"
+                                    :           "rgba(255,255,255,0.12)";
+                String labelColor   = done || current ? "var(--color-primary)" : "rgba(255,255,255,0.25)";
                 String fontWeight  = current ? "700" : "500";
                 String connectorBg = done ? "var(--color-primary)" : "rgba(255,255,255,0.08)";
                 String iconOrCheck = done ? "✓" : icons[i-1];
             %>
                 <!-- Step Circle -->
                 <div style="display:flex;flex-direction:column;align-items:center;gap:6px;min-width:70px;">
-                    <div style="width:36px;height:36px;border-radius:50%;border:2px solid; display:flex;align-items:center;justify-content:center;font-size:0.95rem;font-weight:800;transition:all .3s; <%= circleStyle %>">
+                    <div style="width:36px;height:36px;border-radius:50%;border:2px solid; display:flex;align-items:center;justify-content:center;font-size:0.95rem;font-weight:800;transition:all .3s; <%= "background: " + circleBg + "; color: " + circleColor + "; border-color: " + circleBorder + ";" %>">
                         <%=iconOrCheck%>
                     </div>
-                    <span style="font-size:0.72rem;font-weight:<%=fontWeight%>;white-space:nowrap;<%=labelStyle%>">
+                    <span style="font-size:0.72rem;white-space:nowrap; <%= "font-weight: " + fontWeight + "; color: " + labelColor + ";" %>">
                         <%=labels[i-1]%>
                     </span>
                 </div>
                 <!-- Connector line (except after last) -->
                 <% if (i < totalSteps) { %>
-                <div style="flex:1;height:2px;margin-bottom:22px; max-width:60px;transition:background .3s; background:<%= connectorBg %>;">
+                <div style="flex:1;height:2px;margin-bottom:22px; max-width:60px;transition:background .3s; <%= "background: " + connectorBg + ";" %>">
                 </div>
                 <% } %>
             <% } %>

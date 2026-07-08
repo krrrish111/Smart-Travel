@@ -184,21 +184,19 @@ Open **http://localhost:8080/voyastra** in your browser.
 
 ## 📸 Screenshot Filename Reference
 
-> Once screenshots are captured, place them in `docs/screenshots/` using these exact filenames.
-
-| Filename | Screen |
-|---|---|
-| `docs/screenshots/homepage.png` | Homepage |
-| `docs/screenshots/planner.png` | AI Trip Planner form |
-| `docs/screenshots/planner-result.png` | AI Itinerary Result |
-| `docs/screenshots/flights.png` | Flight Search |
-| `docs/screenshots/hotels.png` | Hotel Search |
-| `docs/screenshots/destination-explorer.png` | Destination Explorer |
-| `docs/screenshots/community.png` | Community Feed |
-| `docs/screenshots/profile.png` | User Profile Dashboard |
-| `docs/screenshots/travel-center.png` | Travel Center |
-| `docs/screenshots/admin-dashboard.png` | Admin Dashboard |
-| `docs/screenshots/chatbot.png` | AI Chatbot Widget |
+| Status | Filename | Screen |
+|---|---|---|
+| ✅ | `docs/screenshots/homepage.png` | Homepage |
+| ✅ | `docs/screenshots/planner.png` | AI Trip Planner |
+| ✅ | `docs/screenshots/flights.png` | Flight Search |
+| ✅ | `docs/screenshots/hotels.png` | Hotel Search |
+| ✅ | `docs/screenshots/destination-explorer.png` | Destination Explorer |
+| ✅ | `docs/screenshots/community.png` | Community Feed |
+| ✅ | `docs/screenshots/profile.png` | User Profile Dashboard |
+| ✅ | `docs/screenshots/travel-center.png` | Travel Center |
+| ✅ | `docs/screenshots/admin-dashboard.png` | Admin Dashboard |
+| ✅ | `docs/screenshots/chatbot.png` | AI Chatbot Widget |
+| ⏳ | `docs/screenshots/planner-result.png` | AI Itinerary Result (needs a generated plan) |
 
 ---
 
@@ -214,12 +212,4 @@ Open **http://localhost:8080/voyastra** in your browser.
 
 ---
 
-## ✅ README Checklist
 
-| Status | Item |
-|---|---|
-| ✓ | **Broken image paths fixed** — all broken `docs/screenshots/*.png` references removed (docs folder is empty) |
-| ✓ | **Markdown validated** — no raw HTML-only blocks, standard GitHub markdown throughout |
-| ✓ | **Mobile friendly** — no wide tables, clean structure renders well on small screens |
-| ✓ | **GitHub compatible** — shields.io badges, standard markdown, no unsupported extensions |
-| ✓ | **Student portfolio ready** — readable in under 2 minutes, clear features, clean layout |

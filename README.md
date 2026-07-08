@@ -369,8 +369,8 @@ Open **http://localhost:8080/voyastra** in your browser.
 <br/>
 
 [![GitHub](https://img.shields.io/badge/GitHub-krrrish111-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/krrrish111)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/YOUR_LINKEDIN_HERE)
-[![Email](https://img.shields.io/badge/Email-Contact-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:YOUR_EMAIL_HERE)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/krish-agrawal11)
+[![Email](https://img.shields.io/badge/Email-Contact-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:krishagrawal138@gmail.com)
 
 <br/>
 

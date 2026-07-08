@@ -56,7 +56,7 @@ Book flights, hotels, trains & more — powered by Google Gemini AI, Razorpay pa
 
 ## 🏠 Homepage
 
-<img src="assets/screenshots/homepage.png" width="100%">
+<div align="center"><img src="assets/screenshots/homepage.png" width="800"></div>
 
 Premium landing page with animated background, AI-powered trip planning CTA, and full navigation across all travel services.
 
@@ -66,43 +66,43 @@ Premium landing page with animated background, AI-powered trip planning CTA, and
 
 ### Trip Planning Form
 
-<img src="assets/screenshots/planner-form.png" width="100%">
+<div align="center"><img src="assets/screenshots/planner-form.png" width="800"></div>
 
 Users enter destination, travel dates, budget, travel style, and traveler count.
 
 ### AI Trip Generation
 
-<img src="assets/screenshots/planner-loading.png" width="100%">
+<div align="center"><img src="assets/screenshots/planner-loading.png" width="800"></div>
 
 Beautiful loading experience while Gemini AI prepares the itinerary.
 
 ### AI Generated Trip
 
-<img src="assets/screenshots/planner-result.png" width="100%">
+<div align="center"><img src="assets/screenshots/planner-result.png" width="800"></div>
 
 Complete personalized itinerary generated using AI.
 
 ### Trip Summary
 
-<img src="assets/screenshots/trip-summary.png" width="100%">
+<div align="center"><img src="assets/screenshots/trip-summary.png" width="800"></div>
 
 Overview including duration, weather, best season, travel mode, and AI insights.
 
 ### Day-by-Day Itinerary
 
-<img src="assets/screenshots/day-itinerary.png" width="100%">
+<div align="center"><img src="assets/screenshots/day-itinerary.png" width="800"></div>
 
 Detailed daily schedule with activities, timings, travel distance, weather, and difficulty.
 
 ### Destination Gallery & Travel Resources
 
-<img src="assets/screenshots/gallery.png" width="100%">
+<div align="center"><img src="assets/screenshots/gallery.png" width="800"></div>
 
 Destination gallery, YouTube vlogs, restaurants, and local recommendations.
 
 ### Local Foods, Attractions & Budget
 
-<img src="assets/screenshots/budget.png" width="100%">
+<div align="center"><img src="assets/screenshots/budget.png" width="800"></div>
 
 Local foods, famous attractions, complete budget breakdown, and AI recommendations.
 
@@ -112,55 +112,55 @@ Local foods, famous attractions, complete budget breakdown, and AI recommendatio
 
 ### Search Destination
 
-<img src="assets/screenshots/destination-search.png" width="100%">
+<div align="center"><img src="assets/screenshots/destination-search.png" width="800"></div>
 
 Search any destination worldwide using Google Places Autocomplete.
 
 ### Destination Overview
 
-<img src="assets/screenshots/destination-overview.png" width="100%">
+<div align="center"><img src="assets/screenshots/destination-overview.png" width="800"></div>
 
 Displays Wikipedia summary, weather, currency, best season, language, and time zone.
 
 ### Landscape Gallery
 
-<img src="assets/screenshots/destination-gallery.png" width="100%">
+<div align="center"><img src="assets/screenshots/destination-gallery.png" width="800"></div>
 
 High-quality destination images fetched dynamically from Unsplash.
 
 ### Travel Videos
 
-<img src="assets/screenshots/destination-videos.png" width="100%">
+<div align="center"><img src="assets/screenshots/destination-videos.png" width="800"></div>
 
 Popular YouTube travel guides and vlogs.
 
 ### Interactive Map
 
-<img src="assets/screenshots/destination-map.png" width="100%">
+<div align="center"><img src="assets/screenshots/destination-map.png" width="800"></div>
 
 Google Maps with attractions, restaurants, hotels, and experiences.
 
 ### Recommended Hotels
 
-<img src="assets/screenshots/destination-hotels.png" width="100%">
+<div align="center"><img src="assets/screenshots/destination-hotels.png" width="800"></div>
 
 Nearby hotels with ratings, availability, and map integration.
 
 ### Top Dining
 
-<img src="assets/screenshots/destination-food.png" width="100%">
+<div align="center"><img src="assets/screenshots/destination-food.png" width="800"></div>
 
 Recommended cafés and restaurants around the destination.
 
 ### Must-Visit Attractions
 
-<img src="assets/screenshots/destination-attractions.png" width="100%">
+<div align="center"><img src="assets/screenshots/destination-attractions.png" width="800"></div>
 
 Popular tourist attractions with ratings and map support.
 
 ### Local Experiences & AI Planning
 
-<img src="assets/screenshots/destination-ai.png" width="100%">
+<div align="center"><img src="assets/screenshots/destination-ai.png" width="800"></div>
 
 Hidden gems, local experiences, AI travel tips, and one-click itinerary generation.
 
@@ -168,7 +168,7 @@ Hidden gems, local experiences, AI travel tips, and one-click itinerary generati
 
 ## ✈️ Flight Booking
 
-<img src="assets/screenshots/flight-booking.png" width="100%">
+<div align="center"><img src="assets/screenshots/flight-booking.png" width="800"></div>
 
 Advanced flight search — One Way, Round Trip, multi-city, airline filters, fare options, and travel class selection.
 
@@ -176,7 +176,7 @@ Advanced flight search — One Way, Round Trip, multi-city, airline filters, far
 
 ## 🏨 Hotel Booking
 
-<img src="assets/screenshots/hotel-booking.png" width="100%">
+<div align="center"><img src="assets/screenshots/hotel-booking.png" width="800"></div>
 
 Search hotels by destination, dates, guests, amenities, price filters, and hotel type.
 
@@ -184,7 +184,7 @@ Search hotels by destination, dates, guests, amenities, price filters, and hotel
 
 ## 🧳 Travel Center
 
-<img src="assets/screenshots/travel-center.png" width="100%">
+<div align="center"><img src="assets/screenshots/travel-center.png" width="800"></div>
 
 Integrated premium services — Visa Assistant, Travel Insurance, Forex, Airport Services, eSIM, Wallet & Rewards.
 
@@ -192,7 +192,7 @@ Integrated premium services — Visa Assistant, Travel Insurance, Forex, Airport
 
 ## 👤 User Profile
 
-<img src="assets/screenshots/profile.png" width="100%">
+<div align="center"><img src="assets/screenshots/profile.png" width="800"></div>
 
 Manage personal info, loyalty points, wallet, bookings, saved plans, and activity history.
 
@@ -200,7 +200,7 @@ Manage personal info, loyalty points, wallet, bookings, saved plans, and activit
 
 ## 🌎 My Journey Dashboard
 
-<img src="assets/screenshots/journey-dashboard.png" width="100%">
+<div align="center"><img src="assets/screenshots/journey-dashboard.png" width="800"></div>
 
 Personal travel dashboard — upcoming trips, weather, travel readiness, memories, budget tracking, and Travel DNA.
 
@@ -208,7 +208,7 @@ Personal travel dashboard — upcoming trips, weather, travel readiness, memorie
 
 ## 👥 Community
 
-<img src="assets/screenshots/community.png" width="100%">
+<div align="center"><img src="assets/screenshots/community.png" width="800"></div>
 
 Travel social platform — stories, image sharing, likes, comments, trending posts, and explorer rankings.
 
@@ -218,19 +218,19 @@ Travel social platform — stories, image sharing, likes, comments, trending pos
 
 ### Dashboard Overview
 
-<img src="assets/screenshots/admin-dashboard.png" width="100%">
+<div align="center"><img src="assets/screenshots/admin-dashboard.png" width="800"></div>
 
 Real-time KPI cards — Total Users, Bookings, Revenue, Plans, Destinations, and platform analytics.
 
 ### Booking Management
 
-<img src="assets/screenshots/admin-bookings.png" width="100%">
+<div align="center"><img src="assets/screenshots/admin-bookings.png" width="800"></div>
 
 Cross-vertical booking registry — filter by type (Flights, Hotels, Trains, Buses, Cabs, Cruises, Helicopters) and manage records.
 
 ### Destination Management
 
-<img src="assets/screenshots/admin-destinations.png" width="100%">
+<div align="center"><img src="assets/screenshots/admin-destinations.png" width="800"></div>
 
 Create, edit, and manage travel destination packages with images, pricing, and UNESCO tags.
 
@@ -240,13 +240,13 @@ Create, edit, and manage travel destination packages with images, pricing, and U
 
 ### Experiences Home
 
-<img src="assets/screenshots/experience-home.png" width="100%">
+<div align="center"><img src="assets/screenshots/experience-home.png" width="800"></div>
 
 Browse curated premium travel experiences.
 
 ### Package Detail
 
-<img src="assets/screenshots/package-details.png" width="100%">
+<div align="center"><img src="assets/screenshots/package-details.png" width="800"></div>
 
 Detailed destination package — hero banner, pricing, duration, best season, overview, and direct booking.
 

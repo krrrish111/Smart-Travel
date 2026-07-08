@@ -72,37 +72,37 @@ Users enter destination, travel dates, budget, travel style, and traveler count.
 
 ### AI Trip Generation
 
-> 📷 *Screenshot coming soon.*
+<img src="assets/screenshots/planner-loading.png" width="100%">
 
 Beautiful loading experience while Gemini AI prepares the itinerary.
 
 ### AI Generated Trip
 
-> 📷 *Screenshot coming soon.*
+<img src="assets/screenshots/planner-result.png" width="100%">
 
 Complete personalized itinerary generated using AI.
 
 ### Trip Summary
 
-> 📷 *Screenshot coming soon.*
+<img src="assets/screenshots/trip-summary.png" width="100%">
 
 Overview including duration, weather, best season, travel mode, and AI insights.
 
 ### Day-by-Day Itinerary
 
-> 📷 *Screenshot coming soon.*
+<img src="assets/screenshots/day-itinerary.png" width="100%">
 
 Detailed daily schedule with activities, timings, travel distance, weather, and difficulty.
 
 ### Destination Gallery & Travel Resources
 
-> 📷 *Screenshot coming soon.*
+<img src="assets/screenshots/gallery.png" width="100%">
 
 Destination gallery, YouTube vlogs, restaurants, and local recommendations.
 
 ### Local Foods, Attractions & Budget
 
-> 📷 *Screenshot coming soon.*
+<img src="assets/screenshots/budget.png" width="100%">
 
 Local foods, famous attractions, complete budget breakdown, and AI recommendations.
 
@@ -118,49 +118,49 @@ Search any destination worldwide using Google Places Autocomplete.
 
 ### Destination Overview
 
-> 📷 *Screenshot coming soon.*
+<img src="assets/screenshots/destination-overview.png" width="100%">
 
 Displays Wikipedia summary, weather, currency, best season, language, and time zone.
 
 ### Landscape Gallery
 
-> 📷 *Screenshot coming soon.*
+<img src="assets/screenshots/destination-gallery.png" width="100%">
 
 High-quality destination images fetched dynamically from Unsplash.
 
 ### Travel Videos
 
-> 📷 *Screenshot coming soon.*
+<img src="assets/screenshots/destination-videos.png" width="100%">
 
 Popular YouTube travel guides and vlogs.
 
 ### Interactive Map
 
-> 📷 *Screenshot coming soon.*
+<img src="assets/screenshots/destination-map.png" width="100%">
 
 Google Maps with attractions, restaurants, hotels, and experiences.
 
 ### Recommended Hotels
 
-> 📷 *Screenshot coming soon.*
+<img src="assets/screenshots/destination-hotels.png" width="100%">
 
 Nearby hotels with ratings, availability, and map integration.
 
 ### Top Dining
 
-> 📷 *Screenshot coming soon.*
+<img src="assets/screenshots/destination-food.png" width="100%">
 
 Recommended cafés and restaurants around the destination.
 
 ### Must-Visit Attractions
 
-> 📷 *Screenshot coming soon.*
+<img src="assets/screenshots/destination-attractions.png" width="100%">
 
 Popular tourist attractions with ratings and map support.
 
 ### Local Experiences & AI Planning
 
-> 📷 *Screenshot coming soon.*
+<img src="assets/screenshots/destination-ai.png" width="100%">
 
 Hidden gems, local experiences, AI travel tips, and one-click itinerary generation.
 
@@ -200,7 +200,7 @@ Manage personal info, loyalty points, wallet, bookings, saved plans, and activit
 
 ## 🌎 My Journey Dashboard
 
-> 📷 *Screenshot coming soon.*
+<img src="assets/screenshots/journey-dashboard.png" width="100%">
 
 Personal travel dashboard — upcoming trips, weather, travel readiness, memories, budget tracking, and Travel DNA.
 
@@ -240,7 +240,7 @@ Create, edit, and manage travel destination packages with images, pricing, and U
 
 ### Experiences Home
 
-> 📷 *Screenshot coming soon.*
+<img src="assets/screenshots/experience-home.png" width="100%">
 
 Browse curated premium travel experiences.
 

@@ -1,7 +1,5 @@
 <div align="center">
 
-<br/>
-
 # ✈️ Voyastra — Travel Smarter
 
 **An AI-powered, full-stack travel platform built with pure Java Servlets & JSP.**  
@@ -54,7 +52,63 @@ Book flights, hotels, trains & more — powered by Google Gemini AI, Razorpay pa
 
 ## 📸 Screenshots
 
-> **Note:** Screenshots will be added to `docs/screenshots/` once captured. Filenames are standardized — see the [reference table](#-screenshot-filename-reference) at the bottom.
+### 🏠 Homepage
+![Homepage](docs/screenshots/homepage.png)
+*Modern landing page with animated background slider and AI-powered trip planning.*
+
+---
+
+### 🧠 AI Trip Planner
+![AI Trip Planner](docs/screenshots/planner.png)
+*Gemini-powered itinerary builder — destination, dates, budget, and travel style.*
+
+---
+
+### ✈️ Flight Search
+![Flight Search](docs/screenshots/flights.png)
+*Search and book flights with seat selection, extras, and Razorpay checkout.*
+
+---
+
+### 🏨 Hotel Search
+![Hotel Search](docs/screenshots/hotels.png)
+*Hotel search with city autocomplete, date range pickers, and guest filters.*
+
+---
+
+### 🌍 Destination Explorer
+![Destination Explorer](docs/screenshots/destination-explorer.png)
+*Featured destinations with weather badges, highlights, and AI itinerary previews.*
+
+---
+
+### 👥 Community Feed
+![Community Feed](docs/screenshots/community.png)
+*Travel stories, posts, reels, and hidden gems — a built-in social platform.*
+
+---
+
+### 👤 User Profile
+![User Profile](docs/screenshots/profile.png)
+*Dashboard for bookings, wishlist, loyalty points, wallet, and journey history.*
+
+---
+
+### 🧳 Travel Center
+![Travel Center](docs/screenshots/travel-center.png)
+*Premium services — Visa assistance, Insurance, Forex, eSIM, and Airport services.*
+
+---
+
+### 📊 Admin Dashboard
+![Admin Dashboard](docs/screenshots/admin-dashboard.png)
+*Real-time KPI cards, Chart.js analytics, and full booking & user management.*
+
+---
+
+### 🤖 AI Chatbot
+![AI Chatbot](docs/screenshots/chatbot.png)
+*Glassmorphic AI Buddy widget with context-aware travel recommendations.*
 
 ---
 
@@ -103,14 +157,14 @@ voyastra/
 **Prerequisites:** JDK 17, Maven 3.9+, Tomcat 10.x, MySQL 8.0+
 
 ```bash
-# 1. Clone the repository
+# 1. Clone
 git clone https://github.com/krrrish111/Smart-Travel.git
 cd Smart-Travel
 
 # 2. Create the database
 mysql -u root -p -e "CREATE DATABASE voyastra CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 
-# 3. Set environment variables (see .env.example)
+# 3. Configure environment variables
 cp .env.example .env
 # Edit .env with your API keys and DB credentials
 
@@ -182,24 +236,6 @@ Open **http://localhost:8080/voyastra** in your browser.
 
 ---
 
-## 📸 Screenshot Filename Reference
-
-| Status | Filename | Screen |
-|---|---|---|
-| ✅ | `docs/screenshots/homepage.png` | Homepage |
-| ✅ | `docs/screenshots/planner.png` | AI Trip Planner |
-| ✅ | `docs/screenshots/flights.png` | Flight Search |
-| ✅ | `docs/screenshots/hotels.png` | Hotel Search |
-| ✅ | `docs/screenshots/destination-explorer.png` | Destination Explorer |
-| ✅ | `docs/screenshots/community.png` | Community Feed |
-| ✅ | `docs/screenshots/profile.png` | User Profile Dashboard |
-| ✅ | `docs/screenshots/travel-center.png` | Travel Center |
-| ✅ | `docs/screenshots/admin-dashboard.png` | Admin Dashboard |
-| ✅ | `docs/screenshots/chatbot.png` | AI Chatbot Widget |
-| ⏳ | `docs/screenshots/planner-result.png` | AI Itinerary Result (needs a generated plan) |
-
----
-
 <div align="center">
 
 **Built with ❤️ and ☕ — powered by Gemini AI, pure Java Servlets, and a love for travel.**
@@ -209,7 +245,3 @@ Open **http://localhost:8080/voyastra** in your browser.
 <sub>© 2026 Voyastra — Travel Smarter</sub>
 
 </div>
-
----
-
-

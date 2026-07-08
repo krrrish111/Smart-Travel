@@ -50,65 +50,259 @@ Book flights, hotels, trains & more — powered by Google Gemini AI, Razorpay pa
 
 ---
 
-## 📸 Screenshots
+# 📸 Project Screenshots
 
-### 🏠 Homepage
-![Homepage](docs/screenshots/homepage.png)
-*Modern landing page with animated background slider and AI-powered trip planning.*
+## 🏠 Homepage
 
----
+<img src="assets/screenshots/homepage.png" width="100%">
 
-### 🧠 AI Trip Planner
-![AI Trip Planner](docs/screenshots/planner.png)
-*Gemini-powered itinerary builder — destination, dates, budget, and travel style.*
+Premium landing page with a modern dark UI, responsive layout, and quick access to all travel services.
 
 ---
 
-### ✈️ Flight Search
-![Flight Search](docs/screenshots/flights.png)
-*Search and book flights with seat selection, extras, and Razorpay checkout.*
+# 🤖 AI Trip Planner
+
+### Trip Planning Form
+
+<img src="assets/screenshots/planner-form.png" width="100%">
+
+Users enter destination, travel dates, budget, travel style, and travelers.
+
+### AI Trip Generation
+
+<img src="assets/screenshots/planner-loading.png" width="100%">
+
+Beautiful loading experience while Gemini AI prepares the itinerary.
+
+### AI Generated Trip
+
+<img src="assets/screenshots/planner-result.png" width="100%">
+
+Complete personalized itinerary generated using AI.
+
+### Trip Summary
+
+<img src="assets/screenshots/trip-summary.png" width="100%">
+
+Overview including duration, weather, best season, travel mode, and AI insights.
+
+### Day-by-Day Itinerary
+
+<img src="assets/screenshots/day-itinerary.png" width="100%">
+
+Detailed daily schedule with activities, timings, travel distance, weather, and difficulty.
+
+### Destination Gallery & Travel Resources
+
+<img src="assets/screenshots/gallery.png" width="100%">
+
+Includes destination gallery, YouTube videos, restaurants, and local recommendations.
+
+### Local Foods, Attractions & Budget
+
+<img src="assets/screenshots/budget.png" width="100%">
+
+Shows:
+
+- Local foods
+- Famous attractions
+- Complete budget breakdown
+- AI recommendations
 
 ---
 
-### 🏨 Hotel Search
-![Hotel Search](docs/screenshots/hotels.png)
-*Hotel search with city autocomplete, date range pickers, and guest filters.*
+# 🌍 Destination Explorer
+
+### Search Destination
+
+<img src="assets/screenshots/destination-search.png" width="100%">
+
+Search any destination worldwide using Google Places.
+
+### Destination Overview
+
+<img src="assets/screenshots/destination-overview.png" width="100%">
+
+Displays:
+
+- Wikipedia summary
+- Weather
+- Currency
+- Best visiting season
+- Language
+- Time Zone
+
+### Landscape Gallery
+
+<img src="assets/screenshots/destination-gallery.png" width="100%">
+
+High-quality destination images fetched dynamically.
+
+### Travel Videos
+
+<img src="assets/screenshots/destination-videos.png" width="100%">
+
+Popular YouTube travel guides and vlogs.
+
+### Interactive Map
+
+<img src="assets/screenshots/destination-map.png" width="100%">
+
+Google Maps with attractions, restaurants, hotels, and experiences.
+
+### Recommended Hotels
+
+<img src="assets/screenshots/destination-hotels.png" width="100%">
+
+Nearby hotels with ratings, availability, and map integration.
+
+### Top Dining
+
+<img src="assets/screenshots/destination-food.png" width="100%">
+
+Recommended cafés and restaurants around the destination.
+
+### Must Visit Attractions
+
+<img src="assets/screenshots/destination-attractions.png" width="100%">
+
+Popular tourist attractions with ratings and map support.
+
+### Local Experiences & AI Planning
+
+<img src="assets/screenshots/destination-ai.png" width="100%">
+
+Hidden gems, local experiences, AI travel tips, and one-click itinerary generation.
 
 ---
 
-### 🌍 Destination Explorer
-![Destination Explorer](docs/screenshots/destination-explorer.png)
-*Featured destinations with weather badges, highlights, and AI itinerary previews.*
+# ✈ Flight Booking
+
+<img src="assets/screenshots/flight-booking.png" width="100%">
+
+Advanced flight search supporting:
+
+- One Way
+- Round Trip
+- Multi-city
+- Airline Filters
+- Fare Options
+- Travel Class
 
 ---
 
-### 👥 Community Feed
-![Community Feed](docs/screenshots/community.png)
-*Travel stories, posts, reels, and hidden gems — a built-in social platform.*
+# 🏨 Hotel Booking
+
+<img src="assets/screenshots/hotel-booking.png" width="100%">
+
+Search hotels using:
+
+- Destination
+- Dates
+- Guests
+- Amenities
+- Price Filters
+- Hotel Type
 
 ---
 
-### 👤 User Profile
-![User Profile](docs/screenshots/profile.png)
-*Dashboard for bookings, wishlist, loyalty points, wallet, and journey history.*
+# 🧳 Travel Center
+
+<img src="assets/screenshots/travel-center.png" width="100%">
+
+Integrated premium travel services including:
+
+- Visa Assistant
+- Travel Insurance
+- Forex Center
+- Airport Services
+- eSIM Marketplace
+- Rewards
+- Wallet
+- Travel Readiness Score
 
 ---
 
-### 🧳 Travel Center
-![Travel Center](docs/screenshots/travel-center.png)
-*Premium services — Visa assistance, Insurance, Forex, eSIM, and Airport services.*
+# 👤 User Profile
+
+<img src="assets/screenshots/profile.png" width="100%">
+
+Manage:
+
+- Personal Information
+- Loyalty Points
+- Wallet
+- Bookings
+- Saved Plans
+- Activity History
 
 ---
 
-### 📊 Admin Dashboard
-![Admin Dashboard](docs/screenshots/admin-dashboard.png)
-*Real-time KPI cards, Chart.js analytics, and full booking & user management.*
+# 🌎 My Journey Dashboard
+
+<img src="assets/screenshots/journey-dashboard.png" width="100%">
+
+Personal travel dashboard with:
+
+- Upcoming Trips
+- Weather
+- Travel Readiness
+- Memories
+- Budget Tracking
+- Travel DNA
 
 ---
 
-### 🤖 AI Chatbot
-![AI Chatbot](docs/screenshots/chatbot.png)
-*Glassmorphic AI Buddy widget with context-aware travel recommendations.*
+# 👥 Community
+
+<img src="assets/screenshots/community.png" width="100%">
+
+Travel social platform supporting:
+
+- Travel Stories
+- Image Sharing
+- Likes
+- Comments
+- Trending Posts
+- Explorer Rankings
+
+---
+
+# 🛠 Admin Dashboard
+
+### Dashboard
+
+<img src="assets/screenshots/admin-dashboard.png" width="100%">
+
+Analytics and overall platform statistics.
+
+### Booking Management
+
+<img src="assets/screenshots/admin-bookings.png" width="100%">
+
+Manage bookings, payments, and users.
+
+### Destination Management
+
+<img src="assets/screenshots/admin-destinations.png" width="100%">
+
+Create, edit, and manage travel destinations.
+
+---
+
+# 🌟 Experiences
+
+### Experiences Home
+
+<img src="assets/screenshots/experience-home.png" width="100%">
+
+Browse curated premium travel experiences.
+
+### Experience Details
+
+<img src="assets/screenshots/package-details.png" width="100%">
+
+Detailed itinerary, pricing, inclusions, gallery, and booking.
 
 ---
 

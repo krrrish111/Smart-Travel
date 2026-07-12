@@ -1,4 +1,4 @@
-﻿<%@ page language="java" pageEncoding="UTF-8"%>
+<%@ page language="java" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
@@ -115,7 +115,7 @@
                                 %>
                                 <div style="position:relative;">
                                     <button class="nav-avatar-trigger" id="navAvatarTrigger" aria-haspopup="true" aria-expanded="false" aria-label="User menu">
-                                        <img src="https://ui-avatars.com/api/?name=<%=encodedName% loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">&background=d4a574&color=1a0f08&bold=true&size=64" alt="<%=sInitials%>" class="nav-avatar-img" onerror="this.style.display='none'">
+                                        <img src="https://ui-avatars.com/api/?name=<%=encodedName%>&amp;background=d4a574&amp;color=1a0f08&amp;bold=true&amp;size=64" alt="<%=sInitials%>" class="nav-avatar-img" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                                         <span class="nav-avatar-name"><%=sFirstName%></span>
                                         <svg class="nav-avatar-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
                                     </button>

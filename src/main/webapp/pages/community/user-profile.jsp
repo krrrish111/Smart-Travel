@@ -1,4 +1,4 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/components/header.jsp" %>
 <%@ include file="/components/global_ui.jsp" %>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/community_feed.css">
@@ -33,8 +33,8 @@
         <div class="up-hero-body">
             <div class="up-avatar-section">
                 <div class="up-avatar-wrap">
-                    <img src="https://ui-avatars.com/api/?name=<%=displayName% loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">&background=<%=avatarBg%>&color=fff&bold=true&size=200"
-                         alt="<%=displayName%>" class="up-avatar" id="profileAvatar">
+                    <img src="https://ui-avatars.com/api/?name=<%=displayName%>&amp;background=<%=avatarBg%>&amp;color=fff&amp;bold=true&amp;size=200"
+                         alt="<%=displayName%>" class="up-avatar" id="profileAvatar" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                     <div class="up-online-dot"></div>
                 </div>
                 <div class="up-identity">

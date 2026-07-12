@@ -1,4 +1,4 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="en" class="dark">
@@ -119,7 +119,7 @@
     <main>
         <!-- Hero Section -->
         <section class="itin-hero">
-            <img src="<%= bgImage % loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">" alt="<%= city %>">
+            <img src="<%= bgImage %>" alt="<%= city %>" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
             <div class="itin-hero-content">
                 <span class="inline-block py-1 px-3 rounded-full bg-primary/20 text-primary border border-primary/30 text-sm font-semibold mb-4 backdrop-blur-md">
                     Curated Itinerary

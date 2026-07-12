@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/components/header.jsp" %>
 <%@ include file="/components/global_ui.jsp" %>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/community_feed.css">
@@ -26,14 +26,14 @@
     <div class="up-hero">
         <div class="up-banner">
             <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1400&q=80"
-                 alt="Banner" class="up-banner-img">
+                 alt="Banner" class="up-banner-img" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
             <div class="up-banner-overlay"></div>
         </div>
 
         <div class="up-hero-body">
             <div class="up-avatar-section">
                 <div class="up-avatar-wrap">
-                    <img src="https://ui-avatars.com/api/?name=<%=displayName%>&background=<%=avatarBg%>&color=fff&bold=true&size=200"
+                    <img src="https://ui-avatars.com/api/?name=<%=displayName% loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">&background=<%=avatarBg%>&color=fff&bold=true&size=200"
                          alt="<%=displayName%>" class="up-avatar" id="profileAvatar">
                     <div class="up-online-dot"></div>
                 </div>
@@ -152,7 +152,7 @@
                 </div>
                 <div class="up-dest-grid">
                     <div class="up-dest-card">
-                        <img src="https://images.unsplash.com/photo-1626082896492-766af4eb65ed?auto=format&fit=crop&w=400&q=80" class="up-dest-img">
+                        <img src="https://images.unsplash.com/photo-1626082896492-766af4eb65ed?auto=format&fit=crop&w=400&q=80" class="up-dest-img" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         <div class="up-dest-overlay">
                             <div class="up-dest-flag">🇮🇳</div>
                             <div class="up-dest-name">Ladakh</div>
@@ -161,7 +161,7 @@
                         <div class="up-dest-badge">⭐ Best Trip</div>
                     </div>
                     <div class="up-dest-card">
-                        <img src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=400&q=80" class="up-dest-img">
+                        <img src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=400&q=80" class="up-dest-img" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         <div class="up-dest-overlay">
                             <div class="up-dest-flag">🇮🇳</div>
                             <div class="up-dest-name">Kerala</div>
@@ -169,7 +169,7 @@
                         </div>
                     </div>
                     <div class="up-dest-card">
-                        <img src="https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=400&q=80" class="up-dest-img">
+                        <img src="https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=400&q=80" class="up-dest-img" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         <div class="up-dest-overlay">
                             <div class="up-dest-flag">🇮🇳</div>
                             <div class="up-dest-name">Goa</div>
@@ -177,7 +177,7 @@
                         </div>
                     </div>
                     <div class="up-dest-card">
-                        <img src="https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=400&q=80" class="up-dest-img">
+                        <img src="https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=400&q=80" class="up-dest-img" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         <div class="up-dest-overlay">
                             <div class="up-dest-flag">🇮🇳</div>
                             <div class="up-dest-name">Rajasthan</div>
@@ -185,7 +185,7 @@
                         </div>
                     </div>
                     <div class="up-dest-card">
-                        <img src="https://images.unsplash.com/photo-1589308078059-be1415eab4c3?auto=format&fit=crop&w=400&q=80" class="up-dest-img">
+                        <img src="https://images.unsplash.com/photo-1589308078059-be1415eab4c3?auto=format&fit=crop&w=400&q=80" class="up-dest-img" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         <div class="up-dest-overlay">
                             <div class="up-dest-flag">🇮🇳</div>
                             <div class="up-dest-name">Meghalaya</div>
@@ -194,7 +194,7 @@
                         <div class="up-dest-badge gem">💎 Hidden Gem</div>
                     </div>
                     <div class="up-dest-card">
-                        <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=400&q=80" class="up-dest-img">
+                        <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=400&q=80" class="up-dest-img" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         <div class="up-dest-overlay">
                             <div class="up-dest-flag">🇹🇭</div>
                             <div class="up-dest-name">Bangkok</div>
@@ -230,24 +230,24 @@
                 <!-- Posts -->
                 <div class="up-tab-content active" id="upt-posts">
                     <div class="up-posts-grid">
-                        <div class="up-post-cell"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=300&q=70" loading="lazy"><div class="up-post-hover"><i class="ri-heart-fill"></i> 842 &nbsp; <i class="ri-chat-1-fill"></i> 64</div></div>
-                        <div class="up-post-cell"><img src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=300&q=70" loading="lazy"><div class="up-post-hover"><i class="ri-heart-fill"></i> 621 &nbsp; <i class="ri-chat-1-fill"></i> 48</div></div>
-                        <div class="up-post-cell"><img src="https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=300&q=70" loading="lazy"><div class="up-post-hover"><i class="ri-heart-fill"></i> 490 &nbsp; <i class="ri-chat-1-fill"></i> 31</div></div>
-                        <div class="up-post-cell"><img src="https://images.unsplash.com/photo-1626082896492-766af4eb65ed?auto=format&fit=crop&w=300&q=70" loading="lazy"><div class="up-post-hover"><i class="ri-heart-fill"></i> 378 &nbsp; <i class="ri-chat-1-fill"></i> 27</div></div>
-                        <div class="up-post-cell"><img src="https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=300&q=70" loading="lazy"><div class="up-post-hover"><i class="ri-heart-fill"></i> 312 &nbsp; <i class="ri-chat-1-fill"></i> 22</div></div>
-                        <div class="up-post-cell"><img src="https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=300&q=70" loading="lazy"><div class="up-post-hover"><i class="ri-heart-fill"></i> 289 &nbsp; <i class="ri-chat-1-fill"></i> 19</div></div>
-                        <div class="up-post-cell"><img src="https://images.unsplash.com/photo-1542152019-216e257e84cc?auto=format&fit=crop&w=300&q=70" loading="lazy"><div class="up-post-hover"><i class="ri-heart-fill"></i> 241 &nbsp; <i class="ri-chat-1-fill"></i> 16</div></div>
-                        <div class="up-post-cell"><img src="https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=300&q=70" loading="lazy"><div class="up-post-hover"><i class="ri-heart-fill"></i> 198 &nbsp; <i class="ri-chat-1-fill"></i> 13</div></div>
-                        <div class="up-post-cell"><img src="https://images.unsplash.com/photo-1559563458-527698bf5295?auto=format&fit=crop&w=300&q=70" loading="lazy"><div class="up-post-hover"><i class="ri-heart-fill"></i> 171 &nbsp; <i class="ri-chat-1-fill"></i> 11</div></div>
+                        <div class="up-post-cell"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=300&q=70" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)"><div class="up-post-hover"><i class="ri-heart-fill"></i> 842 &nbsp; <i class="ri-chat-1-fill"></i> 64</div></div>
+                        <div class="up-post-cell"><img src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=300&q=70" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)"><div class="up-post-hover"><i class="ri-heart-fill"></i> 621 &nbsp; <i class="ri-chat-1-fill"></i> 48</div></div>
+                        <div class="up-post-cell"><img src="https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=300&q=70" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)"><div class="up-post-hover"><i class="ri-heart-fill"></i> 490 &nbsp; <i class="ri-chat-1-fill"></i> 31</div></div>
+                        <div class="up-post-cell"><img src="https://images.unsplash.com/photo-1626082896492-766af4eb65ed?auto=format&fit=crop&w=300&q=70" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)"><div class="up-post-hover"><i class="ri-heart-fill"></i> 378 &nbsp; <i class="ri-chat-1-fill"></i> 27</div></div>
+                        <div class="up-post-cell"><img src="https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=300&q=70" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)"><div class="up-post-hover"><i class="ri-heart-fill"></i> 312 &nbsp; <i class="ri-chat-1-fill"></i> 22</div></div>
+                        <div class="up-post-cell"><img src="https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=300&q=70" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)"><div class="up-post-hover"><i class="ri-heart-fill"></i> 289 &nbsp; <i class="ri-chat-1-fill"></i> 19</div></div>
+                        <div class="up-post-cell"><img src="https://images.unsplash.com/photo-1542152019-216e257e84cc?auto=format&fit=crop&w=300&q=70" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)"><div class="up-post-hover"><i class="ri-heart-fill"></i> 241 &nbsp; <i class="ri-chat-1-fill"></i> 16</div></div>
+                        <div class="up-post-cell"><img src="https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=300&q=70" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)"><div class="up-post-hover"><i class="ri-heart-fill"></i> 198 &nbsp; <i class="ri-chat-1-fill"></i> 13</div></div>
+                        <div class="up-post-cell"><img src="https://images.unsplash.com/photo-1559563458-527698bf5295?auto=format&fit=crop&w=300&q=70" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)"><div class="up-post-hover"><i class="ri-heart-fill"></i> 171 &nbsp; <i class="ri-chat-1-fill"></i> 11</div></div>
                     </div>
                 </div>
 
                 <!-- Reels -->
                 <div class="up-tab-content" id="upt-reels">
                     <div class="up-posts-grid">
-                        <div class="up-post-cell reel-cell"><img src="https://images.unsplash.com/photo-1626082896492-766af4eb65ed?auto=format&fit=crop&w=300&q=70" loading="lazy"><div class="up-reel-icon"><i class="ri-play-fill"></i></div><div class="up-post-hover"><i class="ri-eye-fill"></i> 5.6M</div></div>
-                        <div class="up-post-cell reel-cell"><img src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=300&q=70" loading="lazy"><div class="up-reel-icon"><i class="ri-play-fill"></i></div><div class="up-post-hover"><i class="ri-eye-fill"></i> 3.1M</div></div>
-                        <div class="up-post-cell reel-cell"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=300&q=70" loading="lazy"><div class="up-reel-icon"><i class="ri-play-fill"></i></div><div class="up-post-hover"><i class="ri-eye-fill"></i> 2.4M</div></div>
+                        <div class="up-post-cell reel-cell"><img src="https://images.unsplash.com/photo-1626082896492-766af4eb65ed?auto=format&fit=crop&w=300&q=70" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)"><div class="up-reel-icon"><i class="ri-play-fill"></i></div><div class="up-post-hover"><i class="ri-eye-fill"></i> 5.6M</div></div>
+                        <div class="up-post-cell reel-cell"><img src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=300&q=70" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)"><div class="up-reel-icon"><i class="ri-play-fill"></i></div><div class="up-post-hover"><i class="ri-eye-fill"></i> 3.1M</div></div>
+                        <div class="up-post-cell reel-cell"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=300&q=70" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)"><div class="up-reel-icon"><i class="ri-play-fill"></i></div><div class="up-post-hover"><i class="ri-eye-fill"></i> 2.4M</div></div>
                     </div>
                 </div>
 
@@ -255,7 +255,7 @@
                 <div class="up-tab-content" id="upt-guides">
                     <div class="up-guides-list">
                         <div class="up-guide-item">
-                            <img src="https://images.unsplash.com/photo-1626082896492-766af4eb65ed?auto=format&fit=crop&w=120&q=70" class="up-guide-img">
+                            <img src="https://images.unsplash.com/photo-1626082896492-766af4eb65ed?auto=format&fit=crop&w=120&q=70" class="up-guide-img" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                             <div class="up-guide-body">
                                 <div class="up-guide-name">The Complete Ladakh Circuit</div>
                                 <div class="up-guide-meta">12 Days · ₹35,000 · 18 min read</div>
@@ -266,7 +266,7 @@
                             </button>
                         </div>
                         <div class="up-guide-item">
-                            <img src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=120&q=70" class="up-guide-img">
+                            <img src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=120&q=70" class="up-guide-img" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                             <div class="up-guide-body">
                                 <div class="up-guide-name">Kerala Decoded: Backwaters &amp; Spice Trails</div>
                                 <div class="up-guide-meta">8 Days · ₹22,000 · 14 min read</div>
@@ -277,7 +277,7 @@
                             </button>
                         </div>
                         <div class="up-guide-item">
-                            <img src="https://images.unsplash.com/photo-1596895111956-bf1cf0599ce5?auto=format&fit=crop&w=120&q=70" class="up-guide-img">
+                            <img src="https://images.unsplash.com/photo-1596895111956-bf1cf0599ce5?auto=format&fit=crop&w=120&q=70" class="up-guide-img" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                             <div class="up-guide-body">
                                 <div class="up-guide-name">Hidden Northeast India: Meghalaya, Nagaland &amp; Manipur</div>
                                 <div class="up-guide-meta">14 Days · ₹28,000 · 22 min read</div>

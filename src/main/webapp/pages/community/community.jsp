@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ include file="/components/header.jsp" %>
 <%@ include file="/components/global_ui.jsp" %>
@@ -55,14 +55,14 @@
             <section id="createPostCard" class="create-post-card scroll-reveal">
                 <form id="createPostForm" data-vx>
                     <div class="create-post-header">
-                        <img src="https://ui-avatars.com/api/?name=${sessionScope.user_name != null ? sessionScope.user_name : 'Guest'}&background=d6a66b&color=0b0f19&bold=true" alt="You" class="create-post-avatar">
+                        <img src="https://ui-avatars.com/api/?name=${sessionScope.user_name != null ? sessionScope.user_name : 'Guest'}&background=d6a66b&color=0b0f19&bold=true" alt="You" class="create-post-avatar" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         <textarea id="postTextarea" name="text" class="create-post-textarea" rows="2"
                             placeholder="Share your travel story, tip or experience..."
                             data-v-required data-v-min-len="5" data-v-label="Post"></textarea>
                     </div>
                     
                     <div class="post-preview-image-container" id="postImagePreviewContainer" style="display:none;">
-                        <img id="postImagePreview" src="" alt="Selected Preview" style="display:none;">
+                        <img id="postImagePreview" src="" alt="Selected Preview" style="display:none;" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         <video id="postVideoPreview" src="" controls style="display:none; width:100%; max-height:250px; border-radius:12px;"></video>
                         <button type="button" class="remove-preview-btn" onclick="clearSelectedImage()">×</button>
                     </div>
@@ -122,7 +122,7 @@
                         <c:when test="${not empty topExplorers}">
                             <c:forEach var="explorer" items="${topExplorers}">
                                 <div class="explorer-row">
-                                    <img src="https://ui-avatars.com/api/?name=${explorer.name}&background=d6a66b&color=0b0f19&bold=true" alt="${explorer.name}" class="explorer-avatar">
+                                    <img src="https://ui-avatars.com/api/?name=${explorer.name}&background=d6a66b&color=0b0f19&bold=true" alt="${explorer.name}" class="explorer-avatar" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                                     <div class="explorer-info">
                                         <span class="explorer-name">${explorer.name}</span>
                                         <span class="explorer-stats">✈️ ${explorer.tripCount} trips • ${explorer.followerCount} followers</span>
@@ -135,7 +135,7 @@
                         </c:when>
                         <c:otherwise>
                             <div class="explorer-row">
-                                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=100&auto=format&fit=crop" alt="Sarah J" class="explorer-avatar">
+                                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=100&auto=format&fit=crop" alt="Sarah J" class="explorer-avatar" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                                 <div class="explorer-info">
                                     <span class="explorer-name">Sarah Jenkins</span>
                                     <span class="explorer-stats">✈️ 48 trips • 312 posts</span>
@@ -143,7 +143,7 @@
                                 <button class="follow-btn" onclick="VoyastraToast.show('Please log in to follow travelers!', 'warning')">Follow</button>
                             </div>
                             <div class="explorer-row">
-                                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=100&auto=format&fit=crop" alt="Priya K" class="explorer-avatar">
+                                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=100&auto=format&fit=crop" alt="Priya K" class="explorer-avatar" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                                 <div class="explorer-info">
                                     <span class="explorer-name">Priya Kapoor</span>
                                     <span class="explorer-stats">🌿 Local Guide • 07</span>
@@ -151,7 +151,7 @@
                                 <button class="follow-btn following" onclick="VoyastraToast.show('Please log in to follow travelers!', 'warning')">Following</button>
                             </div>
                             <div class="explorer-row">
-                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=100&auto=format&fit=crop" alt="Meera R" class="explorer-avatar">
+                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=100&auto=format&fit=crop" alt="Meera R" class="explorer-avatar" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                                 <div class="explorer-info">
                                     <span class="explorer-name">Meera Rajan</span>
                                     <span class="explorer-stats">📸 Photographer • 24</span>
@@ -159,7 +159,7 @@
                                 <button class="follow-btn" onclick="VoyastraToast.show('Please log in to follow travelers!', 'warning')">Follow</button>
                             </div>
                             <div class="explorer-row">
-                                <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=100&auto=format&fit=crop" alt="Rahul S" class="explorer-avatar">
+                                <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=100&auto=format&fit=crop" alt="Rahul S" class="explorer-avatar" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                                 <div class="explorer-info">
                                     <span class="explorer-name">Rahul Sharma</span>
                                     <span class="explorer-stats">🗺️ 18 countries</span>
@@ -187,14 +187,14 @@
                 <h3 class="widget-title">Trending Now</h3>
                 <div class="widget-content">
                     <div class="trending-destination" onclick="selectTrending('Rajasthan')">
-                        <img src="https://images.unsplash.com/photo-1477587458883-471a5ed94245?q=80&width=300&auto=format&fit=crop" alt="Rajasthan" class="trending-img">
+                        <img src="https://images.unsplash.com/photo-1477587458883-471a5ed94245?q=80&width=300&auto=format&fit=crop" alt="Rajasthan" class="trending-img" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         <div class="trending-info">
                             <span class="trending-name">Rajasthan</span>
                             <span class="trending-posts">1.2k stories</span>
                         </div>
                     </div>
                     <div class="trending-destination" onclick="selectTrending('Ladakh')">
-                        <img src="https://images.unsplash.com/photo-1596700491950-8b43825f385c?q=80&width=300&auto=format&fit=crop" alt="Ladakh" class="trending-img">
+                        <img src="https://images.unsplash.com/photo-1596700491950-8b43825f385c?q=80&width=300&auto=format&fit=crop" alt="Ladakh" class="trending-img" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         <div class="trending-info">
                             <span class="trending-name">Ladakh</span>
                             <span class="trending-posts">940 stories</span>
@@ -285,7 +285,7 @@
         <div class="story-viewer-top-bar" style="display:flex; justify-content:space-between; align-items:center;">
             <div class="story-author-info">
                 <div class="story-avatar-container">
-                    <img id="storyViewerAvatar" src="" alt="Avatar">
+                    <img id="storyViewerAvatar" src="" alt="Avatar" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                 </div>
                 <div style="display: flex; flex-direction: column;">
                     <span id="storyViewerName" class="story-author-name"></span>
@@ -304,7 +304,7 @@
         </div>
     </div>
     <div class="story-media-container" id="storyMediaContainer" onmousedown="pauseStory()" onmouseup="resumeStory()" ontouchstart="pauseStory()" ontouchend="resumeStory()">
-        <img id="storyViewerImage" style="display:none;">
+        <img id="storyViewerImage" style="display:none;" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
         <video id="storyViewerVideo" playsinline style="display:none;"></video>
         <div id="storyViewerCaption" class="story-viewer-caption"></div>
         <div id="storyViewerLocation" class="story-viewer-location"></div>
@@ -364,7 +364,7 @@
     <div class="media-viewer-nav media-viewer-prev" onclick="navigateMediaViewer(-1, event)">‹</div>
     <div class="media-viewer-nav media-viewer-next" onclick="navigateMediaViewer(1, event)">›</div>
     <div class="media-viewer-content" onclick="event.stopPropagation()">
-        <img id="mediaViewerImage" src="" style="display:none;">
+        <img id="mediaViewerImage" src="" style="display:none;" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
         <video id="mediaViewerVideo" src="" controls style="display:none;"></video>
     </div>
 </div>

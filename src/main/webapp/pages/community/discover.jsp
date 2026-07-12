@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/components/header.jsp" %>
 <%@ include file="/components/global_ui.jsp" %>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/discover.css">
@@ -34,7 +34,7 @@
             <div class="ai-carousel">
                 <!-- Dest 1 -->
                 <div class="ai-card dest-card">
-                    <img src="https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=400&q=80" alt="Goa" class="ai-card-img">
+                    <img src="https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=400&q=80" alt="Goa" class="ai-card-img" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                     <div class="ai-card-overlay">
                         <div class="ai-trend-badge"><i class="ri-arrow-right-up-line"></i> 420% spike</div>
                         <h3>South Goa</h3>
@@ -44,7 +44,7 @@
 
                 <!-- Dest 2 -->
                 <div class="ai-card dest-card">
-                    <img src="https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=400&q=80" alt="Bali" class="ai-card-img">
+                    <img src="https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=400&q=80" alt="Bali" class="ai-card-img" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                     <div class="ai-card-overlay">
                         <div class="ai-trend-badge"><i class="ri-arrow-right-up-line"></i> 310% spike</div>
                         <h3>Ubud, Bali</h3>
@@ -54,7 +54,7 @@
 
                 <!-- Dest 3 -->
                 <div class="ai-card dest-card">
-                    <img src="https://images.unsplash.com/photo-1514222134-b57cbb8ce073?auto=format&fit=crop&w=400&q=80" alt="Kerala" class="ai-card-img">
+                    <img src="https://images.unsplash.com/photo-1514222134-b57cbb8ce073?auto=format&fit=crop&w=400&q=80" alt="Kerala" class="ai-card-img" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                     <div class="ai-card-overlay">
                         <div class="ai-trend-badge"><i class="ri-arrow-right-up-line"></i> 250% spike</div>
                         <h3>Munnar</h3>
@@ -77,7 +77,7 @@
                 <!-- Guide 1 -->
                 <div class="ai-guide-card">
                     <div class="ai-gc-img">
-                        <img src="https://images.unsplash.com/photo-1506461883276-594c8cb257a1?auto=format&fit=crop&w=400&q=80" alt="Guide">
+                        <img src="https://images.unsplash.com/photo-1506461883276-594c8cb257a1?auto=format&fit=crop&w=400&q=80" alt="Guide" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         <div class="ai-gc-stats"><i class="ri-bookmark-fill"></i> 12.4k Saves</div>
                     </div>
                     <div class="ai-gc-body">
@@ -90,7 +90,7 @@
                 <!-- Guide 2 -->
                 <div class="ai-guide-card">
                     <div class="ai-gc-img">
-                        <img src="https://images.unsplash.com/photo-1605649487212-4d63b5011f00?auto=format&fit=crop&w=400&q=80" alt="Guide">
+                        <img src="https://images.unsplash.com/photo-1605649487212-4d63b5011f00?auto=format&fit=crop&w=400&q=80" alt="Guide" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         <div class="ai-gc-stats"><i class="ri-bookmark-fill"></i> 8.2k Saves</div>
                     </div>
                     <div class="ai-gc-body">
@@ -103,7 +103,7 @@
                 <!-- Guide 3 -->
                 <div class="ai-guide-card">
                     <div class="ai-gc-img">
-                        <img src="https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?auto=format&fit=crop&w=400&q=80" alt="Guide">
+                        <img src="https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?auto=format&fit=crop&w=400&q=80" alt="Guide" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         <div class="ai-gc-stats"><i class="ri-bookmark-fill"></i> 5.1k Saves</div>
                     </div>
                     <div class="ai-gc-body">
@@ -126,7 +126,7 @@
             <div class="ai-masonry">
                 <!-- Mix 1 (Food) -->
                 <div class="ai-mix-card">
-                    <img src="https://images.unsplash.com/photo-1589302168068-964664d93cb0?auto=format&fit=crop&w=400&q=80" alt="Food">
+                    <img src="https://images.unsplash.com/photo-1589302168068-964664d93cb0?auto=format&fit=crop&w=400&q=80" alt="Food" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                     <div class="ai-mix-badge food"><i class="ri-restaurant-2-fill"></i> Food</div>
                     <div class="ai-mix-info">
                         <h4>Bawarchi Biryani</h4>
@@ -136,7 +136,7 @@
 
                 <!-- Mix 2 (Gem) -->
                 <div class="ai-mix-card">
-                    <img src="https://images.unsplash.com/photo-1433838552652-f9a46b332c40?auto=format&fit=crop&w=400&q=80" alt="Gem">
+                    <img src="https://images.unsplash.com/photo-1433838552652-f9a46b332c40?auto=format&fit=crop&w=400&q=80" alt="Gem" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                     <div class="ai-mix-badge gem"><i class="ri-gem-fill"></i> Hidden Gem</div>
                     <div class="ai-mix-info">
                         <h4>Secret Waterfall</h4>
@@ -146,7 +146,7 @@
 
                 <!-- Mix 3 (Food) -->
                 <div class="ai-mix-card">
-                    <img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=400&q=80" alt="Food">
+                    <img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=400&q=80" alt="Food" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                     <div class="ai-mix-badge food"><i class="ri-cake-3-fill"></i> Dessert</div>
                     <div class="ai-mix-info">
                         <h4>Le 15 Patisserie</h4>
@@ -156,7 +156,7 @@
 
                 <!-- Mix 4 (Gem) -->
                 <div class="ai-mix-card">
-                    <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=400&q=80" alt="Gem">
+                    <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=400&q=80" alt="Gem" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                     <div class="ai-mix-badge gem"><i class="ri-gem-fill"></i> Hidden Gem</div>
                     <div class="ai-mix-info">
                         <h4>Sunset Point</h4>

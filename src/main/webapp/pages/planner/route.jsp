@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/components/header.jsp" %>
 <%@ include file="/components/global_ui.jsp" %>
 <style>
@@ -70,7 +70,7 @@
                     
                     <div class="suggestion-card">
                         <div style="width: 40px; height: 40px; border-radius: 6px; overflow: hidden; flex-shrink: 0;">
-                            <img src="https://images.unsplash.com/photo-1587474260584-136574528ed5?auto=format&fit=crop&w=100&q=80" alt="Food" class="w-full h-full object-cover">
+                            <img src="https://images.unsplash.com/photo-1587474260584-136574528ed5?auto=format&fit=crop&w=100&q=80" alt="Food" class="w-full h-full object-cover" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         </div>
                         <div>
                             <div class="text-xs text-primary font-bold uppercase tracking-wide">Stop Suggestion</div>
@@ -86,7 +86,7 @@
                     
                     <div class="suggestion-card">
                         <div style="width: 40px; height: 40px; border-radius: 6px; overflow: hidden; flex-shrink: 0;">
-                            <img src="https://images.unsplash.com/photo-1477587784381-80796bba6621?auto=format&fit=crop&w=100&q=80" alt="Palace" class="w-full h-full object-cover">
+                            <img src="https://images.unsplash.com/photo-1477587784381-80796bba6621?auto=format&fit=crop&w=100&q=80" alt="Palace" class="w-full h-full object-cover" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         </div>
                         <div>
                             <div class="text-xs text-secondary font-bold uppercase tracking-wide">Must See</div>

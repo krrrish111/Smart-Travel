@@ -34,7 +34,7 @@ function renderContentGrid() {
             </div>
             <h4 style="margin-bottom:6px; font-weight:600; font-size:0.95rem;">${c.title || '(No title)'}</h4>
             <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${c.subtitle || ''}">${c.subtitle || '(No subtitle)'}</p>
-            ${c.imageUrl ? `<img src="${c.imageUrl}" alt="Preview" style="width:100%;height:80px;object-fit:cover;border-radius:6px;margin-bottom:10px;" onerror="this.style.display='none'">` : ''}
+            ${c.imageUrl ? `<img src="${c.imageUrl}" alt="Preview" style="width:100%;height:80px;object-fit:cover;border-radius:6px;margin-bottom:10px;" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">` : ''}
             ${c.promoCode ? `<div style="font-size:0.75rem; margin-bottom:8px;"><strong>Code:</strong> <code style="background:rgba(212,165,116,0.15);padding:2px 6px;border-radius:4px;letter-spacing:1px;">${c.promoCode}</code></div>` : ''}
             <div style="display:flex; gap:10px; margin-top:12px;">
                 <span style="padding:2px 8px; border-radius:10px; font-size:0.7rem; background:${c.active ? 'rgba(16,185,129,0.12)' : 'rgba(239,68,68,0.1)'}; color:${c.active ? '#10b981' : '#ef4444'}; font-weight:600;">

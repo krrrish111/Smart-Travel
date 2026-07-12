@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
@@ -119,7 +119,7 @@
                 <!-- Right QR & Amount -->
                 <div class="flex flex-col items-center justify-center border-l md:pl-6">
                     <div class="mb-4 text-center">
-                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=VOYASTRA-${booking.bookingCode}" alt="QR Code" class="w-32 h-32 mx-auto border p-1 rounded">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=VOYASTRA-${booking.bookingCode}" alt="QR Code" class="w-32 h-32 mx-auto border p-1 rounded" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         <div class="text-xs text-gray-500 mt-2">Scan for details</div>
                     </div>
                 </div>

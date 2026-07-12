@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/components/header.jsp" %>
 <%@ include file="/components/global_ui.jsp" %>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/food.css">
@@ -10,7 +10,7 @@
     ══════════════════════════════════════════════════════════ -->
     <div class="fd-hero">
         <div class="fd-hero-bg">
-            <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1600&q=80" alt="Food Background">
+            <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1600&q=80" alt="Food Background" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
             <div class="fd-overlay"></div>
         </div>
         <div class="fd-hero-content">
@@ -54,7 +54,7 @@
         <!-- Food 1 -->
         <div class="fd-card">
             <div class="fd-img-wrap">
-                <img src="https://images.unsplash.com/photo-1606491956689-2ea866880c84?auto=format&fit=crop&w=600&q=80" alt="Chole Bhature" class="fd-img">
+                <img src="https://images.unsplash.com/photo-1606491956689-2ea866880c84?auto=format&fit=crop&w=600&q=80" alt="Chole Bhature" class="fd-img" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                 <div class="fd-badge type-street"><i class="ri-store-2-fill"></i> Street Food</div>
                 <div class="fd-price">₹₹</div>
             </div>
@@ -67,7 +67,7 @@
                 <p class="fd-desc">The absolute best Chole Bhature in Delhi. The bhaturas have paneer stuffing inside. Go early, it sells out by 1 PM!</p>
                 
                 <div class="fd-creator">
-                    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80" alt="Priya">
+                    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80" alt="Priya" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                     <span>Ate here via <a href="${pageContext.request.contextPath}/community/user/priyaeats">@priyaeats</a></span>
                 </div>
 
@@ -82,7 +82,7 @@
         <!-- Food 2 -->
         <div class="fd-card">
             <div class="fd-img-wrap">
-                <img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=600&q=80" alt="Dessert" class="fd-img">
+                <img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=600&q=80" alt="Dessert" class="fd-img" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                 <div class="fd-badge type-dessert"><i class="ri-cake-3-fill"></i> Desserts</div>
                 <div class="fd-price">₹₹₹</div>
             </div>
@@ -95,7 +95,7 @@
                 <p class="fd-desc">Their Sea Salt Macaron is a piece of art. Perfect spot for evening coffee and French desserts in South Bombay.</p>
                 
                 <div class="fd-creator">
-                    <img src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=100&q=80" alt="Nisha">
+                    <img src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=100&q=80" alt="Nisha" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                     <span>Ate here via <a href="${pageContext.request.contextPath}/community/user/nishaluxe">@nishaluxe</a></span>
                 </div>
 
@@ -110,7 +110,7 @@
         <!-- Food 3 -->
         <div class="fd-card">
             <div class="fd-img-wrap">
-                <img src="https://images.unsplash.com/photo-1544025162-836691456c66?auto=format&fit=crop&w=600&q=80" alt="Cafe" class="fd-img">
+                <img src="https://images.unsplash.com/photo-1544025162-836691456c66?auto=format&fit=crop&w=600&q=80" alt="Cafe" class="fd-img" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                 <div class="fd-badge type-cafe"><i class="ri-cup-fill"></i> Cafe</div>
                 <div class="fd-price">₹₹</div>
             </div>
@@ -123,7 +123,7 @@
                 <p class="fd-desc">Incredible Mediterranean breakfast bowl. Set in a lush garden, it's the perfect place to chill with a book.</p>
                 
                 <div class="fd-creator">
-                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Sarah">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Sarah" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                     <span>Ate here via <a href="${pageContext.request.contextPath}/community/user/sarahexplores">@sarahexplores</a></span>
                 </div>
 
@@ -138,7 +138,7 @@
         <!-- Food 4 -->
         <div class="fd-card">
             <div class="fd-img-wrap">
-                <img src="https://images.unsplash.com/photo-1589302168068-964664d93cb0?auto=format&fit=crop&w=600&q=80" alt="Biryani" class="fd-img">
+                <img src="https://images.unsplash.com/photo-1589302168068-964664d93cb0?auto=format&fit=crop&w=600&q=80" alt="Biryani" class="fd-img" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                 <div class="fd-badge type-local"><i class="ri-bowl-fill"></i> Local Dish</div>
                 <div class="fd-price">₹₹</div>
             </div>
@@ -151,7 +151,7 @@
                 <p class="fd-desc">Authentic Hyderabadi Dum Biryani. The meat just falls off the bone. Prepare for a crowd, but it is 100% worth it.</p>
                 
                 <div class="fd-creator">
-                    <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=100&q=80" alt="Dev">
+                    <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=100&q=80" alt="Dev" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                     <span>Ate here via <a href="${pageContext.request.contextPath}/community/user/devonbudget">@devonbudget</a></span>
                 </div>
 

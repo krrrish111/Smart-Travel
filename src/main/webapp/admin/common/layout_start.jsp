@@ -14,6 +14,9 @@
     <link rel="icon" type="image/svg+xml" href="${pageContext.request.contextPath}/assets/images/favicon.svg">
     
     <link rel="stylesheet" href="${pageContext.request.contextPath}/admin/css/admin.css">
+    <!-- Global Image Fallback System for Admin Dashboard -->
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/image-fallback.css">
+    <script src="${pageContext.request.contextPath}/assets/js/image-fallback.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <!-- Expose Session Variables to JS -->

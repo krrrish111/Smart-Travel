@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ include file="/components/header.jsp" %>
 <%@ include file="/components/global_ui.jsp" %>
@@ -355,7 +355,7 @@ if (request.getAttribute("destination") == null || request.getAttribute("itinera
         <div class="media-grid">
             <c:forEach items="${images}" var="img">
                 <div class="media-item">
-                    <img src="${img.imageUrl}" alt="${img.description}" loading="lazy" decoding="async">
+                    <img src="${img.imageUrl}" alt="${img.description}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                     <div class="media-caption"><c:out value="${img.description}"/></div>
                 </div>
             </c:forEach>

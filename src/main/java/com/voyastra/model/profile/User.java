@@ -67,4 +67,8 @@ public class User {
 
     public int getLoyaltyPoints() { return loyaltyPoints; }
     public void setLoyaltyPoints(int loyaltyPoints) { this.loyaltyPoints = loyaltyPoints; }
+
+    private String status;
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 }

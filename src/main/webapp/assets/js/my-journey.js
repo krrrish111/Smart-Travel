@@ -28,9 +28,10 @@ async function loadMemories() {
 
     let html = '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; width: 100%;">';
     trips.forEach(trip => {
+        const _bgUrl = (typeof safeBgImg === 'function') ? safeBgImg('https://images.unsplash.com/photo-1506929562872-bb421503ef21?q=80&w=600&auto=format&fit=crop') : 'https://images.unsplash.com/photo-1506929562872-bb421503ef21?q=80&w=600&auto=format&fit=crop';
         html += `
         <div class="trip-card" style="background: rgba(255,255,255,0.03); border: 1px solid var(--color-border); border-radius: 16px; overflow: hidden; transition: transform 0.3s ease; cursor: pointer;" onclick="openMemoryModal(${trip.id})">
-            <div style="height: 160px; background: url('https://images.unsplash.com/photo-1506929562872-bb421503ef21?q=80&w=600&auto=format&fit=crop') center/cover;"></div>
+            <div style="height: 160px; background: url('${_bgUrl}') center/cover no-repeat, linear-gradient(135deg,#0f0c29,#302b63);"></div>
             <div style="padding: 20px;">
                 <h3 style="font-size: 1.4rem; font-family: 'Clash Display', sans-serif; margin-bottom: 5px;">${trip.planTitle ? trip.planTitle : trip.type}</h3>
                 <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 15px;"><i class="ri-calendar-event-line"></i> ${trip.travelDate ? trip.travelDate : 'Archived'}</p>

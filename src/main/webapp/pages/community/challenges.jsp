@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/components/header.jsp" %>
 <%@ include file="/components/global_ui.jsp" %>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/challenges.css">
@@ -22,7 +22,7 @@
             <div class="ch-user-card">
                 <div class="ch-user-profile">
                     <div class="ch-avatar-wrap">
-                        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80" alt="My Avatar">
+                        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80" alt="My Avatar" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         <div class="ch-rank-badge">#42</div>
                     </div>
                     <div class="ch-user-info">
@@ -136,7 +136,7 @@
                 <!-- Rank 1 -->
                 <div class="ch-lb-item rank-1">
                     <div class="ch-lb-rank">1</div>
-                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Sarah">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Sarah" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                     <div class="ch-lb-info">
                         <span class="ch-lb-name">Sarah Jenkins <i class="ri-verified-badge-fill" style="color:var(--color-primary)"></i></span>
                         <span class="ch-lb-handle">@sarahexplores</span>
@@ -147,7 +147,7 @@
                 <!-- Rank 2 -->
                 <div class="ch-lb-item rank-2">
                     <div class="ch-lb-rank">2</div>
-                    <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=100&q=80" alt="Dev">
+                    <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=100&q=80" alt="Dev" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                     <div class="ch-lb-info">
                         <span class="ch-lb-name">Dev Patel</span>
                         <span class="ch-lb-handle">@devonbudget</span>
@@ -158,7 +158,7 @@
                 <!-- Rank 3 -->
                 <div class="ch-lb-item rank-3">
                     <div class="ch-lb-rank">3</div>
-                    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80" alt="Priya">
+                    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80" alt="Priya" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                     <div class="ch-lb-info">
                         <span class="ch-lb-name">Priya Kapoor</span>
                         <span class="ch-lb-handle">@priyaeats</span>
@@ -169,7 +169,7 @@
                 <!-- Rank 4 -->
                 <div class="ch-lb-item">
                     <div class="ch-lb-rank">4</div>
-                    <img src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=100&q=80" alt="Nisha">
+                    <img src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=100&q=80" alt="Nisha" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                     <div class="ch-lb-info">
                         <span class="ch-lb-name">Nisha Tiwari</span>
                         <span class="ch-lb-handle">@nishaluxe</span>
@@ -180,7 +180,7 @@
                 <!-- Rank 5 -->
                 <div class="ch-lb-item">
                     <div class="ch-lb-rank">5</div>
-                    <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=100&q=80" alt="Alex">
+                    <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=100&q=80" alt="Alex" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                     <div class="ch-lb-info">
                         <span class="ch-lb-name">Alex M.</span>
                         <span class="ch-lb-handle">@alexwander</span>
@@ -195,7 +195,7 @@
 
                 <div class="ch-lb-item my-rank">
                     <div class="ch-lb-rank">42</div>
-                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80" alt="Me">
+                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80" alt="Me" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                     <div class="ch-lb-info">
                         <span class="ch-lb-name">Traveler Name (You)</span>
                         <span class="ch-lb-handle">@traveler</span>

@@ -22,6 +22,7 @@ public class UserDAO {
         user.setVerificationToken(rs.getString("verification_token"));
         user.setResetToken(rs.getString("reset_token"));
         user.setCreatedAt(rs.getTimestamp("created_at"));
+        try { user.setStatus(rs.getString("status")); } catch(SQLException e) {}
         
         try {
             user.setPhone(rs.getString("phone"));

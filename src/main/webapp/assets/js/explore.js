@@ -219,9 +219,10 @@ function renderMediaData(data) {
     galleryContainer.innerHTML = '';
     if (data.images && data.images.length > 0) {
         data.images.forEach(img => {
+            const _safeUrl = (typeof safeImg === 'function') ? safeImg(img.url) : (img.url || '');
             const galleryHtml = `
                 <div class="gallery-item glass-card" style="padding: 0;">
-                    <img src="${img.url}" alt="${img.title}">
+                    <img src="${_safeUrl}" alt="${img.title}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)" style="width:100%;height:100%;object-fit:cover;display:block;">
                     <div class="gallery-item-overlay">${img.title}</div>
                 </div>
             `;
@@ -237,11 +238,14 @@ function renderMediaData(data) {
     if (data.videos && data.videos.length > 0) {
         data.videos.forEach(video => {
             const videoId = video.extra_data ? video.extra_data.videoId : '';
-            const thumbnail = video.extra_data ? video.extra_data.thumbnail : 'https://images.unsplash.com/photo-1488646953014-85cb44e25828';
+            const _rawThumb = video.extra_data ? video.extra_data.thumbnail : '';
+            const thumbnail = (typeof safeImg === 'function')
+                ? safeImg(_rawThumb || 'https://images.unsplash.com/photo-1488646953014-85cb44e25828')
+                : (_rawThumb || 'https://images.unsplash.com/photo-1488646953014-85cb44e25828');
             
             const videoHtml = `
                 <div class="video-card" onclick="openVideoPlayer('${videoId}')">
-                    <div class="video-thumbnail-wrapper" style="background-image: url('${thumbnail}')">
+                    <div class="video-thumbnail-wrapper" style="background-image: url('${thumbnail}')" onerror="this.style.backgroundImage='none';this.style.background='linear-gradient(135deg,#0f0c29,#302b63)'">
                         <div class="video-play-btn">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
                         </div>

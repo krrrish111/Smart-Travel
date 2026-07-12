@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 
 <%@ include file="/components/header.jsp" %>
@@ -261,7 +261,7 @@
                             <c:forEach var="trip" items="${premiumTrips}">
                                 <div class="plan-card active">
                                     <div class="plan-card-img-wrap">
-                                        <img src="${not empty trip.imageUrl ? trip.imageUrl : 'https://images.unsplash.com/photo-1542332213-31f87348057f?auto=format&fit=crop&w=800&q=80'}" alt="${trip.title}" loading="lazy">
+                                        <img src="${not empty trip.imageUrl ? trip.imageUrl : 'https://images.unsplash.com/photo-1542332213-31f87348057f?auto=format&fit=crop&w=800&q=80'}" alt="${trip.title}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                                         <div class="plan-card-category">${trip.category}</div>
                                     </div>
                                     <div class="plan-card-body">
@@ -553,7 +553,7 @@
 
                             <c:forEach var="dest" items="${trendingDestinations}" varStatus="status">
                                 <div class="dest-card" data-index="${status.index}">
-                                    <img src="${not empty dest.imageUrl ? dest.imageUrl : 'https://images.unsplash.com/photo-1542332213-31f87348057f?auto=format&fit=crop&w=800&q=80'}" alt="${dest.title}">
+                                    <img src="${not empty dest.imageUrl ? dest.imageUrl : 'https://images.unsplash.com/photo-1542332213-31f87348057f?auto=format&fit=crop&w=800&q=80'}" alt="${dest.title}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                                     <div class="dest-card-overlay"></div>
                                     <div class="dest-card-rank">#${status.index + 1} Trending</div>
                                     <div class="dest-card-category" style="background: rgba(16,185,129,0.85);">${dest.category != null ? dest.category : 'Explore'}</div>
@@ -608,7 +608,7 @@
                     <div class="plan-scroll-inner" id="mustDoInner" style="animation: none; transition: transform 0.1s linear; display: flex; gap: 24px;">
                         <c:forEach var="experience" items="${mustDoExperiences}">
                             <a href="${pageContext.request.contextPath}/experience/details?id=${experience.id}" class="glass-panel flex gap-4 p-4" style="min-width: 320px; border-radius: 16px; cursor: pointer; transition: transform 0.3s ease; text-decoration: none; display: flex;">
-                                <img src="${not empty experience.coverImage ? experience.coverImage : 'https://images.unsplash.com/photo-1628126235206-5260b9ea6441?auto=format,compress&fit=crop&w=150&h=150&q=75'}" alt="${experience.title}" style="width: 80px; height: 80px; border-radius: 12px; object-fit: cover;" loading="lazy">
+                                <img src="${not empty experience.coverImage ? experience.coverImage : 'https://images.unsplash.com/photo-1628126235206-5260b9ea6441?auto=format,compress&fit=crop&w=150&h=150&q=75'}" alt="${experience.title}" style="width: 80px; height: 80px; border-radius: 12px; object-fit: cover;" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                                 <div class="flex flex-col justify-center">
                                     <h4 class="font-bold text-main" style="font-size: 1.1rem;">${experience.title}</h4>
                                     <p class="text-sm text-muted">${experience.location}</p>
@@ -639,7 +639,7 @@
                         <c:forEach var="trip" items="${premiumTrips}">
                         <a href="${pageContext.request.contextPath}/trip?id=${trip.id}" class="plan-card active" style="max-width: none; flex: unset; text-decoration: none;">
                             <div class="plan-card-img-wrap" style="height: 160px;">
-                                <img src="${not empty trip.imageUrl ? trip.imageUrl : 'https://images.unsplash.com/photo-1542332213-31f87348057f?auto=format&fit=crop&w=800&q=80'}" alt="${trip.title}" loading="lazy">
+                                <img src="${not empty trip.imageUrl ? trip.imageUrl : 'https://images.unsplash.com/photo-1542332213-31f87348057f?auto=format&fit=crop&w=800&q=80'}" alt="${trip.title}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                                 <div class="plan-card-category" style="background:rgba(59,130,246,0.85);">${trip.category}</div>
                             </div>
                             <div class="plan-card-body">
@@ -672,7 +672,7 @@
                         <!-- Hero Showcase -->
                         <c:set var="heroDest" value="${iconicDestinations[0]}" />
                         <div class="iconic-hero relative overflow-hidden rounded-3xl mb-12 shadow-2xl group">
-                            <img src="${not empty heroDest.imageUrl ? heroDest.imageUrl : 'https://images.unsplash.com/photo-1542332213-31f87348057f?auto=format&fit=crop&w=800&q=80'}" alt="${heroDest.title}" class="w-full h-[600px] object-cover transition-transform duration-700 group-hover:scale-105">
+                            <img src="${not empty heroDest.imageUrl ? heroDest.imageUrl : 'https://images.unsplash.com/photo-1542332213-31f87348057f?auto=format&fit=crop&w=800&q=80'}" alt="${heroDest.title}" class="w-full h-[600px] object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
                             
                             <div class="absolute bottom-0 left-0 p-8 md:p-16 w-full">
@@ -706,7 +706,7 @@
                             <c:forEach var="dest" items="${iconicDestinations}" begin="1">
                                 <div class="iconic-card group relative bg-black/40 border border-white/10 rounded-2xl overflow-hidden hover:border-yellow-500/50 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_10px_40px_-10px_rgba(234,179,8,0.3)] backdrop-blur-xl flex flex-col">
                                     <div class="relative h-64 overflow-hidden shrink-0">
-                                        <img src="${not empty dest.imageUrl ? dest.imageUrl : 'https://images.unsplash.com/photo-1542332213-31f87348057f?auto=format&fit=crop&w=800&q=80'}" alt="${dest.title}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                                        <img src="${not empty dest.imageUrl ? dest.imageUrl : 'https://images.unsplash.com/photo-1542332213-31f87348057f?auto=format&fit=crop&w=800&q=80'}" alt="${dest.title}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                                         <div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent"></div>
                                         <div class="absolute top-4 right-4 bg-black/50 backdrop-blur-md px-2 py-1 rounded border border-white/20 text-xs font-bold text-white flex items-center gap-1">
                                             <span class="text-yellow-400">★</span> ${dest.rating}
@@ -776,7 +776,7 @@
                 <div class="strip-outer" id="itinStripOuter" style="position: relative; overflow: hidden; cursor: grab; padding: 20px 0;">
                     <div class="strip-inner" id="itinStripInner" style="display: flex; gap: 30px; width: max-content; transition: none; will-change: transform;">
                         <a href="${pageContext.request.contextPath}/itinerary-details?id=Agra" class="itin-card" style="flex: 0 0 320px; text-decoration: none;">
-                            <img class="itin-card-img" src="https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format,compress&fit=crop&w=600&q=75" alt="Agra" loading="lazy">
+                            <img class="itin-card-img" src="https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format,compress&fit=crop&w=600&q=75" alt="Agra" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                             <div class="itin-card-body">
                                 <div class="itin-card-city">Agra</div>
                                 <div class="itin-card-region">Uttar Pradesh</div>
@@ -787,7 +787,7 @@
                             </div>
                         </a>
                         <a href="${pageContext.request.contextPath}/itinerary-details?id=Kerala" class="itin-card" style="flex: 0 0 320px; text-decoration: none;">
-                            <img class="itin-card-img" src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format,compress&fit=crop&w=600&q=75" alt="Kerala" loading="lazy">
+                            <img class="itin-card-img" src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format,compress&fit=crop&w=600&q=75" alt="Kerala" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                             <div class="itin-card-body">
                                 <div class="itin-card-city">Kerala Backwaters</div>
                                 <div class="itin-card-region">Kerala</div>
@@ -798,7 +798,7 @@
                             </div>
                         </a>
                         <a href="${pageContext.request.contextPath}/itinerary-details?id=Jaisalmer" class="itin-card" style="flex: 0 0 320px; text-decoration: none;">
-                            <img class="itin-card-img" src="https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format,compress&fit=crop&w=600&q=75" alt="Jaisalmer" loading="lazy">
+                            <img class="itin-card-img" src="https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format,compress&fit=crop&w=600&q=75" alt="Jaisalmer" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                             <div class="itin-card-body">
                                 <div class="itin-card-city">Jaisalmer Fort</div>
                                 <div class="itin-card-region">Rajasthan</div>
@@ -809,7 +809,7 @@
                             </div>
                         </a>
                         <a href="${pageContext.request.contextPath}/itinerary-details?id=Varanasi" class="itin-card" style="flex: 0 0 320px; text-decoration: none;">
-                            <img class="itin-card-img" src="https://images.unsplash.com/photo-1561359313-0639aad073f0?auto=format,compress&fit=crop&w=600&q=75" alt="Varanasi" loading="lazy">
+                            <img class="itin-card-img" src="https://images.unsplash.com/photo-1561359313-0639aad073f0?auto=format,compress&fit=crop&w=600&q=75" alt="Varanasi" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                             <div class="itin-card-body">
                                 <div class="itin-card-city">Varanasi Ghats</div>
                                 <div class="itin-card-region">Uttar Pradesh</div>
@@ -861,7 +861,7 @@
                         <c:forEach var="hotel" items="${recommendedHotels}" end="3">
                             <a href="${pageContext.request.contextPath}/hotel-details?id=${hotel.id}" class="plan-card" style="max-width: none; flex: unset; display: flex; flex-direction: column;">
                                 <div class="plan-card-img-wrap" style="height: 160px; position: relative;">
-                                    <img src="${not empty hotel.imageUrl ? hotel.imageUrl : 'https://images.unsplash.com/photo-1542332213-31f87348057f?auto=format&fit=crop&w=800&q=80'}" alt="${hotel.name}" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
+                                    <img src="${not empty hotel.imageUrl ? hotel.imageUrl : 'https://images.unsplash.com/photo-1542332213-31f87348057f?auto=format&fit=crop&w=800&q=80'}" alt="${hotel.name}" loading="lazy" style="width:100%; height:100%; object-fit:cover;" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                                     <div class="plan-card-category" style="background:rgba(139,92,246,0.85);">${hotel.propertyType}</div>
                                 </div>
                                 <div class="plan-card-body p-4" style="flex-grow: 1; display: flex; flex-direction: column;">
@@ -927,7 +927,7 @@
                         <c:forEach var="hotel" items="${recentlyViewedHotels}" end="3">
                             <a href="${pageContext.request.contextPath}/hotel-details?id=${hotel.id}" class="plan-card" style="max-width: none; flex: unset; display: flex; flex-direction: column;">
                                 <div class="plan-card-img-wrap" style="height: 160px; position: relative;">
-                                    <img src="${not empty hotel.imageUrl ? hotel.imageUrl : 'https://images.unsplash.com/photo-1542332213-31f87348057f?auto=format&fit=crop&w=800&q=80'}" alt="${hotel.name}" loading="lazy" style="width:100%; height:100%; object-fit:cover;">
+                                    <img src="${not empty hotel.imageUrl ? hotel.imageUrl : 'https://images.unsplash.com/photo-1542332213-31f87348057f?auto=format&fit=crop&w=800&q=80'}" alt="${hotel.name}" loading="lazy" style="width:100%; height:100%; object-fit:cover;" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                                     <div class="plan-card-category" style="background:rgba(79,70,229,0.85);">${hotel.propertyType}</div>
                                 </div>
                                 <div class="plan-card-body p-4" style="flex-grow: 1; display: flex; flex-direction: column;">

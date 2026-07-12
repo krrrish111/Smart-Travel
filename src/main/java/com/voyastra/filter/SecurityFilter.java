@@ -28,7 +28,8 @@ public class SecurityFilter implements Filter {
         "/community", "/destination", "/destinations", "/error", 
         "/route", "/logout", "/google-auth", "/google-login", "/forgot-password", "/reset-password", "/health", "/voyastra/health", "/favicon.ico",
         "/getPlans", "/review", "/search", "/trending", "/activities", "/weather", "/test-travelpayouts",
-        "/hotel-details", "/experience-details", "/itinerary-details", "/experiences", "/flight/download-ticket", "/flight/ticket"
+        "/hotel-details", "/experience-details", "/itinerary-details", "/experiences", "/flight/download-ticket", "/flight/ticket",
+        "/api/explore", "/api/places", "/api/weather", "/api/nearby"
     ));
 
     // Admin-only paths
@@ -116,7 +117,11 @@ public class SecurityFilter implements Filter {
                 String target = path;
                 if (queryString != null)
                     target += "?" + queryString;
+                
                 String redirectTarget = req.getContextPath() + "/login?redirect=" + java.net.URLEncoder.encode(target, "UTF-8");
+                if (target.contains("planner") || target.contains("booking") || target.contains("customize") || target.contains("journey")) {
+                    redirectTarget += "&msg=" + java.net.URLEncoder.encode("Sign in to continue with personalized planning and bookings.", "UTF-8");
+                }
                 logger.info("Redirecting unauthorized request to: {}", redirectTarget);
                 resp.sendRedirect(redirectTarget);
                 return;

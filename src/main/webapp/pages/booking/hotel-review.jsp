@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ include file="/components/header.jsp" %>
@@ -93,7 +93,7 @@
                     <h3><i class="fas fa-hotel mr-2"></i>Property</h3>
                     <div class="flex gap-4">
                         <img src="${pending.hotel.imageUrl}" alt="${pending.hotel.name}"
-                             class="w-20 h-20 rounded-xl object-cover flex-shrink-0">
+                             class="w-20 h-20 rounded-xl object-cover flex-shrink-0" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         <div>
                             <div class="font-bold text-white text-lg mb-1">${pending.hotel.name}</div>
                             <div class="text-gray-400 text-sm mb-2"><i class="fas fa-map-marker-alt mr-1 text-primary"></i>${pending.hotel.city}</div>

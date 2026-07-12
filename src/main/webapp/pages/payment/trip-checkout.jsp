@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="com.voyastra.dao.TripDAO, com.voyastra.model.PremiumTrip" %>
 <%
     String idParam = request.getParameter("id");
@@ -48,7 +48,7 @@
 
         <!-- Trip Selected Strip -->
         <div class="trip-strip">
-            <img src="${tripImg}" class="w-14 h-14 rounded-xl object-cover flex-shrink-0" alt="${tripTitle}">
+            <img src="${tripImg}" class="w-14 h-14 rounded-xl object-cover flex-shrink-0" alt="${tripTitle}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
             <div class="flex-1">
                 <div class="font-bold text-white text-sm">${tripTitle}</div>
                 <div class="text-xs text-gray-400">${tripDest} &nbsp;&bull;&nbsp; ${tripDuration}</div>
@@ -131,7 +131,7 @@
                     
                     <div class="flex gap-4 mb-6">
                         <div class="w-1/3 h-20 rounded-lg overflow-hidden flex-shrink-0">
-                             <img src="${tripImg}" class="w-full h-full object-cover">
+                             <img src="${tripImg}" class="w-full h-full object-cover" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         </div>
                         <div>
                             <h3 class="font-medium">${tripTitle}</h3>

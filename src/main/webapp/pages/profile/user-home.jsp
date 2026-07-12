@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
@@ -171,7 +171,7 @@
         
         <!-- 0. WELCOME BANNER -->
         <div class="dashboard-banner slide-up">
-            <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=1200&q=80" class="banner-img" alt="Voyastra Banner">
+            <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=1200&q=80" class="banner-img" alt="Voyastra Banner" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
             <div class="banner-overlay">
                 <h1 class="text-white mb-2 editorial" style="font-size: 3rem;">
                     Hello, ${sessionScope.name != null ? sessionScope.name : 'Explorer'}!
@@ -238,7 +238,7 @@
                                 <c:forEach var="booking" items="${recentBookings}">
                                     <div class="preview-card p-4 flex gap-6 items-center">
                                         <div style="width: 100px; height: 70px; border-radius: 12px; overflow: hidden; flex-shrink: 0;">
-                                            <img src="${not empty booking.planImage ? booking.planImage : 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=200&q=80'}" style="width: 100%; height: 100%; object-fit: cover;">
+                                            <img src="${not empty booking.planImage ? booking.planImage : 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=200&q=80'}" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                                         </div>
                                         <div class="flex-grow">
                                             <h4 class="text-white font-bold m-0">${booking.planTitle}</h4>
@@ -332,7 +332,7 @@
                     <div class="recommend-card">
                         <div class="recommend-img-box">
                             <div class="recommend-badge">${dest.category != null ? dest.category : 'Top'}</div>
-                            <img src="${dest.image}" alt="${dest.name}">
+                            <img src="${dest.image}" alt="${dest.name}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         </div>
                         <div class="recommend-body">
                             <h4 class="text-white font-bold mb-1" style="font-size: 1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${dest.name}</h4>

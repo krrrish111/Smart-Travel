@@ -1,4 +1,4 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+﻿<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -154,7 +154,7 @@
                 <div style="text-align: center;">
                     <div class="label">Scan Ticket QR</div>
                     <div class="value" style="margin-top: 10px;">
-                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Voyastra_Destination_${not empty bookingId ? bookingId : param.bookingId}" alt="QR Code" style="border-radius: 8px; border: 1px solid #ccc; padding: 10px;">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Voyastra_Destination_${not empty bookingId ? bookingId : param.bookingId}" alt="QR Code" style="border-radius: 8px; border: 1px solid #ccc; padding: 10px;" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                     </div>
                 </div>
             </div>

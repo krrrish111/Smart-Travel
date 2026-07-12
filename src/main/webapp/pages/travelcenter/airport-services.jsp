@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+﻿<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -41,7 +41,7 @@
             <!-- Service 1 -->
             <div class="tc-card overflow-hidden group">
                 <div class="h-48 bg-gray-800 relative overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1542296332-2e4473faf563?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    <img src="https://images.unsplash.com/photo-1542296332-2e4473faf563?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                     <div class="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded text-xs font-bold text-white">Lounge</div>
                 </div>
                 <div class="p-6">
@@ -62,7 +62,7 @@
             <!-- Service 2 -->
             <div class="tc-card overflow-hidden group">
                 <div class="h-48 bg-gray-800 relative overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                     <div class="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded text-xs font-bold text-white">Transfer</div>
                 </div>
                 <div class="p-6">
@@ -83,7 +83,7 @@
             <!-- Service 3 -->
             <div class="tc-card overflow-hidden group">
                 <div class="h-48 bg-gray-800 relative overflow-hidden">
-                    <img src="https://images.unsplash.com/photo-1569154941061-e231b4725ef1?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                    <img src="https://images.unsplash.com/photo-1569154941061-e231b4725ef1?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                     <div class="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded text-xs font-bold text-white">Fast Track</div>
                 </div>
                 <div class="p-6">

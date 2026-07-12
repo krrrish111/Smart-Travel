@@ -52,9 +52,16 @@ async function loadDests() {
             if (d.has_unesco) tags.push('<span style="font-size:0.65rem; padding:2px 6px; background:#f59e0b; color:white; border-radius:4px;">UNESCO</span>');
             if (d.is_trending) tags.push('<span style="font-size:0.65rem; padding:2px 6px; background:#ef4444; color:white; border-radius:4px;">Trending</span>');
             
+            const _destImg = d.image && d.image !== 'null' && d.image !== 'undefined' && d.image.trim()
+                ? (d.image.startsWith('http') ? d.image : '/' + d.image)
+                : '';
+            const _destBg = _destImg
+                ? `url('${_destImg}') center/cover no-repeat, linear-gradient(135deg,#0f0c29,#302b63)`
+                : `linear-gradient(135deg,#0f0c29,#302b63)`;
+            
             return `
             <div class="stat-card" style="padding:0; overflow:hidden;">
-                <div style="height:140px; background: url('${d.image.startsWith('http') ? d.image : '/' + d.image}') center/cover no-repeat; position:relative;">
+                <div style="height:140px; background: ${_destBg}; position:relative;">
                     <input type="checkbox" class="checkbox-custom" data-bulk-context="dests" value="${d.id}" onchange="toggleBulkItem(${d.id}, 'dests', this)" style="position:absolute; top:12px; left:12px;">
                     <div style="position:absolute; bottom:12px; right:12px; padding:4px 10px; background:rgba(0,0,0,0.6); backdrop-filter:blur(4px); border-radius:8px; font-size:0.7rem; color:white;">ID: #${d.id}</div>
                     <div style="position:absolute; top:12px; right:12px; display:flex; gap:4px;">${tags.join('')}</div>
@@ -135,7 +142,11 @@ function openDestModal(mode='add', id=null) {
             if (typeof previewImg === 'function' && d.image) previewImg('destImage', 'destImagePreview');
             
             if (d.gallery && d.gallery.length > 0 && elGallery) {
-                const galHtml = d.gallery.map(g => `<img src="${g.startsWith('http') ? g : CONTEXT_PATH + '/' + g}" style="width:60px; height:60px; object-fit:cover; border-radius:4px;">`).join('');
+                const galHtml = d.gallery.map(g => {
+                    const _gUrl = g && g !== 'null' && g !== 'undefined' ? (g.startsWith('http') ? g : CONTEXT_PATH + '/' + g) : '';
+                    if (!_gUrl) return '';
+                    return `<img src="${_gUrl}" style="width:60px; height:60px; object-fit:cover; border-radius:4px;" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">`;
+                }).join('');
                 elGallery.innerHTML = galHtml;
             }
         }

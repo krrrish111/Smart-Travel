@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 
 <%@ include file="/components/header.jsp" %>
@@ -11,7 +11,7 @@
         <div class="glass-panel text-center slide-up" style="padding: 0; overflow: hidden; border-radius: var(--border-radius-lg);">
             <div style="height: 400px; width: 100%; position: relative;">
                 <img src="${not empty destination.imageUrl ? destination.imageUrl : 'https://images.unsplash.com/photo-1542332213-31f87348057f?auto=format&fit=crop&w=1200&q=80'}" 
-                     alt="${destination.name}" style="width: 100%; height: 100%; object-fit: cover;">
+                     alt="${destination.name}" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                 <div style="position: absolute; inset: 0; background: linear-gradient(to top, var(--color-surface), transparent);"></div>
                 <div style="position: absolute; bottom: 40px; left: 0; right: 0;">
                     <h1 class="text-white editorial shadow-text" style="font-size: 3.5rem; text-shadow: 0 4px 12px rgba(0,0,0,0.8);">${destination.name}</h1>

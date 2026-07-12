@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
     <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
         <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
@@ -1052,7 +1052,7 @@
                         <div class="lightbox-content-wrapper">
                             <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
                             <button class="lightbox-nav-btn lightbox-prev-btn" onclick="prevImage()">&#10094;</button>
-                            <img id="lightboxImg" class="lightbox-image" src="" alt="Preview" loading="lazy">
+                            <img id="lightboxImg" class="lightbox-image" src="" alt="Preview" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                             <button class="lightbox-nav-btn lightbox-next-btn" onclick="nextImage()">&#10095;</button>
                             <div id="lightboxCap" class="lightbox-caption">
                                 <h4 id="lightboxTitle" class="text-white font-bold text-lg mb-1"

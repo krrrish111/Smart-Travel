@@ -1,0 +1,176 @@
+/**
+ * VOYASTRA IMAGE FALLBACK & LAYOUT PRESERVATION CSS
+ * ==================================================
+ * Ensures no broken-image icons ever appear.
+ * All image containers maintain fixed dimensions even on load failure.
+ */
+
+/* ── Global image defaults ───────────────────────────────── */
+img {
+    /* Prevent the ugly broken-image browser icon from appearing */
+    color: transparent;
+    /* Smooth load-in */
+    transition: opacity 0.3s ease;
+}
+
+/* ── Card image containers — fixed height, cover fit ─────── */
+.card-img-wrap,
+.hotel-img-wrap,
+.dest-img-wrap,
+.experience-img-wrap,
+.community-image-wrap,
+.gallery-item,
+.plan-card .card-img,
+.masonry-item,
+.video-card .video-thumbnail-wrapper,
+.trip-card-img,
+.package-img,
+.partner-logo-wrap,
+.testi-avatar-wrap {
+    position: relative;
+    overflow: hidden;
+    border-radius: inherit;
+    background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+    /* Always have a minimum height so layout doesn't collapse */
+    min-height: 160px;
+}
+
+/* Ensure images inside card wrappers always cover and never overflow */
+.card-img-wrap img,
+.hotel-img-wrap img,
+.dest-img-wrap img,
+.experience-img-wrap img,
+.community-image-wrap img,
+.gallery-item img,
+.masonry-item img,
+.trip-card-img img,
+.package-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+
+/* ── Community post images ───────────────────────────────── */
+.community-image-wrap {
+    min-height: 200px;
+    max-height: 500px;
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.community-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 14px;
+}
+
+/* ── Avatar images ───────────────────────────────────────── */
+.community-avatar,
+.comment-user-img,
+.nav-avatar-img,
+.profile-avatar,
+.avatar,
+.user-avatar,
+.author-img,
+.story-avatar {
+    object-fit: cover;
+    object-position: center;
+    background: linear-gradient(135deg, #302b63, #24243e);
+    display: inline-block;
+}
+
+/* Prevent avatar from collapsing */
+.community-avatar-wrap,
+.avatar-wrapper {
+    flex-shrink: 0;
+    overflow: hidden;
+    background: linear-gradient(135deg, #302b63, #24243e);
+}
+
+/* ── Hotel card images ───────────────────────────────────── */
+.hotel-card img,
+.hotel-result-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    min-height: 160px;
+    background: linear-gradient(135deg, #0f0c29, #302b63);
+}
+
+/* ── Destination images ──────────────────────────────────── */
+.dest-card img,
+.destination-img {
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    background: linear-gradient(135deg, #0f0c29, #302b63);
+}
+
+/* ── Experience marketplace images ──────────────────────── */
+.experience-card img,
+.package-card img,
+.experience-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    background: linear-gradient(135deg, #0f0c29, #302b63);
+}
+
+/* ── Gallery images ──────────────────────────────────────── */
+.gallery-item img,
+.masonry-item img {
+    transition: transform 0.4s ease, opacity 0.3s ease;
+}
+
+/* ── Background-image placeholder for div-based backgrounds ─ */
+[data-bg-placeholder] {
+    background-color: #0f0c29;
+    background-image: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+}
+
+/* ── Video thumbnail fallback ────────────────────────────── */
+.video-thumbnail-wrapper {
+    background: linear-gradient(135deg, #0f0c29 0%, #302b63 100%);
+    min-height: 140px;
+}
+
+/* ── Planner gallery ─────────────────────────────────────── */
+.itinerary-img,
+.planner-img,
+.route-img {
+    object-fit: cover;
+    display: block;
+    background: linear-gradient(135deg, #0f0c29, #302b63);
+}
+
+/* ── Admin table thumbnail ───────────────────────────────── */
+.admin-thumb {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 4px;
+    background: linear-gradient(135deg, #302b63, #24243e);
+}
+
+/* ── Broken image placeholder shimmer for loading state ─── */
+@keyframes vShimmer {
+    0%   { background-position: -800px 0; }
+    100% { background-position:  800px 0; }
+}
+
+.v-img-loading {
+    background: linear-gradient(90deg,
+        rgba(48,43,99,0.4) 0%,
+        rgba(212,165,116,0.15) 50%,
+        rgba(48,43,99,0.4) 100%
+    );
+    background-size: 800px 100%;
+    animation: vShimmer 1.6s infinite linear;
+}

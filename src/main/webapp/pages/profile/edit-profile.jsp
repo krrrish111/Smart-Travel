@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/components/header.jsp" %>
 <%@ include file="/components/global_ui.jsp" %>
 
@@ -112,7 +112,7 @@
                 <!-- Avatar Upload Section -->
                 <div class="avatar-upload">
                     <div class="avatar-preview" id="avatarPreviewContainer">
-                        <img id="avatarImage" src="" alt="Profile Preview">
+                        <img id="avatarImage" src="" alt="Profile Preview" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                     </div>
                     <label for="profileImageInput" class="avatar-edit-btn">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

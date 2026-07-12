@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/components/header.jsp" %>
 <%@ include file="/components/global_ui.jsp" %>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/hidden-gems.css">
@@ -10,7 +10,7 @@
     ══════════════════════════════════════════════════════════ -->
     <div class="hg-hero">
         <div class="hg-hero-bg">
-            <img src="https://images.unsplash.com/photo-1589308078059-be1415eab4c3?auto=format&fit=crop&w=1600&q=80" alt="Hidden Gem Map Background">
+            <img src="https://images.unsplash.com/photo-1589308078059-be1415eab4c3?auto=format&fit=crop&w=1600&q=80" alt="Hidden Gem Map Background" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
             <div class="hg-overlay"></div>
         </div>
         <div class="hg-hero-content">
@@ -54,7 +54,7 @@
         <!-- Gem 1 -->
         <div class="hg-card">
             <div class="hg-img-wrap">
-                <img src="https://images.unsplash.com/photo-1596895111956-bf1cf0599ce5?auto=format&fit=crop&w=600&q=80" alt="Nohkalikai Falls" class="hg-img">
+                <img src="https://images.unsplash.com/photo-1596895111956-bf1cf0599ce5?auto=format&fit=crop&w=600&q=80" alt="Nohkalikai Falls" class="hg-img" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                 <div class="hg-badge type-waterfall"><i class="ri-water-flash-fill"></i> Hidden Waterfall</div>
                 <div class="hg-coords">
                     <i class="ri-radar-line"></i> 25.2754° N, 91.7388° E
@@ -66,7 +66,7 @@
                 <p class="hg-desc">A 2-hour trek beyond the main viewpoint reveals crystal clear natural pools hidden in the lush jungle.</p>
                 
                 <div class="hg-creator">
-                    <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&q=80" alt="Arjun">
+                    <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&q=80" alt="Arjun" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                     <span>Discovered by <a href="${pageContext.request.contextPath}/community/user/arjunhikes">@arjunhikes</a></span>
                 </div>
 
@@ -81,7 +81,7 @@
         <!-- Gem 2 -->
         <div class="hg-card">
             <div class="hg-img-wrap">
-                <img src="https://images.unsplash.com/photo-1582236111816-e41af3f5b757?auto=format&fit=crop&w=600&q=80" alt="Cafe" class="hg-img">
+                <img src="https://images.unsplash.com/photo-1582236111816-e41af3f5b757?auto=format&fit=crop&w=600&q=80" alt="Cafe" class="hg-img" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                 <div class="hg-badge type-cafe"><i class="ri-cup-fill"></i> Unknown Cafe</div>
                 <div class="hg-coords">
                     <i class="ri-radar-line"></i> 32.2396° N, 77.1887° E
@@ -93,7 +93,7 @@
                 <p class="hg-desc">Tucked behind the main market street. They roast their own beans and have the best cinnamon rolls in the valley.</p>
                 
                 <div class="hg-creator">
-                    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80" alt="Priya">
+                    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80" alt="Priya" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                     <span>Discovered by <a href="${pageContext.request.contextPath}/community/user/priyaeats">@priyaeats</a></span>
                 </div>
 
@@ -108,7 +108,7 @@
         <!-- Gem 3 -->
         <div class="hg-card">
             <div class="hg-img-wrap">
-                <img src="https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=600&q=80" alt="Beach" class="hg-img">
+                <img src="https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=600&q=80" alt="Beach" class="hg-img" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                 <div class="hg-badge type-beach"><i class="ri-sun-fog-fill"></i> Secret Beach</div>
                 <div class="hg-coords">
                     <i class="ri-radar-line"></i> 14.8814° N, 74.0049° E
@@ -120,7 +120,7 @@
                 <p class="hg-desc">Only accessible by a 2km jungle trek or boat from Palolem. Zero crowds, bioluminescent plankton at night.</p>
                 
                 <div class="hg-creator">
-                    <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=100&q=80" alt="Dev">
+                    <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=100&q=80" alt="Dev" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                     <span>Discovered by <a href="${pageContext.request.contextPath}/community/user/devonbudget">@devonbudget</a></span>
                 </div>
 
@@ -135,7 +135,7 @@
         <!-- Gem 4 -->
         <div class="hg-card">
             <div class="hg-img-wrap">
-                <img src="https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=600&q=80" alt="Viewpoint" class="hg-img">
+                <img src="https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=600&q=80" alt="Viewpoint" class="hg-img" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                 <div class="hg-badge type-viewpoint"><i class="ri-landscape-fill"></i> Viewpoint</div>
                 <div class="hg-coords">
                     <i class="ri-radar-line"></i> 26.9124° N, 75.7873° E
@@ -147,7 +147,7 @@
                 <p class="hg-desc">A hidden staircase on the outer wall of the fort that gives an unobstructed, completely private view of the Pink City sunset.</p>
                 
                 <div class="hg-creator">
-                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Sarah">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Sarah" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                     <span>Discovered by <a href="${pageContext.request.contextPath}/community/user/sarahexplores">@sarahexplores</a></span>
                 </div>
 

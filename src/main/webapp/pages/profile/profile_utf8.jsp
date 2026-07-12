@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/components/header.jsp" %>
 <%@ include file="/components/global_ui.jsp" %>
 
@@ -578,7 +578,7 @@
                                     <div class="booking-item booking-card-status" data-status="${f.status.toLowerCase()}">
                                         <div class="booking-main" style="flex:1;">
                                             <div class="booking-icon" style="background: white; overflow: hidden; padding: 5px;">
-                                                <img src="${f.airlineLogo}" alt="${f.airlineName}" style="width: 100%; height: 100%; object-fit: contain;">
+                                                <img src="${f.airlineLogo}" alt="${f.airlineName}" style="width: 100%; height: 100%; object-fit: contain;" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                                             </div>
                                             <div style="flex:1;">
                                                 <div style="font-weight: 700; font-size: 1.1rem;">${f.airlineName} <span style="color:var(--text-secondary); font-weight: normal;">| ${f.flightNumber}</span></div>
@@ -628,7 +628,7 @@
                                     <div class="booking-item booking-card-status" data-status="${h.status.toLowerCase()}">
                                         <div class="booking-main" style="flex:1;">
                                             <div class="booking-icon" style="width: 80px; height: 80px; border-radius: 12px; overflow: hidden; padding:0;">
-                                                <img src="${not empty h.hotel.imageUrl ? h.hotel.imageUrl : 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=200&q=80'}" alt="${h.hotel.name}" style="width: 100%; height: 100%; object-fit: cover;">
+                                                <img src="${not empty h.hotel.imageUrl ? h.hotel.imageUrl : 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=200&q=80'}" alt="${h.hotel.name}" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                                             </div>
                                             <div style="flex:1;">
                                                 <div style="font-weight: 700; font-size: 1.1rem;">${h.hotel.name}</div>
@@ -1009,7 +1009,7 @@
             <div class="stats-grid" style="grid-template-columns: 1fr 1fr;">
                 <c:forEach var="saved" items="${savedDestinations}">
                     <div class="stat-card" style="text-align: left; padding: 0; overflow: hidden; display: flex; flex-direction: column;">
-                        <img src="${saved.destination.imageUrl}" style="width: 100%; height: 150px; object-fit: cover;">
+                        <img src="${saved.destination.imageUrl}" style="width: 100%; height: 150px; object-fit: cover;" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         <div style="padding: 20px;">
                             <h3 style="margin-bottom: 5px;">${saved.destination.title}</h3>
                             <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 15px;">${saved.destination.destination} | â‚¹${saved.destination.priceInr}</p>
@@ -1047,7 +1047,7 @@
             <div class="stats-grid" style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;">
                 <c:forEach var="hotel" items="${wishlistHotels}">
                     <div class="stat-card" style="padding:0; overflow:hidden; border-radius: 16px; text-align: left;">
-                        <img src="${hotel.imageUrl}" alt="${hotel.name}" style="width: 100%; height: 120px; object-fit: cover;">
+                        <img src="${hotel.imageUrl}" alt="${hotel.name}" style="width: 100%; height: 120px; object-fit: cover;" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         <div style="padding: 15px;">
                             <h3 style="font-size: 1.1rem; margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${hotel.name}</h3>
                             <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 10px;">${hotel.city}</p>
@@ -1064,7 +1064,7 @@
             <div class="stats-grid" style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;">
                 <c:forEach var="hotel" items="${recentlyViewedHotels}">
                     <div class="stat-card" style="padding:0; overflow:hidden; border-radius: 16px; text-align: left; opacity: 0.8;">
-                        <img src="${hotel.imageUrl}" alt="${hotel.name}" style="width: 100%; height: 120px; object-fit: cover; filter: grayscale(20%);">
+                        <img src="${hotel.imageUrl}" alt="${hotel.name}" style="width: 100%; height: 120px; object-fit: cover; filter: grayscale(20%);" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         <div style="padding: 15px;">
                             <h3 style="font-size: 1.1rem; margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${hotel.name}</h3>
                             <p style="color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 10px;">${hotel.city}</p>
@@ -1168,7 +1168,7 @@
                                             <video src="${story.mediaUrl}" style="width:100%; height:100%; object-fit:cover;"></video>
                                         </c:when>
                                         <c:otherwise>
-                                            <img src="${story.mediaUrl}" style="width:100%; height:100%; object-fit:cover;">
+                                            <img src="${story.mediaUrl}" style="width:100%; height:100%; object-fit:cover;" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                                         </c:otherwise>
                                     </c:choose>
                                 </div>
@@ -1414,7 +1414,7 @@
                     if (post.imageUrl.match(/\.(mp4|webm|ogg)$/i)) {
                         mediaHtml = `<video src="\${post.imageUrl}" controls style="width: 150px; height: 150px; object-fit: cover; border-radius: 12px;"></video>`;
                     } else {
-                        mediaHtml = `<img src="\${post.imageUrl}" width="150" height="150" loading="lazy" decoding="async" style="width: 150px; height: 150px; object-fit: cover; border-radius: 12px;">`;
+                        mediaHtml = `<img src="\${post.imageUrl}" width="150" height="150" loading="lazy" decoding="async" style="width: 150px; height: 150px; object-fit: cover; border-radius: 12px;" referrerpolicy="no-referrer" onerror="vImgErr(this)">`;
                     }
                 } else {
                     mediaHtml = `<div style="width: 150px; height: 150px; background: rgba(255,107,0,0.1); border-radius: 12px; display:flex; align-items:center; justify-content:center; color:var(--color-primary);">No Media</div>`;

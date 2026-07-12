@@ -63,7 +63,7 @@ async function loadPlans() {
                 <td><input type="checkbox" class="checkbox-custom" data-bulk-context="plans" value="${p.id}" onchange="toggleBulkItem(${p.id}, 'plans', this)"></td>
                 <td>
                     <div style="display:flex; align-items:center; gap:12px;">
-                        <img src="${p.image ? (p.image.startsWith('http') ? p.image : '/' + p.image) : 'https://placehold.co/100x100?text=No+Img'}" style="width:40px; height:40px; border-radius:6px; object-fit:cover;">
+                        <img src="${p.image && p.image !== 'null' && p.image !== 'undefined' ? (p.image.startsWith('http') ? p.image : '/' + p.image) : (typeof VOYASTRA_PLACEHOLDER !== 'undefined' ? VOYASTRA_PLACEHOLDER : 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDQwIDQwIj48cmVjdCB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIGZpbGw9IiMzMDJiNjMiLz48L3N2Zz4=')}" style="width:40px; height:40px; border-radius:6px; object-fit:cover;" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         <div>
                             <div style="font-weight:600;">${p.title}</div>
                             <div style="font-size:0.75rem; color:var(--text-muted);">${p.category}</div>

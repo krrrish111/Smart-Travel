@@ -493,7 +493,12 @@
     // ── Show toast if redirected for auth or after logout
     (function() {
         var params = new URLSearchParams(window.location.search);
-        if (params.get('error') === 'auth_required') {
+        var customMsg = params.get('msg');
+        if (customMsg) {
+            setTimeout(function() {
+                if (window.VoyastraToast) VoyastraToast.show(customMsg, 'warning');
+            }, 200);
+        } else if (params.get('error') === 'auth_required') {
             setTimeout(function() {
                 if (window.VoyastraToast) VoyastraToast.show('Please log in to continue.', 'warning');
             }, 200);

@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/components/header.jsp" %>
 <%@ include file="/components/global_ui.jsp" %>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/community_feed.css">
@@ -14,7 +14,7 @@
         <div class="ch-hero-body">
             <div class="ch-avatar-wrap">
                 <img src="https://ui-avatars.com/api/?name=${sessionScope.user_name != null ? sessionScope.user_name : 'Creator'}&background=d4a574&color=1a0f08&bold=true&size=200"
-                     alt="Creator Avatar" class="ch-avatar" id="creatorAvatar">
+                     alt="Creator Avatar" class="ch-avatar" id="creatorAvatar" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                 <div class="ch-avatar-edit" onclick="VoyastraToast.show('Photo upload coming soon!', 'info')">
                     <i class="ri-camera-line"></i>
                 </div>
@@ -356,7 +356,7 @@
                 <div class="ch-chart-title">Top Performing Content</div>
                 <div class="ch-top-content-list">
                     <div class="ch-top-content-item">
-                        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=80&q=70" alt="Post" class="ch-top-thumb">
+                        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=80&q=70" alt="Post" class="ch-top-thumb" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         <div class="ch-top-info">
                             <div class="ch-top-title">Golden hour at Pangong Lake 🌅</div>
                             <div class="ch-top-meta"><i class="ri-eye-line"></i> 5.1K views · <i class="ri-heart-line"></i> 842 likes</div>
@@ -366,7 +366,7 @@
                         </div>
                     </div>
                     <div class="ch-top-content-item">
-                        <img src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=80&q=70" alt="Post" class="ch-top-thumb">
+                        <img src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=80&q=70" alt="Post" class="ch-top-thumb" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         <div class="ch-top-info">
                             <div class="ch-top-title">Kerala backwaters at sunrise ☀️</div>
                             <div class="ch-top-meta"><i class="ri-eye-line"></i> 3.8K views · <i class="ri-heart-line"></i> 621 likes</div>
@@ -376,7 +376,7 @@
                         </div>
                     </div>
                     <div class="ch-top-content-item">
-                        <img src="https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=80&q=70" alt="Post" class="ch-top-thumb">
+                        <img src="https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=80&q=70" alt="Post" class="ch-top-thumb" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         <div class="ch-top-info">
                             <div class="ch-top-title">Snowfall morning at Rohtang Pass ❄️</div>
                             <div class="ch-top-meta"><i class="ri-eye-line"></i> 2.9K views · <i class="ri-heart-line"></i> 490 likes</div>
@@ -423,39 +423,39 @@
             <div class="ch-content-section active" id="ct-posts">
                 <div class="ch-posts-grid">
                     <div class="ch-post-thumb" onclick="VoyastraToast.show('Post preview coming soon', 'info')">
-                        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=300&q=70" loading="lazy">
+                        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=300&q=70" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         <div class="ch-post-hover"><i class="ri-heart-fill"></i> 842 &nbsp; <i class="ri-chat-1-fill"></i> 64</div>
                     </div>
                     <div class="ch-post-thumb" onclick="VoyastraToast.show('Post preview coming soon', 'info')">
-                        <img src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=300&q=70" loading="lazy">
+                        <img src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=300&q=70" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         <div class="ch-post-hover"><i class="ri-heart-fill"></i> 621 &nbsp; <i class="ri-chat-1-fill"></i> 48</div>
                     </div>
                     <div class="ch-post-thumb" onclick="VoyastraToast.show('Post preview coming soon', 'info')">
-                        <img src="https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=300&q=70" loading="lazy">
+                        <img src="https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=300&q=70" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         <div class="ch-post-hover"><i class="ri-heart-fill"></i> 490 &nbsp; <i class="ri-chat-1-fill"></i> 31</div>
                     </div>
                     <div class="ch-post-thumb" onclick="VoyastraToast.show('Post preview coming soon', 'info')">
-                        <img src="https://images.unsplash.com/photo-1626082896492-766af4eb65ed?auto=format&fit=crop&w=300&q=70" loading="lazy">
+                        <img src="https://images.unsplash.com/photo-1626082896492-766af4eb65ed?auto=format&fit=crop&w=300&q=70" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         <div class="ch-post-hover"><i class="ri-heart-fill"></i> 378 &nbsp; <i class="ri-chat-1-fill"></i> 27</div>
                     </div>
                     <div class="ch-post-thumb" onclick="VoyastraToast.show('Post preview coming soon', 'info')">
-                        <img src="https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=300&q=70" loading="lazy">
+                        <img src="https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=300&q=70" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         <div class="ch-post-hover"><i class="ri-heart-fill"></i> 312 &nbsp; <i class="ri-chat-1-fill"></i> 22</div>
                     </div>
                     <div class="ch-post-thumb" onclick="VoyastraToast.show('Post preview coming soon', 'info')">
-                        <img src="https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=300&q=70" loading="lazy">
+                        <img src="https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=300&q=70" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         <div class="ch-post-hover"><i class="ri-heart-fill"></i> 289 &nbsp; <i class="ri-chat-1-fill"></i> 19</div>
                     </div>
                     <div class="ch-post-thumb" onclick="VoyastraToast.show('Post preview coming soon', 'info')">
-                        <img src="https://images.unsplash.com/photo-1542152019-216e257e84cc?auto=format&fit=crop&w=300&q=70" loading="lazy">
+                        <img src="https://images.unsplash.com/photo-1542152019-216e257e84cc?auto=format&fit=crop&w=300&q=70" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         <div class="ch-post-hover"><i class="ri-heart-fill"></i> 241 &nbsp; <i class="ri-chat-1-fill"></i> 16</div>
                     </div>
                     <div class="ch-post-thumb" onclick="VoyastraToast.show('Post preview coming soon', 'info')">
-                        <img src="https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=300&q=70" loading="lazy">
+                        <img src="https://images.unsplash.com/photo-1477587458883-47145ed94245?auto=format&fit=crop&w=300&q=70" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         <div class="ch-post-hover"><i class="ri-heart-fill"></i> 198 &nbsp; <i class="ri-chat-1-fill"></i> 13</div>
                     </div>
                     <div class="ch-post-thumb" onclick="VoyastraToast.show('Post preview coming soon', 'info')">
-                        <img src="https://images.unsplash.com/photo-1559563458-527698bf5295?auto=format&fit=crop&w=300&q=70" loading="lazy">
+                        <img src="https://images.unsplash.com/photo-1559563458-527698bf5295?auto=format&fit=crop&w=300&q=70" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         <div class="ch-post-hover"><i class="ri-heart-fill"></i> 171 &nbsp; <i class="ri-chat-1-fill"></i> 11</div>
                     </div>
                 </div>
@@ -465,17 +465,17 @@
             <div class="ch-content-section" id="ct-reels">
                 <div class="ch-posts-grid">
                     <div class="ch-post-thumb reel-item" onclick="VoyastraToast.show('Reel player coming soon', 'info')">
-                        <img src="https://images.unsplash.com/photo-1626082896492-766af4eb65ed?auto=format&fit=crop&w=300&q=70" loading="lazy">
+                        <img src="https://images.unsplash.com/photo-1626082896492-766af4eb65ed?auto=format&fit=crop&w=300&q=70" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         <div class="ch-reel-play-icon"><i class="ri-play-fill"></i></div>
                         <div class="ch-post-hover"><i class="ri-eye-fill"></i> 5.6M</div>
                     </div>
                     <div class="ch-post-thumb reel-item" onclick="VoyastraToast.show('Reel player coming soon', 'info')">
-                        <img src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=300&q=70" loading="lazy">
+                        <img src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=300&q=70" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         <div class="ch-reel-play-icon"><i class="ri-play-fill"></i></div>
                         <div class="ch-post-hover"><i class="ri-eye-fill"></i> 3.1M</div>
                     </div>
                     <div class="ch-post-thumb reel-item" onclick="VoyastraToast.show('Reel player coming soon', 'info')">
-                        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=300&q=70" loading="lazy">
+                        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=300&q=70" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         <div class="ch-reel-play-icon"><i class="ri-play-fill"></i></div>
                         <div class="ch-post-hover"><i class="ri-eye-fill"></i> 2.4M</div>
                     </div>
@@ -486,7 +486,7 @@
             <div class="ch-content-section" id="ct-guides">
                 <div class="ch-guides-list">
                     <div class="ch-guide-row">
-                        <img src="https://images.unsplash.com/photo-1626082896492-766af4eb65ed?auto=format&fit=crop&w=120&q=70" class="ch-guide-thumb">
+                        <img src="https://images.unsplash.com/photo-1626082896492-766af4eb65ed?auto=format&fit=crop&w=120&q=70" class="ch-guide-thumb" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         <div class="ch-guide-info">
                             <div class="ch-guide-title">The Complete Ladakh Circuit</div>
                             <div class="ch-guide-meta">12 Days · ₹35,000 · 18 min read</div>
@@ -495,7 +495,7 @@
                         <span class="ch-guide-status published">Published</span>
                     </div>
                     <div class="ch-guide-row">
-                        <img src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=120&q=70" class="ch-guide-thumb">
+                        <img src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=120&q=70" class="ch-guide-thumb" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         <div class="ch-guide-info">
                             <div class="ch-guide-title">Kerala Decoded: Backwaters &amp; Spice Trails</div>
                             <div class="ch-guide-meta">8 Days · ₹22,000 · 14 min read</div>
@@ -504,7 +504,7 @@
                         <span class="ch-guide-status published">Published</span>
                     </div>
                     <div class="ch-guide-row">
-                        <img src="https://images.unsplash.com/photo-1596895111956-bf1cf0599ce5?auto=format&fit=crop&w=120&q=70" class="ch-guide-thumb">
+                        <img src="https://images.unsplash.com/photo-1596895111956-bf1cf0599ce5?auto=format&fit=crop&w=120&q=70" class="ch-guide-thumb" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         <div class="ch-guide-info">
                             <div class="ch-guide-title">Hidden Northeast India</div>
                             <div class="ch-guide-meta">14 Days · ₹28,000 · 22 min read</div>
@@ -519,7 +519,7 @@
             <div class="ch-content-section" id="ct-trips">
                 <div class="ch-guides-list">
                     <div class="ch-guide-row">
-                        <img src="https://images.unsplash.com/photo-1626082896492-766af4eb65ed?auto=format&fit=crop&w=120&q=70" class="ch-guide-thumb">
+                        <img src="https://images.unsplash.com/photo-1626082896492-766af4eb65ed?auto=format&fit=crop&w=120&q=70" class="ch-guide-thumb" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         <div class="ch-guide-info">
                             <div class="ch-guide-title">Leh Ladakh — June 2026</div>
                             <div class="ch-guide-meta">8 days · 3 travelers · ₹42,000</div>
@@ -528,7 +528,7 @@
                         <span class="ch-guide-status published">Completed</span>
                     </div>
                     <div class="ch-guide-row">
-                        <img src="https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=120&q=70" class="ch-guide-thumb">
+                        <img src="https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=120&q=70" class="ch-guide-thumb" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         <div class="ch-guide-info">
                             <div class="ch-guide-title">Goa New Year Trip — Jan 2026</div>
                             <div class="ch-guide-meta">5 days · 6 travelers · ₹28,500</div>
@@ -537,7 +537,7 @@
                         <span class="ch-guide-status published">Completed</span>
                     </div>
                     <div class="ch-guide-row">
-                        <img src="https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=120&q=70" class="ch-guide-thumb">
+                        <img src="https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=120&q=70" class="ch-guide-thumb" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         <div class="ch-guide-info">
                             <div class="ch-guide-title">Manali Snow Trip — Feb 2026</div>
                             <div class="ch-guide-meta">4 days · 2 travelers · ₹18,200</div>

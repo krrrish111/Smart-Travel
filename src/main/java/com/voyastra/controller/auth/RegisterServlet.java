@@ -74,7 +74,7 @@ public class RegisterServlet extends HttpServlet {
             user.setEmail(cleanEmail);
             user.setPassword(password);
             user.setRole("user");
-            user.setVerified(false);
+            user.setVerified(true);
             user.setVerificationToken(java.util.UUID.randomUUID().toString());
 
             boolean isRegistered = userDAO.registerUser(user);
@@ -90,8 +90,8 @@ public class RegisterServlet extends HttpServlet {
                 com.voyastra.util.EmailService.sendWelcomeEmail(cleanEmail, user.getName(), verifyLink);
                 
                 result.put("success", true);
-                result.put("message", "Success! Please check your email to verify your account.");
-                result.put("redirect", request.getContextPath() + "/login.jsp?registered=true&needsVerification=true");
+                result.put("message", "Registration successful! You can now log in.");
+                result.put("redirect", request.getContextPath() + "/login?registered=true");
             } else {
                 result.put("success", false);
                 result.put("message", "Registration failed. Email might already be in use.");

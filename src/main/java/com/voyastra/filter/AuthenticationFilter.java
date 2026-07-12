@@ -48,7 +48,12 @@ public class AuthenticationFilter implements Filter {
         } else {
             String target = req.getRequestURI();
             if (req.getQueryString() != null) target += "?" + req.getQueryString();
-            res.sendRedirect(req.getContextPath() + "/login?redirect=" + java.net.URLEncoder.encode(target.substring(req.getContextPath().length()), "UTF-8"));
+            String relativeTarget = target.substring(req.getContextPath().length());
+            String loginUrl = req.getContextPath() + "/login?redirect=" + java.net.URLEncoder.encode(relativeTarget, "UTF-8");
+            if (relativeTarget.contains("planner") || relativeTarget.contains("booking") || relativeTarget.contains("customize") || relativeTarget.contains("journey")) {
+                loginUrl += "&msg=" + java.net.URLEncoder.encode("Sign in to continue with personalized planning and bookings.", "UTF-8");
+            }
+            res.sendRedirect(loginUrl);
         }
     }
 

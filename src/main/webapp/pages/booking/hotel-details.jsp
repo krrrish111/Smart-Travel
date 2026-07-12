@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ include file="/components/header.jsp" %>
 <%@ include file="/components/global_ui.jsp" %>
@@ -62,22 +62,22 @@
         <div class="grid grid-cols-1 md:grid-cols-4 gap-2 md:gap-4 mb-12 h-[500px] rounded-2xl overflow-hidden group">
             <!-- Main Image -->
             <div class="md:col-span-2 h-full relative overflow-hidden">
-                <img src="${not empty photos ? photos[0].url : hotel.imageUrl}" alt="Main view" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105 cursor-pointer">
+                <img src="${not empty photos ? photos[0].url : hotel.imageUrl}" alt="Main view" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105 cursor-pointer" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
             </div>
             <!-- Sub Images Grid -->
             <div class="hidden md:grid md:col-span-2 grid-cols-2 grid-rows-2 gap-4 h-full">
                 <c:forEach var="photo" items="${photos}" begin="1" end="3" varStatus="loop">
                     <div class="relative overflow-hidden rounded-xl">
-                        <img src="${photo.url}" alt="${photo.caption}" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105 cursor-pointer">
+                        <img src="${photo.url}" alt="${photo.caption}" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105 cursor-pointer" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                     </div>
                 </c:forEach>
                 <!-- Fill remaining with placeholders if not enough photos -->
                 <c:if test="${empty photos or photos.size() < 4}">
                     <div class="relative overflow-hidden rounded-xl">
-                        <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Room" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105 cursor-pointer">
+                        <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Room" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105 cursor-pointer" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                     </div>
                     <div class="relative overflow-hidden rounded-xl bg-gray-900 group cursor-pointer">
-                        <img src="https://images.unsplash.com/photo-1514933651103-005eec06c04b?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Dining" class="w-full h-full object-cover opacity-60 transition-transform duration-700 hover:scale-105">
+                        <img src="https://images.unsplash.com/photo-1514933651103-005eec06c04b?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Dining" class="w-full h-full object-cover opacity-60 transition-transform duration-700 hover:scale-105" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         <div class="absolute inset-0 flex items-center justify-center">
                             <span class="text-white font-bold text-lg border-2 border-white px-4 py-2 rounded-lg backdrop-blur-sm">View All Photos</span>
                         </div>
@@ -85,7 +85,7 @@
                 </c:if>
                 <c:if test="${not empty photos and photos.size() >= 4}">
                     <div class="relative overflow-hidden rounded-xl bg-gray-900 group cursor-pointer">
-                        <img src="${photos[3].url}" alt="${photos[3].caption}" class="w-full h-full object-cover opacity-60 transition-transform duration-700 hover:scale-105">
+                        <img src="${photos[3].url}" alt="${photos[3].caption}" class="w-full h-full object-cover opacity-60 transition-transform duration-700 hover:scale-105" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         <div class="absolute inset-0 flex items-center justify-center">
                             <span class="text-white font-bold text-lg border-2 border-white px-4 py-2 rounded-lg backdrop-blur-sm">View All ${photos.size() + 1} Photos</span>
                         </div>
@@ -164,7 +164,7 @@
                                                 
                                                 <!-- Room Image -->
                                                 <div class="md:w-1/3 h-48 md:h-auto relative">
-                                                    <img src="${room.imageUrl}" alt="${room.type}" class="w-full h-full object-cover">
+                                                    <img src="${room.imageUrl}" alt="${room.type}" class="w-full h-full object-cover" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                                                 </div>
                                                 
                                                 <!-- Room Details -->
@@ -221,7 +221,7 @@
                                         <input type="radio" name="roomId" value="-1" id="room-mock" class="peer absolute opacity-0 w-0 h-0" onchange="updateSelectedRoom('Standard Double Room', ${hotel.startingPrice > 0 ? hotel.startingPrice : 150})" required ${empty checkIn or empty checkOut ? 'disabled' : ''}>
                                         <div class="surface-panel rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col md:flex-row border-2 border-transparent peer-checked:border-primary peer-checked:bg-primary/5 dark:peer-checked:bg-primary/10">
                                             <div class="md:w-1/3 h-48 md:h-auto relative">
-                                                <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Standard Double Room" class="w-full h-full object-cover">
+                                                <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80" alt="Standard Double Room" class="w-full h-full object-cover" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                                             </div>
                                             <div class="md:w-2/3 p-6 flex flex-col">
                                                 <div class="flex justify-between items-start mb-4">

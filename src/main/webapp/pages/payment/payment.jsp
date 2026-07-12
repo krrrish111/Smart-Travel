@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
     <%@ include file="/components/header.jsp" %>
         <%@ include file="/components/global_ui.jsp" %>
 
@@ -235,7 +235,7 @@
                                         <!-- Service image -->
                                         <div
                                             style="width: 100%; height: 120px; border-radius: 12px; overflow: hidden; margin-bottom: 16px;">
-                                            <img src="<%= cb.getPlanImage() != null ? cb.getPlanImage() : "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=600&q=80" %>"
+                                            <img src="<%= cb.getPlanImage() != null ? cb.getPlanImage() : "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=600&q=80" % loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">"
                                             alt="booking" style="width: 100%; height: 100%; object-fit: cover;">
                                         </div>
 

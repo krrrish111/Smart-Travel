@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/components/global_ui.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -30,12 +30,12 @@
         <!-- Reel 1 -->
         <div class="reel-item">
             <!-- Simulated Video using a cover image and CSS gradient -->
-            <img src="https://images.unsplash.com/photo-1626082896492-766af4eb65ed?auto=format&fit=crop&w=720&q=80" class="reel-video-bg" alt="Video">
+            <img src="https://images.unsplash.com/photo-1626082896492-766af4eb65ed?auto=format&fit=crop&w=720&q=80" class="reel-video-bg" alt="Video" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
             <div class="reel-overlay"></div>
             
             <div class="reel-info">
                 <div class="reel-user">
-                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Avatar" class="reel-avatar" onclick="window.location.href='${pageContext.request.contextPath}/community/user/sarahexplores'">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Avatar" class="reel-avatar" onclick="window.location.href='${pageContext.request.contextPath}/community/user/sarahexplores'" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                     <span class="reel-username" onclick="window.location.href='${pageContext.request.contextPath}/community/user/sarahexplores'">@sarahexplores</span>
                     <button class="reel-follow-btn" onclick="toggleFollow(this)">Follow</button>
                 </div>
@@ -63,18 +63,18 @@
                     <div class="ra-icon"><i class="ri-share-forward-line"></i></div>
                     <span class="ra-count">Share</span>
                 </button>
-                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Audio" class="reel-audio-thumb spin">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Audio" class="reel-audio-thumb spin" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
             </div>
         </div>
 
         <!-- Reel 2 -->
         <div class="reel-item">
-            <img src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=720&q=80" class="reel-video-bg" alt="Video">
+            <img src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=720&q=80" class="reel-video-bg" alt="Video" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
             <div class="reel-overlay"></div>
             
             <div class="reel-info">
                 <div class="reel-user">
-                    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80" alt="Avatar" class="reel-avatar" onclick="window.location.href='${pageContext.request.contextPath}/community/user/priyaeats'">
+                    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80" alt="Avatar" class="reel-avatar" onclick="window.location.href='${pageContext.request.contextPath}/community/user/priyaeats'" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                     <span class="reel-username" onclick="window.location.href='${pageContext.request.contextPath}/community/user/priyaeats'">@priyaeats</span>
                     <button class="reel-follow-btn" onclick="toggleFollow(this)">Follow</button>
                 </div>
@@ -102,18 +102,18 @@
                     <div class="ra-icon"><i class="ri-share-forward-line"></i></div>
                     <span class="ra-count">Share</span>
                 </button>
-                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80" alt="Audio" class="reel-audio-thumb spin">
+                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80" alt="Audio" class="reel-audio-thumb spin" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
             </div>
         </div>
 
         <!-- Reel 3 -->
         <div class="reel-item">
-            <img src="https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=720&q=80" class="reel-video-bg" alt="Video">
+            <img src="https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=720&q=80" class="reel-video-bg" alt="Video" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
             <div class="reel-overlay"></div>
             
             <div class="reel-info">
                 <div class="reel-user">
-                    <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=100&q=80" alt="Avatar" class="reel-avatar" onclick="window.location.href='${pageContext.request.contextPath}/community/user/devonbudget'">
+                    <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=100&q=80" alt="Avatar" class="reel-avatar" onclick="window.location.href='${pageContext.request.contextPath}/community/user/devonbudget'" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                     <span class="reel-username" onclick="window.location.href='${pageContext.request.contextPath}/community/user/devonbudget'">@devonbudget</span>
                     <button class="reel-follow-btn" onclick="toggleFollow(this)">Follow</button>
                 </div>
@@ -141,7 +141,7 @@
                     <div class="ra-icon"><i class="ri-share-forward-line"></i></div>
                     <span class="ra-count">Share</span>
                 </button>
-                <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=100&q=80" alt="Audio" class="reel-audio-thumb spin">
+                <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=100&q=80" alt="Audio" class="reel-audio-thumb spin" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
             </div>
         </div>
 

@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/components/header.jsp" %>
 <%@ include file="/components/global_ui.jsp" %>
 
@@ -257,12 +257,12 @@
             <!-- Photo Gallery -->
             <h2 class="dest-section-title editorial mt-8">Photo Gallery</h2>
             <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
-                <img src="https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=400&q=75" alt="Gallery 1" class="rounded-xl w-full h-32 object-cover hover:opacity-90 transition cursor-pointer">
-                <img src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=400&q=75" alt="Gallery 2" class="rounded-xl w-full h-32 object-cover hover:opacity-90 transition cursor-pointer">
-                <img src="https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=400&q=75" alt="Gallery 3" class="rounded-xl w-full h-32 object-cover hover:opacity-90 transition cursor-pointer">
-                <img src="https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=400&q=75" alt="Gallery 4" class="rounded-xl w-full h-32 object-cover hover:opacity-90 transition cursor-pointer">
-                <img src="https://images.unsplash.com/photo-1561359313-0639aad073f0?auto=format&fit=crop&w=400&q=75" alt="Gallery 5" class="rounded-xl w-full h-32 object-cover hover:opacity-90 transition cursor-pointer">
-                <img src="https://images.unsplash.com/photo-1626082896492-766af4eb65ed?auto=format&fit=crop&w=400&q=75" alt="Gallery 6" class="rounded-xl w-full h-32 object-cover hover:opacity-90 transition cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=400&q=75" alt="Gallery 1" class="rounded-xl w-full h-32 object-cover hover:opacity-90 transition cursor-pointer" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
+                <img src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=400&q=75" alt="Gallery 2" class="rounded-xl w-full h-32 object-cover hover:opacity-90 transition cursor-pointer" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
+                <img src="https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=400&q=75" alt="Gallery 3" class="rounded-xl w-full h-32 object-cover hover:opacity-90 transition cursor-pointer" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
+                <img src="https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=400&q=75" alt="Gallery 4" class="rounded-xl w-full h-32 object-cover hover:opacity-90 transition cursor-pointer" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
+                <img src="https://images.unsplash.com/photo-1561359313-0639aad073f0?auto=format&fit=crop&w=400&q=75" alt="Gallery 5" class="rounded-xl w-full h-32 object-cover hover:opacity-90 transition cursor-pointer" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
+                <img src="https://images.unsplash.com/photo-1626082896492-766af4eb65ed?auto=format&fit=crop&w=400&q=75" alt="Gallery 6" class="rounded-xl w-full h-32 object-cover hover:opacity-90 transition cursor-pointer" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
             </div>
 
             <!-- Traveler Reviews -->
@@ -384,7 +384,7 @@
                 <h3 class="font-bold text-xl mb-4 text-main">Suggested Stays</h3>
                 <div class="flex flex-col gap-4">
                     <a href="${pageContext.request.contextPath}/hotel-details.jsp?id=demo1" class="flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded-lg transition" style="text-decoration:none;">
-                        <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=80&h=80&q=75" alt="Luxury Resort" class="w-16 h-16 rounded-lg object-cover">
+                        <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=80&h=80&q=75" alt="Luxury Resort" class="w-16 h-16 rounded-lg object-cover" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         <div>
                             <h4 class="font-bold text-sm text-main">The Royal Heritage Resort</h4>
                             <p class="text-xs text-muted mb-1">★★★★★ • Premium</p>
@@ -392,7 +392,7 @@
                         </div>
                     </a>
                     <a href="${pageContext.request.contextPath}/hotel-details.jsp?id=demo2" class="flex items-center gap-3 hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded-lg transition" style="text-decoration:none;">
-                        <img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=80&h=80&q=75" alt="Boutique Stay" class="w-16 h-16 rounded-lg object-cover">
+                        <img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=80&h=80&q=75" alt="Boutique Stay" class="w-16 h-16 rounded-lg object-cover" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         <div>
                             <h4 class="font-bold text-sm text-main">Boutique Valley Stay</h4>
                             <p class="text-xs text-muted mb-1">★★★★ • Comfort</p>

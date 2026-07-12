@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ include file="/components/header.jsp" %>
 <%@ include file="/components/global_ui.jsp" %>
@@ -95,7 +95,7 @@
                             
                             <!-- Image Section -->
                             <div class="sm:w-1/3 relative overflow-hidden">
-                                <img src="<c:choose><c:when test="${not empty hotel.imageUrl}">${hotel.imageUrl}</c:when><c:otherwise>https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80</c:otherwise></c:choose>" alt="${hotel.name}" class="w-full h-48 sm:h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                <img src="<c:choose loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)"><c:when test="${not empty hotel.imageUrl}">${hotel.imageUrl}</c:when><c:otherwise>https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80</c:otherwise></c:choose>" alt="${hotel.name}" class="w-full h-48 sm:h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                                 <div class="absolute top-3 left-3 flex flex-col gap-2">
                                     <div class="bg-white/90 dark:bg-black/90 backdrop-blur-sm text-xs font-bold px-3 py-1.5 rounded-lg shadow-sm flex items-center gap-1 w-max">
                                         <i class="fas fa-star text-accent"></i> ${hotel.rating} <span class="text-gray-500 font-normal ml-1">(${hotel.reviewCount} reviews)</span>

@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
                 <%@ include file="/components/header.jsp" %>
 
@@ -705,7 +705,7 @@
                                                         <img src="${s.imageUrl}" alt="${s.name}"
                                                              style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s;"
                                                              onmouseover="this.style.transform='scale(1.05)'"
-                                                             onmouseout="this.style.transform='scale(1)'">
+                                                             onmouseout="this.style.transform='scale(1)'" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                                                         <c:if test="${not empty s.badge}">
                                                             <span style="position: absolute; top: 8px; left: 8px; background: var(--color-primary); color: black; font-size: 0.65rem; font-weight: 700; padding: 4px 10px; border-radius: 20px;">
                                                                 <c:out value="${s.badge}"/>

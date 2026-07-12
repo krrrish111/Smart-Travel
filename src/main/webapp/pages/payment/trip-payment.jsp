@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ include file="/components/header.jsp" %>
@@ -34,7 +34,7 @@
 
             <!-- Razorpay Button Container -->
             <button id="rzp-button1" class="btn-primary w-full py-4 rounded-xl text-lg font-bold shadow-lg transform transition-transform hover:-translate-y-1 flex items-center justify-center gap-3">
-                <img src="https://razorpay.com/assets/razorpay-glyph.svg" alt="Razorpay" class="w-6 h-6 filter brightness-0 invert">
+                <img src="https://razorpay.com/assets/razorpay-glyph.svg" alt="Razorpay" class="w-6 h-6 filter brightness-0 invert" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                 Pay Securely with Razorpay
             </button>
             <p class="text-xs text-gray-500 mt-4">By proceeding, you agree to our Terms of Service and Cancellation Policy.</p>

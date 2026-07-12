@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/components/header.jsp" %>
 <%@ include file="/components/global_ui.jsp" %>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/guides.css">
@@ -10,7 +10,7 @@
     ══════════════════════════════════════════════════════════ -->
     <div class="gm-hero">
         <div class="gm-hero-bg">
-            <img src="https://images.unsplash.com/photo-1522878129833-838a904a0e9e?auto=format&fit=crop&w=1600&q=80" alt="Guide Marketplace">
+            <img src="https://images.unsplash.com/photo-1522878129833-838a904a0e9e?auto=format&fit=crop&w=1600&q=80" alt="Guide Marketplace" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
             <div class="gm-overlay"></div>
         </div>
         <div class="gm-hero-content">
@@ -55,13 +55,13 @@
         <!-- Guide 1 -->
         <div class="gm-card">
             <div class="gm-img-wrap">
-                <img src="https://images.unsplash.com/photo-1598890777032-bde835ba27c2?auto=format&fit=crop&w=600&q=80" alt="Goa" class="gm-img">
+                <img src="https://images.unsplash.com/photo-1598890777032-bde835ba27c2?auto=format&fit=crop&w=600&q=80" alt="Goa" class="gm-img" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                 <div class="gm-badge type-weekend"><i class="ri-calendar-2-fill"></i> Weekend</div>
                 <div class="gm-save-icon" onclick="this.querySelector('i').classList.toggle('ri-bookmark-fill'); this.querySelector('i').classList.toggle('ri-bookmark-line'); VoyastraToast.show('Saved to library', 'success');"><i class="ri-bookmark-line"></i></div>
             </div>
             <div class="gm-body">
                 <div class="gm-creator-tag">
-                    <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=40&q=80" alt="Creator">
+                    <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=40&q=80" alt="Creator" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                     <div class="gm-creator-info">
                         <span class="gmc-name">Dev Patel</span>
                         <a href="${pageContext.request.contextPath}/community/user/devonbudget" class="gmc-handle">@devonbudget</a>
@@ -93,13 +93,13 @@
         <!-- Guide 2 -->
         <div class="gm-card">
             <div class="gm-img-wrap">
-                <img src="https://images.unsplash.com/photo-1626082896492-766af4eb65ed?auto=format&fit=crop&w=600&q=80" alt="Himachal" class="gm-img">
+                <img src="https://images.unsplash.com/photo-1626082896492-766af4eb65ed?auto=format&fit=crop&w=600&q=80" alt="Himachal" class="gm-img" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                 <div class="gm-badge type-multiday"><i class="ri-map-pin-time-fill"></i> 7 Days</div>
                 <div class="gm-save-icon" onclick="this.querySelector('i').classList.toggle('ri-bookmark-fill'); this.querySelector('i').classList.toggle('ri-bookmark-line'); VoyastraToast.show('Saved to library', 'success');"><i class="ri-bookmark-line"></i></div>
             </div>
             <div class="gm-body">
                 <div class="gm-creator-tag">
-                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=40&q=80" alt="Creator">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=40&q=80" alt="Creator" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                     <div class="gm-creator-info">
                         <span class="gmc-name">Sarah Jenkins</span>
                         <a href="${pageContext.request.contextPath}/community/user/sarahexplores" class="gmc-handle">@sarahexplores</a>
@@ -131,13 +131,13 @@
         <!-- Guide 3 -->
         <div class="gm-card">
             <div class="gm-img-wrap">
-                <img src="https://images.unsplash.com/photo-1606491956689-2ea866880c84?auto=format&fit=crop&w=600&q=80" alt="Food Trail" class="gm-img">
+                <img src="https://images.unsplash.com/photo-1606491956689-2ea866880c84?auto=format&fit=crop&w=600&q=80" alt="Food Trail" class="gm-img" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                 <div class="gm-badge type-food"><i class="ri-restaurant-2-fill"></i> Food Trail</div>
                 <div class="gm-save-icon" onclick="this.querySelector('i').classList.toggle('ri-bookmark-fill'); this.querySelector('i').classList.toggle('ri-bookmark-line'); VoyastraToast.show('Saved to library', 'success');"><i class="ri-bookmark-line"></i></div>
             </div>
             <div class="gm-body">
                 <div class="gm-creator-tag">
-                    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=40&q=80" alt="Creator">
+                    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=40&q=80" alt="Creator" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                     <div class="gm-creator-info">
                         <span class="gmc-name">Priya Kapoor</span>
                         <a href="${pageContext.request.contextPath}/community/user/priyaeats" class="gmc-handle">@priyaeats</a>
@@ -169,13 +169,13 @@
         <!-- Guide 4 -->
         <div class="gm-card">
             <div class="gm-img-wrap">
-                <img src="https://images.unsplash.com/photo-1593693397690-362cb9666cb2?auto=format&fit=crop&w=600&q=80" alt="Luxury" class="gm-img">
+                <img src="https://images.unsplash.com/photo-1593693397690-362cb9666cb2?auto=format&fit=crop&w=600&q=80" alt="Luxury" class="gm-img" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                 <div class="gm-badge type-luxury"><i class="ri-vip-diamond-fill"></i> Luxury</div>
                 <div class="gm-save-icon" onclick="this.querySelector('i').classList.toggle('ri-bookmark-fill'); this.querySelector('i').classList.toggle('ri-bookmark-line'); VoyastraToast.show('Saved to library', 'success');"><i class="ri-bookmark-line"></i></div>
             </div>
             <div class="gm-body">
                 <div class="gm-creator-tag">
-                    <img src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=40&q=80" alt="Creator">
+                    <img src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=40&q=80" alt="Creator" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                     <div class="gm-creator-info">
                         <span class="gmc-name">Nisha Tiwari</span>
                         <a href="${pageContext.request.contextPath}/community/user/nishaluxe" class="gmc-handle">@nishaluxe</a>

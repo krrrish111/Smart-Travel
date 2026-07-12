@@ -169,7 +169,9 @@ const CommunityFeed = {
         const container = document.getElementById('communityFeed');
         
         posts.forEach(post => {
-            const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(post.userName)}&background=random&color=ffffff&bold=true`;
+            const avatarUrl = (typeof safeImg === 'function')
+                ? safeImg(`https://ui-avatars.com/api/?name=${encodeURIComponent(post.userName)}&background=random&color=ffffff&bold=true`, 'avatar')
+                : `https://ui-avatars.com/api/?name=${encodeURIComponent(post.userName)}&background=random&color=ffffff&bold=true`;
             const randomId = Math.floor(Math.random() * 10000); // For share/meetup buttons
             
             // Format dynamic date/time
@@ -180,18 +182,20 @@ const CommunityFeed = {
             postCard.id = `post-${post.id}`;
             
             let imageHTML = '';
-            if (post.imageUrl && post.imageUrl.trim() !== '') {
-                const isVideo = post.imageUrl.toLowerCase().endsWith('.mp4');
+            const _imgUrl = post.imageUrl && post.imageUrl.trim() !== '' && post.imageUrl.toLowerCase() !== 'null' && post.imageUrl.toLowerCase() !== 'undefined' ? post.imageUrl.trim() : '';
+            if (_imgUrl) {
+                const isVideo = _imgUrl.toLowerCase().endsWith('.mp4');
                 if (isVideo) {
                     imageHTML = `
                         <div class="community-image-wrap" style="aspect-ratio: auto;">
-                            <video src="${post.imageUrl}" class="community-image media-item" data-media="${post.imageUrl}" data-type="video" style="border-radius:14px;" onclick="openMediaViewer('${post.imageUrl}', 'video')"></video>
+                            <video src="${_imgUrl}" class="community-image media-item" data-media="${_imgUrl}" data-type="video" style="border-radius:14px;" onclick="openMediaViewer('${_imgUrl}', 'video')"></video>
                         </div>
                     `;
                 } else {
+                    const _safeUrl = (typeof safeImg === 'function') ? safeImg(_imgUrl) : _imgUrl;
                     imageHTML = `
                         <div class="community-image-wrap">
-                            <img src="${post.imageUrl}" alt="Travel Photo" class="community-image media-item" data-media="${post.imageUrl}" data-type="image" width="600" height="400" loading="lazy" decoding="async" onclick="openMediaViewer('${post.imageUrl}', 'image')">
+                            <img src="${_safeUrl}" alt="Travel Photo" class="community-image media-item" data-media="${_imgUrl}" data-type="image" width="600" height="400" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)" onclick="openMediaViewer('${_imgUrl}', 'image')">
                         </div>
                     `;
                 }
@@ -284,7 +288,7 @@ const CommunityFeed = {
                 <div class="community-header">
                     <div class="community-user">
                         <div class="community-avatar-wrap">
-                            <img src="${avatarUrl}" alt="${post.userName}" class="community-avatar">
+                            <img src="${avatarUrl}" alt="${post.userName}" class="community-avatar" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         </div>
                         <div>
                             <div class="community-username">
@@ -430,10 +434,12 @@ const CommunityFeed = {
 
                 let html = '';
                 comments.forEach(comment => {
-                    const avatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(comment.userName)}&background=random&color=ffffff&bold=true`;
+                    const avatar = (typeof safeImg === 'function')
+                        ? safeImg(`https://ui-avatars.com/api/?name=${encodeURIComponent(comment.userName)}&background=random&color=ffffff&bold=true`, 'avatar')
+                        : `https://ui-avatars.com/api/?name=${encodeURIComponent(comment.userName)}&background=random&color=ffffff&bold=true`;
                     html += `
                         <div class="comment-row">
-                            <img src="${avatar}" alt="" class="comment-user-img">
+                            <img src="${avatar}" alt="" class="comment-user-img" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                             <div class="comment-bubble">
                                 <div class="comment-user-name">${comment.userName}</div>
                                 <div class="comment-text">${comment.text}</div>
@@ -1180,15 +1186,14 @@ function renderStoriesRow(groups) {
 
         const ringClass = 'unread-story-ring'; 
         
-        const latestStory = group.stories[group.stories.length - 1];
         let avatarUrl = `https://ui-avatars.com/api/?name=${group.username}&background=d6a66b&color=0b0f19&bold=true`;
         if (latestStory && latestStory.mediaUrl && latestStory.mediaType === 'image') {
-            avatarUrl = latestStory.mediaUrl;
+            avatarUrl = (typeof safeImg === 'function') ? safeImg(latestStory.mediaUrl) : latestStory.mediaUrl;
         }
 
         item.innerHTML = `
             <div class="story-avatar-ring ${ringClass}">
-                <img src="${avatarUrl}" alt="${group.username}" class="story-avatar" style="object-fit:cover;">
+                <img src="${avatarUrl}" alt="${group.username}" class="story-avatar" style="object-fit:cover;" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
             </div>
             <span class="story-username">${group.userId === window.VOYASTRA_SESSION.userId ? 'Your Story' : group.username}</span>
         `;
@@ -1247,7 +1252,13 @@ function openStoryViewer(groupIndex, storyIndex) {
     const d = new Date(story.createdAt);
     let hours = Math.floor((new Date() - d) / 3600000);
     document.getElementById('storyViewerTime').textContent = hours < 1 ? 'Just now' : `${hours}h ago`;
-    document.getElementById('storyViewerAvatar').src = `https://ui-avatars.com/api/?name=${group.username}&background=d6a66b&color=0b0f19&bold=true`;
+    const storyViewerAvatarImg = document.getElementById('storyViewerAvatar');
+    if (storyViewerAvatarImg) {
+        storyViewerAvatarImg.src = `https://ui-avatars.com/api/?name=${group.username}&background=d6a66b&color=0b0f19&bold=true`;
+        if (!storyViewerAvatarImg.onerror) {
+            storyViewerAvatarImg.onerror = function() { vImgErr(this); };
+        }
+    }
 
     const img = document.getElementById('storyViewerImage');
     const vid = document.getElementById('storyViewerVideo');
@@ -1292,7 +1303,10 @@ function openStoryViewer(groupIndex, storyIndex) {
     } else {
         vid.style.display = 'none';
         img.style.display = 'block';
-        img.src = story.mediaUrl;
+        img.src = (typeof safeImg === 'function') ? safeImg(story.mediaUrl) : story.mediaUrl;
+        if (!img.onerror) {
+            img.onerror = function() { vImgErr(this); };
+        }
         
         storyProgressRemaining = 5000;
         startImageProgress();
@@ -1441,10 +1455,10 @@ function fetchStoryViews(storyId) {
             container.innerHTML = '';
             if (data.viewers && data.viewers.length > 0) {
                 data.viewers.forEach(name => {
-                    const avatar = `https://ui-avatars.com/api/?name=${name}&background=d6a66b&color=0b0f19&bold=true`;
+                    const avatar = (typeof safeImg === 'function') ? safeImg(`https://ui-avatars.com/api/?name=${name}&background=d6a66b&color=0b0f19&bold=true`, 'avatar') : `https://ui-avatars.com/api/?name=${name}&background=d6a66b&color=0b0f19&bold=true`;
                     container.innerHTML += `
                         <div class="story-viewer-item">
-                            <img src="${avatar}" style="width:30px;height:30px;border-radius:50%;">
+                            <img src="${avatar}" style="width:30px;height:30px;border-radius:50%;" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                             <span>${name}</span>
                         </div>
                     `;
@@ -1513,7 +1527,10 @@ function renderMediaViewerContent() {
         videoEl.style.display = 'block';
         videoEl.play();
     } else {
-        imgEl.src = item.url;
+        imgEl.src = (typeof safeImg === 'function') ? safeImg(item.url) : item.url;
+        if (!imgEl.onerror) {
+            imgEl.onerror = function() { vImgErr(this); };
+        }
         imgEl.style.display = 'block';
     }
 

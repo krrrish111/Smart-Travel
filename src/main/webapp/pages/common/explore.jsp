@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <%@ include file="/components/header.jsp" %>
@@ -163,7 +163,7 @@
                              onclick="document.getElementById('exploreSearchInput').value='${dest.name}'; triggerDestinationExploration('${dest.name}');">
                             <div style="height: 190px; overflow: hidden;">
                                 <img src="${not empty dest.imageUrl ? dest.imageUrl : 'https://images.unsplash.com/photo-1542332213-31f87348057f?auto=format&fit=crop&w=600&q=80'}" 
-                                     alt="${dest.name}" class="w-full h-full object-cover explore-img">
+                                     alt="${dest.name}" class="w-full h-full object-cover explore-img" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                             </div>
                             <div class="p-5">
                                 <div class="flex justify-between items-center mb-2">
@@ -185,7 +185,7 @@
                         <a href="${pageContext.request.contextPath}/planner?location=${plan.title}" class="glass-card" style="padding: 0; overflow: hidden; display: block; text-decoration: none;">
                             <div style="height: 200px; overflow: hidden;">
                                 <img src="${not empty plan.image ? plan.image : 'https://images.unsplash.com/photo-1542332213-31f87348057f?auto=format&fit=crop&w=600&q=80'}" 
-                                     alt="${plan.title}" class="w-full h-full object-cover explore-img">
+                                     alt="${plan.title}" class="w-full h-full object-cover explore-img" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                             </div>
                             <div class="p-5">
                                 <span class="chip text-xs" style="background: rgba(255,255,255,0.08); color: var(--color-primary); font-weight: 700; margin-bottom: 8px; display: inline-block;">${plan.category}</span>

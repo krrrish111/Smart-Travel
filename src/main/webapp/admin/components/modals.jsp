@@ -1,4 +1,4 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+﻿<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!-- Add/Edit Plan Modal -->
 <div class="admin-modal-overlay" id="planModal">
     <div class="admin-modal" style="max-height: 90vh; overflow-y: auto;">
@@ -54,7 +54,7 @@
                         <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:5px;">— OR —</div>
                         <input type="file" id="planImageFile" name="planImageFile" accept="image/*" class="form-control" style="font-size: 0.8rem;">
                     </div>
-                    <img id="planImagePreview" class="image-preview-box" src="" alt="Preview">
+                    <img id="planImagePreview" class="image-preview-box" src="" alt="Preview" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                 </div>
                 <div class="form-group" style="padding-bottom: 20px;">
                     <label class="form-label" for="planDesc">Description / Highlight tags</label>
@@ -148,7 +148,7 @@
                         <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:5px;">— OR —</div>
                         <input type="file" id="destImageFile" name="destImageFile" accept="image/*" class="form-control" style="font-size: 0.8rem;">
                     </div>
-                    <img id="destImagePreview" class="image-preview-box" src="" alt="Preview">
+                    <img id="destImagePreview" class="image-preview-box" src="" alt="Preview" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                 </div>
 
                 <div class="form-group">
@@ -212,7 +212,7 @@
             <div class="form-group">
                 <label class="form-label">Activity Image URL</label>
                 <input type="text" class="form-control" id="activityImage" name="image_url" required placeholder="Paste an image URL..." oninput="previewImg('activityImage','activityImagePreview')">
-                <img id="activityImagePreview" src="" alt="Preview" style="display:none; margin-top:10px; width:100%; height:120px; object-fit:cover; border-radius:8px; border:1px solid var(--color-border);">
+                <img id="activityImagePreview" src="" alt="Preview" style="display:none; margin-top:10px; width:100%; height:120px; object-fit:cover; border-radius:8px; border:1px solid var(--color-border);" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
             </div>
             
             <!-- These are usually hidden as they are updated by user reviews, but for admin edit we show them -->
@@ -278,7 +278,7 @@
                            placeholder="https://example.com/image.jpg"
                            oninput="previewImg('contentImageUrl','contentImagePreview')">
                     <img id="contentImagePreview" src="" alt="Preview"
-                         style="display:none; margin-top:10px; width:100%; height:120px; object-fit:cover; border-radius:8px; border:1px solid var(--color-border);">
+                         style="display:none; margin-top:10px; width:100%; height:120px; object-fit:cover; border-radius:8px; border:1px solid var(--color-border);" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                 </div>
 
                 <!-- Button Text + Link -->

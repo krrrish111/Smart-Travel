@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
@@ -34,7 +34,7 @@
             <c:if test="${not empty trip}">
                 <div class="flex flex-col sm:flex-row gap-4 items-center mb-4" style="border-bottom:1px solid var(--color-border);padding-bottom:16px;">
                     <div style="width:100px;height:70px;border-radius:10px;overflow:hidden;flex-shrink:0;">
-                        <img src="${trip.imageUrl}" style="width:100%;height:100%;object-fit:cover;">
+                        <img src="${trip.imageUrl}" style="width:100%;height:100%;object-fit:cover;" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                     </div>
                     <div class="flex-1">
                         <h4 class="text-main fw-bold">${trip.title}</h4>

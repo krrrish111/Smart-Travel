@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 
 
@@ -9,7 +9,7 @@
 
     <!-- Hero Banner -->
     <div class="relative" style="height: 280px; overflow: hidden;">
-        <img src="${trip.imageUrl}" style="width:100%;height:100%;object-fit:cover;filter:brightness(0.45);">
+        <img src="${trip.imageUrl}" style="width:100%;height:100%;object-fit:cover;filter:brightness(0.45);" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
         <div class="absolute w-full text-center" style="top:50%;transform:translateY(-50%);z-index:10;">
             <p class="text-primary fw-bold text-sm uppercase tracking-widest mb-2">Book Your Adventure</p>
             <h1 class="text-white fw-bold" style="font-size:clamp(1.8rem,4vw,3rem);text-shadow:0 4px 20px rgba(0,0,0,0.6);">${trip.title}</h1>
@@ -35,7 +35,7 @@
                     <!-- Package Summary Card -->
                     <div class="glass-panel p-5 mb-5 flex flex-col sm:flex-row gap-5 items-center slide-up">
                         <div style="width:140px;height:100px;border-radius:12px;overflow:hidden;flex-shrink:0;">
-                            <img src="${trip.imageUrl}" style="width:100%;height:100%;object-fit:cover;">
+                            <img src="${trip.imageUrl}" style="width:100%;height:100%;object-fit:cover;" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         </div>
                         <div class="flex-1">
                             <span class="text-primary text-xs fw-bold uppercase tracking-widest">${trip.category}</span>

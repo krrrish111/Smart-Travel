@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ include file="/components/header.jsp" %>
@@ -886,7 +886,7 @@
 
                     grid.innerHTML += `
                         <div class="memory-item">
-                            <img src="\${m.url}" alt="\${m.type}">
+                            <img src="\${m.url}" alt="\${m.type}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                             <div class="memory-caption">
                                 <strong><i class="\${icon}"></i> \${m.caption}</strong><br>
                                 <span style="font-size: 0.85rem; opacity: 0.7;"><i class="ri-map-pin-line"></i> \${m.location}</span>

@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ include file="/components/header.jsp" %>
 <%@ include file="/components/global_ui.jsp" %>
@@ -25,7 +25,7 @@
 
         <!-- Hotel / Room Selected Strip -->
         <div class="hotel-strip">
-            <img src="${hotel.imageUrl}" class="w-14 h-14 rounded-xl object-cover flex-shrink-0" alt="${hotel.name}">
+            <img src="${hotel.imageUrl}" class="w-14 h-14 rounded-xl object-cover flex-shrink-0" alt="${hotel.name}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
             <div class="flex-1">
                 <div class="font-bold text-white text-sm">${hotel.name}</div>
                 <div class="text-xs text-gray-400">${room.type} &nbsp;&bull;&nbsp; ${checkIn} &rarr; ${checkOut} &nbsp;&bull;&nbsp; ${guests} Guest(s)</div>
@@ -174,7 +174,7 @@
                     
                     <div class="flex gap-4 mb-6">
                         <div class="w-1/3 h-20 rounded-lg overflow-hidden flex-shrink-0">
-                             <img src="${hotel.imageUrl}" class="w-full h-full object-cover">
+                             <img src="${hotel.imageUrl}" class="w-full h-full object-cover" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                         </div>
                         <div>
                             <h3 class="font-medium">${hotel.name}</h3>

@@ -85,64 +85,69 @@ public class LoginServlet extends HttpServlet {
 
             // 2. Lookup & Validate
             User user = userDAO.getUserByEmail(email.trim().toLowerCase());
-            boolean validPassword = false;
-            
-            if (user != null) {
-                // Email Verification Check
-                if (!user.isVerified() && !"admin".equals(user.getRole())) {
-                    result.put("success", false);
-                    result.put("message", "Email not verified. Please check your inbox.");
-                    response.getWriter().write(gson.toJson(result));
-                    return;
-                }
+            if (user == null) {
+                result.put("success", false);
+                result.put("message", "Unknown email address. Please register first.");
+                response.getWriter().write(gson.toJson(result));
+                return;
+            }
 
-                String stored = user.getPassword();
-                if (stored != null) {
-                    if (stored.startsWith("$2")) {
-                        try { validPassword = BCrypt.checkpw(password.trim(), stored); } catch (Exception e) {}
-                    } else {
-                        validPassword = password.trim().equals(stored.trim());
-                    }
+            // Disabled account check
+            if (user.getStatus() != null && ("disabled".equalsIgnoreCase(user.getStatus()) || "inactive".equalsIgnoreCase(user.getStatus()) || "suspended".equalsIgnoreCase(user.getStatus()))) {
+                result.put("success", false);
+                result.put("message", "This account has been disabled. Please contact support.");
+                response.getWriter().write(gson.toJson(result));
+                return;
+            }
+
+            boolean validPassword = false;
+            String stored = user.getPassword();
+            if (stored != null) {
+                if (stored.startsWith("$2")) {
+                    try { validPassword = BCrypt.checkpw(password.trim(), stored); } catch (Exception e) {}
+                } else {
+                    validPassword = password.trim().equals(stored.trim());
                 }
             }
 
-            if (validPassword && user != null) {
-                // 3. Create Session (Fixation Protection)
-                HttpSession oldSession = request.getSession(false);
-                if (oldSession != null) oldSession.invalidate();
-                HttpSession session = request.getSession(true);
-
-                String userName = (user.getName() != null && !user.getName().isEmpty()) ? user.getName() : "Traveller";
-                String userRole = user.getRole() != null ? user.getRole() : "user";
-
-                session.setAttribute("user_id",   user.getId());
-                session.setAttribute("name",      userName);
-                session.setAttribute("username",  userName);
-                session.setAttribute("email",     user.getEmail());
-                session.setAttribute("role",      userRole);
-                session.setAttribute("user",      user);
-                session.setMaxInactiveInterval(30 * 60);
-
-                try { AdminLogger.log(request, "LOGIN", "User", user.getId(), "User '" + user.getEmail() + "' logged in."); } catch (Exception e) {}
-
-                // 4. Return Success (include user data for frontend auth sync)
-                result.put("success", true);
-                result.put("message", "Login successful! Redirecting...");
-                result.put("userId", String.valueOf(user.getId()));
-                result.put("name", userName);
-                result.put("email", user.getEmail());
-                result.put("role", userRole);
-                
-                String redirect = "admin".equals(userRole) ? "admin" : "user-home";
-                if (target != null && !target.isEmpty()) {
-                    result.put("redirect", request.getContextPath() + (target.startsWith("/") ? "" : "/") + target);
-                } else {
-                    result.put("redirect", request.getContextPath() + "/" + redirect);
-                }
-                
-            } else {
+            if (!validPassword) {
                 result.put("success", false);
-                result.put("message", "Invalid email or password.");
+                result.put("message", "Incorrect password. Please try again.");
+                response.getWriter().write(gson.toJson(result));
+                return;
+            }
+
+            // 3. Create Session (Fixation Protection)
+            HttpSession oldSession = request.getSession(false);
+            if (oldSession != null) oldSession.invalidate();
+            HttpSession session = request.getSession(true);
+
+            String userName = (user.getName() != null && !user.getName().isEmpty()) ? user.getName() : "Traveller";
+            String userRole = user.getRole() != null ? user.getRole() : "user";
+
+            session.setAttribute("user_id",   user.getId());
+            session.setAttribute("name",      userName);
+            session.setAttribute("username",  userName);
+            session.setAttribute("email",     user.getEmail());
+            session.setAttribute("role",      userRole);
+            session.setAttribute("user",      user);
+            session.setMaxInactiveInterval(30 * 60);
+
+            try { AdminLogger.log(request, "LOGIN", "User", user.getId(), "User '" + user.getEmail() + "' logged in."); } catch (Exception e) {}
+
+            // 4. Return Success (include user data for frontend auth sync)
+            result.put("success", true);
+            result.put("message", "Login successful! Redirecting...");
+            result.put("userId", String.valueOf(user.getId()));
+            result.put("name", userName);
+            result.put("email", user.getEmail());
+            result.put("role", userRole);
+            
+            String redirect = "admin".equals(userRole) ? "admin" : "user-home";
+            if (target != null && !target.isEmpty()) {
+                result.put("redirect", request.getContextPath() + (target.startsWith("/") ? "" : "/") + target);
+            } else {
+                result.put("redirect", request.getContextPath() + "/" + redirect);
             }
             
             response.getWriter().write(gson.toJson(result));

@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" %>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -146,7 +146,7 @@
     <div class="experience-grid">
         <c:forEach var="exp" items="${experiences}">
             <a href="${pageContext.request.contextPath}/experience-details?id=${exp.id}" class="exp-card">
-                <img src="${exp.coverImage}" alt="${exp.title}" class="exp-img">
+                <img src="${exp.coverImage}" alt="${exp.title}" class="exp-img" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="vImgErr(this)">
                 <div class="exp-content">
                     <span class="exp-tag">${exp.category} • ${exp.difficulty}</span>
                     <h3 class="exp-title">${exp.title}</h3>
